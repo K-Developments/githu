@@ -233,7 +233,7 @@ export default function HomePage() {
                     />
                   </CardHeader>
                   <CardContent className="p-6">
-                    <Badge variant="secondary" className="mb-2">{pkg.theme}</Badge>
+                    <Badge variant="accent" className="mb-2">{pkg.theme}</Badge>
                     <CardTitle className="font-headline text-2xl">{pkg.title}</CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-1 text-muted-foreground">
                       <MapPin className="h-4 w-4" /> {pkg.location}
@@ -454,7 +454,7 @@ export default function HomePage() {
       <footer className="bg-accent text-accent-foreground py-8">
         <div className="container mx-auto px-4 md:px-6 text-center">
             <a href="#home" className="flex items-center justify-center gap-2 mb-4">
-                <Logo className="h-8 w-8 text-accent-foreground" />
+                <Logo className="h-8 w-8" />
                 <span className="font-headline text-xl font-bold tracking-wide">
                     Island Hopes Escapes
                 </span>
@@ -477,7 +477,7 @@ export default function HomePage() {
                         <p className="text-foreground/90">{selectedPackage.longDescription}</p>
                         <div className="mt-4 flex gap-4 text-sm">
                             <Badge variant="default" className="text-base">${selectedPackage.price.toLocaleString()}</Badge>
-                            <Badge variant="secondary" className="text-base">{selectedPackage.duration} Days</Badge>
+                            <Badge variant="accent" className="text-base">{selectedPackage.duration} Days</Badge>
                             <Badge variant="outline" className="text-base">{selectedPackage.theme}</Badge>
                         </div>
                     </div>
@@ -526,4 +526,5 @@ export default function HomePage() {
   );
 }
 
+    
     
