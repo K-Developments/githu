@@ -193,7 +193,7 @@ export default function HomePage() {
         <section id="destinations" className="py-16 md:py-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-bold">Curated Island Getaways</h2>
+              <h2 className="font-headline text-3xl md:text-4xl font-bold text-accent">Curated Island Getaways</h2>
               <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
                 Browse our hand-picked selection of island adventures, relaxing retreats, and romantic escapes.
               </p>
@@ -234,7 +234,7 @@ export default function HomePage() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <Badge variant="accent" className="mb-2">{pkg.theme}</Badge>
-                    <CardTitle className="font-headline text-2xl">{pkg.title}</CardTitle>
+                    <CardTitle className="font-headline text-2xl text-accent">{pkg.title}</CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-1 text-muted-foreground">
                       <MapPin className="h-4 w-4 text-accent" /> {pkg.location}
                     </CardDescription>
@@ -254,7 +254,7 @@ export default function HomePage() {
             <div className="container mx-auto px-4 md:px-6">
                  <div className="text-center mb-12">
                     <Sparkles className="mx-auto h-10 w-10 text-primary mb-2" />
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold">Find Your Perfect Escape</h2>
+                    <h2 className="font-headline text-3xl md:text-4xl font-bold text-accent">Find Your Perfect Escape</h2>
                     <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
                         Let our AI guide you to the island destination that perfectly matches your desires.
                     </p>
@@ -340,7 +340,7 @@ export default function HomePage() {
                                  {!isGeneratingRecommendation && recommendationResult && (
                                      <Card className="w-full bg-background transition-all animate-in fade-in-50">
                                          <CardHeader>
-                                             <CardTitle className="font-headline">{recommendationResult.title}</CardTitle>
+                                             <CardTitle className="font-headline text-accent">{recommendationResult.title}</CardTitle>
                                              <CardDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-accent"/>{recommendationResult.location}</CardDescription>
                                          </CardHeader>
                                          <CardContent>
@@ -366,7 +366,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-headline text-3xl md:text-4xl font-bold">Ready for an Adventure?</h2>
+                <h2 className="font-headline text-3xl md:text-4xl font-bold text-accent">Ready for an Adventure?</h2>
                 <p className="mt-4 text-lg text-muted-foreground">
                   Our travel experts are here to help you plan the perfect island getaway. Fill out the form, and we'll craft a personalized itinerary just for you.
                 </p>
@@ -467,7 +467,7 @@ export default function HomePage() {
         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent className="max-w-4xl max-h-[90vh] grid-rows-[auto_1fr_auto] p-0">
              <DialogHeader className="p-6 pb-0">
-               <DialogTitle className="font-headline text-3xl">{selectedPackage.title}</DialogTitle>
+               <DialogTitle className="font-headline text-3xl text-accent">{selectedPackage.title}</DialogTitle>
                <DialogDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-accent" />{selectedPackage.location}</DialogDescription>
              </DialogHeader>
             <div className="overflow-y-auto px-6">
@@ -482,7 +482,7 @@ export default function HomePage() {
                         </div>
                     </div>
                     <div>
-                        <h3 className="font-headline text-xl font-semibold mb-2">Itinerary</h3>
+                        <h3 className="font-headline text-xl font-semibold mb-2 text-accent">Itinerary</h3>
                         <div className="space-y-4">
                             {selectedPackage.itinerary.map(item => (
                                 <div key={item.day} className="flex gap-4">
@@ -500,7 +500,7 @@ export default function HomePage() {
                     </div>
                 </div>
                  <div className="mt-6">
-                    <h3 className="font-headline text-xl font-semibold mb-4">Reviews</h3>
+                    <h3 className="font-headline text-xl font-semibold mb-4 text-accent">Reviews</h3>
                     <div className="space-y-4">
                     {selectedPackage.reviews.map((review, i) => (
                         <div key={i} className="bg-background p-4 rounded-lg">
