@@ -98,7 +98,7 @@ export default function HomePage() {
                 Where exceptional service meets breathtaking destinations. Your private escape awaits beyond the ordinary.
               </p>
               <div className="flex flex-col sm:flex-row gap-5">
-                <a href="#" className="btn-primary group relative btn border-white text-white py-4 px-10">
+                 <a href="#" className="btn-primary group relative btn border-white text-white py-4 px-10 hover:border-accent">
                   <span className="absolute inset-0 w-0 bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
                   <span className="relative">Explore Collections</span>
                 </a>
@@ -257,3 +257,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
