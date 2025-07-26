@@ -5,33 +5,52 @@
 @layer base {
   :root {
     --background: 255 100% 100%;
-    --foreground: 196 53% 34%;
-    --card: 255 100% 100%;
-    --card-foreground: 196 53% 34%;
-    --popover: 255 100% 100%;
-    --popover-foreground: 196 53% 34%;
-    --primary: 184 49% 46%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+ 
+    --primary: 188 55% 45%; /* --azure: #3EA3AD */
     --primary-foreground: 0 0% 100%;
-    --secondary: 170 51% 54%;
+ 
+    --secondary: 172 52% 55%; /* --lagoon: #47C8B1 */
     --secondary-foreground: 0 0% 100%;
-    --muted: 60 56% 80%;
-    --muted-foreground: 215 15% 55%;
-    --accent: 78 60% 42%;
+ 
+    --muted: 60 56% 80%; /* --ivory: #EAE3A4 */
+    --muted-foreground: 240 4% 46%;
+ 
+    --accent: 78 60% 42%; /* --olive: #91AB2B */
     --accent-foreground: 0 0% 100%;
+ 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 210 20% 90%;
-    --input: 210 20% 90%;
-    --ring: 78 60% 42%;
+
+    --border: 240 6% 90%; /* --gray: #F5F5F5 */
+    --input: 240 6% 90%;
+    --ring: 188 55% 45%;
+
+    --deep-ocean: 196 53% 34%; /* --deep-ocean: #287289 */
+ 
     --radius: 0.5rem;
   }
-}
 
+  .dark {
+    /* Define dark mode colors if needed */
+  }
+}
+ 
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+    letter-spacing: 0.5px;
+  }
+  h1,h2,h3,h4,h5,h6 {
+    letter-spacing: 0.5px;
   }
 }

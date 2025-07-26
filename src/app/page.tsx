@@ -1,233 +1,258 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { packages as allPackages, type Package } from "@/lib/data";
-import {
-  Facebook,
+import { 
+  ChevronDown,
+  ConciergeBell, 
+  Umbrella, 
+  Rocket, 
+  UserCog, 
+  Instagram, 
+  Facebook, 
   Twitter,
-  Instagram,
-  Headset,
-  HandCoins,
-  Leaf,
-  MapPin,
   Phone,
   Mail,
+  MapPin,
+  Clock
 } from "lucide-react";
 
 
 export default function HomePage() {
-  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
-  const [isDialogOpen, setDialogOpen] = useState(false);
-
-  const handleViewDetails = (pkg: Package) => {
-    setSelectedPackage(pkg);
-    setDialogOpen(true);
-  };
-  
   const navLinks = [
-    { name: "Home", href: "#home" },
+    { name: "Home", href: "#" },
     { name: "Destinations", href: "#destinations" },
-    { name: "Deals", href: "#" },
-    { name: "About", href: "#features" },
+    { name: "Experiences", href: "#" },
+    { name: "Yachts", href: "#" },
     { name: "Contact", href: "#footer" },
   ];
 
-  const featuredPackages = allPackages.slice(0, 3);
+  const destinations = [
+    {
+      badge: "Exclusive",
+      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      imageHint: "maldives resort",
+      title: "Private Island Resort, Maldives",
+      description: "Your own overwater villa with private butler, infinity pool, and direct lagoon access. Includes helicopter transfer from Malé.",
+      price: "From $2,500/night"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      imageHint: "swiss alps",
+      title: "Alpine Chalet, Switzerland",
+      description: "Luxury ski-in/ski-out chalet with private chef, spa, and panoramic mountain views. Includes concierge ski service.",
+      price: "From $3,200/night"
+    },
+    {
+      badge: "New",
+      image: "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      imageHint: "safari lodge",
+      title: "Wildlife Reserve, Tanzania",
+      description: "Ultra-luxury tented camp with private game drives, bush dinners, and star bed experience.",
+      price: "From $1,800/night"
+    }
+  ];
+
+  const services = [
+    { icon: ConciergeBell, title: "24/7 Concierge", description: "Dedicated travel curator available around the clock to fulfill your every request." },
+    { icon: Umbrella, title: "Villa Selection", description: "Access to 5,000+ private villas and residences unavailable to the public." },
+    { icon: Rocket, title: "Private Transfers", description: "Helicopters, yachts and luxury vehicles arranged for seamless transitions." },
+    { icon: UserCog, title: "Discretion", description: "Complete privacy protocols for high-profile clients and confidential travel." }
+  ];
+
+  const footerLinks = {
+    destinations: ["Caribbean", "Mediterranean", "Alpine", "Asia", "Private Islands"],
+    services: ["Luxury Villa Rentals", "Yacht Charters", "Private Jet Travel", "Event Travel", "Honeymoons"]
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <header className="fixed top-0 z-50 w-full bg-primary shadow-md">
-        <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-          <a href="#home" className="text-2xl font-bold text-white font-headline">
-            Travel<span className="text-muted">Escape</span>
+    <div className="flex flex-col min-h-screen">
+      <header className="absolute top-0 left-0 w-full py-[30px] z-50">
+        <div className="container mx-auto flex justify-between items-center px-4">
+          <a href="#" className="font-headline text-2xl font-bold text-white tracking-[2px]">
+            Azure<span className="text-muted">Voyages</span>
           </a>
-          <nav className="hidden md:flex gap-8">
-            {navLinks.map((link) => (
-               <a key={link.name} href={link.href} className="font-semibold text-white transition-colors hover:text-muted">
-                 {link.name}
-               </a>
-            ))}
+          <nav className="hidden md:flex">
+            <ul className="flex items-center space-x-10">
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <a href={link.href} className="text-white text-sm font-medium tracking-wider uppercase relative pb-1.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-muted after:transition-all after:duration-300 hover:after:w-full">
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </nav>
         </div>
       </header>
 
       <main className="flex-1">
-        <section id="home" className="relative h-screen w-full flex items-center text-center text-white pt-20">
-          <Image
-            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Tropical beach paradise"
-            layout="fill"
-            objectFit="cover"
-            className="z-0"
-            priority
-          />
-          <div className="absolute inset-0 bg-primary/70 z-10" />
+        <section id="home" className="relative h-screen min-h-[800px] w-full flex items-center bg-cover bg-center bg-fixed" style={{backgroundImage: "url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"}}>
+          <div className="absolute inset-0 bg-deep-ocean/30 z-10" />
           <div className="container relative z-20 px-4 md:px-6">
-              <h1 className="font-headline text-6xl font-bold !text-white drop-shadow-lg">
-                Discover Your Dream Escape
+            <div className="max-w-3xl text-white">
+              <h1 className="font-headline text-5xl md:text-7xl font-bold leading-tight mb-5 text-shadow">
+                Curated Luxury Travel Experiences
               </h1>
-              <p className="font-headline mt-4 max-w-2xl mx-auto text-2xl italic !text-muted drop-shadow-md">
-                Luxury resorts, hidden gems & eco-adventures
+              <p className="text-lg md:text-xl text-muted mb-10 max-w-2xl font-light">
+                Where exceptional service meets breathtaking destinations. Your private escape awaits beyond the ordinary.
               </p>
-              <div className="mt-10 flex justify-center gap-5 flex-col sm:flex-row items-center">
-                <Button size="lg" variant="accent" className="w-full sm:w-auto rounded-full px-8 py-6 text-lg border-2 border-accent hover:bg-transparent hover:text-white">
-                  Explore Destinations
-                </Button>
-                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full px-8 py-6 text-lg border-white text-white bg-transparent hover:bg-white hover:text-foreground">
-                  Learn More
-                </Button>
+              <div className="flex flex-col sm:flex-row gap-5">
+                <a href="#" className="btn-primary group relative btn border-white text-white">
+                  <span className="absolute inset-0 w-0 bg-accent transition-all duration-300 ease-out group-hover:w-full"></span>
+                  <span className="relative">Explore Collections</span>
+                </a>
+                <a href="#" className="btn-secondary btn border-accent bg-accent text-white hover:bg-transparent hover:text-accent">
+                  Book Consultation
+                </a>
               </div>
+            </div>
+          </div>
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-2xl animate-bounce z-20">
+            <ChevronDown />
           </div>
         </section>
 
-        <section id="destinations" className="py-24">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="text-center mb-16">
-              <h2 className="font-headline text-4xl font-bold text-black">Featured Destinations</h2>
-              <p className="mt-2 text-lg text-primary max-w-3xl mx-auto">
-                Explore our most popular travel packages handpicked for unforgettable experiences.
+        <section id="destinations" className="py-28 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-20">
+              <h2 className="font-headline text-4xl md:text-5xl text-deep-ocean mb-4 relative inline-block after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-accent">
+                Signature Destinations
+              </h2>
+              <p className="mt-8 text-lg text-primary max-w-3xl mx-auto font-light">
+                Our most exclusive properties hand-selected for the discerning traveler
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredPackages.map((pkg) => (
-                <Card key={pkg.id} className="overflow-hidden transition-transform duration-300 hover:-translate-y-2.5 rounded-lg shadow-lg bg-white">
-                  <div className="h-52 overflow-hidden">
-                    <Image
-                      src={pkg.images[0]}
-                      alt={pkg.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      data-ai-hint={pkg.imageHints[0]}
-                    />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {destinations.map((dest, index) => (
+                <div key={index} className="bg-white shadow-lg hover:shadow-2xl transition-all duration-400 group overflow-hidden hover:-translate-y-2">
+                  <div className="relative">
+                    {dest.badge && <div className="absolute top-5 right-5 bg-accent text-white py-1 px-4 text-xs uppercase tracking-widest z-10">{dest.badge}</div>}
+                    <div className="h-72 overflow-hidden">
+                      <Image
+                        src={dest.image}
+                        alt={dest.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-full object-cover transition-transform duration-1000 ease-in-out group-hover:scale-110"
+                        data-ai-hint={dest.imageHint}
+                      />
+                    </div>
                   </div>
-                  <CardContent className="p-5">
-                    <CardTitle className="font-headline text-2xl text-black mb-2">{pkg.title}</CardTitle>
-                    <CardDescription className="text-gray-600 mb-4 h-16">{pkg.description}</CardDescription>
-                     <div className="font-bold text-2xl text-accent mb-4">${pkg.price.toLocaleString()}</div>
-                    <Button variant="secondary" onClick={() => handleViewDetails(pkg)} className="w-full rounded-md font-semibold text-base">View Details</Button>
-                  </CardContent>
-                </Card>
+                  <div className="p-8">
+                    <h3 className="font-headline text-2xl text-deep-ocean mb-2">{dest.title}</h3>
+                    <p className="text-gray-600 mb-5 font-light h-24">{dest.description}</p>
+                    <div className="font-headline text-2xl text-accent mb-6">{dest.price}</div>
+                    <a href="#" className="inline-block py-3 px-8 bg-deep-ocean text-white font-medium text-sm tracking-wider uppercase transition-colors hover:bg-primary">
+                      Request Availability
+                    </a>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="features" className="py-24 bg-muted">
-             <div className="container mx-auto px-4 md:px-6">
-                 <div className="text-center mb-16">
-                    <h2 className="font-headline text-4xl font-bold text-black">Why Choose Us?</h2>
-                    <p className="mt-2 text-lg text-primary max-w-3xl mx-auto">
-                        We're committed to making your travel experience seamless and memorable.
-                    </p>
+        <section id="services" className="py-28">
+          <div className="container mx-auto px-4">
+             <div className="text-center mb-20">
+                <h2 className="font-headline text-4xl md:text-5xl text-deep-ocean mb-4 relative inline-block after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-accent">
+                  Our Services
+                </h2>
+                <p className="mt-8 text-lg text-primary max-w-3xl mx-auto font-light">
+                  Tailored experiences designed around your preferences
+                </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+              {services.map((service, index) => (
+                <div key={index} className="text-center">
+                  <div className="w-20 h-20 bg-muted rounded-full mx-auto flex items-center justify-center mb-8">
+                    <service.icon className="w-9 h-9 text-deep-ocean" />
+                  </div>
+                  <h3 className="font-headline text-2xl mb-4 text-deep-ocean">{service.title}</h3>
+                  <p className="text-gray-600 font-light">{service.description}</p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <Card className="text-center p-8 rounded-lg bg-white shadow-md">
-                        <Headset className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-black mb-3">24/7 Support</h3>
-                        <p className="text-gray-600">Our travel experts are available round the clock to assist you</p>
-                    </Card>
-                     <Card className="text-center p-8 rounded-lg bg-white shadow-md">
-                        <HandCoins className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-black mb-3">Best Price Guarantee</h3>
-                        <p className="text-gray-600">We'll match any lower price you find for the same package</p>
-                    </Card>
-                     <Card className="text-center p-8 rounded-lg bg-white shadow-md">
-                        <Leaf className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-black mb-3">Eco-Friendly Stays</h3>
-                        <p className="text-gray-600">Carefully selected sustainable accommodations</p>
-                    </Card>
-                     <Card className="text-center p-8 rounded-lg bg-white shadow-md">
-                        <MapPin className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-black mb-3">Local Experts</h3>
-                        <p className="text-gray-600">Authentic experiences guided by destination specialists</p>
-                    </Card>
-                </div>
-             </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        <section id="testimonials" className="py-28 text-white bg-cover bg-center bg-fixed" style={{backgroundImage: "url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"}}>
+          <div className="absolute inset-0 bg-primary/90"></div>
+          <div className="container mx-auto px-4 relative">
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="text-2xl italic mb-8 leading-relaxed font-light">
+                "Azure Voyages transformed our anniversary trip into something magical. Every detail was perfection - from the private yacht charter to the surprise sunset dinner on the cliffs of Santorini. This is why we only travel with them."
+              </p>
+              <div className="font-headline text-xl">James & Sophia Laurent</div>
+              <div className="text-sm opacity-80 font-light">Paris, France</div>
+            </div>
+          </div>
         </section>
 
-        <section className="py-20 bg-secondary text-white text-center">
-            <div className="container mx-auto px-4 md:px-6">
-                <h2 className="text-4xl font-bold mb-5 text-black">Get Travel Deals & Updates</h2>
-                <p className="max-w-xl mx-auto mb-8">Subscribe to our newsletter for exclusive offers and travel inspiration</p>
-                <form className="flex max-w-md mx-auto">
-                    <Input type="email" placeholder="Your email address" className="flex-1 !rounded-l-full !rounded-r-none text-black" />
-                    <Button type="submit" variant="accent" className="!rounded-r-full !rounded-l-none font-bold hover:bg-foreground">Subscribe</Button>
-                </form>
+        <section id="newsletter" className="py-24 bg-muted">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="font-headline text-4xl text-deep-ocean mb-5">Join Our Circle</h2>
+              <p className="text-deep-ocean mb-10 font-light">
+                Receive exclusive access to private villas, yachts, and experiences before they're available to the public.
+              </p>
+              <form className="flex max-w-lg mx-auto border border-deep-ocean">
+                <input type="email" placeholder="Your email address" className="flex-1 p-5 border-none bg-transparent text-deep-ocean placeholder:text-deep-ocean/70 focus:outline-none" />
+                <button type="submit" className="py-5 px-10 bg-deep-ocean text-white font-medium tracking-wider uppercase text-sm transition-colors hover:bg-primary">
+                  Subscribe
+                </button>
+              </form>
             </div>
+          </div>
         </section>
       </main>
 
-      <footer id="footer" className="bg-accent text-muted py-16">
-        <div className="container mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10">
-                <div>
-                    <h3 className="text-white text-xl font-bold mb-5">TravelEscape</h3>
-                    <p className="mb-5">Making dream vacations a reality since 2010. We specialize in personalized travel experiences.</p>
-                    <div className="flex gap-4">
-                        <a href="#" className="text-secondary hover:text-white"><Facebook /></a>
-                        <a href="#" className="text-secondary hover:text-white"><Instagram /></a>
-                        <a href="#" className="text-secondary hover:text-white"><Twitter /></a>
-                    </div>
-                </div>
-                 <div>
-                    <h3 className="text-white text-xl font-bold mb-5">Quick Links</h3>
-                    <ul className="space-y-3">
-                        <li><a href="#" className="hover:text-white">Home</a></li>
-                        <li><a href="#" className="hover:text-white">Destinations</a></li>
-                        <li><a href="#" className="hover:text-white">Special Offers</a></li>
-                        <li><a href="#" className="hover:text-white">Travel Blog</a></li>
-                        <li><a href="#" className="hover:text-white">About Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 className="text-white text-xl font-bold mb-5">Support</h3>
-                    <ul className="space-y-3">
-                        <li><a href="#" className="hover:text-white">FAQs</a></li>
-                        <li><a href="#" className="hover:text-white">Booking Terms</a></li>
-                        <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-                        <li><a href="#" className="hover:text-white">Contact Us</a></li>
-                    </ul>
-                </div>
-                 <div>
-                    <h3 className="text-white text-xl font-bold mb-5">Contact Info</h3>
-                    <ul className="space-y-3">
-                        <li className="flex items-start gap-3"><MapPin className="mt-1 h-5 w-5 text-secondary" /> 123 Beach Road, Miami, FL</li>
-                        <li className="flex items-start gap-3"><Phone className="h-5 w-5 text-secondary" /> +1 (555) 123-4567</li>
-                        <li className="flex items-start gap-3"><Mail className="h-5 w-5 text-secondary" /> info@travelescape.com</li>
-                    </ul>
-                </div>
+      <footer id="footer" className="bg-black text-white py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <div>
+              <a href="#" className="font-headline text-2xl mb-5 inline-block">
+                Azure<span className="text-muted">Voyages</span>
+              </a>
+              <p className="text-sm text-gray-400 font-light mb-5">Specializing in ultra-luxury travel experiences since 2008.</p>
+              <div className="flex gap-4">
+                <a href="#" className="text-muted hover:text-accent"><Instagram size={18} /></a>
+                <a href="#" className="text-muted hover:text-accent"><Facebook size={18} /></a>
+                <a href="#" className="text-muted hover:text-accent"><Twitter size={18} /></a>
+              </div>
             </div>
-            <div className="text-center pt-8 border-t border-primary">
-                <p>&copy; {new Date().getFullYear()} TravelEscape. All rights reserved.</p>
+            <div>
+              <h3 className="font-headline text-xl text-muted mb-6 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 after:h-[1px] after:bg-accent">Destinations</h3>
+              <ul className="space-y-3.5">
+                {footerLinks.destinations.map(link => (
+                  <li key={link}><a href="#" className="text-gray-400 text-sm font-light transition-all hover:text-muted hover:pl-1.5">{link}</a></li>
+                ))}
+              </ul>
             </div>
+            <div>
+              <h3 className="font-headline text-xl text-muted mb-6 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 after:h-[1px] after:bg-accent">Services</h3>
+              <ul className="space-y-3.5">
+                {footerLinks.services.map(link => (
+                  <li key={link}><a href="#" className="text-gray-400 text-sm font-light transition-all hover:text-muted hover:pl-1.5">{link}</a></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-headline text-xl text-muted mb-6 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 after:h-[1px] after:bg-accent">Contact</h3>
+              <ul className="space-y-4 text-sm font-light">
+                <li className="flex items-center gap-3 text-gray-400"><Phone size={16} className="text-accent"/> +1 (555) 327-8888</li>
+                <li className="flex items-center gap-3 text-gray-400"><Mail size={16} className="text-accent"/> concierge@azurevoyages.com</li>
+                <li className="flex items-center gap-3 text-gray-400"><MapPin size={16} className="text-accent"/> 1000 Brickell Ave, Miami</li>
+                <li className="flex items-center gap-3 text-gray-400"><Clock size={16} className="text-accent"/> 24/7 Service</li>
+              </ul>
+            </div>
+          </div>
+          <div className="text-center pt-8 border-t border-gray-500/20 text-xs text-gray-500">
+            <p>&copy; {new Date().getFullYear()} Azure Voyages. All rights reserved.</p>
+          </div>
         </div>
       </footer>
-
-      {selectedPackage && (
-        <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl p-0">
-             <DialogHeader className="p-6 pb-4">
-               <DialogTitle className="font-headline text-3xl text-black">{selectedPackage.title}</DialogTitle>
-               <DialogDescription>{selectedPackage.location}</DialogDescription>
-             </DialogHeader>
-            <div className="px-6 pb-6">
-                <Image src={selectedPackage.images[0]} data-ai-hint={selectedPackage.imageHints[0]} alt={selectedPackage.title} width={800} height={600} className="rounded-lg object-cover w-full mb-4" />
-                <p className="text-foreground/90">{selectedPackage.longDescription}</p>
-                 <div className="mt-4 font-bold text-2xl text-accent">${selectedPackage.price.toLocaleString()}</div>
-            </div>
-            <div className="p-6 bg-gray-100 flex justify-end">
-                <Button variant="secondary" onClick={() => setDialogOpen(false)}>Close</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
     </div>
   );
 }
