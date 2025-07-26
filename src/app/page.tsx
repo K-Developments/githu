@@ -70,7 +70,7 @@ export default function HomePage() {
       <header className="absolute top-0 left-0 w-full py-[30px] z-50">
         <div className="container mx-auto flex justify-between items-center px-4">
           <a href="#" className="font-headline text-2xl font-bold text-white tracking-[2px]">
-            Azure<span className="text-muted">Voyages</span>
+            Island Hopes<span className="text-muted">Travels</span>
           </a>
           <nav className="hidden md:flex">
             <ul className="flex items-center space-x-10">
@@ -102,7 +102,7 @@ export default function HomePage() {
                   <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
                   Explore Collections
                 </a>
-                <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-accent transition-all duration-300">
+                <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-white transition-all duration-300">
                   Book Consultation
                 </a>
               </div>
@@ -183,7 +183,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 relative z-20">
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-2xl italic mb-8 leading-relaxed font-light">
-                "Azure Voyages transformed our anniversary trip into something magical. Every detail was perfection - from the private yacht charter to the surprise sunset dinner on the cliffs of Santorini. This is why we only travel with them."
+                "Island Hopes Travels transformed our anniversary trip into something magical. Every detail was perfection - from the private yacht charter to the surprise sunset dinner on the cliffs of Santorini. This is why we only travel with them."
               </p>
               <div className="font-headline text-xl">James & Sophia Laurent</div>
               <div className="text-sm opacity-80 font-light">Paris, France</div>
@@ -214,7 +214,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <div>
               <a href="#" className="font-headline text-2xl mb-5 inline-block">
-                Azure<span className="text-muted">Voyages</span>
+                Island Hopes<span className="text-muted">Travels</span>
               </a>
               <p className="text-sm text-gray-400 font-light mb-5">Specializing in ultra-luxury travel experiences since 2008.</p>
               <div className="flex gap-4">
@@ -243,19 +243,17 @@ export default function HomePage() {
               <h3 className="font-headline text-xl text-muted mb-6 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 after:h-[1px] after:bg-accent">Contact</h3>
               <ul className="space-y-4 text-sm font-light">
                 <li className="flex items-center gap-3 text-gray-400"><Phone size={16} className="text-accent"/> +1 (555) 327-8888</li>
-                <li className="flex items-center gap-3 text-gray-400"><Mail size={16} className="text-accent"/> concierge@azurevoyages.com</li>
+                <li className="flex items-center gap-3 text-gray-400"><Mail size={16} className="text-accent"/> concierge@islandhopestravels.com</li>
                 <li className="flex items-center gap-3 text-gray-400"><MapPin size={16} className="text-accent"/> 1000 Brickell Ave, Miami</li>
                 <li className="flex items-center gap-3 text-gray-400"><Clock size={16} className="text-accent"/> 24/7 Service</li>
               </ul>
             </div>
           </div>
           <div className="text-center pt-8 border-t border-gray-500/20 text-xs text-gray-500">
-            <p>&copy; {new Date().getFullYear()} Azure Voyages. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Island Hopes Travels. All rights reserved.</p>
           </div>
         </div>
       </footer>
     </div>
   );
 }
-
-    

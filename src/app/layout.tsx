@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Azure Voyages | Luxury Travel Curators",
+  title: "Island Hopes Travels",
   description: "Your serene getaway to the world's most beautiful islands.",
 };
 
