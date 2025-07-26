@@ -177,9 +177,9 @@ export default function HomePage() {
           </div>
         </section>
         
-        <section id="testimonials" className="py-28 text-white bg-cover bg-center bg-fixed" style={{backgroundImage: "url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"}}>
-          <div className="absolute inset-0 bg-primary/90"></div>
-          <div className="container mx-auto px-4 relative">
+        <section id="testimonials" className="py-28 text-white bg-cover bg-center bg-fixed relative" style={{backgroundImage: "url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"}}>
+          <div className="absolute inset-0 bg-deep-ocean/30 z-10"></div>
+          <div className="container mx-auto px-4 relative z-20">
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-2xl italic mb-8 leading-relaxed font-light">
                 "Azure Voyages transformed our anniversary trip into something magical. Every detail was perfection - from the private yacht charter to the surprise sunset dinner on the cliffs of Santorini. This is why we only travel with them."
