@@ -138,7 +138,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full bg-primary/80 backdrop-blur-sm shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
           <a href="#home" className="flex items-center gap-2">
@@ -221,7 +221,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPackages.map((pkg) => (
-                <Card key={pkg.id} className="overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
+                <Card key={pkg.id} className="overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 bg-white">
                   <CardHeader className="p-0">
                     <Image
                       src={pkg.images[0]}
@@ -250,7 +250,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="recommendations" className="bg-background/70 py-16 md:py-24">
+        <section id="recommendations" className="py-16 md:py-24">
             <div className="container mx-auto px-4 md:px-6">
                  <div className="text-center mb-12">
                     <Sparkles className="mx-auto h-10 w-10 text-accent mb-2" />
@@ -260,7 +260,7 @@ export default function HomePage() {
                     </p>
                 </div>
 
-                <Card className="max-w-4xl mx-auto">
+                <Card className="max-w-4xl mx-auto bg-white">
                     <CardContent className="p-6 md:p-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                             <Form {...recommendationForm}>
@@ -270,7 +270,7 @@ export default function HomePage() {
                                         name="travelStyle"
                                         render={({ field }) => (
                                             <FormItem className="space-y-3">
-                                                <FormLabel className="text-lg font-semibold">What's your travel style?</FormLabel>
+                                                <FormLabel className="text-lg font-semibold text-foreground">What's your travel style?</FormLabel>
                                                 <FormControl>
                                                     <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid grid-cols-2 gap-4">
                                                         <FormItem className="flex items-center space-x-3 space-y-0">
@@ -300,7 +300,7 @@ export default function HomePage() {
                                         name="interests"
                                         render={() => (
                                             <FormItem>
-                                                <FormLabel className="text-lg font-semibold">What are your interests?</FormLabel>
+                                                <FormLabel className="text-lg font-semibold text-foreground">What are your interests?</FormLabel>
                                                 <div className="grid grid-cols-2 gap-2">
                                                     {recommendationInterests.map((item) => (
                                                         <FormField
@@ -381,9 +381,9 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
-                  <CardTitle>Booking Inquiry</CardTitle>
+                  <CardTitle className="text-foreground">Booking Inquiry</CardTitle>
                   <CardDescription>Send us a message, and we'll be in touch shortly.</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -391,7 +391,7 @@ export default function HomePage() {
                     <form onSubmit={bookingForm.handleSubmit(handleBookingSubmit)} className="space-y-4">
                       <FormField control={bookingForm.control} name="name" render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Full Name</FormLabel>
+                            <FormLabel className="text-foreground">Full Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -404,7 +404,7 @@ export default function HomePage() {
                       />
                       <FormField control={bookingForm.control} name="email" render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email Address</FormLabel>
+                            <FormLabel className="text-foreground">Email Address</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -417,7 +417,7 @@ export default function HomePage() {
                       />
                       <FormField control={bookingForm.control} name="destination" render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Destination of Interest (optional)</FormLabel>
+                            <FormLabel className="text-foreground">Destination of Interest (optional)</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -430,7 +430,7 @@ export default function HomePage() {
                       />
                       <FormField control={bookingForm.control} name="message" render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Your Message</FormLabel>
+                            <FormLabel className="text-foreground">Your Message</FormLabel>
                             <FormControl>
                               <Textarea placeholder="Tell us about your dream vacation..." {...field} />
                             </FormControl>
@@ -476,8 +476,8 @@ export default function HomePage() {
                         <Image src={selectedPackage.images[0]} data-ai-hint={selectedPackage.imageHints[0]} alt={selectedPackage.title} width={800} height={600} className="rounded-lg object-cover w-full mb-4" />
                         <p className="text-foreground/90">{selectedPackage.longDescription}</p>
                         <div className="mt-4 flex gap-4 text-sm">
-                            <Badge variant="default" className="text-base bg-accent text-accent-foreground">${selectedPackage.price.toLocaleString()}</Badge>
-                            <Badge variant="accent" className="text-base">{selectedPackage.duration} Days</Badge>
+                            <Badge variant="accent" className="text-base">${selectedPackage.price.toLocaleString()}</Badge>
+                            <Badge variant="secondary" className="text-base">{selectedPackage.duration} Days</Badge>
                             <Badge variant="secondary" className="text-base">{selectedPackage.theme}</Badge>
                         </div>
                     </div>
@@ -491,7 +491,7 @@ export default function HomePage() {
                                         <div className="border-l-2 border-dashed border-border h-full"></div>
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold">{item.title}</h4>
+                                        <h4 className="font-semibold text-foreground">{item.title}</h4>
                                         <p className="text-sm text-muted-foreground">{item.description}</p>
                                     </div>
                                 </div>
@@ -505,7 +505,7 @@ export default function HomePage() {
                     {selectedPackage.reviews.map((review, i) => (
                         <div key={i} className="bg-background p-4 rounded-lg">
                             <div className="flex items-center justify-between">
-                                <p className="font-semibold">{review.name}</p>
+                                <p className="font-semibold text-foreground">{review.name}</p>
                                 <div className="flex">
                                     {[...Array(5)].map((_, j) => <Star key={j} className={`h-4 w-4 ${j < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`}/>)}
                                 </div>
