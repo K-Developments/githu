@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type SVGProps } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,27 +11,14 @@ import {
   Facebook,
   Twitter,
   Instagram,
-  Pinterest,
   Headset,
-  HandHoldingUsd,
+  HandCoins,
   Leaf,
-  MapMarkedAlt,
-  MapMarkerAlt,
+  MapPin,
   Phone,
-  Envelope,
+  Mail,
 } from "lucide-react";
 
-
-// Logo Component
-function Logo(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M12 22s8-4.5 8-11.8A8 8 0 0 0 12 2a8 8 0 0 0-8 8.2c0 7.3 8 11.8 8 11.8z" />
-      <path d="M12 18c-3.14 0-6-1.66-6-4.5 0-2.84 2.86-5.5 6-5.5s6 2.66 6 5.5c0 2.84-2.86 4.5-6 4.5z" />
-      <path d="M12 12.5c-3.14 0-6-1.66-6-4.5S8.86 3.5 12 3.5s6 2.66 6 5.5" />
-    </svg>
-  );
-}
 
 export default function HomePage() {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
@@ -53,10 +40,10 @@ export default function HomePage() {
   const featuredPackages = allPackages.slice(0, 3);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="fixed top-0 z-50 w-full bg-primary shadow-md">
         <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-          <a href="#home" className="text-2xl font-bold text-white">
+          <a href="#home" className="text-2xl font-bold text-white font-headline">
             Travel<span className="text-muted">Escape</span>
           </a>
           <nav className="hidden md:flex gap-8">
@@ -88,7 +75,7 @@ export default function HomePage() {
                 Luxury resorts, hidden gems & eco-adventures
               </p>
               <div className="mt-10 flex justify-center gap-5 flex-col sm:flex-row items-center">
-                <Button size="lg" variant="accent" className="w-full sm:w-auto rounded-full px-8 py-6 text-lg border-2 border-accent hover:bg-transparent hover:text-accent">
+                <Button size="lg" variant="accent" className="w-full sm:w-auto rounded-full px-8 py-6 text-lg border-2 border-accent hover:bg-transparent hover:text-white">
                   Explore Destinations
                 </Button>
                 <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full px-8 py-6 text-lg border-white text-white bg-transparent hover:bg-white hover:text-foreground">
@@ -101,7 +88,7 @@ export default function HomePage() {
         <section id="destinations" className="py-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-16">
-              <h2 className="font-headline text-4xl font-bold text-foreground">Featured Destinations</h2>
+              <h2 className="font-headline text-4xl font-bold text-black">Featured Destinations</h2>
               <p className="mt-2 text-lg text-primary max-w-3xl mx-auto">
                 Explore our most popular travel packages handpicked for unforgettable experiences.
               </p>
@@ -121,10 +108,10 @@ export default function HomePage() {
                     />
                   </div>
                   <CardContent className="p-5">
-                    <CardTitle className="font-headline text-2xl text-foreground mb-2">{pkg.title}</CardTitle>
+                    <CardTitle className="font-headline text-2xl text-black mb-2">{pkg.title}</CardTitle>
                     <CardDescription className="text-gray-600 mb-4 h-16">{pkg.description}</CardDescription>
                      <div className="font-bold text-2xl text-accent mb-4">${pkg.price.toLocaleString()}</div>
-                    <Button variant="secondary" onClick={() => handleViewDetails(pkg)} className="w-full rounded-md font-semibold text-base hover:bg-primary">View Details</Button>
+                    <Button variant="secondary" onClick={() => handleViewDetails(pkg)} className="w-full rounded-md font-semibold text-base">View Details</Button>
                   </CardContent>
                 </Card>
               ))}
@@ -135,7 +122,7 @@ export default function HomePage() {
         <section id="features" className="py-24 bg-muted">
              <div className="container mx-auto px-4 md:px-6">
                  <div className="text-center mb-16">
-                    <h2 className="font-headline text-4xl font-bold text-foreground">Why Choose Us?</h2>
+                    <h2 className="font-headline text-4xl font-bold text-black">Why Choose Us?</h2>
                     <p className="mt-2 text-lg text-primary max-w-3xl mx-auto">
                         We're committed to making your travel experience seamless and memorable.
                     </p>
@@ -143,22 +130,22 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <Card className="text-center p-8 rounded-lg bg-white shadow-md">
                         <Headset className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-foreground mb-3">24/7 Support</h3>
+                        <h3 className="text-xl font-bold text-black mb-3">24/7 Support</h3>
                         <p className="text-gray-600">Our travel experts are available round the clock to assist you</p>
                     </Card>
                      <Card className="text-center p-8 rounded-lg bg-white shadow-md">
-                        <HandHoldingUsd className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-foreground mb-3">Best Price Guarantee</h3>
+                        <HandCoins className="mx-auto h-12 w-12 text-primary mb-5" />
+                        <h3 className="text-xl font-bold text-black mb-3">Best Price Guarantee</h3>
                         <p className="text-gray-600">We'll match any lower price you find for the same package</p>
                     </Card>
                      <Card className="text-center p-8 rounded-lg bg-white shadow-md">
                         <Leaf className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-foreground mb-3">Eco-Friendly Stays</h3>
+                        <h3 className="text-xl font-bold text-black mb-3">Eco-Friendly Stays</h3>
                         <p className="text-gray-600">Carefully selected sustainable accommodations</p>
                     </Card>
                      <Card className="text-center p-8 rounded-lg bg-white shadow-md">
-                        <MapMarkedAlt className="mx-auto h-12 w-12 text-primary mb-5" />
-                        <h3 className="text-xl font-bold text-foreground mb-3">Local Experts</h3>
+                        <MapPin className="mx-auto h-12 w-12 text-primary mb-5" />
+                        <h3 className="text-xl font-bold text-black mb-3">Local Experts</h3>
                         <p className="text-gray-600">Authentic experiences guided by destination specialists</p>
                     </Card>
                 </div>
@@ -167,7 +154,7 @@ export default function HomePage() {
 
         <section className="py-20 bg-secondary text-white text-center">
             <div className="container mx-auto px-4 md:px-6">
-                <h2 className="text-4xl font-bold mb-5">Get Travel Deals & Updates</h2>
+                <h2 className="text-4xl font-bold mb-5 text-black">Get Travel Deals & Updates</h2>
                 <p className="max-w-xl mx-auto mb-8">Subscribe to our newsletter for exclusive offers and travel inspiration</p>
                 <form className="flex max-w-md mx-auto">
                     <Input type="email" placeholder="Your email address" className="flex-1 !rounded-l-full !rounded-r-none text-black" />
@@ -177,7 +164,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer id="footer" className="bg-foreground text-muted py-16">
+      <footer id="footer" className="bg-accent text-muted py-16">
         <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10">
                 <div>
@@ -187,7 +174,6 @@ export default function HomePage() {
                         <a href="#" className="text-secondary hover:text-white"><Facebook /></a>
                         <a href="#" className="text-secondary hover:text-white"><Instagram /></a>
                         <a href="#" className="text-secondary hover:text-white"><Twitter /></a>
-                        <a href="#" className="text-secondary hover:text-white"><Pinterest /></a>
                     </div>
                 </div>
                  <div>
@@ -212,9 +198,9 @@ export default function HomePage() {
                  <div>
                     <h3 className="text-white text-xl font-bold mb-5">Contact Info</h3>
                     <ul className="space-y-3">
-                        <li className="flex items-start gap-3"><MapMarkerAlt className="mt-1 h-5 w-5 text-secondary" /> 123 Beach Road, Miami, FL</li>
+                        <li className="flex items-start gap-3"><MapPin className="mt-1 h-5 w-5 text-secondary" /> 123 Beach Road, Miami, FL</li>
                         <li className="flex items-start gap-3"><Phone className="h-5 w-5 text-secondary" /> +1 (555) 123-4567</li>
-                        <li className="flex items-start gap-3"><Envelope className="h-5 w-5 text-secondary" /> info@travelescape.com</li>
+                        <li className="flex items-start gap-3"><Mail className="h-5 w-5 text-secondary" /> info@travelescape.com</li>
                     </ul>
                 </div>
             </div>
@@ -228,7 +214,7 @@ export default function HomePage() {
         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent className="max-w-2xl p-0">
              <DialogHeader className="p-6 pb-4">
-               <DialogTitle className="font-headline text-3xl text-foreground">{selectedPackage.title}</DialogTitle>
+               <DialogTitle className="font-headline text-3xl text-black">{selectedPackage.title}</DialogTitle>
                <DialogDescription>{selectedPackage.location}</DialogDescription>
              </DialogHeader>
             <div className="px-6 pb-6">
