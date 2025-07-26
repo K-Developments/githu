@@ -22,10 +22,17 @@ import {
 export default function HomePage() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showNav, setShowNav] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const controlNavbar = () => {
       if (typeof window !== 'undefined') {
+        if (window.scrollY > 50) {
+          setScrolled(true);
+        } else {
+          setScrolled(false);
+        }
+
         if (window.scrollY > lastScrollY && window.scrollY > 100) { // if scroll down hide the navbar
           setShowNav(false);
         } else { // if scroll up show the navbar
@@ -92,7 +99,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className={`fixed top-0 left-0 w-full py-[30px] z-50 transition-transform duration-300 ${showNav ? 'translate-y-0' : '-translate-y-full'}`}>
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${showNav ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'py-5 bg-deep-ocean shadow-lg' : 'py-[30px]'}`}>
         <div className="container mx-auto flex justify-between items-center px-4">
           <a href="#" className="font-headline text-2xl font-bold text-white tracking-[2px]">
             Island Hopes<span className="text-muted">Travels</span>
