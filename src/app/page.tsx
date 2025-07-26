@@ -236,7 +236,7 @@ export default function HomePage() {
                     <Badge variant="accent" className="mb-2">{pkg.theme}</Badge>
                     <CardTitle className="font-headline text-2xl">{pkg.title}</CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-1 text-muted-foreground">
-                      <MapPin className="h-4 w-4" /> {pkg.location}
+                      <MapPin className="h-4 w-4 text-accent" /> {pkg.location}
                     </CardDescription>
                     <p className="mt-4 text-sm text-foreground/80 leading-relaxed line-clamp-3">{pkg.description}</p>
                   </CardContent>
@@ -341,7 +341,7 @@ export default function HomePage() {
                                      <Card className="w-full bg-background transition-all animate-in fade-in-50">
                                          <CardHeader>
                                              <CardTitle className="font-headline">{recommendationResult.title}</CardTitle>
-                                             <CardDescription className="flex items-center gap-2"><MapPin className="h-4 w-4"/>{recommendationResult.location}</CardDescription>
+                                             <CardDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-accent"/>{recommendationResult.location}</CardDescription>
                                          </CardHeader>
                                          <CardContent>
                                              <Image src={recommendationResult.images[0]} data-ai-hint={recommendationResult.imageHints[0]} alt={recommendationResult.title} width={400} height={250} className="rounded-lg object-cover w-full h-40" />
@@ -468,7 +468,7 @@ export default function HomePage() {
           <DialogContent className="max-w-4xl max-h-[90vh] grid-rows-[auto_1fr_auto] p-0">
              <DialogHeader className="p-6 pb-0">
                <DialogTitle className="font-headline text-3xl">{selectedPackage.title}</DialogTitle>
-               <DialogDescription className="flex items-center gap-2"><MapPin className="h-4 w-4" />{selectedPackage.location}</DialogDescription>
+               <DialogDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-accent" />{selectedPackage.location}</DialogDescription>
              </DialogHeader>
             <div className="overflow-y-auto px-6">
                 <div className="grid md:grid-cols-2 gap-6 mt-4">
@@ -525,6 +525,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-    
