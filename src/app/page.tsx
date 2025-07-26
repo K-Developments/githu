@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   ChevronDown,
   ConciergeBell, 
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface HeroData {
   headline: string;
@@ -37,6 +38,15 @@ export default function HomePage() {
   const [showNav, setShowNav] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [heroData, setHeroData] = useState<HeroData | null>(null);
+
+  const scrollContainerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: scrollContainerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const gridScrollY = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+  const gridOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
 
   useEffect(() => {
     const fetchHeroData = async () => {
@@ -162,84 +172,106 @@ export default function HomePage() {
 
       <main className="flex-1">
        {heroData ? (
-          <section id="home" className="relative h-screen min-h-[800px] w-full flex items-center">
-             <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{backgroundImage: `url(${heroData.backgroundUrl})`}} />
-             <div className="absolute inset-0 bg-deep-ocean/30" />
-            <div className="container relative mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 md:pt-0">
-              {/* Left Column: Hero Content */}
-              <div className="max-w-xl text-left">
-                <h1 className="font-headline text-5xl md:text-7xl font-bold leading-tight mb-5 text-white text-shadow">
-                  {heroData.headline}
-                </h1>
-                <p className="text-lg md:text-xl text-muted mb-10 max-w-2xl font-light">
-                  {heroData.description}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-5">
-                   <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-white border border-white overflow-hidden z-10 transition-all duration-300">
-                      <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
-                      <span className="relative">{heroData.buttonPrimary}</span>
-                   </a>
-                   <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-white transition-all duration-300">
-                    {heroData.buttonSecondary}
-                  </a>
-                </div>
-              </div>
-
-              {/* Right Column: Broken Grid with Video and Images */}
-              <div className="relative h-[60vh] min-h-[500px] hidden md:block">
-                <div className="absolute inset-0 w-full h-full">
-                  <div className="relative w-full h-full">
-                    {/* Main Video */}
-                    <div className="absolute top-0 left-0 w-2/3 h-2/3 shadow-2xl overflow-hidden rounded-lg">
-                      <video
-                        src={heroData.videoUrl}
-                        autoPlay
-                        muted
-                        loop
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    {/* Small Image 1 */}
-                    <div className="absolute bottom-1/4 right-0 w-[45%] h-1/2 shadow-xl overflow-hidden rounded-lg border-8 border-white">
-                      <Image
-                        src={heroData.imageUrl1}
-                        alt="Luxury travel 1"
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-cover"
-                        data-ai-hint="luxury beach"
-                      />
-                    </div>
-                    {/* Small Image 2 */}
-                    <div className="absolute bottom-0 left-1/4 w-1/3 h-1/2 shadow-lg overflow-hidden rounded-lg border-4 border-white z-10">
-                       <Image
-                        src={heroData.imageUrl2}
-                        alt="Luxury travel 2"
-                        width={300}
-                        height={300}
-                        className="w-full h-full object-cover"
-                        data-ai-hint="yacht deck"
-                      />
-                    </div>
-                     {/* Small Image 3 */}
-                    <div className="absolute top-2/3 right-1/4 w-1/3 h-1/3 shadow-lg overflow-hidden rounded-lg border-4 border-white z-20">
-                       <Image
-                        src={heroData.imageUrl3}
-                        alt="Luxury travel 3"
-                        width={300}
-                        height={400}
-                        className="w-full h-full object-cover"
-                        data-ai-hint="resort interior"
-                      />
-                    </div>
+          <div ref={scrollContainerRef} className="relative h-[200vh] w-full">
+            <div className="sticky top-0 h-screen w-full overflow-hidden">
+              <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{backgroundImage: `url(${heroData.backgroundUrl})`}} />
+              <div className="absolute inset-0 bg-deep-ocean/30" />
+              <motion.div style={{ opacity: gridOpacity }} className="container relative mx-auto grid md:grid-cols-2 gap-8 items-center h-full pt-20 md:pt-0">
+                {/* Left Column: Hero Content */}
+                <div className="max-w-xl text-left">
+                  <h1 className="font-headline text-5xl md:text-7xl font-bold leading-tight mb-5 text-white text-shadow">
+                    {heroData.headline}
+                  </h1>
+                  <p className="text-lg md:text-xl text-muted mb-10 max-w-2xl font-light">
+                    {heroData.description}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-white border border-white overflow-hidden z-10 transition-all duration-300">
+                        <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
+                        <span className="relative">{heroData.buttonPrimary}</span>
+                    </a>
+                    <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-white transition-all duration-300">
+                      {heroData.buttonSecondary}
+                    </a>
                   </div>
                 </div>
-              </div>
+
+                {/* Right Column: Broken Grid with Video and Images */}
+                <motion.div style={{ y: gridScrollY }} className="relative h-[150vh] min-h-[500px] hidden md:block">
+                  <div className="absolute inset-0 w-full h-full">
+                    <div className="relative w-full h-full">
+                      {/* Main Video */}
+                      <motion.div 
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.8 }}
+                        className="absolute top-0 left-0 w-2/3 h-2/3 shadow-2xl overflow-hidden rounded-lg">
+                        <video
+                          src={heroData.videoUrl}
+                          autoPlay
+                          muted
+                          loop
+                          className="w-full h-full object-cover"
+                        />
+                      </motion.div>
+                      {/* Small Image 1 */}
+                      <motion.div 
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="absolute bottom-1/4 right-0 w-[45%] h-1/2 shadow-xl overflow-hidden rounded-lg border-8 border-white">
+                        <Image
+                          src={heroData.imageUrl1}
+                          alt="Luxury travel 1"
+                          width={400}
+                          height={400}
+                          className="w-full h-full object-cover"
+                          data-ai-hint="luxury beach"
+                        />
+                      </motion.div>
+                      {/* Small Image 2 */}
+                      <motion.div 
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="absolute bottom-0 left-1/4 w-1/3 h-1/2 shadow-lg overflow-hidden rounded-lg border-4 border-white z-10">
+                        <Image
+                          src={heroData.imageUrl2}
+                          alt="Luxury travel 2"
+                          width={300}
+                          height={300}
+                          className="w-full h-full object-cover"
+                          data-ai-hint="yacht deck"
+                        />
+                      </motion.div>
+                      {/* Small Image 3 */}
+                      <motion.div 
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="absolute top-2/3 right-1/4 w-1/3 h-1/3 shadow-lg overflow-hidden rounded-lg border-4 border-white z-20">
+                        <Image
+                          src={heroData.imageUrl3}
+                          alt="Luxury travel 3"
+                          width={300}
+                          height={400}
+                          className="w-full h-full object-cover"
+                          data-ai-hint="resort interior"
+                        />
+                      </motion.div>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+              <motion.div style={{ opacity: gridOpacity }} className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-2xl animate-bounce">
+                  <ChevronDown />
+              </motion.div>
             </div>
-             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-2xl animate-bounce">
-                <ChevronDown />
-            </div>
-          </section>
+          </div>
         ) : (
           <div className="h-screen flex items-center justify-center">Loading...</div>
         )}
