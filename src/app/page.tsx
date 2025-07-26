@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { 
   ChevronDown,
   ConciergeBell, 
@@ -19,6 +20,30 @@ import {
 
 
 export default function HomePage() {
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showNav, setShowNav] = useState(true);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        if (window.scrollY > lastScrollY && window.scrollY > 100) { // if scroll down hide the navbar
+          setShowNav(false);
+        } else { // if scroll up show the navbar
+          setShowNav(true);
+        }
+        setLastScrollY(window.scrollY);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, [lastScrollY]);
+
+
   const navLinks = [
     { name: "Home", href: "#" },
     { name: "Destinations", href: "#destinations" },
@@ -67,7 +92,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="absolute top-0 left-0 w-full py-[30px] z-50">
+      <header className={`fixed top-0 left-0 w-full py-[30px] z-50 transition-transform duration-300 ${showNav ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container mx-auto flex justify-between items-center px-4">
           <a href="#" className="font-headline text-2xl font-bold text-white tracking-[2px]">
             Island Hopes<span className="text-muted">Travels</span>
