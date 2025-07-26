@@ -20,6 +20,7 @@ interface HeroData {
   videoUrl: string;
   imageUrl1: string;
   imageUrl2: string;
+  imageUrl3: string;
 }
 
 export default function AdminHomePage() {
@@ -32,6 +33,7 @@ export default function AdminHomePage() {
     videoUrl: "",
     imageUrl1: "",
     imageUrl2: "",
+    imageUrl3: "",
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -55,6 +57,7 @@ export default function AdminHomePage() {
             videoUrl: "https://placehold.co/600x400.mp4/EAE3A4/287289?text=Tropical+Escape",
             imageUrl1: "https://placehold.co/400x400.png",
             imageUrl2: "https://placehold.co/300x300.png",
+            imageUrl3: "https://placehold.co/300x400.png",
           });
         }
       } catch (error) {
@@ -151,6 +154,10 @@ export default function AdminHomePage() {
               <Input id="imageUrl2" value={heroData.imageUrl2} onChange={handleInputChange} />
             </div>
           </div>
+          <div className="space-y-2">
+              <Label htmlFor="imageUrl3">Hero Image 3 URL</Label>
+              <Input id="imageUrl3" value={heroData.imageUrl3} onChange={handleInputChange} />
+            </div>
           <Button onClick={handleSave}>Save Changes</Button>
         </CardContent>
       </Card>

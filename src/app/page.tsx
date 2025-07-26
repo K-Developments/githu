@@ -29,6 +29,7 @@ interface HeroData {
   videoUrl: string;
   imageUrl1: string;
   imageUrl2: string;
+  imageUrl3: string;
 }
 
 export default function HomePage() {
@@ -54,6 +55,7 @@ export default function HomePage() {
             videoUrl: "https://placehold.co/600x400.mp4/EAE3A4/287289?text=Tropical+Escape",
             imageUrl1: "https://placehold.co/400x400.png",
             imageUrl2: "https://placehold.co/300x300.png",
+            imageUrl3: "https://placehold.co/300x400.png",
           });
         }
       } catch (error) {
@@ -198,7 +200,7 @@ export default function HomePage() {
                       />
                     </div>
                     {/* Small Image 1 */}
-                    <div className="absolute bottom-0 right-0 w-1/2 h-1/2 shadow-xl overflow-hidden rounded-lg border-8 border-white">
+                    <div className="absolute bottom-1/4 right-0 w-[45%] h-1/2 shadow-xl overflow-hidden rounded-lg border-8 border-white">
                       <Image
                         src={heroData.imageUrl1}
                         alt="Luxury travel 1"
@@ -209,7 +211,7 @@ export default function HomePage() {
                       />
                     </div>
                     {/* Small Image 2 */}
-                    <div className="absolute top-1/2 left-1/4 w-1/3 h-1/3 shadow-lg overflow-hidden rounded-lg border-4 border-white transform -translate-y-1/2 -translate-x-1/2 z-10">
+                    <div className="absolute bottom-0 left-1/4 w-1/3 h-1/2 shadow-lg overflow-hidden rounded-lg border-4 border-white z-10">
                        <Image
                         src={heroData.imageUrl2}
                         alt="Luxury travel 2"
@@ -217,6 +219,17 @@ export default function HomePage() {
                         height={300}
                         className="w-full h-full object-cover"
                         data-ai-hint="yacht deck"
+                      />
+                    </div>
+                     {/* Small Image 3 */}
+                    <div className="absolute top-2/3 right-1/4 w-1/3 h-1/3 shadow-lg overflow-hidden rounded-lg border-4 border-white z-20">
+                       <Image
+                        src={heroData.imageUrl3}
+                        alt="Luxury travel 3"
+                        width={300}
+                        height={400}
+                        className="w-full h-full object-cover"
+                        data-ai-hint="resort interior"
                       />
                     </div>
                   </div>
@@ -375,5 +388,4 @@ export default function HomePage() {
     </div>
   );
 }
-
     
