@@ -1,41 +1,26 @@
 "use client";
 
-import { useState, useMemo, type SVGProps } from "react";
+import { useState, type SVGProps } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { packages as allPackages, type Package } from "@/lib/data";
 import {
-  Heart,
-  Mail,
-  MapPin,
-  MessageSquare,
-  Palette,
-  Plane,
-  Send,
-  Sparkles,
-  Star,
-  Sun,
-  TrendingUp,
-  User,
-  Wind,
-  Bed,
-  Utensils,
-  Ship,
-  ChevronRight,
+  Facebook,
+  Twitter,
+  Instagram,
+  Pinterest,
+  Headset,
+  HandHoldingUsd,
+  Leaf,
+  MapMarkedAlt,
+  MapMarkerAlt,
+  Phone,
+  Envelope,
 } from "lucide-react";
+
 
 // Logo Component
 function Logo(props: SVGProps<SVGSVGElement>) {
@@ -48,475 +33,210 @@ function Logo(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-// Zod schema for booking form
-const bookingFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  destination: z.string().optional(),
-  message: z.string().min(10, { message: "Message must be at least 10 characters long." }),
-});
-
-// Zod schema for recommendation form
-const recommendationInterests = [
-    { id: "beaches", label: "Beaches" },
-    { id: "hiking", label: "Hiking" },
-    { id: "diving", label: "Diving" },
-    { id: "cuisine", label: "Cuisine" },
-    { id: "history", label: "History" },
-    { id: "nightlife", label: "Nightlife" },
-] as const;
-
-const recommendationSchema = z.object({
-  travelStyle: z.enum(["Adventure", "Relaxation", "Romance", "Culture"], { required_error: "Please select a travel style." }),
-  budget: z.enum(["economy", "standard", "luxury"], { required_error: "Please select a budget." }),
-  interests: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "You have to select at least one interest.",
-  }),
-});
-
 export default function HomePage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTheme, setSelectedTheme] = useState("All");
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [isSubmittingBooking, setSubmittingBooking] = useState(false);
-  const [isGeneratingRecommendation, setGeneratingRecommendation] = useState(false);
-  const [recommendationResult, setRecommendationResult] = useState<Package | null>(null);
-
-  const { toast } = useToast();
-
-  const bookingForm = useForm<z.infer<typeof bookingFormSchema>>({
-    resolver: zodResolver(bookingFormSchema),
-    defaultValues: { name: "", email: "", destination: "", message: "" },
-  });
-
-  const recommendationForm = useForm<z.infer<typeof recommendationSchema>>({
-    resolver: zodResolver(recommendationSchema),
-    defaultValues: { interests: ["beaches"] },
-  });
-
-  const filteredPackages = useMemo(() => {
-    return allPackages
-      .filter((p) => selectedTheme === "All" || p.theme === selectedTheme)
-      .filter(
-        (p) =>
-          p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.location.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-  }, [searchTerm, selectedTheme]);
 
   const handleViewDetails = (pkg: Package) => {
     setSelectedPackage(pkg);
     setDialogOpen(true);
   };
-
-  const handleBookingSubmit = async (values: z.infer<typeof bookingFormSchema>) => {
-    setSubmittingBooking(true);
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
-    setSubmittingBooking(false);
-    toast({
-      title: "Inquiry Sent!",
-      description: "Thank you for your interest. We'll get back to you within 24 hours.",
-    });
-    bookingForm.reset();
-  };
-
-  const handleRecommendationSubmit = async (values: z.infer<typeof recommendationSchema>) => {
-    setGeneratingRecommendation(true);
-    setRecommendationResult(null);
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate AI call
-    // Simple logic to pick a "recommended" package
-    const recommended = allPackages.find(p => p.theme === values.travelStyle) || allPackages[0];
-    setRecommendationResult(recommended);
-    setGeneratingRecommendation(false);
-  };
   
   const navLinks = [
+    { name: "Home", href: "#home" },
     { name: "Destinations", href: "#destinations" },
-    { name: "Recommendations", href: "#recommendations" },
-    { name: "Contact", href: "#contact" },
+    { name: "Deals", href: "#" },
+    { name: "About", href: "#features" },
+    { name: "Contact", href: "#footer" },
   ];
 
+  const featuredPackages = allPackages.slice(0, 3);
+
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <header className="sticky top-0 z-50 w-full bg-primary/80 backdrop-blur-sm shadow-sm">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-          <a href="#home" className="flex items-center gap-2">
-            <Logo className="h-8 w-8 text-primary-foreground" />
-            <span className="font-headline text-xl font-bold text-primary-foreground tracking-wide">
-              Island Hopes Escapes
-            </span>
+    <div className="flex flex-col min-h-screen bg-white">
+      <header className="fixed top-0 z-50 w-full bg-primary shadow-md">
+        <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
+          <a href="#home" className="text-2xl font-bold text-white">
+            Travel<span className="text-muted">Escape</span>
           </a>
-          <nav className="hidden md:flex gap-6">
+          <nav className="hidden md:flex gap-8">
             {navLinks.map((link) => (
-               <a key={link.name} href={link.href} className="text-sm font-medium text-primary-foreground/80 transition-colors hover:text-primary-foreground">
+               <a key={link.name} href={link.href} className="font-semibold text-white transition-colors hover:text-muted">
                  {link.name}
                </a>
             ))}
           </nav>
-          <a href="#contact">
-            <Button size="sm" variant="accent" className="hidden md:flex">Book Now</Button>
-          </a>
         </div>
       </header>
 
       <main className="flex-1">
-        <section id="home" className="relative h-[60vh] md:h-[80vh] w-full">
+        <section id="home" className="relative h-screen w-full flex items-center text-center text-white pt-20">
           <Image
-            src="https://placehold.co/1600x900.png"
+            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
             alt="Tropical beach paradise"
             layout="fill"
             objectFit="cover"
-            className="opacity-90"
-            data-ai-hint="tropical beach"
+            className="z-0"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-          <div className="absolute inset-0 flex items-center justify-center text-center">
-            <div className="container px-4 md:px-6 text-white">
-              <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold !text-white drop-shadow-lg">
-                Your Dream Island Awaits
+          <div className="absolute inset-0 bg-primary/70 z-10" />
+          <div className="container relative z-20 px-4 md:px-6">
+              <h1 className="font-headline text-6xl font-bold !text-white drop-shadow-lg">
+                Discover Your Dream Escape
               </h1>
-              <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl !text-gray-200 drop-shadow-md">
-                Discover curated travel packages to the world's most serene and breathtaking islands.
+              <p className="font-headline mt-4 max-w-2xl mx-auto text-2xl italic !text-muted drop-shadow-md">
+                Luxury resorts, hidden gems & eco-adventures
               </p>
-              <a href="#destinations">
-                <Button size="lg" variant="accent" className="mt-8">
-                  Explore Packages
-                  <Plane className="ml-2 h-5 w-5" />
+              <div className="mt-10 flex justify-center gap-5 flex-col sm:flex-row items-center">
+                <Button size="lg" variant="accent" className="w-full sm:w-auto rounded-full px-8 py-6 text-lg border-2 border-accent hover:bg-transparent hover:text-accent">
+                  Explore Destinations
                 </Button>
-              </a>
-            </div>
+                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full px-8 py-6 text-lg border-white text-white bg-transparent hover:bg-white hover:text-foreground">
+                  Learn More
+                </Button>
+              </div>
           </div>
         </section>
 
-        <section id="destinations" className="py-16 md:py-24">
+        <section id="destinations" className="py-24">
           <div className="container mx-auto px-4 md:px-6">
-            <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-foreground">Curated Island Getaways</h2>
-              <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
-                Browse our hand-picked selection of island adventures, relaxing retreats, and romantic escapes.
+            <div className="text-center mb-16">
+              <h2 className="font-headline text-4xl font-bold text-foreground">Featured Destinations</h2>
+              <p className="mt-2 text-lg text-primary max-w-3xl mx-auto">
+                Explore our most popular travel packages handpicked for unforgettable experiences.
               </p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-4 mb-8">
-              <Input
-                placeholder="Search by destination or package..."
-                className="flex-grow"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Select value={selectedTheme} onValueChange={setSelectedTheme}>
-                <SelectTrigger className="w-full md:w-[240px]">
-                  <SelectValue placeholder="Filter by theme" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All Themes</SelectItem>
-                  <SelectItem value="Adventure">Adventure</SelectItem>
-                  <SelectItem value="Relaxation">Relaxation</SelectItem>
-                  <SelectItem value="Romance">Romance</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPackages.map((pkg) => (
-                <Card key={pkg.id} className="overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 bg-white">
-                  <CardHeader className="p-0">
+              {featuredPackages.map((pkg) => (
+                <Card key={pkg.id} className="overflow-hidden transition-transform duration-300 hover:-translate-y-2.5 rounded-lg shadow-lg bg-white">
+                  <div className="h-52 overflow-hidden">
                     <Image
                       src={pkg.images[0]}
                       alt={pkg.title}
                       width={600}
                       height={400}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       data-ai-hint={pkg.imageHints[0]}
                     />
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <Badge variant="secondary" className="mb-2">{pkg.theme}</Badge>
-                    <CardTitle className="font-headline text-2xl text-foreground">{pkg.title}</CardTitle>
-                    <CardDescription className="flex items-center gap-2 mt-1 text-muted-foreground">
-                      <MapPin className="h-4 w-4 text-secondary" /> {pkg.location}
-                    </CardDescription>
-                    <p className="mt-4 text-sm text-foreground/80 leading-relaxed line-clamp-3">{pkg.description}</p>
+                  </div>
+                  <CardContent className="p-5">
+                    <CardTitle className="font-headline text-2xl text-foreground mb-2">{pkg.title}</CardTitle>
+                    <CardDescription className="text-gray-600 mb-4 h-16">{pkg.description}</CardDescription>
+                     <div className="font-bold text-2xl text-accent mb-4">${pkg.price.toLocaleString()}</div>
+                    <Button variant="secondary" onClick={() => handleViewDetails(pkg)} className="w-full rounded-md font-semibold text-base hover:bg-primary">View Details</Button>
                   </CardContent>
-                  <CardFooter className="flex justify-between items-center">
-                    <div className="font-bold text-xl text-primary">${pkg.price.toLocaleString()}</div>
-                    <Button variant="accent" onClick={() => handleViewDetails(pkg)}>View Details</Button>
-                  </CardFooter>
                 </Card>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="recommendations" className="py-16 md:py-24">
-            <div className="container mx-auto px-4 md:px-6">
-                 <div className="text-center mb-12">
-                    <Sparkles className="mx-auto h-10 w-10 text-accent mb-2" />
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold text-foreground">Find Your Perfect Escape</h2>
-                    <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Let our AI guide you to the island destination that perfectly matches your desires.
+        <section id="features" className="py-24 bg-muted">
+             <div className="container mx-auto px-4 md:px-6">
+                 <div className="text-center mb-16">
+                    <h2 className="font-headline text-4xl font-bold text-foreground">Why Choose Us?</h2>
+                    <p className="mt-2 text-lg text-primary max-w-3xl mx-auto">
+                        We're committed to making your travel experience seamless and memorable.
                     </p>
                 </div>
-
-                <Card className="max-w-4xl mx-auto bg-white">
-                    <CardContent className="p-6 md:p-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                            <Form {...recommendationForm}>
-                                <form onSubmit={recommendationForm.handleSubmit(handleRecommendationSubmit)} className="space-y-8">
-                                    <FormField
-                                        control={recommendationForm.control}
-                                        name="travelStyle"
-                                        render={({ field }) => (
-                                            <FormItem className="space-y-3">
-                                                <FormLabel className="text-lg font-semibold text-foreground">What's your travel style?</FormLabel>
-                                                <FormControl>
-                                                    <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid grid-cols-2 gap-4">
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl><RadioGroupItem value="Adventure" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Wind className="h-4 w-4 text-secondary"/>Adventure</FormLabel>
-                                                        </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl><RadioGroupItem value="Relaxation" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Sun className="h-4 w-4 text-secondary"/>Relaxation</FormLabel>
-                                                        </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl><RadioGroupItem value="Romance" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Heart className="h-4 w-4 text-secondary"/>Romance</FormLabel>
-                                                        </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl><RadioGroupItem value="Culture" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Palette className="h-4 w-4 text-secondary"/>Culture</FormLabel>
-                                                        </FormItem>
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={recommendationForm.control}
-                                        name="interests"
-                                        render={() => (
-                                            <FormItem>
-                                                <FormLabel className="text-lg font-semibold text-foreground">What are your interests?</FormLabel>
-                                                <div className="grid grid-cols-2 gap-2">
-                                                    {recommendationInterests.map((item) => (
-                                                        <FormField
-                                                            key={item.id}
-                                                            control={recommendationForm.control}
-                                                            name="interests"
-                                                            render={({ field }) => (
-                                                                <FormItem key={item.id} className="flex flex-row items-start space-x-3 space-y-0">
-                                                                    <FormControl>
-                                                                        <Checkbox
-                                                                            checked={field.value?.includes(item.id)}
-                                                                            onCheckedChange={(checked) => {
-                                                                                return checked
-                                                                                    ? field.onChange([...(field.value || []), item.id])
-                                                                                    : field.onChange(field.value?.filter((value) => value !== item.id));
-                                                                            }}
-                                                                        />
-                                                                    </FormControl>
-                                                                    <FormLabel className="text-sm font-normal">{item.label}</FormLabel>
-                                                                </FormItem>
-                                                            )}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button type="submit" variant="accent" className="w-full" disabled={isGeneratingRecommendation}>
-                                        {isGeneratingRecommendation ? 'Generating...' : 'Get Recommendation'}
-                                        <Sparkles className="ml-2 h-4 w-4" />
-                                    </Button>
-                                </form>
-                            </Form>
-                            <div className="relative border-l border-dashed pl-8 min-h-[200px] flex items-center justify-center">
-                                 {isGeneratingRecommendation && <div className="text-center text-muted-foreground">Finding your perfect paradise...</div>}
-                                 {!isGeneratingRecommendation && recommendationResult && (
-                                     <Card className="w-full bg-background transition-all animate-in fade-in-50">
-                                         <CardHeader>
-                                             <CardTitle className="font-headline text-foreground">{recommendationResult.title}</CardTitle>
-                                             <CardDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary"/>{recommendationResult.location}</CardDescription>
-                                         </CardHeader>
-                                         <CardContent>
-                                             <Image src={recommendationResult.images[0]} data-ai-hint={recommendationResult.imageHints[0]} alt={recommendationResult.title} width={400} height={250} className="rounded-lg object-cover w-full h-40" />
-                                             <p className="text-sm mt-4">{recommendationResult.description}</p>
-                                         </CardContent>
-                                         <CardFooter>
-                                             <Button variant="accent" className="w-full" onClick={() => handleViewDetails(recommendationResult)}>View Full Package</Button>
-                                         </CardFooter>
-                                     </Card>
-                                 )}
-                                 {!isGeneratingRecommendation && !recommendationResult && (
-                                    <div className="text-center text-muted-foreground">Your personalized recommendation will appear here.</div>
-                                 )}
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <Card className="text-center p-8 rounded-lg bg-white shadow-md">
+                        <Headset className="mx-auto h-12 w-12 text-primary mb-5" />
+                        <h3 className="text-xl font-bold text-foreground mb-3">24/7 Support</h3>
+                        <p className="text-gray-600">Our travel experts are available round the clock to assist you</p>
+                    </Card>
+                     <Card className="text-center p-8 rounded-lg bg-white shadow-md">
+                        <HandHoldingUsd className="mx-auto h-12 w-12 text-primary mb-5" />
+                        <h3 className="text-xl font-bold text-foreground mb-3">Best Price Guarantee</h3>
+                        <p className="text-gray-600">We'll match any lower price you find for the same package</p>
+                    </Card>
+                     <Card className="text-center p-8 rounded-lg bg-white shadow-md">
+                        <Leaf className="mx-auto h-12 w-12 text-primary mb-5" />
+                        <h3 className="text-xl font-bold text-foreground mb-3">Eco-Friendly Stays</h3>
+                        <p className="text-gray-600">Carefully selected sustainable accommodations</p>
+                    </Card>
+                     <Card className="text-center p-8 rounded-lg bg-white shadow-md">
+                        <MapMarkedAlt className="mx-auto h-12 w-12 text-primary mb-5" />
+                        <h3 className="text-xl font-bold text-foreground mb-3">Local Experts</h3>
+                        <p className="text-gray-600">Authentic experiences guided by destination specialists</p>
+                    </Card>
+                </div>
+             </div>
         </section>
 
-        <section id="contact" className="py-16 md:py-24">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="font-headline text-3xl md:text-4xl font-bold text-foreground">Ready for an Adventure?</h2>
-                <p className="mt-4 text-lg text-muted-foreground">
-                  Our travel experts are here to help you plan the perfect island getaway. Fill out the form, and we'll craft a personalized itinerary just for you.
-                </p>
-                <div className="mt-8 space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-secondary/10 p-3 rounded-full"><TrendingUp className="h-6 w-6 text-secondary"/></div>
-                    <p><span className="font-bold">Personalized Planning:</span> Tailored itineraries to match your travel style.</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="bg-secondary/10 p-3 rounded-full"><Star className="h-6 w-6 text-secondary"/></div>
-                    <p><span className="font-bold">Expert Support:</span> 24/7 assistance from our experienced travel agents.</p>
-                  </div>
-                </div>
-              </div>
-              <Card className="bg-white">
-                <CardHeader>
-                  <CardTitle className="text-foreground">Booking Inquiry</CardTitle>
-                  <CardDescription>Send us a message, and we'll be in touch shortly.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Form {...bookingForm}>
-                    <form onSubmit={bookingForm.handleSubmit(handleBookingSubmit)} className="space-y-4">
-                      <FormField control={bookingForm.control} name="name" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Full Name</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input placeholder="John Doe" {...field} className="pl-10" />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField control={bookingForm.control} name="email" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Email Address</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input placeholder="you@example.com" {...field} className="pl-10" />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField control={bookingForm.control} name="destination" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Destination of Interest (optional)</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input placeholder="e.g., Maldives" {...field} className="pl-10" />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField control={bookingForm.control} name="message" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Your Message</FormLabel>
-                            <FormControl>
-                              <Textarea placeholder="Tell us about your dream vacation..." {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button type="submit" variant="accent" className="w-full" disabled={isSubmittingBooking}>
-                        {isSubmittingBooking ? "Sending..." : "Send Inquiry"}
-                        <Send className="ml-2 h-4 w-4" />
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
+        <section className="py-20 bg-secondary text-white text-center">
+            <div className="container mx-auto px-4 md:px-6">
+                <h2 className="text-4xl font-bold mb-5">Get Travel Deals & Updates</h2>
+                <p className="max-w-xl mx-auto mb-8">Subscribe to our newsletter for exclusive offers and travel inspiration</p>
+                <form className="flex max-w-md mx-auto">
+                    <Input type="email" placeholder="Your email address" className="flex-1 !rounded-l-full !rounded-r-none text-black" />
+                    <Button type="submit" variant="accent" className="!rounded-r-full !rounded-l-none font-bold hover:bg-foreground">Subscribe</Button>
+                </form>
             </div>
-          </div>
         </section>
       </main>
 
-      <footer className="bg-primary text-primary-foreground py-8">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-            <a href="#home" className="flex items-center justify-center gap-2 mb-4">
-                <Logo className="h-8 w-8" />
-                <span className="font-headline text-xl font-bold tracking-wide">
-                    Island Hopes Escapes
-                </span>
-            </a>
-            <p className="text-sm text-primary-foreground/80">&copy; {new Date().getFullYear()} Island Hopes Escapes. All rights reserved.</p>
+      <footer id="footer" className="bg-foreground text-muted py-16">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10">
+                <div>
+                    <h3 className="text-white text-xl font-bold mb-5">TravelEscape</h3>
+                    <p className="mb-5">Making dream vacations a reality since 2010. We specialize in personalized travel experiences.</p>
+                    <div className="flex gap-4">
+                        <a href="#" className="text-secondary hover:text-white"><Facebook /></a>
+                        <a href="#" className="text-secondary hover:text-white"><Instagram /></a>
+                        <a href="#" className="text-secondary hover:text-white"><Twitter /></a>
+                        <a href="#" className="text-secondary hover:text-white"><Pinterest /></a>
+                    </div>
+                </div>
+                 <div>
+                    <h3 className="text-white text-xl font-bold mb-5">Quick Links</h3>
+                    <ul className="space-y-3">
+                        <li><a href="#" className="hover:text-white">Home</a></li>
+                        <li><a href="#" className="hover:text-white">Destinations</a></li>
+                        <li><a href="#" className="hover:text-white">Special Offers</a></li>
+                        <li><a href="#" className="hover:text-white">Travel Blog</a></li>
+                        <li><a href="#" className="hover:text-white">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 className="text-white text-xl font-bold mb-5">Support</h3>
+                    <ul className="space-y-3">
+                        <li><a href="#" className="hover:text-white">FAQs</a></li>
+                        <li><a href="#" className="hover:text-white">Booking Terms</a></li>
+                        <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" className="hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h3 className="text-white text-xl font-bold mb-5">Contact Info</h3>
+                    <ul className="space-y-3">
+                        <li className="flex items-start gap-3"><MapMarkerAlt className="mt-1 h-5 w-5 text-secondary" /> 123 Beach Road, Miami, FL</li>
+                        <li className="flex items-start gap-3"><Phone className="h-5 w-5 text-secondary" /> +1 (555) 123-4567</li>
+                        <li className="flex items-start gap-3"><Envelope className="h-5 w-5 text-secondary" /> info@travelescape.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div className="text-center pt-8 border-t border-primary">
+                <p>&copy; {new Date().getFullYear()} TravelEscape. All rights reserved.</p>
+            </div>
         </div>
       </footer>
 
       {selectedPackage && (
         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] grid-rows-[auto_1fr_auto] p-0">
-             <DialogHeader className="p-6 pb-0">
+          <DialogContent className="max-w-2xl p-0">
+             <DialogHeader className="p-6 pb-4">
                <DialogTitle className="font-headline text-3xl text-foreground">{selectedPackage.title}</DialogTitle>
-               <DialogDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary" />{selectedPackage.location}</DialogDescription>
+               <DialogDescription>{selectedPackage.location}</DialogDescription>
              </DialogHeader>
-            <div className="overflow-y-auto px-6">
-                <div className="grid md:grid-cols-2 gap-6 mt-4">
-                    <div>
-                        <Image src={selectedPackage.images[0]} data-ai-hint={selectedPackage.imageHints[0]} alt={selectedPackage.title} width={800} height={600} className="rounded-lg object-cover w-full mb-4" />
-                        <p className="text-foreground/90">{selectedPackage.longDescription}</p>
-                        <div className="mt-4 flex gap-4 text-sm">
-                            <Badge variant="accent" className="text-base">${selectedPackage.price.toLocaleString()}</Badge>
-                            <Badge variant="secondary" className="text-base">{selectedPackage.duration} Days</Badge>
-                            <Badge variant="secondary" className="text-base">{selectedPackage.theme}</Badge>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 className="font-headline text-xl font-semibold mb-2 text-foreground">Itinerary</h3>
-                        <div className="space-y-4">
-                            {selectedPackage.itinerary.map(item => (
-                                <div key={item.day} className="flex gap-4">
-                                    <div className="flex flex-col items-center">
-                                        <div className="bg-accent text-accent-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold">{item.day}</div>
-                                        <div className="border-l-2 border-dashed border-border h-full"></div>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold text-foreground">{item.title}</h4>
-                                        <p className="text-sm text-muted-foreground">{item.description}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-                 <div className="mt-6">
-                    <h3 className="font-headline text-xl font-semibold mb-4 text-foreground">Reviews</h3>
-                    <div className="space-y-4">
-                    {selectedPackage.reviews.map((review, i) => (
-                        <div key={i} className="bg-background p-4 rounded-lg">
-                            <div className="flex items-center justify-between">
-                                <p className="font-semibold text-foreground">{review.name}</p>
-                                <div className="flex">
-                                    {[...Array(5)].map((_, j) => <Star key={j} className={`h-4 w-4 ${j < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`}/>)}
-                                </div>
-                            </div>
-                            <p className="text-sm text-muted-foreground mt-1">{review.text}</p>
-                        </div>
-                    ))}
-                    </div>
-                </div>
+            <div className="px-6 pb-6">
+                <Image src={selectedPackage.images[0]} data-ai-hint={selectedPackage.imageHints[0]} alt={selectedPackage.title} width={800} height={600} className="rounded-lg object-cover w-full mb-4" />
+                <p className="text-foreground/90">{selectedPackage.longDescription}</p>
+                 <div className="mt-4 font-bold text-2xl text-accent">${selectedPackage.price.toLocaleString()}</div>
             </div>
-            <div className="p-6 bg-background/50 border-t flex justify-end">
+            <div className="p-6 bg-gray-100 flex justify-end">
                 <Button variant="secondary" onClick={() => setDialogOpen(false)}>Close</Button>
             </div>
           </DialogContent>
