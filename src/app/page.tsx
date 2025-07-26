@@ -27,6 +27,9 @@ interface HeroData {
   buttonPrimary: string;
   buttonSecondary: string;
   backgroundUrl: string;
+  videoUrl: string;
+  imageUrl1: string;
+  imageUrl2: string;
 }
 
 export default function HomePage() {
@@ -49,6 +52,9 @@ export default function HomePage() {
             buttonPrimary: "Explore Collections",
             buttonSecondary: "Book Consultation",
             backgroundUrl: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            videoUrl: "https://placehold.co/600x400.mp4/EAE3A4/287289?text=Tropical+Escape",
+            imageUrl1: "https://placehold.co/400x400.png",
+            imageUrl2: "https://placehold.co/300x300.png",
           });
         }
       } catch (error) {
@@ -169,10 +175,10 @@ export default function HomePage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-5">
                    <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-white border border-white overflow-hidden z-10 transition-all duration-300">
-                      <span className="absolute top-0 left-0 w-full h-full bg-olive -z-10 transition-all duration-300 ease-in-out group-hover:w-0"></span>
+                      <span className="absolute top-0 left-0 w-0 h-full bg-olive -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
                       <span className="relative">{heroData.buttonPrimary}</span>
                    </a>
-                  <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-olive text-white border border-olive hover:bg-transparent hover:text-olive transition-all duration-300">
+                   <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-olive text-white border border-olive hover:bg-transparent hover:text-olive transition-all duration-300">
                     {heroData.buttonSecondary}
                   </a>
                 </div>
@@ -185,7 +191,7 @@ export default function HomePage() {
                     {/* Main Video */}
                     <div className="absolute top-0 left-0 w-2/3 h-2/3 shadow-2xl overflow-hidden rounded-lg">
                       <video
-                        src="https://placehold.co/600x400.mp4/EAE3A4/287289?text=Tropical+Escape"
+                        src={heroData.videoUrl}
                         autoPlay
                         muted
                         loop
@@ -195,7 +201,7 @@ export default function HomePage() {
                     {/* Small Image 1 */}
                     <div className="absolute bottom-0 right-0 w-1/2 h-1/2 shadow-xl overflow-hidden rounded-lg border-8 border-white">
                       <Image
-                        src="https://placehold.co/400x400.png"
+                        src={heroData.imageUrl1}
                         alt="Luxury travel 1"
                         width={400}
                         height={400}
@@ -206,7 +212,7 @@ export default function HomePage() {
                     {/* Small Image 2 */}
                     <div className="absolute top-1/2 left-1/4 w-1/3 h-1/3 shadow-lg overflow-hidden rounded-lg border-4 border-white transform -translate-y-1/2 -translate-x-1/2 z-10">
                        <Image
-                        src="https://placehold.co/300x300.png"
+                        src={heroData.imageUrl2}
                         alt="Luxury travel 2"
                         width={300}
                         height={300}
@@ -370,7 +376,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    

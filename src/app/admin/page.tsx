@@ -17,6 +17,9 @@ interface HeroData {
   buttonPrimary: string;
   buttonSecondary: string;
   backgroundUrl: string;
+  videoUrl: string;
+  imageUrl1: string;
+  imageUrl2: string;
 }
 
 export default function AdminHomePage() {
@@ -26,6 +29,9 @@ export default function AdminHomePage() {
     buttonPrimary: "",
     buttonSecondary: "",
     backgroundUrl: "",
+    videoUrl: "",
+    imageUrl1: "",
+    imageUrl2: "",
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -46,6 +52,9 @@ export default function AdminHomePage() {
             buttonPrimary: "Explore Collections",
             buttonSecondary: "Book Consultation",
             backgroundUrl: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            videoUrl: "https://placehold.co/600x400.mp4/EAE3A4/287289?text=Tropical+Escape",
+            imageUrl1: "https://placehold.co/400x400.png",
+            imageUrl2: "https://placehold.co/300x300.png",
           });
         }
       } catch (error) {
@@ -127,6 +136,20 @@ export default function AdminHomePage() {
            <div className="space-y-2">
             <Label htmlFor="backgroundUrl">Background Image URL</Label>
             <Input id="backgroundUrl" value={heroData.backgroundUrl} onChange={handleInputChange} />
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="videoUrl">Hero Video URL</Label>
+            <Input id="videoUrl" value={heroData.videoUrl} onChange={handleInputChange} />
+          </div>
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl1">Hero Image 1 URL</Label>
+              <Input id="imageUrl1" value={heroData.imageUrl1} onChange={handleInputChange} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl2">Hero Image 2 URL</Label>
+              <Input id="imageUrl2" value={heroData.imageUrl2} onChange={handleInputChange} />
+            </div>
           </div>
           <Button onClick={handleSave}>Save Changes</Button>
         </CardContent>
