@@ -15,7 +15,10 @@ import {
   Phone,
   Mail,
   MapPin,
-  Clock
+  Clock,
+  Youtube,
+  Ship,
+  Hotel
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -121,7 +124,7 @@ export default function HomePage() {
 
   const services = [
     { icon: ConciergeBell, title: "24/7 Concierge", description: "Dedicated travel curator available around the clock to fulfill your every request." },
-    { icon: Umbrella, title: "Villa Selection", description: "Access to 5,000+ private villas and residences unavailable to the public." },
+    { icon: Hotel, title: "Villa Selection", description: "Access to 5,000+ private villas and residences unavailable to the public." },
     { icon: Rocket, title: "Private Transfers", description: "Helicopters, yachts and luxury vehicles arranged for seamless transitions." },
     { icon: UserCog, title: "Discretion", description: "Complete privacy protocols for high-profile clients and confidential travel." }
   ];
@@ -153,37 +156,74 @@ export default function HomePage() {
       </header>
 
       <main className="flex-1">
-        {heroData ? (
-          <section id="home" className="relative h-screen min-h-[800px] w-full flex items-center bg-cover bg-center bg-fixed" style={{backgroundImage: `url('${heroData.backgroundUrl}')`}}>
-            <div className="absolute inset-0 bg-deep-ocean/30 z-10" />
-            <div className="container relative z-20 px-4 md:px-6">
-              <div className="max-w-3xl text-white">
-                <h1 className="font-headline text-5xl md:text-7xl font-bold leading-tight mb-5 text-shadow">
+       {heroData ? (
+          <section id="home" className="relative h-screen min-h-[800px] w-full flex items-center bg-gray-50">
+            <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 md:pt-0">
+              {/* Left Column: Hero Content */}
+              <div className="max-w-xl text-left">
+                <h1 className="font-headline text-5xl md:text-7xl font-bold leading-tight mb-5 text-deep-ocean text-shadow-sm">
                   {heroData.headline}
                 </h1>
-                <p className="text-lg md:text-xl text-muted mb-10 max-w-2xl font-light">
+                <p className="text-lg md:text-xl text-primary mb-10 max-w-2xl font-light">
                   {heroData.description}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-5">
-                   <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-white border border-white overflow-hidden z-10 transition-all duration-300">
-                    <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
-                    {heroData.buttonPrimary}
-                  </a>
-                  <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-white transition-all duration-300">
+                   <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-deep-ocean border border-deep-ocean overflow-hidden z-10 transition-all duration-300">
+                      <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
+                      <span className="group-hover:text-white transition-colors duration-300">{heroData.buttonPrimary}</span>
+                   </a>
+                  <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-accent transition-all duration-300">
                     {heroData.buttonSecondary}
                   </a>
                 </div>
               </div>
-            </div>
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-2xl animate-bounce z-20">
-              <ChevronDown />
+
+              {/* Right Column: Broken Grid with Video and Images */}
+              <div className="relative h-[60vh] min-h-[500px] hidden md:block">
+                <div className="absolute inset-0 w-full h-full">
+                  <div className="relative w-full h-full">
+                    {/* Main Video */}
+                    <div className="absolute top-0 left-0 w-2/3 h-2/3 shadow-2xl overflow-hidden rounded-lg">
+                      <video
+                        src="https://placehold.co/600x400.mp4/EAE3A4/287289?text=Tropical+Escape"
+                        autoPlay
+                        muted
+                        loop
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {/* Small Image 1 */}
+                    <div className="absolute bottom-0 right-0 w-1/2 h-1/2 shadow-xl overflow-hidden rounded-lg border-8 border-white">
+                      <Image
+                        src="https://placehold.co/400x400.png"
+                        alt="Luxury travel 1"
+                        width={400}
+                        height={400}
+                        className="w-full h-full object-cover"
+                        data-ai-hint="luxury beach"
+                      />
+                    </div>
+                    {/* Small Image 2 */}
+                    <div className="absolute top-1/2 left-1/4 w-1/3 h-1/3 shadow-lg overflow-hidden rounded-lg border-4 border-white transform -translate-y-1/2 -translate-x-1/2 z-10">
+                       <Image
+                        src="https://placehold.co/300x300.png"
+                        alt="Luxury travel 2"
+                        width={300}
+                        height={300}
+                        className="w-full h-full object-cover"
+                        data-ai-hint="yacht deck"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         ) : (
           <div className="h-screen flex items-center justify-center">Loading...</div>
         )}
 
-        <section id="destinations" className="py-28 bg-gray-50">
+        <section id="destinations" className="py-28 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-20">
               <h2 className="font-headline text-4xl md:text-5xl text-deep-ocean mb-4 relative inline-block after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-accent">
@@ -224,7 +264,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="services" className="py-28">
+        <section id="services" className="py-28 bg-gray-50">
           <div className="container mx-auto px-4">
              <div className="text-center mb-20">
                 <h2 className="font-headline text-4xl md:text-5xl text-deep-ocean mb-4 relative inline-block after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-accent">
