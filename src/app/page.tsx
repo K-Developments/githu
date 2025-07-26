@@ -139,23 +139,23 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm shadow-sm">
+      <header className="sticky top-0 z-50 w-full bg-primary/80 backdrop-blur-sm shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
           <a href="#home" className="flex items-center gap-2">
-            <Logo className="h-8 w-8 text-primary" />
+            <Logo className="h-8 w-8 text-primary-foreground" />
             <span className="font-headline text-xl font-bold text-primary-foreground tracking-wide">
               Island Hopes Escapes
             </span>
           </a>
           <nav className="hidden md:flex gap-6">
             {navLinks.map((link) => (
-               <a key={link.name} href={link.href} className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+               <a key={link.name} href={link.href} className="text-sm font-medium text-primary-foreground/80 transition-colors hover:text-primary-foreground">
                  {link.name}
                </a>
             ))}
           </nav>
           <a href="#contact">
-            <Button size="sm" className="hidden md:flex">Book Now</Button>
+            <Button size="sm" variant="accent" className="hidden md:flex">Book Now</Button>
           </a>
         </div>
       </header>
@@ -181,7 +181,7 @@ export default function HomePage() {
                 Discover curated travel packages to the world's most serene and breathtaking islands.
               </p>
               <a href="#destinations">
-                <Button size="lg" className="mt-8">
+                <Button size="lg" variant="accent" className="mt-8">
                   Explore Packages
                   <Plane className="ml-2 h-5 w-5" />
                 </Button>
@@ -193,7 +193,7 @@ export default function HomePage() {
         <section id="destinations" className="py-16 md:py-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-12">
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-black">Curated Island Getaways</h2>
+              <h2 className="font-headline text-3xl md:text-4xl font-bold text-foreground">Curated Island Getaways</h2>
               <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
                 Browse our hand-picked selection of island adventures, relaxing retreats, and romantic escapes.
               </p>
@@ -233,16 +233,16 @@ export default function HomePage() {
                     />
                   </CardHeader>
                   <CardContent className="p-6">
-                    <Badge variant="accent" className="mb-2">{pkg.theme}</Badge>
-                    <CardTitle className="font-headline text-2xl text-black">{pkg.title}</CardTitle>
+                    <Badge variant="secondary" className="mb-2">{pkg.theme}</Badge>
+                    <CardTitle className="font-headline text-2xl text-foreground">{pkg.title}</CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-1 text-muted-foreground">
-                      <MapPin className="h-4 w-4 text-accent" /> {pkg.location}
+                      <MapPin className="h-4 w-4 text-secondary" /> {pkg.location}
                     </CardDescription>
                     <p className="mt-4 text-sm text-foreground/80 leading-relaxed line-clamp-3">{pkg.description}</p>
                   </CardContent>
                   <CardFooter className="flex justify-between items-center">
                     <div className="font-bold text-xl text-primary">${pkg.price.toLocaleString()}</div>
-                    <Button onClick={() => handleViewDetails(pkg)}>View Details</Button>
+                    <Button variant="accent" onClick={() => handleViewDetails(pkg)}>View Details</Button>
                   </CardFooter>
                 </Card>
               ))}
@@ -253,8 +253,8 @@ export default function HomePage() {
         <section id="recommendations" className="bg-background/70 py-16 md:py-24">
             <div className="container mx-auto px-4 md:px-6">
                  <div className="text-center mb-12">
-                    <Sparkles className="mx-auto h-10 w-10 text-primary mb-2" />
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold text-black">Find Your Perfect Escape</h2>
+                    <Sparkles className="mx-auto h-10 w-10 text-accent mb-2" />
+                    <h2 className="font-headline text-3xl md:text-4xl font-bold text-foreground">Find Your Perfect Escape</h2>
                     <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
                         Let our AI guide you to the island destination that perfectly matches your desires.
                     </p>
@@ -275,19 +275,19 @@ export default function HomePage() {
                                                     <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid grid-cols-2 gap-4">
                                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                                             <FormControl><RadioGroupItem value="Adventure" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Wind className="h-4 w-4 text-accent"/>Adventure</FormLabel>
+                                                            <FormLabel className="font-normal flex items-center gap-2"><Wind className="h-4 w-4 text-secondary"/>Adventure</FormLabel>
                                                         </FormItem>
                                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                                             <FormControl><RadioGroupItem value="Relaxation" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Sun className="h-4 w-4 text-accent"/>Relaxation</FormLabel>
+                                                            <FormLabel className="font-normal flex items-center gap-2"><Sun className="h-4 w-4 text-secondary"/>Relaxation</FormLabel>
                                                         </FormItem>
                                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                                             <FormControl><RadioGroupItem value="Romance" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Heart className="h-4 w-4 text-accent"/>Romance</FormLabel>
+                                                            <FormLabel className="font-normal flex items-center gap-2"><Heart className="h-4 w-4 text-secondary"/>Romance</FormLabel>
                                                         </FormItem>
                                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                                             <FormControl><RadioGroupItem value="Culture" /></FormControl>
-                                                            <FormLabel className="font-normal flex items-center gap-2"><Palette className="h-4 w-4 text-accent"/>Culture</FormLabel>
+                                                            <FormLabel className="font-normal flex items-center gap-2"><Palette className="h-4 w-4 text-secondary"/>Culture</FormLabel>
                                                         </FormItem>
                                                     </RadioGroup>
                                                 </FormControl>
@@ -329,7 +329,7 @@ export default function HomePage() {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit" className="w-full" disabled={isGeneratingRecommendation}>
+                                    <Button type="submit" variant="accent" className="w-full" disabled={isGeneratingRecommendation}>
                                         {isGeneratingRecommendation ? 'Generating...' : 'Get Recommendation'}
                                         <Sparkles className="ml-2 h-4 w-4" />
                                     </Button>
@@ -340,15 +340,15 @@ export default function HomePage() {
                                  {!isGeneratingRecommendation && recommendationResult && (
                                      <Card className="w-full bg-background transition-all animate-in fade-in-50">
                                          <CardHeader>
-                                             <CardTitle className="font-headline text-black">{recommendationResult.title}</CardTitle>
-                                             <CardDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-accent"/>{recommendationResult.location}</CardDescription>
+                                             <CardTitle className="font-headline text-foreground">{recommendationResult.title}</CardTitle>
+                                             <CardDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary"/>{recommendationResult.location}</CardDescription>
                                          </CardHeader>
                                          <CardContent>
                                              <Image src={recommendationResult.images[0]} data-ai-hint={recommendationResult.imageHints[0]} alt={recommendationResult.title} width={400} height={250} className="rounded-lg object-cover w-full h-40" />
                                              <p className="text-sm mt-4">{recommendationResult.description}</p>
                                          </CardContent>
                                          <CardFooter>
-                                             <Button className="w-full" onClick={() => handleViewDetails(recommendationResult)}>View Full Package</Button>
+                                             <Button variant="accent" className="w-full" onClick={() => handleViewDetails(recommendationResult)}>View Full Package</Button>
                                          </CardFooter>
                                      </Card>
                                  )}
@@ -366,17 +366,17 @@ export default function HomePage() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-headline text-3xl md:text-4xl font-bold text-black">Ready for an Adventure?</h2>
+                <h2 className="font-headline text-3xl md:text-4xl font-bold text-foreground">Ready for an Adventure?</h2>
                 <p className="mt-4 text-lg text-muted-foreground">
                   Our travel experts are here to help you plan the perfect island getaway. Fill out the form, and we'll craft a personalized itinerary just for you.
                 </p>
                 <div className="mt-8 space-y-4">
                   <div className="flex items-center gap-4">
-                    <div className="bg-primary/10 p-3 rounded-full"><TrendingUp className="h-6 w-6 text-primary"/></div>
+                    <div className="bg-secondary/10 p-3 rounded-full"><TrendingUp className="h-6 w-6 text-secondary"/></div>
                     <p><span className="font-bold">Personalized Planning:</span> Tailored itineraries to match your travel style.</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="bg-primary/10 p-3 rounded-full"><Star className="h-6 w-6 text-primary"/></div>
+                    <div className="bg-secondary/10 p-3 rounded-full"><Star className="h-6 w-6 text-secondary"/></div>
                     <p><span className="font-bold">Expert Support:</span> 24/7 assistance from our experienced travel agents.</p>
                   </div>
                 </div>
@@ -438,7 +438,7 @@ export default function HomePage() {
                           </FormItem>
                         )}
                       />
-                      <Button type="submit" className="w-full" disabled={isSubmittingBooking}>
+                      <Button type="submit" variant="accent" className="w-full" disabled={isSubmittingBooking}>
                         {isSubmittingBooking ? "Sending..." : "Send Inquiry"}
                         <Send className="ml-2 h-4 w-4" />
                       </Button>
@@ -451,7 +451,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="bg-accent text-accent-foreground py-8">
+      <footer className="bg-primary text-primary-foreground py-8">
         <div className="container mx-auto px-4 md:px-6 text-center">
             <a href="#home" className="flex items-center justify-center gap-2 mb-4">
                 <Logo className="h-8 w-8" />
@@ -459,7 +459,7 @@ export default function HomePage() {
                     Island Hopes Escapes
                 </span>
             </a>
-            <p className="text-sm text-accent-foreground/80">&copy; {new Date().getFullYear()} Island Hopes Escapes. All rights reserved.</p>
+            <p className="text-sm text-primary-foreground/80">&copy; {new Date().getFullYear()} Island Hopes Escapes. All rights reserved.</p>
         </div>
       </footer>
 
@@ -467,8 +467,8 @@ export default function HomePage() {
         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent className="max-w-4xl max-h-[90vh] grid-rows-[auto_1fr_auto] p-0">
              <DialogHeader className="p-6 pb-0">
-               <DialogTitle className="font-headline text-3xl text-black">{selectedPackage.title}</DialogTitle>
-               <DialogDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-accent" />{selectedPackage.location}</DialogDescription>
+               <DialogTitle className="font-headline text-3xl text-foreground">{selectedPackage.title}</DialogTitle>
+               <DialogDescription className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary" />{selectedPackage.location}</DialogDescription>
              </DialogHeader>
             <div className="overflow-y-auto px-6">
                 <div className="grid md:grid-cols-2 gap-6 mt-4">
@@ -476,18 +476,18 @@ export default function HomePage() {
                         <Image src={selectedPackage.images[0]} data-ai-hint={selectedPackage.imageHints[0]} alt={selectedPackage.title} width={800} height={600} className="rounded-lg object-cover w-full mb-4" />
                         <p className="text-foreground/90">{selectedPackage.longDescription}</p>
                         <div className="mt-4 flex gap-4 text-sm">
-                            <Badge variant="default" className="text-base">${selectedPackage.price.toLocaleString()}</Badge>
+                            <Badge variant="default" className="text-base bg-accent text-accent-foreground">${selectedPackage.price.toLocaleString()}</Badge>
                             <Badge variant="accent" className="text-base">{selectedPackage.duration} Days</Badge>
-                            <Badge variant="outline" className="text-base">{selectedPackage.theme}</Badge>
+                            <Badge variant="secondary" className="text-base">{selectedPackage.theme}</Badge>
                         </div>
                     </div>
                     <div>
-                        <h3 className="font-headline text-xl font-semibold mb-2 text-black">Itinerary</h3>
+                        <h3 className="font-headline text-xl font-semibold mb-2 text-foreground">Itinerary</h3>
                         <div className="space-y-4">
                             {selectedPackage.itinerary.map(item => (
                                 <div key={item.day} className="flex gap-4">
                                     <div className="flex flex-col items-center">
-                                        <div className="bg-primary text-primary-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold">{item.day}</div>
+                                        <div className="bg-accent text-accent-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold">{item.day}</div>
                                         <div className="border-l-2 border-dashed border-border h-full"></div>
                                     </div>
                                     <div>
@@ -500,7 +500,7 @@ export default function HomePage() {
                     </div>
                 </div>
                  <div className="mt-6">
-                    <h3 className="font-headline text-xl font-semibold mb-4 text-black">Reviews</h3>
+                    <h3 className="font-headline text-xl font-semibold mb-4 text-foreground">Reviews</h3>
                     <div className="space-y-4">
                     {selectedPackage.reviews.map((review, i) => (
                         <div key={i} className="bg-background p-4 rounded-lg">
@@ -517,7 +517,7 @@ export default function HomePage() {
                 </div>
             </div>
             <div className="p-6 bg-background/50 border-t flex justify-end">
-                <Button onClick={() => setDialogOpen(false)}>Close</Button>
+                <Button variant="secondary" onClick={() => setDialogOpen(false)}>Close</Button>
             </div>
           </DialogContent>
         </Dialog>
