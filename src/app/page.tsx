@@ -17,12 +17,46 @@ import {
   MapPin,
   Clock
 } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
+interface HeroData {
+  headline: string;
+  description: string;
+  buttonPrimary: string;
+  buttonSecondary: string;
+  backgroundUrl: string;
+}
 
 export default function HomePage() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showNav, setShowNav] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  const [heroData, setHeroData] = useState<HeroData | null>(null);
+
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        const docRef = doc(db, "content", "home");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setHeroData(docSnap.data().hero as HeroData);
+        } else {
+           setHeroData({
+            headline: "Curated Luxury Travel Experiences",
+            description: "Where exceptional service meets breathtaking destinations. Your private escape awaits beyond the ordinary.",
+            buttonPrimary: "Explore Collections",
+            buttonSecondary: "Book Consultation",
+            backgroundUrl: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching hero data:", error);
+      }
+    };
+
+    fetchHeroData();
+  }, []);
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -119,31 +153,35 @@ export default function HomePage() {
       </header>
 
       <main className="flex-1">
-        <section id="home" className="relative h-screen min-h-[800px] w-full flex items-center bg-cover bg-center bg-fixed" style={{backgroundImage: "url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"}}>
-          <div className="absolute inset-0 bg-deep-ocean/30 z-10" />
-          <div className="container relative z-20 px-4 md:px-6">
-            <div className="max-w-3xl text-white">
-              <h1 className="font-headline text-5xl md:text-7xl font-bold leading-tight mb-5 text-shadow">
-                Curated Luxury Travel Experiences
-              </h1>
-              <p className="text-lg md:text-xl text-muted mb-10 max-w-2xl font-light">
-                Where exceptional service meets breathtaking destinations. Your private escape awaits beyond the ordinary.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-5">
-                 <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-white border border-white overflow-hidden z-10 transition-all duration-300">
-                  <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
-                  Explore Collections
-                </a>
-                <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-white transition-all duration-300">
-                  Book Consultation
-                </a>
+        {heroData ? (
+          <section id="home" className="relative h-screen min-h-[800px] w-full flex items-center bg-cover bg-center bg-fixed" style={{backgroundImage: `url('${heroData.backgroundUrl}')`}}>
+            <div className="absolute inset-0 bg-deep-ocean/30 z-10" />
+            <div className="container relative z-20 px-4 md:px-6">
+              <div className="max-w-3xl text-white">
+                <h1 className="font-headline text-5xl md:text-7xl font-bold leading-tight mb-5 text-shadow">
+                  {heroData.headline}
+                </h1>
+                <p className="text-lg md:text-xl text-muted mb-10 max-w-2xl font-light">
+                  {heroData.description}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-5">
+                   <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-white border border-white overflow-hidden z-10 transition-all duration-300">
+                    <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
+                    {heroData.buttonPrimary}
+                  </a>
+                  <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-white transition-all duration-300">
+                    {heroData.buttonSecondary}
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-2xl animate-bounce z-20">
-            <ChevronDown />
-          </div>
-        </section>
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-2xl animate-bounce z-20">
+              <ChevronDown />
+            </div>
+          </section>
+        ) : (
+          <div className="h-screen flex items-center justify-center">Loading...</div>
+        )}
 
         <section id="destinations" className="py-28 bg-gray-50">
           <div className="container mx-auto px-4">
