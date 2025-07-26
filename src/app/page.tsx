@@ -451,15 +451,15 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="bg-secondary text-secondary-foreground py-8">
+      <footer className="bg-accent text-accent-foreground py-8">
         <div className="container mx-auto px-4 md:px-6 text-center">
             <a href="#home" className="flex items-center justify-center gap-2 mb-4">
-                <Logo className="h-8 w-8 text-secondary-foreground" />
+                <Logo className="h-8 w-8 text-accent-foreground" />
                 <span className="font-headline text-xl font-bold tracking-wide">
                     Island Hopes Escapes
                 </span>
             </a>
-            <p className="text-sm text-secondary-foreground/80">&copy; {new Date().getFullYear()} Island Hopes Escapes. All rights reserved.</p>
+            <p className="text-sm text-accent-foreground/80">&copy; {new Date().getFullYear()} Island Hopes Escapes. All rights reserved.</p>
         </div>
       </footer>
 
@@ -525,3 +525,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
