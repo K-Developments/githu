@@ -98,11 +98,11 @@ export default function HomePage() {
                 Where exceptional service meets breathtaking destinations. Your private escape awaits beyond the ordinary.
               </p>
               <div className="flex flex-col sm:flex-row gap-5">
-                 <a href="#" className="btn-primary group relative btn border-white text-white py-4 px-10 hover:border-olive">
-                  <span className="absolute inset-0 w-0 bg-olive transition-all duration-300 ease-out group-hover:w-full"></span>
-                  <span className="relative">Explore Collections</span>
+                 <a href="#" className="group relative inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm text-white border border-white overflow-hidden z-10 transition-all duration-300">
+                  <span className="absolute top-0 left-0 w-0 h-full bg-accent -z-10 transition-all duration-300 ease-in-out group-hover:w-full"></span>
+                  Explore Collections
                 </a>
-                <a href="#" className="btn-secondary btn border-olive bg-olive text-white hover:bg-transparent hover:text-olive py-4 px-10">
+                <a href="#" className="inline-block rounded-none py-4 px-10 font-semibold tracking-wider uppercase text-sm bg-accent text-white border border-accent hover:bg-transparent hover:text-accent transition-all duration-300">
                   Book Consultation
                 </a>
               </div>
