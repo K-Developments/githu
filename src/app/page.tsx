@@ -107,6 +107,18 @@ export default function HomePage() {
                 />
               </div>
             ))}
+            {validImages.length > 1 && (
+              <div className="pagination-bullets">
+                {validImages.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`pagination-bullet ${index === currentImageIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentImageIndex(index)}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
         </div>
         <div className="hero-content">
           <h1 dangerouslySetInnerHTML={{ __html: heroData.headline }}></h1>

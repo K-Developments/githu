@@ -233,6 +233,7 @@ nav a:hover::after {
 /* Image Side (40%) - Now on the RIGHT */
 .hero-image {
   width: 55%;
+  height: 100vh;
   position: relative;
   overflow: hidden;
 }
@@ -454,6 +455,26 @@ nav a:hover::after {
   }
 }
 
+/* Pagination Bullets */
+.pagination-bullets {
+  position: absolute;
+  z-index: 2;
+}
+
+.pagination-bullet {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.2);
+}
+
+.pagination-bullet.active {
+  background-color: white;
+}
+
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
   header {
@@ -564,6 +585,15 @@ nav a:hover::after {
   .stat-item .label {
     font-size: 0.8rem;
   }
+
+  .pagination-bullets {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
 }
 
 /* Small mobile adjustments */
@@ -591,6 +621,15 @@ nav a:hover::after {
   .hero-image::after {
     width: 120px;
   }
+
+  .pagination-bullets {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 }
 
 /* Large screen enhancements */
@@ -609,5 +648,16 @@ nav a:hover::after {
 
   .hero-content p {
     font-size: 1.4rem;
+  }
+}
+
+@media (min-width: 1025px) {
+   .pagination-bullets {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 }
