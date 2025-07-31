@@ -96,7 +96,7 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 20px 5%;
+  padding: 12px 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -114,7 +114,7 @@ header:hover {
 
 .logo {
   font-family: 'Luxurious Roman', cursive;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #222;
   text-decoration: none;
@@ -361,9 +361,9 @@ nav a:hover::after {
   background: linear-gradient(135deg, hsl(188 55% 45%), hsl(188 75% 35%));
   color: white;
   border: none;
-  padding: 16px 32px;
+  padding: 12px 28px;
   border-radius: 50px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.4s ease;
@@ -396,7 +396,7 @@ nav a:hover::after {
   background: transparent;
   color: #444;
   border: 2px solid #ddd;
-  padding: 14px 28px;
+  padding: 10px 24px;
   border-radius: 50px;
   font-size: 0.8rem;
   font-weight: 500;
@@ -567,8 +567,13 @@ nav a:hover::after {
   }
 
   .hero-button {
-    padding: 16px 32px;
-    font-size: 1rem;
+    padding: 12px 28px;
+    font-size: 0.9rem;
+  }
+
+  .secondary-button {
+    padding: 10px 24px;
+    font-size: 0.9rem;
   }
 
   .stats {
