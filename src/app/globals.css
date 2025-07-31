@@ -512,7 +512,6 @@ nav a:hover::after {
 .wrap-image-portrait .image,
 .wrap-text-and-landscape .image {
     overflow: hidden;
-    border-radius: 12px;
 }
 
 .wrap-image-portrait .image img,
