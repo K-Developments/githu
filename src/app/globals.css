@@ -739,12 +739,12 @@ nav a:hover::after {
 
   .hero-button {
     padding: 12px 28px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .secondary-button {
     padding: 10px 24px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .stats {
@@ -787,7 +787,8 @@ nav a:hover::after {
       order: -1;
   }
    .destinations-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 }
 
