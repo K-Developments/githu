@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -56,7 +57,7 @@ export default function HomePage() {
   return (
     <>
       <header>
-        <a href="#" className="logo">WANDER<span>LUX</span></a>
+        <a href="#" className="logo">ISLAND<span>HOPES</span></a>
         <nav>
           <ul>
             <li><a href="#">Destinations</a></li>
