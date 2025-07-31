@@ -27,6 +27,11 @@ interface IntroData {
   landscapeImage: string;
 }
 
+interface DestinationsData {
+  title: string;
+  subtitle: string;
+}
+
 export default function AdminHomePage() {
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
@@ -42,6 +47,10 @@ export default function AdminHomePage() {
     portraitImage: "",
     landscapeImage: "",
   });
+  const [destinationsData, setDestinationsData] = useState<DestinationsData>({
+    title: "",
+    subtitle: "",
+  });
 
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -54,7 +63,6 @@ export default function AdminHomePage() {
         if (docSnap.exists()) {
           const data = docSnap.data();
           
-          // Set Hero Data
           const hero = (data.hero || {}) as HeroData;
           const images = hero.sliderImages || [];
           while (images.length < 3) {
@@ -62,7 +70,6 @@ export default function AdminHomePage() {
           }
           setHeroData({ ...hero, sliderImages: images.slice(0, 3) });
 
-          // Set Intro Data
           const intro = (data.intro || {}) as IntroData;
           setIntroData({
             headline: intro.headline || "",
@@ -72,9 +79,14 @@ export default function AdminHomePage() {
             landscapeImage: intro.landscapeImage || "",
           });
 
+          const destinations = (data.destinations || {}) as DestinationsData;
+          setDestinationsData({
+            title: destinations.title || "",
+            subtitle: destinations.subtitle || "",
+          });
+
         } else {
           console.log("No such document! Using default values.");
-          // Set default values if document doesn't exist
           setHeroData({
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
@@ -92,6 +104,10 @@ export default function AdminHomePage() {
             linkText: "Meet our team",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
+          });
+          setDestinationsData({
+            title: "Our Favourite Destinations",
+            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         }
       } catch (error) {
@@ -125,10 +141,15 @@ export default function AdminHomePage() {
     setIntroData(prevData => ({ ...prevData, [id]: value.replace(/\\n/g, '\n') }));
   };
 
+  const handleDestinationsChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setDestinationsData(prevData => ({ ...prevData, [id]: value }));
+  };
+
   const handleSave = async () => {
     try {
       const docRef = doc(db, "content", "home");
-      await setDoc(docRef, { hero: heroData, intro: introData }, { merge: true });
+      await setDoc(docRef, { hero: heroData, intro: introData, destinations: destinationsData }, { merge: true });
       toast({
         title: "Success",
         description: "Home page content has been saved.",
@@ -220,6 +241,23 @@ export default function AdminHomePage() {
                     <Label htmlFor="landscapeImage">Landscape Image URL</Label>
                     <Input id="landscapeImage" value={introData.landscapeImage} onChange={handleIntroChange} />
                 </div>
+            </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+            <CardTitle>Destinations Section</CardTitle>
+            <CardDescription>Update the title and subtitle for the destinations section.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+            <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input id="title" value={destinationsData.title} onChange={handleDestinationsChange} />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="subtitle">Subtitle</Label>
+                <Textarea id="subtitle" value={destinationsData.subtitle} onChange={handleDestinationsChange} />
             </div>
         </CardContent>
       </Card>

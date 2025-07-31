@@ -24,9 +24,15 @@ interface IntroData {
   landscapeImage: string;
 }
 
+interface DestinationsData {
+  title: string;
+  subtitle: string;
+}
+
 export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
   const [introData, setIntroData] = useState<IntroData | null>(null);
+  const [destinationsData, setDestinationsData] = useState<DestinationsData | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -38,6 +44,7 @@ export default function HomePage() {
           const data = docSnap.data();
           const hero = data.hero as HeroData;
           const intro = data.intro as IntroData;
+          const destinations = data.destinations as DestinationsData;
           
            const images = hero.sliderImages && Array.isArray(hero.sliderImages) && hero.sliderImages.length > 0
            ? hero.sliderImages
@@ -53,6 +60,10 @@ export default function HomePage() {
             linkText: "Meet our team",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
+          });
+          setDestinationsData(destinations || {
+            title: "Our Favourite Destinations",
+            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         } else {
            setHeroData({
@@ -72,6 +83,10 @@ export default function HomePage() {
             linkText: "Meet our team",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
+          });
+          setDestinationsData({
+            title: "Our Favourite Destinations",
+            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         }
       } catch (error) {
@@ -95,7 +110,7 @@ export default function HomePage() {
   }, [currentImageIndex, heroData]);
 
 
-  if (!heroData || !introData) {
+  if (!heroData || !introData || !destinationsData) {
     return <div className="h-screen w-full flex items-center justify-center bg-[#f8f5f2]">Loading...</div>;
   }
 
@@ -194,8 +209,8 @@ export default function HomePage() {
         </section>
 
         <section className="destinations-section">
-            <h2 className="section-title">Our Favourite Destinations</h2>
-            <p className="section-subtitle">A curated selection of the world's most enchanting islands, waiting to be discovered.</p>
+            <h2 className="section-title">{destinationsData.title}</h2>
+            <p className="section-subtitle">{destinationsData.subtitle}</p>
             <div className="destinations-grid">
                 {packages.map((pkg) => (
                     <div key={pkg.id} className="destination-card">
