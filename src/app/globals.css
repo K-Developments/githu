@@ -124,7 +124,7 @@ header:hover {
 
 .logo {
   font-family: 'Luxurious Roman', cursive;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: #222;
   text-decoration: none;
@@ -333,7 +333,7 @@ nav a:hover::after {
 
 .hero-content h1 {
   font-family: 'Luxurious Roman', cursive;
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-size: clamp(2rem, 3.5vw, 3rem);
   font-weight: 400;
   margin-bottom: 1.5rem;
   line-height: 1.1;
@@ -348,7 +348,7 @@ nav a:hover::after {
 }
 
 .hero-content p {
-  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
   color: #666;
   margin-bottom: 2.5rem;
   max-width: 500px;
@@ -370,9 +370,9 @@ nav a:hover::after {
   background: linear-gradient(135deg, hsl(188 55% 45%), hsl(188 75% 35%));
   color: white;
   border: none;
-  padding: 12px 28px;
+  padding: 10px 24px;
   border-radius: 50px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.4s ease;
@@ -405,9 +405,9 @@ nav a:hover::after {
   background: transparent;
   color: #444;
   border: 2px solid #ddd;
-  padding: 10px 24px;
+  padding: 8px 20px;
   border-radius: 50px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -570,6 +570,82 @@ nav a:hover::after {
     transform: scaleX(1);
 }
 
+/* Destinations Section */
+.destinations-section {
+    padding: 100px 5%;
+    background-color: #fefcfb;
+    text-align: center;
+}
+
+.destinations-section .section-title {
+    font-family: 'Luxurious Roman', cursive;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #222;
+    margin-bottom: 1rem;
+}
+
+.destinations-section .section-subtitle {
+    font-size: 1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 4rem auto;
+    line-height: 1.7;
+}
+
+.destinations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.destination-card {
+    position: relative;
+    overflow: hidden;
+    height: 450px;
+    cursor: pointer;
+}
+
+.destination-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.destination-card:hover img {
+    transform: scale(1.05);
+}
+
+.destination-card .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    padding: 2rem;
+    color: white;
+    transform: translateY(100%);
+    transition: transform 0.4s ease-in-out;
+}
+
+.destination-card:hover .overlay {
+    transform: translateY(0);
+}
+
+.destination-card .card-title {
+    font-family: 'Luxurious Roman', cursive;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.destination-card .card-location {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
   header {
@@ -577,7 +653,7 @@ nav a:hover::after {
   }
 
   .logo {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
   
   header nav {
@@ -663,12 +739,12 @@ nav a:hover::after {
 
   .hero-button {
     padding: 12px 28px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .secondary-button {
     padding: 10px 24px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .stats {
@@ -767,11 +843,11 @@ nav a:hover::after {
   }
 
   .hero-content h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
 
   .hero-content p {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
   }
 }
 

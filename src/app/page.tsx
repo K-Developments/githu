@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { packages } from "@/lib/data";
 
 interface HeroData {
   headline: string;
@@ -179,6 +180,28 @@ export default function HomePage() {
                           data-ai-hint="travel landscape" />
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section className="destinations-section">
+            <h2 className="section-title">Our Favourite Destinations</h2>
+            <p className="section-subtitle">A curated selection of the world's most enchanting islands, waiting to be discovered.</p>
+            <div className="destinations-grid">
+                {packages.map((pkg) => (
+                    <div key={pkg.id} className="destination-card">
+                        <Image 
+                            src={pkg.images[0]} 
+                            alt={`View of ${pkg.title}`}
+                            layout="fill"
+                            objectFit="cover"
+                            data-ai-hint={pkg.imageHints[0]}
+                        />
+                        <div className="overlay">
+                            <h3 className="card-title">{pkg.title}</h3>
+                            <p className="card-location">{pkg.location}</p>
+                        </div>
+                    </div>
+                ))}
             </div>
         </section>
 
