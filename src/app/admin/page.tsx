@@ -64,7 +64,13 @@ export default function AdminHomePage() {
 
           // Set Intro Data
           const intro = (data.intro || {}) as IntroData;
-          setIntroData(intro);
+          setIntroData({
+            headline: intro.headline || "",
+            paragraph: intro.paragraph || "",
+            linkText: intro.linkText || "",
+            portraitImage: intro.portraitImage || "",
+            landscapeImage: intro.landscapeImage || "",
+          });
 
         } else {
           console.log("No such document! Using default values.");
@@ -194,7 +200,7 @@ export default function AdminHomePage() {
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
-                <Label htmlFor="introHeadline">Headline</Label>
+                <Label htmlFor="headline">Headline</Label>
                 <Textarea id="headline" value={introData.headline} onChange={handleIntroChange} />
             </div>
             <div className="space-y-2">

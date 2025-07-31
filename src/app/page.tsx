@@ -45,7 +45,13 @@ export default function HomePage() {
                "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
              ];
           setHeroData({ ...hero, sliderImages: images });
-          setIntroData(intro);
+          setIntroData(intro || {
+            headline: "Magical memories,<br>Bespoke experiences",
+            paragraph: "Once you have travelled the voyage never ends. Island Hopes will open a world of wonders and create magical memories that will stay with you far beyond your travels.\n\nDiverge from the typical tourist destinations in favour of unique, authentic experiences. Experiences designed in the most inspiring surroundings that will be yours, and yours only. Journeys that create memorable moments and Island Hopes’s bespoke itineraries will make this happen. The wonders of the world are within your reach.",
+            linkText: "Meet our team",
+            portraitImage: "https://placehold.co/800x1000.png",
+            landscapeImage: "https://placehold.co/1000x662.png",
+          });
         } else {
            setHeroData({
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
