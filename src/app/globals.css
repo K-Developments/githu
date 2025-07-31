@@ -106,25 +106,39 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 12px 5%;
+  padding: 8px 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
-  background: rgba(248, 245, 242, 0.95);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background: white;
+  border-bottom: 1px solid #eee;
   transition: all 0.3s ease;
 }
 
-header:hover {
-  background: rgba(248, 245, 242, 0.98);
+.header-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.header-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
 }
 
 .logo {
   font-family: 'Luxurious Roman', cursive;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #222;
   text-decoration: none;
@@ -192,13 +206,25 @@ nav a:hover::after {
   width: 100%;
 }
 
+.search-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #444;
+    transition: color 0.3s ease;
+}
+
+.search-button:hover {
+    color: hsl(188 55% 45%);
+}
+
 .cta-button {
   background: linear-gradient(135deg, hsl(188 55% 45%), hsl(188 75% 35%));
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 10px 20px;
   border-radius: 50px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -333,7 +359,7 @@ nav a:hover::after {
 
 .hero-content h1 {
   font-family: 'Luxurious Roman', cursive;
-  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-size: clamp(2rem, 3.5vw, 2.5rem);
   font-weight: 400;
   margin-bottom: 1.5rem;
   line-height: 1.1;
@@ -348,7 +374,7 @@ nav a:hover::after {
 }
 
 .hero-content p {
-  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  font-size: clamp(0.9rem, 1.2vw, 0.9rem);
   color: #666;
   margin-bottom: 2.5rem;
   max-width: 500px;
@@ -370,9 +396,9 @@ nav a:hover::after {
   background: linear-gradient(135deg, hsl(188 55% 45%), hsl(188 75% 35%));
   color: white;
   border: none;
-  padding: 10px 24px;
+  padding: 8px 20px;
   border-radius: 50px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.4s ease;
@@ -405,9 +431,9 @@ nav a:hover::after {
   background: transparent;
   color: #444;
   border: 2px solid #ddd;
-  padding: 8px 20px;
+  padding: 6px 18px;
   border-radius: 50px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -807,7 +833,7 @@ nav a:hover::after {
 
 /* Tablet adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
-  header nav {
+  .header-center {
     display: none; /* Hide nav on tablet for now */
   }
   .hero-content {
@@ -847,11 +873,11 @@ nav a:hover::after {
   }
 
   .hero-content h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   .hero-content p {
-    font-size: 1.05rem;
+    font-size: 0.9rem;
   }
 }
 

@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { packages } from "@/lib/data";
+import { Search } from "lucide-react";
 
 interface HeroData {
   headline: string;
@@ -103,16 +104,25 @@ export default function HomePage() {
   return (
     <>
       <header>
-        <a href="#" className="logo">ISLAND<span>HOPES</span></a>
-        <nav>
-          <ul>
-            <li><a href="#">Destinations</a></li>
-            <li><a href="#">Experiences</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#" className="cta-button">Plan Trip</a></li>
-          </ul>
-        </nav>
+          <div className="header-left">
+              <a href="#" className="logo">ISLAND<span>HOPES</span></a>
+          </div>
+          <div className="header-center">
+              <nav>
+                  <ul>
+                      <li><a href="#">Destinations</a></li>
+                      <li><a href="#">Experiences</a></li>
+                      <li><a href="#">About</a></li>
+                      <li><a href="#">Contact</a></li>
+                  </ul>
+              </nav>
+          </div>
+          <div className="header-right">
+              <a href="#" className="cta-button">Plan Trip</a>
+              <button className="search-button" aria-label="Search">
+                  <Search size={20} />
+              </button>
+          </div>
       </header>
       
       <main>
