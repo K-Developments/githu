@@ -71,7 +71,7 @@ export default function HomePage() {
            <Carousel className="w-full h-full" opts={{ loop: true }}>
             <CarouselContent className="w-full h-full">
               {(heroData.sliderImages || []).map((imgSrc, index) => (
-                <CarouselItem key={index} className="w-full h-full">
+                <CarouselItem key={index} className="w-full h-full p-0">
                   <Image 
                     src={imgSrc || "https://placehold.co/2070x1380.png"} 
                     alt={`Luxury Travel Destination ${index + 1}`}
@@ -83,8 +83,8 @@ export default function HomePage() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 text-white" />
-            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 text-white" />
+            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-none" />
+            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-none" />
           </Carousel>
         </div>
         <div className="hero-content">
