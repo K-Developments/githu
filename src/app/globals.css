@@ -90,6 +90,16 @@ body {
   overflow-x: hidden;
 }
 
+main img {
+  filter: saturate(0.9) brightness(1.05) contrast(1.05);
+  transition: filter 0.3s ease-in-out;
+}
+
+main img:hover {
+    filter: none;
+}
+
+
 /* Header Styles */
 header {
   position: fixed;
@@ -490,11 +500,13 @@ nav a:hover::after {
 
 .wrap-image-portrait {
     width: 40%;
+    flex-shrink: 0;
 }
 
 .wrap-text-and-landscape {
     width: 55%;
     padding-top: 4rem;
+    flex-shrink: 0;
 }
 
 .wrap-image-portrait .image,
