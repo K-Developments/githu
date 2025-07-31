@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 interface HeroData {
   headline: string;
@@ -15,8 +14,10 @@ interface HeroData {
   sliderImages: string[];
 }
 
+
 export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchHeroData = async () => {
@@ -24,7 +25,16 @@ export default function HomePage() {
         const docRef = doc(db, "content", "home");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setHeroData(docSnap.data().hero as HeroData);
+          const data = docSnap.data().hero as HeroData;
+           // Ensure sliderImages exists and is an array, default if not
+           const images = data.sliderImages && Array.isArray(data.sliderImages) && data.sliderImages.length > 0
+           ? data.sliderImages
+           : [
+               "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+               "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+               "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+             ];
+          setHeroData({ ...data, sliderImages: images });
         } else {
            setHeroData({
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
@@ -46,9 +56,24 @@ export default function HomePage() {
     fetchHeroData();
   }, []);
 
+  useEffect(() => {
+    if (heroData && heroData.sliderImages && heroData.sliderImages.length > 1) {
+      const timer = setTimeout(() => {
+        setCurrentImageIndex((prevIndex) =>
+          prevIndex === heroData.sliderImages.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 5000); // Change image every 5 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentImageIndex, heroData]);
+
+
   if (!heroData) {
-    return <div className="h-screen w-full flex items-center justify-center bg-[#E3F7F4]">Loading...</div>;
+    return <div className="h-screen w-full flex items-center justify-center bg-[#f8f5f2]">Loading...</div>;
   }
+
+  const validImages = heroData.sliderImages?.filter(url => url) || [];
 
   return (
     <>
@@ -68,24 +93,20 @@ export default function HomePage() {
       
       <section className="hero">
         <div className="hero-image">
-           <Carousel className="w-full h-full" opts={{ loop: true }}>
-            <CarouselContent className="w-full h-full">
-              {(heroData.sliderImages || []).map((imgSrc, index) => (
-                <CarouselItem key={index} className="w-full h-full p-0">
-                  <Image 
-                    src={imgSrc || "https://placehold.co/2070x1380.png"} 
-                    alt={`Luxury Travel Destination ${index + 1}`}
-                    width={2070}
-                    height={1380}
-                    priority={index === 0}
-                    className="w-full h-full object-cover"
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-none" />
-            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-none" />
-          </Carousel>
+            {validImages.map((url, index) => (
+              <div
+                key={index}
+                className={`fade-image ${index === currentImageIndex ? 'active' : ''}`}
+              >
+                <Image 
+                  src={url}
+                  alt="Luxury Travel Destination"
+                  layout="fill"
+                  objectFit="cover"
+                  priority={index === 0}
+                />
+              </div>
+            ))}
         </div>
         <div className="hero-content">
           <h1 dangerouslySetInnerHTML={{ __html: heroData.headline }}></h1>
