@@ -47,7 +47,7 @@ export default function HomePage() {
   }, []);
 
   if (!heroData) {
-    return <div className="h-screen w-full flex items-center justify-center bg-[#f8f5f2]">Loading...</div>;
+    return <div className="h-screen w-full flex items-center justify-center bg-[#E3F7F4]">Loading...</div>;
   }
 
   return (
