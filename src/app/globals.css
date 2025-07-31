@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 30 33% 98%;
+    --background: 169 21% 94%;
     --foreground: 30 3% 10%;
 
     --card: 30 33% 98%;
@@ -13,16 +13,16 @@
     --popover: 30 33% 98%;
     --popover-foreground: 30 3% 10%;
 
-    --primary: 188 55% 45%;
+    --primary: 169 35% 42%;
     --primary-foreground: 30 33% 98%;
 
     --secondary: 30 5% 90%;
     --secondary-foreground: 30 3% 10%;
 
-    --muted: 30 5% 60%;
+    --muted: 170 12% 60%;
     --muted-foreground: 30 3% 40%;
 
-    --accent: 30 5% 90%;
+    --accent: 170 28% 88%;
     --accent-foreground: 30 3% 10%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,7 +30,7 @@
 
     --border: 30 5% 80%;
     --input: 30 5% 70%;
-    --ring: 188 55% 45%;
+    --ring: 169 35% 42%;
 
     --radius: 0.5rem;
   }
@@ -363,7 +363,7 @@ nav a:hover::after {
   border: none;
   padding: 16px 32px;
   border-radius: 50px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.4s ease;
@@ -398,7 +398,7 @@ nav a:hover::after {
   border: 2px solid #ddd;
   padding: 14px 28px;
   border-radius: 50px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
