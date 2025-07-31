@@ -16,11 +16,7 @@ interface HeroData {
   description: string;
   buttonPrimary: string;
   buttonSecondary: string;
-  backgroundUrl: string;
-  videoUrl: string;
-  imageUrl1: string;
-  imageUrl2: string;
-  imageUrl3: string;
+  sliderImages: string[];
 }
 
 export default function AdminHomePage() {
@@ -29,11 +25,7 @@ export default function AdminHomePage() {
     description: "",
     buttonPrimary: "",
     buttonSecondary: "",
-    backgroundUrl: "",
-    videoUrl: "",
-    imageUrl1: "",
-    imageUrl2: "",
-    imageUrl3: "",
+    sliderImages: ["", "", ""],
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -44,20 +36,27 @@ export default function AdminHomePage() {
         const docRef = doc(db, "content", "home");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setHeroData(docSnap.data().hero as HeroData);
+          const data = docSnap.data().hero as HeroData;
+          // Ensure sliderImages is an array of 3, padding with empty strings if necessary
+          const images = data.sliderImages || [];
+          while (images.length < 3) {
+            images.push("");
+          }
+          setHeroData({ ...data, sliderImages: images.slice(0, 3) });
+
         } else {
           console.log("No such document! Using default values.");
           // Set default values if document doesn't exist
           setHeroData({
-            headline: "Curated Luxury Travel Experiences",
-            description: "Where exceptional service meets breathtaking destinations. Your private escape awaits beyond the ordinary.",
-            buttonPrimary: "Explore Collections",
-            buttonSecondary: "Book Consultation",
-            backgroundUrl: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-            videoUrl: "https://placehold.co/600x400.mp4/EAE3A4/287289?text=Tropical+Escape",
-            imageUrl1: "https://placehold.co/400x400.png",
-            imageUrl2: "https://placehold.co/300x300.png",
-            imageUrl3: "https://placehold.co/300x400.png",
+            headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
+            description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
+            buttonPrimary: "Start Your Journey",
+            buttonSecondary: "View Destinations",
+            sliderImages: [
+              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+              "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            ],
           });
         }
       } catch (error) {
@@ -83,6 +82,15 @@ export default function AdminHomePage() {
     }));
   };
   
+  const handleImageChange = (index: number, value: string) => {
+    const newSliderImages = [...heroData.sliderImages];
+    newSliderImages[index] = value;
+    setHeroData(prevData => ({
+        ...prevData,
+        sliderImages: newSliderImages
+    }));
+  };
+
   const handleSave = async () => {
     try {
       const docRef = doc(db, "content", "home");
@@ -136,28 +144,18 @@ export default function AdminHomePage() {
               <Input id="buttonSecondary" value={heroData.buttonSecondary} onChange={handleInputChange} />
             </div>
           </div>
-           <div className="space-y-2">
-            <Label htmlFor="backgroundUrl">Background Image URL</Label>
-            <Input id="backgroundUrl" value={heroData.backgroundUrl} onChange={handleInputChange} />
+           <div className="space-y-4">
+            <Label>Slider Images</Label>
+            {heroData.sliderImages.map((url, index) => (
+                 <div className="space-y-2" key={index}>
+                    <Label htmlFor={`sliderImage${index + 1}`}>Image {index + 1} URL</Label>
+                    <Input 
+                        id={`sliderImage${index + 1}`} 
+                        value={url} 
+                        onChange={(e) => handleImageChange(index, e.target.value)} />
+                </div>
+            ))}
           </div>
-           <div className="space-y-2">
-            <Label htmlFor="videoUrl">Hero Video URL</Label>
-            <Input id="videoUrl" value={heroData.videoUrl} onChange={handleInputChange} />
-          </div>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="imageUrl1">Hero Image 1 URL</Label>
-              <Input id="imageUrl1" value={heroData.imageUrl1} onChange={handleInputChange} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="imageUrl2">Hero Image 2 URL</Label>
-              <Input id="imageUrl2" value={heroData.imageUrl2} onChange={handleInputChange} />
-            </div>
-          </div>
-          <div className="space-y-2">
-              <Label htmlFor="imageUrl3">Hero Image 3 URL</Label>
-              <Input id="imageUrl3" value={heroData.imageUrl3} onChange={handleInputChange} />
-            </div>
           <Button onClick={handleSave}>Save Changes</Button>
         </CardContent>
       </Card>
