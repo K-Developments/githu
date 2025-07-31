@@ -257,7 +257,6 @@ nav a:hover::after {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 32px 0 0 32px;
   transition: transform 0.5s ease;
 }
 
@@ -475,6 +474,91 @@ nav a:hover::after {
   background-color: white;
 }
 
+/* Intro Section */
+.intro-home {
+    padding: 120px 5%;
+    background-color: #f8f5f2;
+}
+
+.intro-container {
+    display: flex;
+    gap: 5%;
+    align-items: flex-start;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.wrap-image-portrait {
+    width: 40%;
+}
+
+.wrap-text-and-landscape {
+    width: 55%;
+    padding-top: 4rem;
+}
+
+.wrap-image-portrait .image,
+.wrap-text-and-landscape .image {
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.wrap-image-portrait .image img,
+.wrap-text-and-landscape .image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.wrap-image-portrait .image:hover img,
+.wrap-text-and-landscape .image:hover img {
+    transform: scale(1.05);
+}
+
+.secondary-heading {
+    font-family: 'Luxurious Roman', cursive;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: #222;
+}
+
+.paragraph-style {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.link-to {
+    color: hsl(188 55% 45%);
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 5px;
+    margin-bottom: 3rem;
+    display: inline-block;
+}
+
+.link-to::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: hsl(188 55% 45%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.link-to:hover::after {
+    transform: scaleX(1);
+}
+
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
   header {
@@ -599,6 +683,22 @@ nav a:hover::after {
     flex-direction: row;
     gap: 10px;
   }
+
+  .intro-home {
+      padding: 80px 5%;
+  }
+
+  .intro-container {
+      flex-direction: column;
+      gap: 2rem;
+  }
+  .wrap-image-portrait, .wrap-text-and-landscape {
+      width: 100%;
+      padding-top: 0;
+  }
+  .wrap-text-and-landscape {
+      order: -1;
+  }
 }
 
 /* Small mobile adjustments */
@@ -635,6 +735,14 @@ nav a:hover::after {
     flex-direction: column;
     gap: 15px;
   }
+
+  .intro-container {
+      gap: 3%;
+  }
+  .wrap-text-and-landscape {
+      padding-top: 2rem;
+  }
+
 }
 
 /* Large screen enhancements */
