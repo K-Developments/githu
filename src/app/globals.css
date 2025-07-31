@@ -786,6 +786,9 @@ nav a:hover::after {
   .wrap-text-and-landscape {
       order: -1;
   }
+   .destinations-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Small mobile adjustments */
