@@ -8,8 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, writeBatch, deleteDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
+import type { Package } from "@/lib/data";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Trash2 } from "lucide-react";
 
 interface HeroData {
   headline: string;
@@ -51,6 +54,7 @@ export default function AdminHomePage() {
     title: "",
     subtitle: "",
   });
+  const [packages, setPackages] = useState<Package[]>([]);
 
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -58,10 +62,11 @@ export default function AdminHomePage() {
   useEffect(() => {
     const fetchContentData = async () => {
       try {
-        const docRef = doc(db, "content", "home");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
+        const contentDocRef = doc(db, "content", "home");
+        const contentDocSnap = await getDoc(contentDocRef);
+        
+        if (contentDocSnap.exists()) {
+          const data = contentDocSnap.data();
           
           const hero = (data.hero || {}) as HeroData;
           const images = hero.sliderImages || [];
@@ -86,7 +91,7 @@ export default function AdminHomePage() {
           });
 
         } else {
-          console.log("No such document! Using default values.");
+          console.log("No content document! Using default values.");
           setHeroData({
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
@@ -110,6 +115,17 @@ export default function AdminHomePage() {
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         }
+
+        const packagesCollectionRef = collection(db, "packages");
+        const packagesSnap = await getDocs(packagesCollectionRef);
+        if (packagesSnap.empty) {
+          console.log("No packages found in Firestore.");
+          setPackages([]);
+        } else {
+          const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+          setPackages(packagesData);
+        }
+
       } catch (error) {
         console.error("Error fetching content data:", error);
         toast({
@@ -145,20 +161,84 @@ export default function AdminHomePage() {
     const { id, value } = e.target;
     setDestinationsData(prevData => ({ ...prevData, [id]: value }));
   };
+  
+  const handlePackageChange = (index: number, field: keyof Package, value: any) => {
+    const newPackages = [...packages];
+    (newPackages[index] as any)[field] = value;
+    setPackages(newPackages);
+  };
+  
+  const handlePackageImageChange = (pkgIndex: number, imgIndex: number, value: string) => {
+      const newPackages = [...packages];
+      if (!newPackages[pkgIndex].images) {
+          newPackages[pkgIndex].images = [];
+      }
+      newPackages[pkgIndex].images[imgIndex] = value;
+      setPackages(newPackages);
+  };
+
+  const handleAddNewPackage = () => {
+    const newPackage: Package = {
+      id: `new-${Date.now()}`,
+      title: "New Destination",
+      location: "",
+      theme: "Relaxation",
+      price: 0,
+      duration: 0,
+      description: "",
+      longDescription: "",
+      images: ["https://placehold.co/600x400.png"],
+      imageHints: [],
+      itinerary: [],
+      reviews: [],
+    };
+    setPackages([...packages, newPackage]);
+  };
+
+  const handleDeletePackage = (id: string) => {
+    setPackages(packages.filter(p => p.id !== id));
+    // The actual deletion from Firestore will happen on save
+  };
 
   const handleSave = async () => {
     try {
-      const docRef = doc(db, "content", "home");
-      await setDoc(docRef, { hero: heroData, intro: introData, destinations: destinationsData }, { merge: true });
+      const batch = writeBatch(db);
+
+      // Save content data
+      const contentDocRef = doc(db, "content", "home");
+      batch.set(contentDocRef, { hero: heroData, intro: introData, destinations: destinationsData }, { merge: true });
+      
+      // Save packages data
+      const packagesCollectionRef = collection(db, 'packages');
+      const existingPackagesSnap = await getDocs(packagesCollectionRef);
+      const existingIds = existingPackagesSnap.docs.map(d => d.id);
+      const currentIds = packages.map(p => p.id);
+
+      // Delete packages that are no longer in the state
+      for (const id of existingIds) {
+          if (!currentIds.includes(id)) {
+              batch.delete(doc(db, "packages", id));
+          }
+      }
+      
+      // Update or add packages
+      packages.forEach(pkg => {
+        const { id, ...pkgData } = pkg;
+        const docRef = doc(db, "packages", id);
+        batch.set(docRef, pkgData);
+      });
+
+      await batch.commit();
+
       toast({
         title: "Success",
-        description: "Home page content has been saved.",
+        description: "All changes have been saved.",
       });
     } catch (error) {
       console.error("Error saving content:", error);
       toast({
         title: "Error",
-        description: "Failed to save homepage data.",
+        description: "Failed to save data.",
         variant: "destructive",
       });
     }
@@ -261,6 +341,56 @@ export default function AdminHomePage() {
             </div>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Manage Destinations</CardTitle>
+          <CardDescription>Add, edit, or delete destination packages.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Accordion type="multiple" className="w-full">
+            {packages.map((pkg, index) => (
+              <AccordionItem value={pkg.id} key={pkg.id}>
+                <AccordionTrigger>{pkg.title}</AccordionTrigger>
+                <AccordionContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`pkg-title-${index}`}>Title</Label>
+                      <Input id={`pkg-title-${index}`} value={pkg.title} onChange={(e) => handlePackageChange(index, 'title', e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`pkg-location-${index}`}>Location</Label>
+                      <Input id={`pkg-location-${index}`} value={pkg.location} onChange={(e) => handlePackageChange(index, 'location', e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`pkg-price-${index}`}>Price</Label>
+                      <Input id={`pkg-price-${index}`} type="number" value={pkg.price} onChange={(e) => handlePackageChange(index, 'price', Number(e.target.value))} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`pkg-duration-${index}`}>Duration (days)</Label>
+                      <Input id={`pkg-duration-${index}`} type="number" value={pkg.duration} onChange={(e) => handlePackageChange(index, 'duration', Number(e.target.value))} />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`pkg-desc-${index}`}>Short Description</Label>
+                    <Textarea id={`pkg-desc-${index}`} value={pkg.description} onChange={(e) => handlePackageChange(index, 'description', e.target.value)} />
+                  </div>
+                   <div className="space-y-2">
+                    <Label>Image URL</Label>
+                    <Input value={pkg.images?.[0] || ''} onChange={(e) => handlePackageImageChange(index, 0, e.target.value)} />
+                  </div>
+                  <Button variant="destructive" size="sm" onClick={() => handleDeletePackage(pkg.id)}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Package
+                  </Button>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+          <Button onClick={handleAddNewPackage}>Add New Package</Button>
+        </CardContent>
+      </Card>
+
 
       <Button onClick={handleSave}>Save All Changes</Button>
     </div>

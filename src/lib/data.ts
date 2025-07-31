@@ -2,17 +2,19 @@ export type Package = {
   id: string;
   title: string;
   location: string;
-  theme: "Relaxation" | "Adventure" | "Romance" | "Culture";
-  price: number;
-  duration: number; // in days
+  theme?: "Relaxation" | "Adventure" | "Romance" | "Culture";
+  price?: number;
+  duration?: number; // in days
   description: string;
-  longDescription: string;
+  longDescription?: string;
   images: string[];
-  imageHints: string[];
-  itinerary: { day: number; title: string; description: string }[];
-  reviews: { name: string; rating: number; text: string }[];
+  imageHints?: string[];
+  itinerary?: { day: number; title: string; description: string }[];
+  reviews?: { name: string; rating: number; text: string }[];
 };
 
+// This data is now seeded into Firestore and managed from the admin panel.
+// It is kept here as a reference or for potential future use if Firestore is empty.
 export const packages: Package[] = [
   {
     id: "maldives-bliss",
@@ -113,7 +115,7 @@ export const packages: Package[] = [
       { day: 6, title: "Kintamani Volcano", description: "Enjoy breathtaking views of Mount Batur volcano and its crater lake." },
       { day: 7, title: "Travel to Seminyak", description: "Move to the chic coastal town of Seminyak for some beach time." },
       { day: 8, title: "Tanah Lot & Uluwatu", description: "Visit the iconic sea temples of Tanah Lot and Uluwatu, and watch a Kecak fire dance at sunset." },
-      { day: 9, title: "Departure", description: "Enjoy a final morning on the beach before your flight home." },
+      { day: 9, "title": "Departure", "description": "Enjoy a final morning on the beach before your flight home." },
     ],
     reviews: [
       { name: "Irene", rating: 5, text: "A deeply moving and beautiful cultural experience." },

@@ -4,8 +4,8 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { packages } from "@/lib/data";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import type { Package } from "@/lib/data";
 import { Search } from "lucide-react";
 
 interface HeroData {
@@ -33,15 +33,18 @@ export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
   const [introData, setIntroData] = useState<IntroData | null>(null);
   const [destinationsData, setDestinationsData] = useState<DestinationsData | null>(null);
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchContentData = async () => {
+      setLoading(true);
       try {
-        const docRef = doc(db, "content", "home");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
+        const contentDocRef = doc(db, "content", "home");
+        const contentDocSnap = await getDoc(contentDocRef);
+        if (contentDocSnap.exists()) {
+          const data = contentDocSnap.data();
           const hero = data.hero as HeroData;
           const intro = data.intro as IntroData;
           const destinations = data.destinations as DestinationsData;
@@ -89,8 +92,16 @@ export default function HomePage() {
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         }
+
+        const packagesCollectionRef = collection(db, "packages");
+        const packagesSnap = await getDocs(packagesCollectionRef);
+        const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+        setPackages(packagesData);
+
       } catch (error) {
-        console.error("Error fetching hero data:", error);
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -110,11 +121,14 @@ export default function HomePage() {
   }, [currentImageIndex, heroData]);
 
 
-  if (!heroData || !introData || !destinationsData) {
+  if (loading) {
     return <div className="h-screen w-full flex items-center justify-center bg-[#f8f5f2]">Loading...</div>;
   }
-
-  const validImages = heroData.sliderImages?.filter(url => url) || [];
+  
+  const heroContent = heroData!;
+  const introContent = introData!;
+  const destinationsContent = destinationsData!;
+  const validImages = heroContent.sliderImages?.filter(url => url) || [];
 
   return (
     <>
@@ -171,11 +185,11 @@ export default function HomePage() {
               )}
           </div>
           <div className="hero-content">
-            <h1 dangerouslySetInnerHTML={{ __html: heroData.headline }}></h1>
-            <p>{heroData.description}</p>
+            <h1 dangerouslySetInnerHTML={{ __html: heroContent.headline }}></h1>
+            <p>{heroContent.description}</p>
             <div className="hero-buttons">
-              <button className="hero-button">{heroData.buttonPrimary}</button>
-              <a href="#" className="secondary-button">{heroData.buttonSecondary}</a>
+              <button className="hero-button">{heroContent.buttonPrimary}</button>
+              <a href="#" className="secondary-button">{heroContent.buttonSecondary}</a>
             </div>
           </div>
         </section>
@@ -186,20 +200,20 @@ export default function HomePage() {
                     <div className="image">
                         <Image 
                           alt="Inspiring travel portrait" 
-                          src={introData.portraitImage} 
+                          src={introContent.portraitImage} 
                           width={800} 
                           height={1000} 
                           data-ai-hint="travel portrait" />
                     </div>
                 </div>
                 <div className="wrap-text-and-landscape">
-                    <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introData.headline }}></h2>
-                    <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introData.paragraph.replace(/\n/g, '<br />') }}></p>
-                    <a className="link-to" href="#">{introData.linkText}</a>
+                    <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
+                    <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
+                    <a className="link-to" href="#">{introContent.linkText}</a>
                     <div className="image">
                         <Image 
                           alt="Inspiring travel landscape" 
-                          src={introData.landscapeImage} 
+                          src={introContent.landscapeImage} 
                           width={1000} 
                           height={662}
                           data-ai-hint="travel landscape" />
@@ -209,8 +223,8 @@ export default function HomePage() {
         </section>
 
         <section className="destinations-section">
-            <h2 className="section-title">{destinationsData.title}</h2>
-            <p className="section-subtitle">{destinationsData.subtitle}</p>
+            <h2 className="section-title">{destinationsContent.title}</h2>
+            <p className="section-subtitle">{destinationsContent.subtitle}</p>
             <div className="destinations-grid">
                 {packages.map((pkg) => (
                     <div key={pkg.id} className="destination-card">
@@ -219,7 +233,7 @@ export default function HomePage() {
                             alt={`View of ${pkg.title}`}
                             layout="fill"
                             objectFit="cover"
-                            data-ai-hint={pkg.imageHints[0]}
+                            data-ai-hint={pkg.imageHints?.[0]}
                         />
                         <div className="overlay">
                             <h3 className="card-title">{pkg.title}</h3>
