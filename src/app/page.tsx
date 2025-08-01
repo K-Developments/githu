@@ -78,8 +78,8 @@ export default function HomePage() {
             image: "https://placehold.co/1920x600.png",
           });
           setDestinationsData(destinations || {
-            title: "Featured Packages",
-            subtitle: "A curated selection of our most popular journeys, designed for unforgettable experiences.",
+            title: "Our Favourite Destinations",
+            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         } else {
            setHeroData({
@@ -104,8 +104,8 @@ export default function HomePage() {
             image: "https://placehold.co/1920x600.png",
           });
           setDestinationsData({
-            title: "Featured Packages",
-            subtitle: "A curated selection of our most popular journeys, designed for unforgettable experiences.",
+            title: "Our Favourite Destinations",
+            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         }
 
@@ -242,9 +242,14 @@ export default function HomePage() {
             </div>
         </section>
 
+        <section className="quote-section noise-overlay" style={{ backgroundImage: `url(${quoteContent.image})` }} data-ai-hint="tropical beach">
+            <div className="overlay"></div>
+            <p className="quote-text">{quoteContent.text}</p>
+        </section>
+
         <section className="packages-section">
-            <h2 className="section-title">{destinationsContent.title}</h2>
-            <p className="section-subtitle">{destinationsContent.subtitle}</p>
+            <h2 className="section-title">Featured Packages</h2>
+            <p className="section-subtitle">A curated selection of our most popular journeys, designed for unforgettable experiences.</p>
             <div className="packages-grid">
                 {packages.map((pkg) => (
                     <PackageCard key={pkg.id} packageData={pkg} />
@@ -252,10 +257,6 @@ export default function HomePage() {
             </div>
         </section>
 
-        <section className="quote-section noise-overlay" style={{ backgroundImage: `url(${quoteContent.image})` }} data-ai-hint="tropical beach">
-            <div className="overlay"></div>
-            <p className="quote-text">{quoteContent.text}</p>
-        </section>
 
       </main>
     </>
