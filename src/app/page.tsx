@@ -164,6 +164,15 @@ export default function HomePage() {
       
       <main>
         <section className="hero">
+          <div className="hero-content">
+            <div className="subtitle">{heroContent.subtitle}</div>
+            <h1 dangerouslySetInnerHTML={{ __html: heroContent.headline }}></h1>
+            <p>{heroContent.description}</p>
+            <div className="hero-buttons">
+              <button className="hero-button">{heroContent.buttonPrimary}</button>
+              <a href="#" className="secondary-button">{heroContent.buttonSecondary}</a>
+            </div>
+          </div>
           <div className="hero-image">
               {validImages.map((url, index) => (
                 <div
@@ -191,15 +200,6 @@ export default function HomePage() {
                   ))}
                 </div>
               )}
-          </div>
-          <div className="hero-content">
-            <div className="subtitle">{heroContent.subtitle}</div>
-            <h1 dangerouslySetInnerHTML={{ __html: heroContent.headline }}></h1>
-            <p>{heroContent.description}</p>
-            <div className="hero-buttons">
-              <button className="hero-button">{heroContent.buttonPrimary}</button>
-              <a href="#" className="secondary-button">{heroContent.buttonSecondary}</a>
-            </div>
           </div>
         </section>
 
