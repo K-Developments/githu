@@ -18,7 +18,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['Syne', 'sans-serif'],
-        headline: ['Luxurious Roman', 'cursive'],
+        headline: ['Cinzel', 'cursive'],
       },
       colors: {
         background: 'hsl(var(--background))',
