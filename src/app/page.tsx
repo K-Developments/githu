@@ -12,8 +12,6 @@ import { MobileNav } from "@/components/ui/mobile-nav";
 interface HeroData {
   headline: string;
   description: string;
-  buttonPrimary: string;
-  buttonSecondary: string;
   sliderImages: string[];
   subtitle: string;
 }
@@ -26,6 +24,11 @@ interface IntroData {
   landscapeImage: string;
 }
 
+interface QuoteData {
+  text: string;
+  image: string;
+}
+
 interface DestinationsData {
   title: string;
   subtitle: string;
@@ -34,6 +37,7 @@ interface DestinationsData {
 export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
   const [introData, setIntroData] = useState<IntroData | null>(null);
+  const [quoteData, setQuoteData] = useState<QuoteData | null>(null);
   const [destinationsData, setDestinationsData] = useState<DestinationsData | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,6 +54,7 @@ export default function HomePage() {
           const data = contentDocSnap.data();
           const hero = data.hero as HeroData;
           const intro = data.intro as IntroData;
+          const quote = data.quote as QuoteData;
           const destinations = data.destinations as DestinationsData;
           
            const images = hero.sliderImages && Array.isArray(hero.sliderImages) && hero.sliderImages.length > 0
@@ -67,6 +72,10 @@ export default function HomePage() {
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
           });
+           setQuoteData(quote || {
+            text: '"The world is a book and those who do not travel read only one page."',
+            image: "https://placehold.co/1920x600.png",
+          });
           setDestinationsData(destinations || {
             title: "Our Favourite Destinations",
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
@@ -76,8 +85,6 @@ export default function HomePage() {
             subtitle: "Luxury Travel Specialists",
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
-            buttonPrimary: "Start Your Journey",
-            buttonSecondary: "View Destinations",
             sliderImages: [
               "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
               "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
@@ -90,6 +97,10 @@ export default function HomePage() {
             linkText: "Meet our team",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
+          });
+          setQuoteData({
+            text: '"The world is a book and those who do not travel read only one page."',
+            image: "https://placehold.co/1920x600.png",
           });
           setDestinationsData({
             title: "Our Favourite Destinations",
@@ -131,6 +142,7 @@ export default function HomePage() {
   
   const heroContent = heroData!;
   const introContent = introData!;
+  const quoteContent = quoteData!;
   const destinationsContent = destinationsData!;
   const validImages = heroContent.sliderImages?.filter(url => url) || [];
 
@@ -220,11 +232,18 @@ export default function HomePage() {
                     </div>
                 </div>
                 <div className="wrap-text-and-landscape">
-                    <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
+                  <div className="landscape-content">
+                   <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
                     <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
                     <a className="link-to" href="#">{introContent.linkText}</a>
+                  </div>
                 </div>
             </div>
+        </section>
+
+        <section className="quote-section noise-overlay" style={{ backgroundImage: `url(${quoteContent.image})` }} data-ai-hint="tropical beach">
+            <div className="overlay"></div>
+            <p className="quote-text">{quoteContent.text}</p>
         </section>
 
         <section className="destinations-section">

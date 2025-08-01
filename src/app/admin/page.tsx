@@ -17,8 +17,6 @@ import { Trash2 } from "lucide-react";
 interface HeroData {
   headline: string;
   description: string;
-  buttonPrimary: string;
-  buttonSecondary: string;
   sliderImages: string[];
   subtitle: string;
 }
@@ -31,6 +29,11 @@ interface IntroData {
   landscapeImage: string;
 }
 
+interface QuoteData {
+  text: string;
+  image: string;
+}
+
 interface DestinationsData {
   title: string;
   subtitle: string;
@@ -40,8 +43,6 @@ export default function AdminHomePage() {
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
     description: "",
-    buttonPrimary: "",
-    buttonSecondary: "",
     sliderImages: ["", "", ""],
     subtitle: "",
   });
@@ -51,6 +52,10 @@ export default function AdminHomePage() {
     linkText: "",
     portraitImage: "",
     landscapeImage: "",
+  });
+  const [quoteData, setQuoteData] = useState<QuoteData>({
+    text: "",
+    image: "",
   });
   const [destinationsData, setDestinationsData] = useState<DestinationsData>({
     title: "",
@@ -86,6 +91,12 @@ export default function AdminHomePage() {
             landscapeImage: intro.landscapeImage || "",
           });
 
+          const quote = (data.quote || {}) as QuoteData;
+           setQuoteData({
+            text: quote.text || '"The world is a book and those who do not travel read only one page."',
+            image: quote.image || "https://placehold.co/1920x600.png",
+          });
+
           const destinations = (data.destinations || {}) as DestinationsData;
           setDestinationsData({
             title: destinations.title || "",
@@ -98,8 +109,6 @@ export default function AdminHomePage() {
             subtitle: "Luxury Travel Specialists",
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
-            buttonPrimary: "Start Your Journey",
-            buttonSecondary: "View Destinations",
             sliderImages: [
               "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
               "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
@@ -112,6 +121,10 @@ export default function AdminHomePage() {
             linkText: "Meet our team",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
+          });
+          setQuoteData({
+            text: '"The world is a book and those who do not travel read only one page."',
+            image: "https://placehold.co/1920x600.png",
           });
           setDestinationsData({
             title: "Our Favourite Destinations",
@@ -158,6 +171,11 @@ export default function AdminHomePage() {
   const handleIntroChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setIntroData(prevData => ({ ...prevData, [id]: value.replace(/\\n/g, '\n') }));
+  };
+  
+  const handleQuoteChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setQuoteData(prevData => ({ ...prevData, [id]: value }));
   };
 
   const handleDestinationsChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -209,7 +227,7 @@ export default function AdminHomePage() {
 
       // Save content data
       const contentDocRef = doc(db, "content", "home");
-      batch.set(contentDocRef, { hero: heroData, intro: introData, destinations: destinationsData }, { merge: true });
+      batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData }, { merge: true });
       
       // Save packages data
       const packagesCollectionRef = collection(db, 'packages');
@@ -276,16 +294,7 @@ export default function AdminHomePage() {
             <Label htmlFor="description">Description</Label>
             <Textarea id="description" value={heroData.description} onChange={handleHeroChange} />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="buttonPrimary">Primary Button Text</Label>
-              <Input id="buttonPrimary" value={heroData.buttonPrimary} onChange={handleHeroChange} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="buttonSecondary">Secondary Button Text</Label>
-              <Input id="buttonSecondary" value={heroData.buttonSecondary} onChange={handleHeroChange} />
-            </div>
-          </div>
+          
            <div className="space-y-4">
             <Label>Slider Images</Label>
             {heroData.sliderImages.map((url, index) => (
@@ -331,6 +340,24 @@ export default function AdminHomePage() {
             </div>
         </CardContent>
       </Card>
+      
+      <Card>
+        <CardHeader>
+            <CardTitle>Quote Section</CardTitle>
+            <CardDescription>Update the content for the full-width quote section.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+            <div className="space-y-2">
+                <Label htmlFor="text">Quote Text</Label>
+                <Textarea id="text" value={quoteData.text} onChange={handleQuoteChange} />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="image">Background Image URL</Label>
+                <Input id="image" value={quoteData.image} onChange={handleQuoteChange} />
+            </div>
+        </CardContent>
+      </Card>
+
 
       <Card>
         <CardHeader>
