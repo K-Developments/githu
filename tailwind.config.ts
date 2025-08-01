@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
+        body: ['Syne', 'sans-serif'],
         headline: ['Luxurious Roman', 'cursive'],
       },
       colors: {
