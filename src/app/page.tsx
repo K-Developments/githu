@@ -162,7 +162,7 @@ export default function HomePage() {
               {validImages.map((url, index) => (
                 <div
                   key={index}
-                  className={`fade-image ${index === currentImageIndex ? 'active' : ''}`}
+                  className={`fade-image noise-overlay ${index === currentImageIndex ? 'active' : ''}`}
                 >
                   <Image 
                     src={url}
@@ -200,7 +200,7 @@ export default function HomePage() {
         <section className="intro-home">
             <div className="intro-container">
                 <div className="wrap-image-portrait">
-                    <div className="image">
+                    <div className="image noise-overlay">
                         <Image 
                           alt="Inspiring travel portrait" 
                           src={introContent.portraitImage} 
@@ -213,7 +213,7 @@ export default function HomePage() {
                     <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
                     <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
                     <a className="link-to" href="#">{introContent.linkText}</a>
-                    <div className="image">
+                    <div className="image noise-overlay">
                         <Image 
                           alt="Inspiring travel landscape" 
                           src={introContent.landscapeImage} 
@@ -230,7 +230,7 @@ export default function HomePage() {
             <p className="section-subtitle">{destinationsContent.subtitle}</p>
             <div className="destinations-grid">
                 {packages.map((pkg) => (
-                    <div key={pkg.id} className="destination-card">
+                    <div key={pkg.id} className="destination-card noise-overlay">
                         <Image 
                             src={pkg.images[0]} 
                             alt={`View of ${pkg.title}`}
