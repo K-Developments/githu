@@ -359,7 +359,7 @@ nav a:hover::after {
 
 .hero-content h1 {
   font-family: 'Luxurious Roman', cursive;
-  font-size: clamp(2rem, 3.5vw, 2.5rem);
+  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
   font-weight: 400;
   margin-bottom: 1.5rem;
   line-height: 1.1;
@@ -445,37 +445,6 @@ nav a:hover::after {
   border-color: hsl(188 55% 45%);
   color: hsl(188 55% 45%);
   transform: translateY(-2px);
-}
-
-/* Stats Section */
-.stats {
-  position: absolute;
-  bottom: 60px;
-  left: 8%;
-  display: flex;
-  gap: 40px;
-  opacity: 0;
-  animation: fadeInUp 1s ease 1s forwards;
-}
-
-.stat-item {
-  text-align: center;
-}
-
-.stat-item .number {
-  font-family: 'Luxurious Roman', cursive;
-  font-size: 2rem;
-  font-weight: 700;
-  color: hsl(188 55% 45%);
-  display: block;
-}
-
-.stat-item .label {
-  font-size: 0.9rem;
-  color: #666;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
 /* Fade in animation */
@@ -773,21 +742,6 @@ nav a:hover::after {
     font-size: 0.75rem;
   }
 
-  .stats {
-    position: static;
-    margin-top: 30px;
-    gap: 30px;
-    justify-content: center;
-  }
-
-  .stat-item .number {
-    font-size: 1.5rem;
-  }
-
-  .stat-item .label {
-    font-size: 0.8rem;
-  }
-
   .pagination-bullets {
     bottom: 20px;
     left: 50%;
@@ -824,11 +778,6 @@ nav a:hover::after {
     padding: 15% 6% 10%;
   }
 
-  .stats {
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
 }
 
 /* Tablet adjustments */
@@ -873,7 +822,7 @@ nav a:hover::after {
   }
 
   .hero-content h1 {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
   }
 
   .hero-content p {

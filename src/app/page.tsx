@@ -194,20 +194,6 @@ export default function HomePage() {
               <button className="hero-button">{heroContent.buttonPrimary}</button>
               <a href="#" className="secondary-button">{heroContent.buttonSecondary}</a>
             </div>
-             <div className="stats">
-              <div className="stat-item">
-                <span className="number">25+</span>
-                <span className="label">Years of Experience</span>
-              </div>
-              <div className="stat-item">
-                <span className="number">98%</span>
-                <span className="label">Client Satisfaction</span>
-              </div>
-              <div className="stat-item">
-                <span className="number">100+</span>
-                <span className="label">Destinations</span>
-              </div>
-            </div>
           </div>
         </section>
 
