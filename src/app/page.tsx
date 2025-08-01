@@ -241,11 +241,6 @@ export default function HomePage() {
             </div>
         </section>
 
-        <section className="quote-section noise-overlay" style={{ backgroundImage: `url(${quoteContent.image})` }} data-ai-hint="tropical beach">
-            <div className="overlay"></div>
-            <p className="quote-text">{quoteContent.text}</p>
-        </section>
-
         <section className="destinations-section">
             <h2 className="section-title">{destinationsContent.title}</h2>
             <p className="section-subtitle">{destinationsContent.subtitle}</p>
@@ -266,6 +261,11 @@ export default function HomePage() {
                     </div>
                 ))}
             </div>
+        </section>
+
+        <section className="quote-section noise-overlay" style={{ backgroundImage: `url(${quoteContent.image})` }} data-ai-hint="tropical beach">
+            <div className="overlay"></div>
+            <p className="quote-text">{quoteContent.text}</p>
         </section>
 
       </main>
