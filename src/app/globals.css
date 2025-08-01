@@ -335,23 +335,6 @@ header {
   z-index: 1;
 }
 
-/* Floating badge */
-.hero-image::before {
-  content: '★ Award Winning';
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  background: rgba(255, 255, 255, 0.95);
-  color: hsl(188 55% 45%);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  z-index: 2;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-}
-
 /* Content Side (60%) */
 .hero-content {
   width: 45%;
