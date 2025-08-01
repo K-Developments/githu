@@ -92,11 +92,6 @@ body {
 
 main img {
   filter: saturate(0.9) brightness(1.05) contrast(1.05);
-  transition: filter 0.3s ease-in-out;
-}
-
-main img:hover {
-    filter: none;
 }
 
 
