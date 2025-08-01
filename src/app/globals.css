@@ -101,7 +101,7 @@ main img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
     pointer-events: none;
     mix-blend-mode: overlay;
     opacity: 0.15;
@@ -482,6 +482,7 @@ header {
 .wrap-image-portrait {
     width: 40%;
     flex-shrink: 0;
+    position: relative;
 }
 
 .wrap-text-and-landscape {
@@ -491,13 +492,13 @@ header {
 }
 
 .wrap-image-portrait .image,
-.wrap-text-and-landscape .image {
+.wrap-image-portrait .landscape-image-wrapper {
     overflow: hidden;
     position: relative;
 }
 
 .wrap-image-portrait .image img,
-.wrap-text-and-landscape .image img {
+.wrap-image-portrait .landscape-image-wrapper img {
     width: 100%;
     height: auto;
     display: block;
@@ -506,7 +507,7 @@ header {
 }
 
 .wrap-image-portrait .image:hover img,
-.wrap-text-and-landscape .image:hover img {
+.wrap-image-portrait .landscape-image-wrapper:hover img {
     transform: scale(1.05);
 }
 
@@ -773,6 +774,15 @@ header {
     gap: 15px;
     z-index: 3;
   }
+
+  .wrap-image-portrait .landscape-image-wrapper {
+    position: absolute;
+    width: 60%;
+    bottom: -15%;
+    right: -25%;
+    border: 8px solid white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
 }
 
 /* Tablet adjustments */
@@ -798,6 +808,14 @@ header {
   }
   .hero-content h1 {
     font-size: 3rem;
+  }
+  
+  .wrap-image-portrait .landscape-image-wrapper {
+    position: static;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    margin-top: 1rem;
   }
 }
 

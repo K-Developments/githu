@@ -210,12 +210,7 @@ export default function HomePage() {
                           height={1000} 
                           data-ai-hint="travel portrait" />
                     </div>
-                </div>
-                <div className="wrap-text-and-landscape">
-                    <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
-                    <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
-                    <a className="link-to" href="#">{introContent.linkText}</a>
-                    <div className="image noise-overlay">
+                     <div className="landscape-image-wrapper noise-overlay">
                         <Image 
                           alt="Inspiring travel landscape" 
                           src={introContent.landscapeImage} 
@@ -223,6 +218,11 @@ export default function HomePage() {
                           height={662}
                           data-ai-hint="travel landscape" />
                     </div>
+                </div>
+                <div className="wrap-text-and-landscape">
+                    <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
+                    <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
+                    <a className="link-to" href="#">{introContent.linkText}</a>
                 </div>
             </div>
         </section>
