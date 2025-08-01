@@ -8,6 +8,7 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package } from "@/lib/data";
 import { Search, Menu } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
+import { PackageCard } from "@/components/ui/package-card";
 
 interface HeroData {
   headline: string;
@@ -77,8 +78,8 @@ export default function HomePage() {
             image: "https://placehold.co/1920x600.png",
           });
           setDestinationsData(destinations || {
-            title: "Our Favourite Destinations",
-            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
+            title: "Featured Packages",
+            subtitle: "A curated selection of our most popular journeys, designed for unforgettable experiences.",
           });
         } else {
            setHeroData({
@@ -103,8 +104,8 @@ export default function HomePage() {
             image: "https://placehold.co/1920x600.png",
           });
           setDestinationsData({
-            title: "Our Favourite Destinations",
-            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
+            title: "Featured Packages",
+            subtitle: "A curated selection of our most popular journeys, designed for unforgettable experiences.",
           });
         }
 
@@ -241,24 +242,12 @@ export default function HomePage() {
             </div>
         </section>
 
-        <section className="destinations-section">
+        <section className="packages-section">
             <h2 className="section-title">{destinationsContent.title}</h2>
             <p className="section-subtitle">{destinationsContent.subtitle}</p>
-            <div className="destinations-grid">
+            <div className="packages-grid">
                 {packages.map((pkg) => (
-                    <div key={pkg.id} className="destination-card noise-overlay">
-                        <Image 
-                            src={pkg.images[0]} 
-                            alt={`View of ${pkg.title}`}
-                            layout="fill"
-                            objectFit="cover"
-                            data-ai-hint={pkg.imageHints?.[0]}
-                        />
-                        <div className="overlay">
-                            <h3 className="card-title">{pkg.title}</h3>
-                            <p className="card-location">{pkg.location}</p>
-                        </div>
-                    </div>
+                    <PackageCard key={pkg.id} packageData={pkg} />
                 ))}
             </div>
         </section>
