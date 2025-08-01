@@ -14,6 +14,7 @@ interface HeroData {
   buttonPrimary: string;
   buttonSecondary: string;
   sliderImages: string[];
+  subtitle: string;
 }
 
 interface IntroData {
@@ -70,6 +71,7 @@ export default function HomePage() {
           });
         } else {
            setHeroData({
+            subtitle: "Luxury Travel Specialists",
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
             buttonPrimary: "Start Your Journey",
@@ -185,11 +187,26 @@ export default function HomePage() {
               )}
           </div>
           <div className="hero-content">
+            <div className="subtitle">{heroContent.subtitle}</div>
             <h1 dangerouslySetInnerHTML={{ __html: heroContent.headline }}></h1>
             <p>{heroContent.description}</p>
             <div className="hero-buttons">
               <button className="hero-button">{heroContent.buttonPrimary}</button>
               <a href="#" className="secondary-button">{heroContent.buttonSecondary}</a>
+            </div>
+             <div className="stats">
+              <div className="stat-item">
+                <span className="number">25+</span>
+                <span className="label">Years of Experience</span>
+              </div>
+              <div className="stat-item">
+                <span className="number">98%</span>
+                <span className="label">Client Satisfaction</span>
+              </div>
+              <div className="stat-item">
+                <span className="number">100+</span>
+                <span className="label">Destinations</span>
+              </div>
             </div>
           </div>
         </section>

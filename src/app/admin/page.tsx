@@ -20,6 +20,7 @@ interface HeroData {
   buttonPrimary: string;
   buttonSecondary: string;
   sliderImages: string[];
+  subtitle: string;
 }
 
 interface IntroData {
@@ -42,6 +43,7 @@ export default function AdminHomePage() {
     buttonPrimary: "",
     buttonSecondary: "",
     sliderImages: ["", "", ""],
+    subtitle: "",
   });
   const [introData, setIntroData] = useState<IntroData>({
     headline: "",
@@ -93,6 +95,7 @@ export default function AdminHomePage() {
         } else {
           console.log("No content document! Using default values.");
           setHeroData({
+            subtitle: "Luxury Travel Specialists",
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
             buttonPrimary: "Start Your Journey",
@@ -261,6 +264,10 @@ export default function AdminHomePage() {
           <CardDescription>Update the content of the hero section.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="subtitle">Subtitle</Label>
+            <Input id="subtitle" value={heroData.subtitle} onChange={handleHeroChange} />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="headline">Headline</Label>
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
