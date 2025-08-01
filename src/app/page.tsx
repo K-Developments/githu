@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package } from "@/lib/data";
-import { Search } from "lucide-react";
+import { Search, Menu } from "lucide-react";
+import { MobileNav } from "@/components/ui/mobile-nav";
 
 interface HeroData {
   headline: string;
@@ -37,6 +38,7 @@ export default function HomePage() {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchContentData = async () => {
@@ -134,12 +136,13 @@ export default function HomePage() {
 
   return (
     <>
+      <MobileNav isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
       <header>
           <div className="header-left">
               <a href="#" className="logo">ISLAND<span>HOPES</span></a>
           </div>
           <div className="header-center">
-              <nav>
+              <nav className="desktop-nav">
                   <ul>
                       <li><a href="#">Destinations</a></li>
                       <li><a href="#">Experiences</a></li>
@@ -149,9 +152,12 @@ export default function HomePage() {
               </nav>
           </div>
           <div className="header-right">
-              <a href="#" className="cta-button">Plan Trip</a>
-              <button className="search-button" aria-label="Search">
+              <a href="#" className="cta-button desktop-only">Plan Trip</a>
+              <button className="search-button desktop-only" aria-label="Search">
                   <Search size={20} />
+              </button>
+              <button onClick={() => setIsMenuOpen(true)} className="hamburger-button" aria-label="Open menu">
+                  <Menu size={24} />
               </button>
           </div>
       </header>
