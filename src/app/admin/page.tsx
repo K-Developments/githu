@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, collection, getDocs, writeBatch, deleteDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import type { Package } from "@/lib/data";
+import type { Package, Category } from "@/lib/data";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Trash2 } from "lucide-react";
 
@@ -60,6 +60,8 @@ export default function AdminHomePage() {
     subtitle: "",
   });
   const [packages, setPackages] = useState<Package[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+
 
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -128,16 +130,16 @@ export default function AdminHomePage() {
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         }
+        
+        const categoriesCollectionRef = collection(db, "categories");
+        const categoriesSnap = await getDocs(categoriesCollectionRef);
+        const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
+        setCategories(categoriesData);
 
         const packagesCollectionRef = collection(db, "packages");
         const packagesSnap = await getDocs(packagesCollectionRef);
-        if (packagesSnap.empty) {
-          console.log("No packages found in Firestore.");
-          setPackages([]);
-        } else {
-          const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
-          setPackages(packagesData);
-        }
+        const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+        setPackages(packagesData);
 
       } catch (error) {
         console.error("Error fetching content data:", error);
@@ -179,26 +181,47 @@ export default function AdminHomePage() {
     const { id, value } = e.target;
     setDestinationsData(prevData => ({ ...prevData, [id]: value }));
   };
-  
-  const handlePackageChange = (index: number, field: keyof Package, value: any) => {
-    const newPackages = [...packages];
-    (newPackages[index] as any)[field] = value;
-    setPackages(newPackages);
+
+  const handleCategoryChange = (index: number, value: string) => {
+    const newCategories = [...categories];
+    newCategories[index].name = value;
+    setCategories(newCategories);
   };
   
-  const handlePackageImageChange = (pkgIndex: number, imgIndex: number, value: string) => {
-      const newPackages = [...packages];
-      if (!newPackages[pkgIndex].images) {
-          newPackages[pkgIndex].images = [];
-      }
-      newPackages[pkgIndex].images[imgIndex] = value;
-      setPackages(newPackages);
+  const handlePackageChange = (id: string, field: keyof Omit<Package, 'id'>, value: any) => {
+    setPackages(prevPackages => prevPackages.map(p => p.id === id ? { ...p, [field]: value } : p));
+  };
+  
+  const handlePackageImageChange = (id: string, imgIndex: number, value: string) => {
+    setPackages(prevPackages => prevPackages.map(p => {
+        if (p.id === id) {
+            const newImages = [...(p.images || [])];
+            newImages[imgIndex] = value;
+            return { ...p, images: newImages };
+        }
+        return p;
+    }));
   };
 
-  const handleAddNewPackage = () => {
+  const handleAddNewCategory = () => {
+    const newCategory: Category = {
+      id: `new-cat-${Date.now()}`,
+      name: "New Category",
+    };
+    setCategories([...categories, newCategory]);
+  };
+  
+  const handleDeleteCategory = (id: string) => {
+    setCategories(categories.filter(c => c.id !== id));
+    // Also remove associated packages from state
+    setPackages(packages.filter(p => p.categoryId !== id));
+  };
+
+  const handleAddNewPackage = (categoryId: string) => {
     const newPackage: Package = {
-      id: `new-${Date.now()}`,
-      title: "New Destination",
+      id: `new-pkg-${Date.now()}`,
+      categoryId: categoryId,
+      title: "New Package",
       location: "",
       description: "",
       images: ["https://placehold.co/600x400.png"],
@@ -209,7 +232,6 @@ export default function AdminHomePage() {
 
   const handleDeletePackage = (id: string) => {
     setPackages(packages.filter(p => p.id !== id));
-    // The actual deletion from Firestore will happen on save
   };
 
   const handleSave = async () => {
@@ -220,20 +242,34 @@ export default function AdminHomePage() {
       const contentDocRef = doc(db, "content", "home");
       batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData }, { merge: true });
       
-      // Save packages data
+      // Save categories
+      const categoriesCollectionRef = collection(db, 'categories');
+      const existingCategoriesSnap = await getDocs(categoriesCollectionRef);
+      const existingCategoryIds = existingCategoriesSnap.docs.map(d => d.id);
+      const currentCategoryIds = categories.map(c => c.id);
+
+      for (const id of existingCategoryIds) {
+          if (!currentCategoryIds.includes(id)) {
+              batch.delete(doc(db, "categories", id));
+          }
+      }
+      categories.forEach(cat => {
+          const { id, ...catData } = cat;
+          const docRef = doc(db, "categories", id);
+          batch.set(docRef, catData);
+      });
+
+      // Save packages
       const packagesCollectionRef = collection(db, 'packages');
       const existingPackagesSnap = await getDocs(packagesCollectionRef);
-      const existingIds = existingPackagesSnap.docs.map(d => d.id);
-      const currentIds = packages.map(p => p.id);
+      const existingPackageIds = existingPackagesSnap.docs.map(d => d.id);
+      const currentPackageIds = packages.map(p => p.id);
 
-      // Delete packages that are no longer in the state
-      for (const id of existingIds) {
-          if (!currentIds.includes(id)) {
+      for (const id of existingPackageIds) {
+          if (!currentPackageIds.includes(id)) {
               batch.delete(doc(db, "packages", id));
           }
       }
-      
-      // Update or add packages
       packages.forEach(pkg => {
         const { id, ...pkgData } = pkg;
         const docRef = doc(db, "packages", id);
@@ -332,7 +368,7 @@ export default function AdminHomePage() {
         <CardHeader>
             <CardTitle>Quote Section</CardTitle>
             <CardDescription>Update the content for the full-width quote section.</CardDescription>
-        </CardHeader>
+        </Header>
         <CardContent className="space-y-6">
             <div className="space-y-2">
                 <Label htmlFor="text">Quote Text</Label>
@@ -362,45 +398,66 @@ export default function AdminHomePage() {
             </div>
         </CardContent>
       </Card>
-
+      
       <Card>
         <CardHeader>
-          <CardTitle>Manage Destinations</CardTitle>
-          <CardDescription>Add, edit, or delete destination packages.</CardDescription>
+          <CardTitle>Manage Categories & Packages</CardTitle>
+          <CardDescription>Organize packages within categories.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Accordion type="multiple" className="w-full">
-            {packages.map((pkg, index) => (
-              <AccordionItem value={pkg.id} key={pkg.id}>
-                <AccordionTrigger>{pkg.title}</AccordionTrigger>
-                <AccordionContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor={`pkg-title-${index}`}>Title</Label>
-                      <Input id={`pkg-title-${index}`} value={pkg.title} onChange={(e) => handlePackageChange(index, 'title', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor={`pkg-location-${index}`}>Location</Label>
-                      <Input id={`pkg-location-${index}`} value={pkg.location} onChange={(e) => handlePackageChange(index, 'location', e.target.value)} />
-                    </div>
-                  </div>
+            {categories.map((category, catIndex) => (
+              <AccordionItem value={category.id} key={category.id}>
+                <AccordionTrigger>{category.name}</AccordionTrigger>
+                <AccordionContent className="space-y-6 bg-slate-50 p-4 rounded-md">
                   <div className="space-y-2">
-                    <Label htmlFor={`pkg-desc-${index}`}>Short Description</Label>
-                    <Textarea id={`pkg-desc-${index}`} value={pkg.description} onChange={(e) => handlePackageChange(index, 'description', e.target.value)} />
+                    <Label htmlFor={`cat-name-${catIndex}`}>Category Name</Label>
+                    <Input id={`cat-name-${catIndex}`} value={category.name} onChange={(e) => handleCategoryChange(catIndex, e.target.value)} />
                   </div>
-                   <div className="space-y-2">
-                    <Label>Image URL</Label>
-                    <Input value={pkg.images?.[0] || ''} onChange={(e) => handlePackageImageChange(index, 0, e.target.value)} />
+
+                  <div className="space-y-4">
+                    <Label>Packages in this Category</Label>
+                    {packages.filter(p => p.categoryId === category.id).map((pkg) => (
+                      <div key={pkg.id} className="p-4 border rounded-md space-y-3 bg-white">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <Label htmlFor={`pkg-title-${pkg.id}`} className="text-xs">Title</Label>
+                                <Input id={`pkg-title-${pkg.id}`} value={pkg.title} onChange={(e) => handlePackageChange(pkg.id, 'title', e.target.value)} />
+                            </div>
+                            <div className="space-y-1">
+                                <Label htmlFor={`pkg-location-${pkg.id}`} className="text-xs">Location</Label>
+                                <Input id={`pkg-location-${pkg.id}`} value={pkg.location} onChange={(e) => handlePackageChange(pkg.id, 'location', e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor={`pkg-desc-${pkg.id}`} className="text-xs">Short Description</Label>
+                            <Textarea id={`pkg-desc-${pkg.id}`} value={pkg.description} onChange={(e) => handlePackageChange(pkg.id, 'description', e.target.value)} rows={2} />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor={`pkg-img-${pkg.id}`} className="text-xs">Image URL</Label>
+                            <Input id={`pkg-img-${pkg.id}`} value={pkg.images?.[0] || ''} onChange={(e) => handlePackageImageChange(pkg.id, 0, e.target.value)} />
+                        </div>
+                         <Button variant="destructive" size="sm" onClick={() => handleDeletePackage(pkg.id)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete Package
+                        </Button>
+                      </div>
+                    ))}
                   </div>
-                  <Button variant="destructive" size="sm" onClick={() => handleDeletePackage(pkg.id)}>
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete Destination
-                  </Button>
+                  
+                  <div className="flex gap-2 pt-4 border-t">
+                    <Button size="sm" onClick={() => handleAddNewPackage(category.id)}>Add New Package</Button>
+                     <Button variant="destructive" size="sm" onClick={() => handleDeleteCategory(category.id)}>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Delete Category
+                    </Button>
+                  </div>
+
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
-          <Button onClick={handleAddNewPackage}>Add New Destination</Button>
+          <Button onClick={handleAddNewCategory}>Add New Category</Button>
         </CardContent>
       </Card>
 
