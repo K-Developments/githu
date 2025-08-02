@@ -761,8 +761,7 @@ header {
 
 .packages-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+
 }
 
 .no-packages-message {
@@ -1100,7 +1099,7 @@ header {
   }
   
   .packages-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns:1fr;
   }
 
   .packages-divider {
@@ -1347,7 +1346,8 @@ h2{
   }
 
   .packages-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2 , 1fr) !important;
+    gap:3rem;
   }
 
   .package-display-card {

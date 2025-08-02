@@ -276,7 +276,7 @@ export default function HomePage() {
                 >
                   <Image 
                     src={url}
-                    alt="Luxury Travel Destination"
+                    alt={`Luxury travel scene ${index + 1} for Island Hopes`}
                     fill
                     sizes="100vw"
                     className="object-cover"
@@ -309,7 +309,7 @@ export default function HomePage() {
                  <div className="intro-image-cluster">
                     <div className="image-landscape-wrapper noise-overlay">
                         <Image 
-                          alt="Inspiring travel landscape" 
+                          alt="Lush, inspiring travel landscape with mountains and water" 
                           src={introContent.landscapeImage} 
                           width={1000} 
                           height={662}
@@ -318,7 +318,7 @@ export default function HomePage() {
                     </div>
                     <div className="image-portrait-wrapper noise-overlay">
                         <Image 
-                          alt="Inspiring travel portrait" 
+                          alt="Happy traveler enjoying a bespoke experience" 
                           src={introContent.portraitImage} 
                           width={800} 
                           height={1000} 
@@ -383,7 +383,7 @@ export default function HomePage() {
                                 <div className="card-image">
                                     <Image
                                         src={pkg.images[0]}
-                                        alt={pkg.title}
+                                        alt={`Image of ${pkg.title} package in ${pkg.location}`}
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         className="object-cover"

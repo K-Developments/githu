@@ -1,0 +1,7 @@
+# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+#
+# A robot should access the /sitemap.xml file to get a list of all pages on the website.
+
+User-agent: *
+Allow: /
+Sitemap: /sitemap.xml
