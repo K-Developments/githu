@@ -847,8 +847,8 @@ header {
     padding: 2rem;
     background: white;
     position: absolute;
-    right: 10%;
-    top: 125%;
+    right: -5%;
+    top: 15%;
     box-shadow: 0 10px 10px rgba(0,0,0,0.1);
     z-index: 10;
   }
