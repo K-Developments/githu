@@ -782,6 +782,7 @@ header {
   line-height: 1.2;
   margin-bottom: 0.75rem;
   color: #222;
+  text-transform: uppercase;
 }
 
 .package-display-card .card-description {
@@ -920,8 +921,14 @@ header {
     font-size:3.5rem;
     text-align:center;
   }
+  h2 {
+    font-size: 2rem !important;
+   
+  }
 }
-
+h2{
+   text-transform: uppercase;
+}
 
 /* DESKTOP & TABLET Overrides */
 @media (min-width: 769px) {
@@ -1162,3 +1169,5 @@ header {
   }
   
 }
+
+
