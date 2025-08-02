@@ -10,6 +10,7 @@ import { Search, Menu, ArrowLeft, ArrowRight } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 interface HeroData {
   headline: string;
@@ -347,34 +348,38 @@ export default function HomePage() {
 
                 <motion.div className="packages-grid" layout>
                     <AnimatePresence>
-                        {activePackages.map((pkg) => (
-                        <motion.div 
-                            key={pkg.id} 
-                            className="package-display-card"
-                            layout
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.4, ease: "easeInOut" }}
-                            >
-                            <div className="card-image">
-                                <Image
-                                    src={pkg.images[0]}
-                                    alt={pkg.title}
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    className="object-cover"
-                                    data-ai-hint={pkg.imageHints?.[0]}
-                                />
-                            </div>
-                            <div className="card-details">
-                                <h3 className="card-title">{pkg.title}</h3>
-                                <p className="card-description">{pkg.description}</p>
-                                <a href={`/packages/${pkg.id}`} className="view-button">
-                                    View Details
-                                </a>
-                            </div>
-                        </motion.div>
+                        {activePackages.map((pkg, index) => (
+                        <React.Fragment key={pkg.id}>
+                            <motion.div 
+                                className="package-display-card"
+                                layout
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                                >
+                                <div className="card-image">
+                                    <Image
+                                        src={pkg.images[0]}
+                                        alt={pkg.title}
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        className="object-cover"
+                                        data-ai-hint={pkg.imageHints?.[0]}
+                                    />
+                                </div>
+                                <div className="card-details">
+                                    <h3 className="card-title">{pkg.title}</h3>
+                                    <p className="card-description">{pkg.description}</p>
+                                    <a href={`/packages/${pkg.id}`} className="view-button">
+                                        View Details
+                                    </a>
+                                </div>
+                            </motion.div>
+                            {index < activePackages.length - 1 && (
+                                <Separator className="packages-divider" />
+                             )}
+                        </React.Fragment>
                         ))}
                     </AnimatePresence>
                 </motion.div>
@@ -395,3 +400,5 @@ export default function HomePage() {
     </>
   );
 }
+
+    
