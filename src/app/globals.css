@@ -684,10 +684,23 @@ header {
     opacity: 1;
 }
 
-.card-title-decorated {
+.destination-card .card-title-decorated {
+    position: relative;
     color: #222;
     border: 1px solid #222;
     padding: 0.5rem;
+    display: inline-block;
+}
+
+.destination-card .card-title-decorated::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 1px solid #222;
+    pointer-events: none;
 }
 
 
