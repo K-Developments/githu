@@ -368,7 +368,7 @@ export default function AdminHomePage() {
         <CardHeader>
             <CardTitle>Quote Section</CardTitle>
             <CardDescription>Update the content for the full-width quote section.</CardDescription>
-        </Header>
+        </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
                 <Label htmlFor="text">Quote Text</Label>
