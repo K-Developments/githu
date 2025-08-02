@@ -765,7 +765,7 @@ header {
   }
 
   .destination-card .card-title-decorated::before {
-    border-color: white;
+    display: none;
   }
 }
 
