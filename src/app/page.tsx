@@ -1,8 +1,8 @@
 
 "use client";
 
-import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package, Destination, Category, Testimonial } from "@/lib/data";
@@ -415,8 +415,8 @@ export default function HomePage() {
         {testimonials.length > 0 && (
             <section className="homepage-testimonials-section">
                 <div className="testimonial-container">
-                    <Button variant="outline" size="icon" onClick={handlePrevTestimonial} className="testimonial-arrow">
-                        <ArrowLeft />
+                    <Button variant="ghost" size="icon" onClick={handlePrevTestimonial} className="testimonial-arrow">
+                        <ArrowLeft size={32} />
                     </Button>
                     <div className="testimonial-content-wrapper">
                          <AnimatePresence mode="wait">
@@ -438,8 +438,8 @@ export default function HomePage() {
                             </motion.div>
                          </AnimatePresence>
                     </div>
-                    <Button variant="outline" size="icon" onClick={handleNextTestimonial} className="testimonial-arrow">
-                        <ArrowRight />
+                    <Button variant="ghost" size="icon" onClick={handleNextTestimonial} className="testimonial-arrow">
+                        <ArrowRight size={32} />
                     </Button>
                 </div>
             </section>
