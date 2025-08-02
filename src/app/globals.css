@@ -482,17 +482,18 @@ header {
     gap: 2rem;
     max-width: 1400px;
     margin: 0 auto;
-    position: relative;
 }
 
 .intro-text-content {
-    order: 1;
+    order: 2;
+    text-align: center;
 }
 
 .intro-image-cluster {
-    order: 2;
+    order: 1;
+    position: relative;
+    margin-bottom: 2rem;
 }
-
 .image-portrait-wrapper, .image-landscape-wrapper {
     overflow: hidden;
 }
@@ -698,6 +699,11 @@ header {
   .intro-home {
       padding: 80px 5%;
   }
+  
+  .image-landscape-wrapper {
+      margin-top: -15%;
+      margin-left: 10%;
+  }
 
    .destinations-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -809,36 +815,31 @@ header {
   .intro-text-content {
       flex: 1 1 45%;
       padding-right: 5%;
-      position: absolute;
-      width: 55%;
-      padding: 2rem;
-      background: white;
-      right: 10%;
-      top: 15%;
-      z-index: 3;
+      order: 1;
+      text-align: left;
   }
 
   .intro-image-cluster {
-      flex: 1 1 50%;
-      position: relative;
+      flex: 1 1 55%;
+      order: 2;
       height: 80vh;
   }
 
   .image-portrait-wrapper {
       position: absolute;
-      width: 60%;
+      width: 50%;
       top: 0;
-      right: 0;
-      z-index: 1;
+      left: 0;
+      z-index: 2;
       box-shadow: 0 15px 35px rgba(0,0,0,0.15);
   }
 
   .image-landscape-wrapper {
       position: absolute;
-      width: 70%;
-      bottom: 0;
-      left: 0;
-      z-index: 2;
+      width: 65%;
+      bottom: 10%;
+      right: 0;
+      z-index: 1;
       box-shadow: 0 15px 35px rgba(0,0,0,0.15);
   }
 
