@@ -77,6 +77,9 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  const allPackagesCategory: Category = { id: 'all', name: 'All Packages' };
+
 
   useEffect(() => {
     const fetchContentData = async () => {
@@ -149,7 +152,7 @@ export default function HomePage() {
         const categoriesCollectionRef = collection(db, "categories");
         const categoriesSnap = await getDocs(categoriesCollectionRef);
         const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
-        setCategories(categoriesData);
+        setCategories([allPackagesCategory, ...categoriesData]);
         
         const packagesCollectionRef = collection(db, "packages");
         const packagesSnap = await getDocs(packagesCollectionRef);
@@ -167,10 +170,16 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (categories.length > 0 && packages.length > 0) {
-      const currentCategoryId = categories[activeCategoryIndex].id;
-      const filteredPackages = packages.filter(p => p.categoryId === currentCategoryId);
-      setActivePackages(filteredPackages);
+    if (categories.length > 0) {
+      const currentCategory = categories[activeCategoryIndex];
+      if (currentCategory.id === 'all') {
+        setActivePackages(packages);
+      } else {
+        const filteredPackages = packages.filter(p => p.categoryId === currentCategory.id);
+        setActivePackages(filteredPackages);
+      }
+    } else {
+        setActivePackages(packages);
     }
   }, [activeCategoryIndex, categories, packages]);
 
