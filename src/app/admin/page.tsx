@@ -203,15 +203,9 @@ export default function AdminHomePage() {
       id: `new-${Date.now()}`,
       title: "New Destination",
       location: "",
-      theme: "Relaxation",
-      price: 0,
-      duration: 0,
       description: "",
-      longDescription: "",
       images: ["https://placehold.co/600x400.png"],
       imageHints: [],
-      itinerary: [],
-      reviews: [],
     };
     setPackages([...packages, newPackage]);
   };
@@ -396,14 +390,6 @@ export default function AdminHomePage() {
                       <Label htmlFor={`pkg-location-${index}`}>Location</Label>
                       <Input id={`pkg-location-${index}`} value={pkg.location} onChange={(e) => handlePackageChange(index, 'location', e.target.value)} />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor={`pkg-price-${index}`}>Price</Label>
-                      <Input id={`pkg-price-${index}`} type="number" value={pkg.price} onChange={(e) => handlePackageChange(index, 'price', Number(e.target.value))} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor={`pkg-duration-${index}`}>Duration (days)</Label>
-                      <Input id={`pkg-duration-${index}`} type="number" value={pkg.duration} onChange={(e) => handlePackageChange(index, 'duration', Number(e.target.value))} />
-                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor={`pkg-desc-${index}`}>Short Description</Label>
@@ -415,13 +401,13 @@ export default function AdminHomePage() {
                   </div>
                   <Button variant="destructive" size="sm" onClick={() => handleDeletePackage(pkg.id)}>
                     <Trash2 className="mr-2 h-4 w-4" />
-                    Delete Package
+                    Delete Destination
                   </Button>
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
-          <Button onClick={handleAddNewPackage}>Add New Package</Button>
+          <Button onClick={handleAddNewPackage}>Add New Destination</Button>
         </CardContent>
       </Card>
 

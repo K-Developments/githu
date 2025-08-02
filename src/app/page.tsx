@@ -8,7 +8,6 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package } from "@/lib/data";
 import { Search, Menu } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
-import { PackageCard } from "@/components/ui/package-card";
 
 interface HeroData {
   headline: string;
@@ -34,6 +33,27 @@ interface DestinationsData {
   title: string;
   subtitle: string;
 }
+
+const DestinationCard = ({ packageData }: { packageData: Package }) => {
+    return (
+        <div className="destination-card noise-overlay">
+            <a href={`/destinations/${packageData.id}`}>
+                <Image
+                    src={packageData.images[0]}
+                    alt={`View of ${packageData.title}`}
+                    layout="fill"
+                    objectFit="cover"
+                    data-ai-hint={packageData.imageHints?.[0]}
+                />
+                <div className="card-content">
+                    <p className="card-location">{packageData.location}</p>
+                    <h3 className="card-title">{packageData.title}</h3>
+                </div>
+            </a>
+        </div>
+    );
+};
+
 
 export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
@@ -242,21 +262,20 @@ export default function HomePage() {
             </div>
         </section>
 
-        <section className="quote-section noise-overlay" style={{ backgroundImage: `url(${quoteContent.image})` }} data-ai-hint="tropical beach">
-            <div className="overlay"></div>
-            <p className="quote-text">{quoteContent.text}</p>
-        </section>
-
-        <section className="packages-section">
-            <h2 className="section-title">Featured Packages</h2>
-            <p className="section-subtitle">A curated selection of our most popular journeys, designed for unforgettable experiences.</p>
-            <div className="packages-grid">
+        <section className="destinations-section">
+            <h2 className="section-title">{destinationsContent.title}</h2>
+            <p className="section-subtitle">{destinationsContent.subtitle}</p>
+            <div className="destinations-grid">
                 {packages.map((pkg) => (
-                    <PackageCard key={pkg.id} packageData={pkg} />
+                    <DestinationCard key={pkg.id} packageData={pkg} />
                 ))}
             </div>
         </section>
 
+        <section className="quote-section noise-overlay" style={{ backgroundImage: `url(${quoteContent.image})` }} data-ai-hint="tropical beach">
+            <div className="overlay"></div>
+            <p className="quote-text">{quoteContent.text}</p>
+        </section>
 
       </main>
     </>
