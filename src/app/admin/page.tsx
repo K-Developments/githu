@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, collection, getDocs, writeBatch, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import type { Package, Category } from "@/lib/data";
+import type { Package, Category, Destination } from "@/lib/data";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Trash2 } from "lucide-react";
 
@@ -59,6 +59,7 @@ export default function AdminHomePage() {
     title: "",
     subtitle: "",
   });
+  const [destinations, setDestinations] = useState<Destination[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -131,6 +132,11 @@ export default function AdminHomePage() {
           });
         }
         
+        const destinationsCollectionRef = collection(db, "destinations");
+        const destinationsSnap = await getDocs(destinationsCollectionRef);
+        const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+        setDestinations(destinationsData);
+
         const categoriesCollectionRef = collection(db, "categories");
         const categoriesSnap = await getDocs(categoriesCollectionRef);
         const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
@@ -177,10 +183,31 @@ export default function AdminHomePage() {
     setQuoteData(prevData => ({ ...prevData, [id]: value }));
   };
 
-  const handleDestinationsChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleDestinationsSectionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setDestinationsData(prevData => ({ ...prevData, [id]: value }));
   };
+
+  const handleDestinationChange = (id: string, field: keyof Omit<Destination, 'id'>, value: any) => {
+    setDestinations(prevDestinations => prevDestinations.map(d => d.id === id ? { ...d, [field]: value } : d));
+  };
+
+  const handleAddNewDestination = () => {
+    const newDestination: Destination = {
+      id: `new-dest-${Date.now()}`,
+      title: "New Destination",
+      location: "",
+      description: "",
+      image: "https://placehold.co/600x400.png",
+      imageHint: "",
+    };
+    setDestinations([...destinations, newDestination]);
+  };
+
+  const handleDeleteDestination = (id: string) => {
+    setDestinations(destinations.filter(d => d.id !== id));
+  };
+
 
   const handleCategoryChange = (index: number, value: string) => {
     const newCategories = [...categories];
@@ -242,6 +269,23 @@ export default function AdminHomePage() {
       const contentDocRef = doc(db, "content", "home");
       batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData }, { merge: true });
       
+      // Save destinations
+      const destinationsCollectionRef = collection(db, 'destinations');
+      const existingDestinationsSnap = await getDocs(destinationsCollectionRef);
+      const existingDestinationIds = existingDestinationsSnap.docs.map(d => d.id);
+      const currentDestinationIds = destinations.map(d => d.id);
+
+      for (const id of existingDestinationIds) {
+          if (!currentDestinationIds.includes(id)) {
+              batch.delete(doc(db, "destinations", id));
+          }
+      }
+      destinations.forEach(dest => {
+          const { id, ...destData } = dest;
+          const docRef = doc(db, "destinations", id);
+          batch.set(docRef, destData);
+      });
+
       // Save categories
       const categoriesCollectionRef = collection(db, 'categories');
       const existingCategoriesSnap = await getDocs(categoriesCollectionRef);
@@ -385,24 +429,62 @@ export default function AdminHomePage() {
       <Card>
         <CardHeader>
             <CardTitle>Destinations Section</CardTitle>
-            <CardDescription>Update the title and subtitle for the destinations section.</CardDescription>
+            <CardDescription>Update the title and subtitle for the destinations section header.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
-                <Input id="title" value={destinationsData.title} onChange={handleDestinationsChange} />
+                <Input id="title" value={destinationsData.title} onChange={handleDestinationsSectionChange} />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="subtitle">Subtitle</Label>
-                <Textarea id="subtitle" value={destinationsData.subtitle} onChange={handleDestinationsChange} />
+                <Textarea id="subtitle" value={destinationsData.subtitle} onChange={handleDestinationsSectionChange} />
             </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Manage Destinations</CardTitle>
+          <CardDescription>Manage the destination cards for the grid section.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-4">
+            {destinations.map((dest) => (
+              <div key={dest.id} className="p-4 border rounded-md space-y-3 bg-slate-50">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <Label htmlFor={`dest-title-${dest.id}`} className="text-xs">Title</Label>
+                    <Input id={`dest-title-${dest.id}`} value={dest.title} onChange={(e) => handleDestinationChange(dest.id, 'title', e.target.value)} />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor={`dest-location-${dest.id}`} className="text-xs">Location</Label>
+                    <Input id={`dest-location-${dest.id}`} value={dest.location} onChange={(e) => handleDestinationChange(dest.id, 'location', e.target.value)} />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`dest-desc-${dest.id}`} className="text-xs">Short Description</Label>
+                  <Textarea id={`dest-desc-${dest.id}`} value={dest.description} onChange={(e) => handleDestinationChange(dest.id, 'description', e.target.value)} rows={2} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`dest-img-${dest.id}`} className="text-xs">Image URL</Label>
+                  <Input id={`dest-img-${dest.id}`} value={dest.image} onChange={(e) => handleDestinationChange(dest.id, 'image', e.target.value)} />
+                </div>
+                <Button variant="destructive" size="sm" onClick={() => handleDeleteDestination(dest.id)}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete Destination
+                </Button>
+              </div>
+            ))}
+          </div>
+          <Button onClick={handleAddNewDestination}>Add New Destination</Button>
         </CardContent>
       </Card>
       
       <Card>
         <CardHeader>
           <CardTitle>Manage Categories & Packages</CardTitle>
-          <CardDescription>Organize packages within categories.</CardDescription>
+          <CardDescription>Organize packages within categories for the interactive preview section.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Accordion type="multiple" className="w-full">

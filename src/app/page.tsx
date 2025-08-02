@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
-import type { Package } from "@/lib/data";
+import type { Package, Destination } from "@/lib/data";
 import { Search, Menu } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 
@@ -33,22 +33,22 @@ interface DestinationsData {
   subtitle: string;
 }
 
-const DestinationCard = ({ packageData }: { packageData: Package }) => {
+const DestinationCard = ({ destination }: { destination: Destination }) => {
     return (
         <div className="destination-card noise-overlay">
-            <a href={`/destinations/${packageData.id}`}>
+            <a href={`/destinations/${destination.id}`}>
                 <Image
-                    src={packageData.images[0]}
-                    alt={`View of ${packageData.title}`}
+                    src={destination.image}
+                    alt={`View of ${destination.title}`}
                     fill
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="object-cover"
-                    data-ai-hint={packageData.imageHints?.[0]}
+                    data-ai-hint={destination.imageHint}
                 />
                 <div className="card-content">
-                    <p className="card-location">{packageData.location}</p>
-                    <h3 className="card-title card-title-decorated">{packageData.title}</h3>
-                    <p className="card-description">{packageData.description}</p>
+                    <p className="card-location">{destination.location}</p>
+                    <h3 className="card-title card-title-decorated">{destination.title}</h3>
+                    <p className="card-description">{destination.description}</p>
                 </div>
             </a>
         </div>
@@ -61,6 +61,7 @@ export default function HomePage() {
   const [introData, setIntroData] = useState<IntroData | null>(null);
   const [quoteData, setQuoteData] = useState<QuoteData | null>(null);
   const [destinationsData, setDestinationsData] = useState<DestinationsData | null>(null);
+  const [destinations, setDestinations] = useState<Destination[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
   const [activePackage, setActivePackage] = useState<Package | null>(null);
   const [loading, setLoading] = useState(true);
@@ -129,6 +130,11 @@ export default function HomePage() {
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
           });
         }
+
+        const destinationsCollectionRef = collection(db, "destinations");
+        const destinationsSnap = await getDocs(destinationsCollectionRef);
+        const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+        setDestinations(destinationsData);
 
         const packagesCollectionRef = collection(db, "packages");
         const packagesSnap = await getDocs(packagesCollectionRef);
@@ -270,8 +276,8 @@ export default function HomePage() {
             <h2 className="section-title">{destinationsContent.title}</h2>
             <p className="section-subtitle">{destinationsContent.subtitle}</p>
             <div className="destinations-grid">
-                {packages.map((pkg) => (
-                    <DestinationCard key={pkg.id} packageData={pkg} />
+                {destinations.map((dest) => (
+                    <DestinationCard key={dest.id} destination={dest} />
                 ))}
             </div>
         </section>

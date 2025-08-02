@@ -1,4 +1,13 @@
 
+export type Destination = {
+  id: string;
+  title: string;
+  location: string;
+  description: string;
+  image: string;
+  imageHint?: string;
+};
+
 export type Package = {
   id: string;
   categoryId: string;
