@@ -8,6 +8,7 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package, Destination } from "@/lib/data";
 import { Search, Menu } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface HeroData {
   headline: string;
@@ -55,6 +56,11 @@ const DestinationCard = ({ destination }: { destination: Destination }) => {
     );
 };
 
+const cardVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+};
 
 export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
@@ -296,27 +302,62 @@ export default function HomePage() {
                     </li>
                 ))}
                 </ul>
-                {activePackage && (
-                <div className="package-display-card">
-                    <div className="card-image">
-                    <Image
-                        src={activePackage.images[0]}
-                        alt={activePackage.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
-                        data-ai-hint={activePackage.imageHints?.[0]}
-                    />
-                    </div>
-                    <div className="card-details">
-                    <h3 className="card-title">{activePackage.title}</h3>
-                    <p className="card-description">{activePackage.description}</p>
-                    <a href={`/destinations/${activePackage.id}`} className="view-button">
-                        View Details
-                    </a>
-                    </div>
+                <div className="package-display">
+                    <AnimatePresence mode="wait">
+                    {activePackage && (
+                    <motion.div 
+                        key={activePackage.id} 
+                        className="package-display-card"
+                        >
+                        <motion.div 
+                            className="card-image"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1, transition: { duration: 0.6, ease: "easeInOut" } }}
+                            exit={{ opacity: 0 }}
+                            >
+                            <Image
+                                src={activePackage.images[0]}
+                                alt={activePackage.title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                className="object-cover"
+                                data-ai-hint={activePackage.imageHints?.[0]}
+                            />
+                        </motion.div>
+                        <div className="card-details">
+                            <div className="overflow-hidden">
+                                <motion.h3 
+                                    key={`${activePackage.id}-title`}
+                                    initial={{ y: "100%" }}
+                                    animate={{ y: 0, transition: { duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] } }}
+                                    exit={{ y: "-100%", transition: { duration: 0.3 } }}
+                                    className="card-title">{activePackage.title}
+                                </motion.h3>
+                            </div>
+                            <div className="overflow-hidden">
+                                <motion.p 
+                                    key={`${activePackage.id}-desc`}
+                                    initial={{ y: "100%" }}
+                                    animate={{ y: 0, transition: { duration: 0.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] } }}
+                                    exit={{ y: "-100%", transition: { duration: 0.3 } }}
+                                    className="card-description">{activePackage.description}
+                                </motion.p>
+                             </div>
+                             <motion.div
+                                 key={`${activePackage.id}-button`}
+                                 initial={{ opacity: 0, y: 20 }}
+                                 animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.3 } }}
+                                 exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+                             >
+                                <a href={`/destinations/${activePackage.id}`} className="view-button">
+                                    View Details
+                                </a>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                    )}
+                    </AnimatePresence>
                 </div>
-                )}
             </div>
         </section>
 
