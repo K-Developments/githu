@@ -770,7 +770,8 @@ header {
 }
 
 .package-display-card .card-details {
-  padding: 1.5rem 0 0 0;
+  padding: 1rem;
+  background-color: white;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -783,6 +784,8 @@ header {
   margin-bottom: 0.75rem;
   color: #222;
   text-transform: uppercase;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.75rem;
 }
 
 .package-display-card .card-description {
@@ -889,17 +892,6 @@ header {
   
   .packages-grid {
     grid-template-columns: 1fr;
-  }
-  
-  .package-display-card .card-details {
-    background-color: white;
-    padding: 1rem;
-  }
-
-  .package-display-card .card-title {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 0.75rem;
-      margin-bottom: 0.75rem;
   }
 
   .packages-divider {
@@ -1073,45 +1065,6 @@ h2{
   .packages-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 3rem;
-    align-items: stretch;
-    position: relative;
-  }
-  
-  .packages-divider {
-    display: block;
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background-color: #333;
-    transform: translateX(-50%);
-  }
-  
-  .packages-grid > *:nth-child(odd) {
-    padding-right: 1.5rem;
-  }
-  
-  .packages-grid > *:nth-child(even) {
-    padding-left: 1.5rem;
-  }
-
-  .package-display-card {
-    flex-direction: row;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .package-display-card .card-image {
-    width: 45%;
-    flex-shrink: 0;
-    padding-bottom: 0;
-    aspect-ratio: 1/1;
-  }
-  
-  .package-display-card .card-details {
-    padding: 0;
-    align-items: flex-start;
   }
 }
 
@@ -1150,11 +1103,6 @@ h2{
   .packages-grid {
     grid-template-columns: 1fr;
   }
-  
-   .packages-divider {
-    display: none;
-  }
- 
 }
 
 /* Large screen enhancements */
@@ -1169,5 +1117,6 @@ h2{
   }
   
 }
+
 
 
