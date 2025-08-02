@@ -953,6 +953,90 @@ header {
     width: 100%;
 }
 
+/* Footer Styles */
+.site-footer {
+    background-color: #fefcfb;
+    color: #555;
+    padding: 4rem 5% 2rem;
+    border-top: 1px solid #eee;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-column .logo {
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.footer-column p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    max-width: 250px;
+    margin-bottom: 1.5rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    color: #555;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-links a:hover {
+    color: hsl(188 55% 45%);
+    transform: translateY(-2px);
+}
+
+.footer-column h4 {
+    font-family: 'Marcellus', serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #555;
+    font-size: 0.9rem;
+    transition: color 0.3s ease, padding-left 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: hsl(188 55% 45%);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #777;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
@@ -1091,6 +1175,20 @@ header {
 
   .newsletter-form {
       flex-direction: column;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-column p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .social-links {
+    justify-content: center;
   }
 
 }
@@ -1249,8 +1347,7 @@ h2{
   }
 
   .packages-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem;
+    grid-template-columns: 1fr;
   }
 
   .package-display-card {

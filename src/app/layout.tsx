@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { Footer } from "@/components/ui/footer";
 
 export const metadata: Metadata = {
   title: "Island Hopes",
@@ -21,6 +22,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         {children}
+        <Footer />
         <Toaster />
       </body>
     </html>
