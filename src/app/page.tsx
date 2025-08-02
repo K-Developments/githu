@@ -11,6 +11,7 @@ import { MobileNav } from "@/components/ui/mobile-nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 
 interface HeroData {
   headline: string;
@@ -455,6 +456,16 @@ export default function HomePage() {
             </section>
         )}
 
+        <section className="newsletter-section">
+            <div className="newsletter-container">
+                <h2 className="section-title">STAY INSPIRED</h2>
+                <p className="newsletter-subtitle">Receive travel inspiration, news and expert tips straight to your inbox.</p>
+                <form className="newsletter-form">
+                    <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
+                    <Button type="submit" className="cta-button">Subscribe</Button>
+                </form>
+            </div>
+        </section>
 
       </main>
     </>
