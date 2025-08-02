@@ -115,7 +115,7 @@ main img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
     pointer-events: none;
     mix-blend-mode: overlay;
     opacity: 0.15;
@@ -789,6 +789,8 @@ header {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  padding:1rem;
+  background-color:white;
 }
 
 .package-display-card .card-title {
@@ -800,6 +802,7 @@ header {
   text-transform: uppercase;
   padding-bottom: 0.75rem;
   letter-spacing:0.2rem !important;
+  border-bottom: 1px solid #000000;
 }
 
 .package-display-card .card-description {
@@ -905,6 +908,10 @@ header {
     flex-shrink: 0;
 }
 
+.testimonial-pagination {
+    display: none;
+}
+
 
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
@@ -999,6 +1006,31 @@ header {
 
   .testimonial-text {
     font-size: 1rem;
+  }
+
+  .testimonial-arrow {
+    display: none;
+  }
+
+  .testimonial-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .testimonial-bullet {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .testimonial-bullet.active {
+    background-color: hsl(188 55% 45%);
   }
 }
 

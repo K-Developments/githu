@@ -442,6 +442,16 @@ export default function HomePage() {
                         <ArrowRight size={32} />
                     </Button>
                 </div>
+                <div className="testimonial-pagination">
+                    {testimonials.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`testimonial-bullet ${index === activeTestimonialIndex ? 'active' : ''}`}
+                            onClick={() => setActiveTestimonialIndex(index)}
+                            aria-label={`Go to testimonial ${index + 1}`}
+                        />
+                    ))}
+                </div>
             </section>
         )}
 
