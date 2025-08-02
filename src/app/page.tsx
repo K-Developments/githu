@@ -47,7 +47,8 @@ const DestinationCard = ({ packageData }: { packageData: Package }) => {
                 />
                 <div className="card-content">
                     <p className="card-location">{packageData.location}</p>
-                    <h3 className="card-title">{packageData.title}</h3>
+                    <h3 className="card-title card-title-decorated">{packageData.title}</h3>
+                    <p className="card-description">{packageData.description}</p>
                 </div>
             </a>
         </div>
@@ -280,5 +281,3 @@ export default function HomePage() {
     </>
   );
 }
-
-    
