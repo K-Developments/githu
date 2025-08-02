@@ -686,7 +686,6 @@ header {
 
 .destination-card .card-title-decorated {
     position: relative;
-    color: #222;
     border: 1px solid #222;
     padding: 0.5rem;
     display: inline-block;
@@ -701,6 +700,88 @@ header {
     bottom: 4px;
     border: 1px solid #222;
     pointer-events: none;
+}
+
+/* Homepage Packages Section */
+.homepage-packages-section {
+  padding: 100px 5%;
+  background-color: #f8f5f2;
+}
+
+.packages-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.packages-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.package-list-item button {
+  font-family: 'Marcellus', serif;
+  font-size: 1.5rem;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.package-list-item button.active,
+.package-list-item button:hover {
+  color: #222;
+}
+
+.package-display-card {
+  background-color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.package-display-card .card-image {
+  position: relative;
+  width: 100%;
+  padding-bottom: 60%; /* Aspect ratio */
+}
+
+.package-display-card .card-details {
+  padding: 2rem;
+}
+
+.package-display-card .card-title {
+  font-family: 'Marcellus', serif;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.package-display-card .card-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.package-display-card .view-button {
+  background-color: hsl(188 55% 45%);
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.package-display-card .view-button:hover {
+  background-color: hsl(188 75% 35%);
 }
 
 
@@ -844,42 +925,39 @@ header {
     z-index: 3;
   }
   
- .intro-container {
+  .intro-container {
     flex-direction: row;
     align-items: center;
     gap: 5%;
   }
 
   .intro-text-content {
-      flex: 1 1 45%;
+      flex: 1 1 50%;
       padding-right: 5%;
       order: 1;
       text-align: left;
   }
 
   .intro-image-cluster {
-      flex: 1 1 55%;
+      flex: 1 1 50%;
       order: 2;
       position: relative;
-      height: 80vh;
       min-height: 600px;
+  }
+
+  .image-landscape-wrapper {
+      position: relative;
+      width: 100%;
+      z-index: 1;
   }
 
   .image-portrait-wrapper {
       position: absolute;
-      width: 45%;
-      bottom: 0;
-      right: 0;
+      width: 50%;
+      bottom: -10%;
+      right: -10%;
       z-index: 2;
       box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-  }
-
-  .image-landscape-wrapper {
-      position: absolute;
-      width: 80%;
-      top: 10%;
-      left: 0;
-      z-index: 1;
   }
 
   .image-portrait-wrapper img, .image-landscape-wrapper img {
@@ -911,6 +989,12 @@ header {
     transform: translateY(0) scale(1);
     opacity: 1;
     pointer-events: auto;
+  }
+  
+  .packages-container {
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: center;
   }
 }
 

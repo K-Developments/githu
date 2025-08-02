@@ -62,6 +62,7 @@ export default function HomePage() {
   const [quoteData, setQuoteData] = useState<QuoteData | null>(null);
   const [destinationsData, setDestinationsData] = useState<DestinationsData | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
+  const [activePackage, setActivePackage] = useState<Package | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -133,6 +134,9 @@ export default function HomePage() {
         const packagesSnap = await getDocs(packagesCollectionRef);
         const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
         setPackages(packagesData);
+        if (packagesData.length > 0) {
+            setActivePackage(packagesData[0]);
+        }
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -269,6 +273,44 @@ export default function HomePage() {
                 {packages.map((pkg) => (
                     <DestinationCard key={pkg.id} packageData={pkg} />
                 ))}
+            </div>
+        </section>
+        
+        <section className="homepage-packages-section">
+            <div className="packages-container">
+                <ul className="packages-list">
+                {packages.map((pkg) => (
+                    <li key={pkg.id} className="package-list-item">
+                    <button
+                        onMouseEnter={() => setActivePackage(pkg)}
+                        className={activePackage?.id === pkg.id ? 'active' : ''}
+                    >
+                        {pkg.title}
+                    </button>
+                    </li>
+                ))}
+                </ul>
+                {activePackage && (
+                <div className="package-display-card">
+                    <div className="card-image">
+                    <Image
+                        src={activePackage.images[0]}
+                        alt={activePackage.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover"
+                        data-ai-hint={activePackage.imageHints?.[0]}
+                    />
+                    </div>
+                    <div className="card-details">
+                    <h3 className="card-title">{activePackage.title}</h3>
+                    <p className="card-description">{activePackage.description}</p>
+                    <a href={`/destinations/${activePackage.id}`} className="view-button">
+                        View Details
+                    </a>
+                    </div>
+                </div>
+                )}
             </div>
         </section>
 
