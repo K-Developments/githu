@@ -719,58 +719,36 @@ header {
 .packages-container {
   max-width: 1400px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
 }
 
-.packages-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.packages-header {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.package-list-item button {
+.packages-category-title {
   font-family: 'Marcellus', serif;
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
-  color: #999;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  padding: 0.5rem 0;
-  transition: all 0.3s ease;
-  position: relative;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+  min-width: 250px;
 }
 
-.package-list-item button::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: hsl(188 55% 45%);
-    transition: width 0.4s ease;
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
-.package-list-item button.active,
-.package-list-item button:hover {
-  color: #222;
-}
-
-.package-list-item button.active::after,
-.package-list-item button:hover::after {
-    width: 100%;
-}
-
-.package-display {
-    position: relative;
-    min-height: 500px;
+.no-packages-message {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
 }
 
 .package-display-card {
@@ -789,7 +767,7 @@ header {
 }
 
 .package-display-card .card-details {
-  padding: 2rem 2.5rem;
+  padding: 1.5rem 2rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -797,17 +775,17 @@ header {
 
 .package-display-card .card-title {
   font-family: 'Marcellus', serif;
-  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   color: #222;
 }
 
 .package-display-card .card-description {
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.7;
   color: #666;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   flex-grow: 1;
 }
 
@@ -815,9 +793,9 @@ header {
   background: linear-gradient(135deg, hsl(188 55% 45%), hsl(188 75% 35%));
   color: white;
   border: none;
-  padding: 12px 28px;
+  padding: 10px 24px;
   border-radius: 50px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -890,7 +868,6 @@ header {
 
   .destination-card .card-title-decorated {
     color: white;
-    border-color: white;
     border: 1px solid white;
   }
 
@@ -898,26 +875,8 @@ header {
     display: none;
   }
   
-  @media (max-width: 768px) {
-      .destination-card .card-title-decorated {
-        color: white;
-        border-color: white;
-      }
-      .destination-card .card-title-decorated::before {
-        display: none;
-      }
-  }
-
-  .packages-list {
-    flex-direction: row;
-    overflow-x: auto;
-    white-space: nowrap;
-    padding-bottom: 1rem;
-    gap: 1.5rem;
-  }
-
-  .package-list-item button {
-    font-size: 1.1rem;
+  .packages-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1018,15 +977,16 @@ header {
 
   .image-landscape-wrapper {
     position: relative;
-    width: 100%;
+    width: 85%;
     z-index: 1;
+    margin-left: auto;
   }
-
+  
   .image-portrait-wrapper {
     position: absolute;
-    width: 50%;
+    width: 45%;
     bottom: -10%;
-    right: -10%;
+    left: 0;
     z-index: 2;
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
   }
@@ -1063,9 +1023,13 @@ header {
   }
   
   .packages-container {
-    grid-template-columns: 1fr 2fr;
-    gap: 4rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
     align-items: center;
+  }
+
+  .packages-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -1100,6 +1064,10 @@ header {
    .destinations-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .packages-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
  
 }
 
@@ -1115,5 +1083,3 @@ header {
   }
   
 }
-
-    

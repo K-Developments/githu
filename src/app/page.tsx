@@ -5,10 +5,11 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
-import type { Package, Destination } from "@/lib/data";
-import { Search, Menu } from "lucide-react";
+import type { Package, Destination, Category } from "@/lib/data";
+import { Search, Menu, ArrowLeft, ArrowRight } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface HeroData {
   headline: string;
@@ -68,8 +69,11 @@ export default function HomePage() {
   const [quoteData, setQuoteData] = useState<QuoteData | null>(null);
   const [destinationsData, setDestinationsData] = useState<DestinationsData | null>(null);
   const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
-  const [activePackage, setActivePackage] = useState<Package | null>(null);
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const [activePackages, setActivePackages] = useState<Package[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -142,13 +146,15 @@ export default function HomePage() {
         const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
         setDestinations(destinationsData);
 
+        const categoriesCollectionRef = collection(db, "categories");
+        const categoriesSnap = await getDocs(categoriesCollectionRef);
+        const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
+        setCategories(categoriesData);
+        
         const packagesCollectionRef = collection(db, "packages");
         const packagesSnap = await getDocs(packagesCollectionRef);
         const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
         setPackages(packagesData);
-        if (packagesData.length > 0) {
-            setActivePackage(packagesData[0]);
-        }
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -161,6 +167,15 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    if (categories.length > 0 && packages.length > 0) {
+      const currentCategoryId = categories[activeCategoryIndex].id;
+      const filteredPackages = packages.filter(p => p.categoryId === currentCategoryId);
+      setActivePackages(filteredPackages);
+    }
+  }, [activeCategoryIndex, categories, packages]);
+
+
+  useEffect(() => {
     if (heroData && heroData.sliderImages && heroData.sliderImages.length > 1) {
       const timer = setTimeout(() => {
         setCurrentImageIndex((prevIndex) =>
@@ -171,6 +186,14 @@ export default function HomePage() {
       return () => clearTimeout(timer);
     }
   }, [currentImageIndex, heroData]);
+  
+  const handleNextCategory = () => {
+    setActiveCategoryIndex(prev => (prev + 1) % categories.length);
+  };
+
+  const handlePrevCategory = () => {
+    setActiveCategoryIndex(prev => (prev - 1 + categories.length) % categories.length);
+  };
 
 
   if (loading) {
@@ -182,6 +205,7 @@ export default function HomePage() {
   const quoteContent = quoteData!;
   const destinationsContent = destinationsData!;
   const validImages = heroContent.sliderImages?.filter(url => url) || [];
+  const activeCategory = categories.length > 0 ? categories[activeCategoryIndex] : null;
 
   return (
     <>
@@ -288,76 +312,68 @@ export default function HomePage() {
             </div>
         </section>
         
-        <section className="homepage-packages-section">
+         <section className="homepage-packages-section">
             <div className="packages-container">
-                <ul className="packages-list">
-                {packages.map((pkg) => (
-                    <li key={pkg.id} className="package-list-item">
-                    <button
-                        onMouseEnter={() => setActivePackage(pkg)}
-                        className={activePackage?.id === pkg.id ? 'active' : ''}
-                    >
-                        {pkg.title}
-                    </button>
-                    </li>
-                ))}
-                </ul>
-                <div className="package-display">
-                    <AnimatePresence mode="wait">
-                    {activePackage && (
-                    <motion.div 
-                        key={activePackage.id} 
-                        className="package-display-card"
-                        >
-                        <motion.div 
-                            className="card-image"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1, transition: { duration: 0.6, ease: "easeInOut" } }}
-                            exit={{ opacity: 0 }}
+                <div className="packages-header">
+                    <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
+                        <ArrowLeft />
+                    </Button>
+                    <h2 className="packages-category-title">
+                        <AnimatePresence mode="wait">
+                            <motion.span
+                                key={activeCategory ? activeCategory.id : 'empty'}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
                             >
-                            <Image
-                                src={activePackage.images[0]}
-                                alt={activePackage.title}
-                                fill
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                className="object-cover"
-                                data-ai-hint={activePackage.imageHints?.[0]}
-                            />
-                        </motion.div>
-                        <div className="card-details">
-                            <div className="overflow-hidden">
-                                <motion.h3 
-                                    key={`${activePackage.id}-title`}
-                                    initial={{ y: "100%" }}
-                                    animate={{ y: 0, transition: { duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] } }}
-                                    exit={{ y: "-100%", transition: { duration: 0.3 } }}
-                                    className="card-title">{activePackage.title}
-                                </motion.h3>
+                               {activeCategory ? activeCategory.name : "Packages"}
+                            </motion.span>
+                        </AnimatePresence>
+                    </h2>
+                    <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
+                        <ArrowRight />
+                    </Button>
+                </div>
+
+                <motion.div className="packages-grid" layout>
+                    <AnimatePresence>
+                        {activePackages.map((pkg) => (
+                        <motion.div 
+                            key={pkg.id} 
+                            className="package-display-card"
+                            layout
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                            >
+                            <div className="card-image">
+                                <Image
+                                    src={pkg.images[0]}
+                                    alt={pkg.title}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    className="object-cover"
+                                    data-ai-hint={pkg.imageHints?.[0]}
+                                />
                             </div>
-                            <div className="overflow-hidden">
-                                <motion.p 
-                                    key={`${activePackage.id}-desc`}
-                                    initial={{ y: "100%" }}
-                                    animate={{ y: 0, transition: { duration: 0.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] } }}
-                                    exit={{ y: "-100%", transition: { duration: 0.3 } }}
-                                    className="card-description">{activePackage.description}
-                                </motion.p>
-                             </div>
-                             <motion.div
-                                 key={`${activePackage.id}-button`}
-                                 initial={{ opacity: 0, y: 20 }}
-                                 animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.3 } }}
-                                 exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
-                             >
-                                <a href={`/destinations/${activePackage.id}`} className="view-button">
+                            <div className="card-details">
+                                <h3 className="card-title">{pkg.title}</h3>
+                                <p className="card-description">{pkg.description}</p>
+                                <a href={`/packages/${pkg.id}`} className="view-button">
                                     View Details
                                 </a>
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                    )}
+                            </div>
+                        </motion.div>
+                        ))}
                     </AnimatePresence>
-                </div>
+                </motion.div>
+                {activePackages.length === 0 && !loading && (
+                    <div className="no-packages-message">
+                        <p>There are currently no packages available for this category.</p>
+                    </div>
+                )}
             </div>
         </section>
 
