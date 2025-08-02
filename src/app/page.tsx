@@ -235,10 +235,19 @@ export default function HomePage() {
             <div className="intro-container">
                 <div className="intro-text-content">
                    <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
-                    <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
+                    <p className="paragraph-style">{introContent.paragraph}</p>
                     <a className="link-to" href="#">{introContent.linkText}</a>
                 </div>
                  <div className="intro-image-cluster">
+                    <div className="image-landscape-wrapper noise-overlay">
+                        <Image 
+                          alt="Inspiring travel landscape" 
+                          src={introContent.landscapeImage} 
+                          width={1000} 
+                          height={662}
+                          className="object-cover"
+                          data-ai-hint="travel landscape" />
+                    </div>
                     <div className="image-portrait-wrapper noise-overlay">
                         <Image 
                           alt="Inspiring travel portrait" 
@@ -247,15 +256,6 @@ export default function HomePage() {
                           height={1000} 
                           className="object-cover"
                           data-ai-hint="travel portrait" />
-                    </div>
-                     <div className="image-landscape-wrapper noise-overlay">
-                        <Image 
-                          alt="Inspiring travel landscape" 
-                          src={introContent.landscapeImage} 
-                          width={1000} 
-                          height={662}
-                          className="object-cover"
-                          data-ai-hint="travel landscape" />
                     </div>
                 </div>
             </div>
@@ -280,3 +280,5 @@ export default function HomePage() {
     </>
   );
 }
+
+    
