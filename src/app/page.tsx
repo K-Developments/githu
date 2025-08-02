@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package, Destination, Category } from "@/lib/data";
@@ -400,5 +400,3 @@ export default function HomePage() {
     </>
   );
 }
-
-    
