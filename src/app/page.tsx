@@ -40,8 +40,9 @@ const DestinationCard = ({ packageData }: { packageData: Package }) => {
                 <Image
                     src={packageData.images[0]}
                     alt={`View of ${packageData.title}`}
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    className="object-cover"
                     data-ai-hint={packageData.imageHints?.[0]}
                 />
                 <div className="card-content">
@@ -208,8 +209,9 @@ export default function HomePage() {
                   <Image 
                     src={url}
                     alt="Luxury Travel Destination"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
                     priority={index === 0}
                   />
                 </div>
@@ -243,6 +245,7 @@ export default function HomePage() {
                           src={introContent.portraitImage} 
                           width={800} 
                           height={1000} 
+                          className="object-cover"
                           data-ai-hint="travel portrait" />
                     </div>
                      <div className="image-landscape-wrapper noise-overlay">
@@ -251,6 +254,7 @@ export default function HomePage() {
                           src={introContent.landscapeImage} 
                           width={1000} 
                           height={662}
+                          className="object-cover"
                           data-ai-hint="travel landscape" />
                     </div>
                 </div>
