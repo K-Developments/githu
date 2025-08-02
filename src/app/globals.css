@@ -333,7 +333,29 @@ header {
   margin-bottom: 1rem;
   opacity: 0;
   animation: fadeInUp 1s ease 0.2s forwards;
+  position: relative;
+  padding: 0.5rem 0;
 }
+
+.hero-content .subtitle::before,
+.hero-content .subtitle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 1px;
+    background-color: hsl(188 55% 45% / 0.5);
+}
+
+.hero-content .subtitle::before {
+    top: 0;
+}
+
+.hero-content .subtitle::after {
+    bottom: 0;
+}
+
 
 .hero-content h1 {
   font-family: 'Marcellus', serif;
