@@ -325,12 +325,15 @@ header {
 .hero-content h1 {
   font-family: 'Marcellus', serif;
   font-size: clamp(2.5rem, 10vw, 3rem);
-  font-weight: 400;
+  
   margin-bottom: 1.5rem;
   line-height: 1.1;
   color: #222;
   opacity: 0;
   animation: fadeInUp 1s ease 0.4s forwards;
+  font-weight:bold;
+  letter-spacing: 0.5rem;
+  text-transform:uppercase;
 }
 
 .hero-content h1 .highlight {
@@ -349,7 +352,7 @@ header {
   opacity: 0;
   animation: fadeInUp 1s ease 0.6s forwards;
   padding: 2rem;
-  border: 1px solid #666;
+  border: 2px solid #666;
 }
 
 .hero-content p::before {
@@ -470,8 +473,9 @@ header {
 
 /* Intro Section */
 .intro-home {
-    padding: 120px 5%;
+    padding: 7.5rem 5%;
     background-color: #f8f5f2;
+    overflow:hidden;
 }
 
 .intro-container {
@@ -566,7 +570,7 @@ header {
 /* Quote Section */
 .quote-section {
     position: relative;
-    padding: 100px 5%;
+    padding: 6.25rem 5%;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -599,7 +603,7 @@ header {
 
 /* Destinations Section */
 .destinations-section {
-  padding: 100px 5%;
+  padding: 6.25rem 5%;
   background-color: #fefcfb;
 }
 
@@ -712,7 +716,7 @@ header {
 
 /* Homepage Packages Section */
 .homepage-packages-section {
-  padding: 100px 5%;
+  padding: 6.25rem 5%;
   background-color: #f8f5f2;
 }
 
@@ -816,6 +820,14 @@ header {
 
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
+  .intro-home,
+  .destinations-section,
+  .homepage-packages-section,
+  .quote-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
   header {
     padding: 8px 5%;
   }
@@ -839,10 +851,6 @@ header {
   
   .pagination-bullets {
     display: none;
-  }
-
-  .intro-home {
-      padding: 80px 5%;
   }
 
    .destinations-grid {
@@ -895,7 +903,11 @@ header {
 /* Small mobile adjustments */
 @media (max-width: 480px) {
   .hero-content {
-    padding: 15% 6% 10%;
+    padding: 0;
+  }
+  .hero-content h1{
+    font-size:3.5rem;
+    text-align:center;
   }
 }
 
@@ -939,6 +951,7 @@ header {
       color: #222;
       font-size: clamp(3rem, 6vw, 4rem);
       text-shadow: none;
+  
   }
 
   .hero-content h1 .highlight {
@@ -1138,5 +1151,3 @@ header {
   }
   
 }
-
-    
