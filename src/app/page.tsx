@@ -13,7 +13,6 @@ interface HeroData {
   headline: string;
   description: string;
   sliderImages: string[];
-  subtitle: string;
 }
 
 interface IntroData {
@@ -103,7 +102,6 @@ export default function HomePage() {
           });
         } else {
            setHeroData({
-            subtitle: "Luxury Travel Specialists",
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
             sliderImages: [
@@ -198,7 +196,6 @@ export default function HomePage() {
       <main>
         <section className="hero">
           <div className="hero-content">
-            <div className="subtitle">{heroContent.subtitle}</div>
             <h1 dangerouslySetInnerHTML={{ __html: heroContent.headline }}></h1>
             <p>{heroContent.description}</p>
           </div>
