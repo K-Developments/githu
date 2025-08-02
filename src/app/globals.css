@@ -102,7 +102,7 @@ main img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
     pointer-events: none;
     mix-blend-mode: overlay;
     opacity: 0.15;
@@ -474,45 +474,29 @@ header {
 
 .intro-container {
     display: flex;
-    gap: 5%;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 2rem;
     max-width: 1400px;
     margin: 0 auto;
-    position: relative;
 }
 
-.wrap-image-portrait {
-    width: 40%;
-    flex-shrink: 0;
-    position: relative;
+.intro-text-content {
+    order: 1;
 }
 
-.wrap-text-and-landscape {
-    width: 55%;
-    padding-top: 4rem;
-    flex-shrink: 0;
+.intro-image-cluster {
+    order: 2;
 }
 
-.wrap-image-portrait .image,
-.wrap-image-portrait .landscape-image-wrapper {
+.image-portrait-wrapper, .image-landscape-wrapper {
     overflow: hidden;
-    position: relative;
 }
-
-.wrap-image-portrait .image img,
-.wrap-image-portrait .landscape-image-wrapper img {
+.image-portrait-wrapper img, .image-landscape-wrapper img {
     width: 100%;
     height: auto;
     display: block;
     object-fit: cover;
-    transition: transform 0.4s ease;
 }
-
-.wrap-image-portrait .image:hover img,
-.wrap-image-portrait .landscape-image-wrapper:hover img {
-    transform: scale(1.05);
-}
-
 
 .secondary-heading {
     font-family: 'Marcellus', serif;
@@ -710,19 +694,6 @@ header {
       padding: 80px 5%;
   }
 
-  .intro-container {
-      flex-direction: column;
-      gap: 2rem;
-  }
-  .wrap-image-portrait, .wrap-text-and-landscape {
-      width: 100%;
-      padding-top: 0;
-  }
-  .wrap-text-and-landscape {
-      order: -1;
-      position: static;
-  }
-
    .destinations-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.2rem;
@@ -731,6 +702,7 @@ header {
   .destination-card {
     height: auto;
     aspect-ratio: 1 / 1;
+    border-radius: 0;
   }
 
   .destination-card .card-content {
@@ -828,29 +800,40 @@ header {
     gap: 15px;
     z-index: 3;
   }
-
-  .wrap-image-portrait .landscape-image-wrapper {
-    position: absolute;
-    width: 70%;
-    bottom: -15%;
-    right: -30%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  }
-
+  
   .intro-container {
-    position: relative;
+    flex-direction: row;
+    align-items: center;
+    gap: 5%;
   }
 
-  .wrap-text-and-landscape {
-    flex-shrink: 0;
-    width: 55%;
-    padding: 2rem;
-    background: white;
-    position: absolute;
-    right: -5%;
-    top: 15%;
-    box-shadow: 0 10px 10px rgba(0,0,0,0.1);
-    z-index: 10;
+  .intro-text-content {
+      flex: 1 1 45%;
+      padding-right: 5%;
+  }
+
+  .intro-image-cluster {
+      flex: 1 1 50%;
+      position: relative;
+      height: 80vh;
+  }
+
+  .image-portrait-wrapper {
+      position: absolute;
+      width: 60%;
+      top: 0;
+      right: 0;
+      z-index: 1;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  }
+
+  .image-landscape-wrapper {
+      position: absolute;
+      width: 70%;
+      bottom: 0;
+      left: 0;
+      z-index: 2;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
   }
 
   .destinations-grid {
@@ -870,16 +853,6 @@ header {
     display: block;
   }
 
-  .intro-container {
-      gap: 3%;
-  }
-  .wrap-text-and-landscape {
-      position: static;
-      width: 55%;
-      padding-top: 2rem;
-      background: transparent;
-      box-shadow: none;
-  }
   .hero-content {
     padding: 5% 5%;
   }
@@ -887,12 +860,15 @@ header {
     font-size: 3rem;
   }
   
-  .wrap-image-portrait .landscape-image-wrapper {
-    position: static;
-    width: 100%;
-    box-shadow: none;
-    margin-top: 1rem;
+  .intro-container {
+    gap: 2rem;
+    align-items: flex-start;
   }
+
+  .intro-image-cluster {
+    height: 60vh;
+  }
+
    .destinations-grid {
     grid-template-columns: repeat(2, 1fr);
   }

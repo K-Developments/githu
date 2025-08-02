@@ -234,8 +234,13 @@ export default function HomePage() {
 
         <section className="intro-home">
             <div className="intro-container">
-                <div className="wrap-image-portrait">
-                    <div className="image noise-overlay">
+                <div className="intro-text-content">
+                   <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
+                    <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
+                    <a className="link-to" href="#">{introContent.linkText}</a>
+                </div>
+                 <div className="intro-image-cluster">
+                    <div className="image-portrait-wrapper noise-overlay">
                         <Image 
                           alt="Inspiring travel portrait" 
                           src={introContent.portraitImage} 
@@ -243,7 +248,7 @@ export default function HomePage() {
                           height={1000} 
                           data-ai-hint="travel portrait" />
                     </div>
-                     <div className="landscape-image-wrapper noise-overlay">
+                     <div className="image-landscape-wrapper noise-overlay">
                         <Image 
                           alt="Inspiring travel landscape" 
                           src={introContent.landscapeImage} 
@@ -252,16 +257,9 @@ export default function HomePage() {
                           data-ai-hint="travel landscape" />
                     </div>
                 </div>
-                <div className="wrap-text-and-landscape">
-                  <div className="landscape-content">
-                   <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
-                    <p className="paragraph-style" dangerouslySetInnerHTML={{ __html: introContent.paragraph.replace(/\n/g, '<br />') }}></p>
-                    <a className="link-to" href="#">{introContent.linkText}</a>
-                  </div>
-                </div>
             </div>
         </section>
-
+        
         <section className="destinations-section">
             <h2 className="section-title">{destinationsContent.title}</h2>
             <p className="section-subtitle">{destinationsContent.subtitle}</p>
