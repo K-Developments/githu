@@ -890,6 +890,17 @@ header {
     grid-template-columns: 1fr;
   }
   
+  .package-display-card .card-details {
+    background-color: white;
+    padding: 1rem;
+  }
+
+  .package-display-card .card-title {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+  }
+
   .packages-divider {
       display: block;
       background-color: #ddd;
