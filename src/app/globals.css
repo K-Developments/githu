@@ -758,6 +758,15 @@ header {
   .destination-card .card-title {
     font-size: 0.8rem;
   }
+
+  .destination-card .card-title-decorated {
+    color: white;
+    border-color: white;
+  }
+
+  .destination-card .card-title-decorated::before {
+    border-color: white;
+  }
 }
 
 /* Small mobile adjustments */
