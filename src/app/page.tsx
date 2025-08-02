@@ -5,8 +5,8 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
-import type { Package, Destination, Category } from "@/lib/data";
-import { Search, Menu, ArrowLeft, ArrowRight } from "lucide-react";
+import type { Package, Destination, Category, Testimonial } from "@/lib/data";
+import { Search, Menu, ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -72,8 +72,10 @@ export default function HomePage() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
   const [activePackages, setActivePackages] = useState<Package[]>([]);
+  const [activeTestimonialIndex, setActiveTestimonialIndex] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -160,6 +162,11 @@ export default function HomePage() {
         const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
         setPackages(packagesData);
 
+        const testimonialsCollectionRef = collection(db, "testimonials");
+        const testimonialsSnap = await getDocs(testimonialsCollectionRef);
+        const testimonialsData = testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
+        setTestimonials(testimonialsData);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -205,6 +212,14 @@ export default function HomePage() {
     setActiveCategoryIndex(prev => (prev - 1 + categories.length) % categories.length);
   };
 
+  const handleNextTestimonial = () => {
+    setActiveTestimonialIndex(prev => (prev + 1) % testimonials.length);
+  };
+
+  const handlePrevTestimonial = () => {
+    setActiveTestimonialIndex(prev => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
 
   if (loading) {
     return <div className="h-screen w-full flex items-center justify-center bg-[#f8f5f2]">Loading...</div>;
@@ -216,6 +231,7 @@ export default function HomePage() {
   const destinationsContent = destinationsData!;
   const validImages = heroContent.sliderImages?.filter(url => url) || [];
   const activeCategory = categories.length > 0 ? categories[activeCategoryIndex] : null;
+  const activeTestimonial = testimonials.length > 0 ? testimonials[activeTestimonialIndex] : null;
 
   return (
     <>
@@ -326,7 +342,7 @@ export default function HomePage() {
             <div className="overlay"></div>
             <p className="quote-text">{quoteContent.text}</p>
         </section>
-        
+
          <section className="homepage-packages-section">
             <div className="packages-container">
                 <div className="packages-header">
@@ -395,6 +411,40 @@ export default function HomePage() {
                 )}
             </div>
         </section>
+
+        {testimonials.length > 0 && (
+            <section className="homepage-testimonials-section">
+                <div className="testimonial-container">
+                    <Button variant="outline" size="icon" onClick={handlePrevTestimonial} className="testimonial-arrow">
+                        <ArrowLeft />
+                    </Button>
+                    <div className="testimonial-content-wrapper">
+                         <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeTestimonial ? activeTestimonial.id : ""}
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -50 }}
+                                transition={{ duration: 0.5 }}
+                                className="testimonial-content"
+                            >
+                                <Quote className="testimonial-quote-icon" />
+                                <p className="testimonial-text">
+                                    {activeTestimonial?.text}
+                                </p>
+                                <div className="testimonial-author">
+                                    <span className="font-bold">{activeTestimonial?.author}</span>, {activeTestimonial?.location}
+                                </div>
+                            </motion.div>
+                         </AnimatePresence>
+                    </div>
+                    <Button variant="outline" size="icon" onClick={handleNextTestimonial} className="testimonial-arrow">
+                        <ArrowRight />
+                    </Button>
+                </div>
+            </section>
+        )}
+
 
       </main>
     </>

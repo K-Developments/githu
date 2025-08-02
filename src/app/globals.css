@@ -73,6 +73,21 @@
     @apply bg-background text-foreground;
   }
 }
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  letter-spacing:0.1rem;
+}
 
 
 /* Reset & Base Styles */
@@ -183,12 +198,13 @@ header {
 .desktop-nav a {
   text-decoration: none;
   color: #444;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.009rem;
   transition: all 0.3s ease;
   position: relative;
   padding: 8px 0;
+
 }
 
 .desktop-nav a:hover {
@@ -473,7 +489,7 @@ header {
 
 /* Intro Section */
 .intro-home {
-    padding: 7.5rem 5%;
+    padding: 4rem 5%;
     background-color: #f8f5f2;
     overflow:hidden;
 }
@@ -570,7 +586,7 @@ header {
 /* Quote Section */
 .quote-section {
     position: relative;
-    padding: 6.25rem 5%;
+    padding: 4rem 5%;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -603,7 +619,7 @@ header {
 
 /* Destinations Section */
 .destinations-section {
-  padding: 6.25rem 5%;
+  padding: 4rem 5%;
   background-color: #fefcfb;
 }
 
@@ -716,7 +732,7 @@ header {
 
 /* Homepage Packages Section */
 .homepage-packages-section {
-  padding: 6.25rem 5%;
+  padding: 4rem 5%;
   background-color: #f8f5f2;
 }
 
@@ -770,8 +786,6 @@ header {
 }
 
 .package-display-card .card-details {
-  padding: 1rem;
-  background-color: white;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -784,8 +798,8 @@ header {
   margin-bottom: 0.75rem;
   color: #222;
   text-transform: uppercase;
-  border-bottom: 1px solid #eee;
   padding-bottom: 0.75rem;
+  letter-spacing:0.2rem !important;
 }
 
 .package-display-card .card-description {
@@ -821,16 +835,79 @@ header {
   display: none;
 }
 
+/* Testimonials Section */
+.homepage-testimonials-section {
+    padding: 4rem 5%;
+    background-color: #fefcfb;
+}
+
+.testimonial-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.testimonial-content-wrapper {
+    position: relative;
+    padding: 2rem;
+    border: 2px solid #222;
+    text-align: center;
+    flex-grow: 1;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial-content-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px solid #222;
+    pointer-events: none;
+}
+
+.testimonial-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.testimonial-quote-icon {
+    width: 3rem;
+    height: 3rem;
+    color: hsl(188 55% 45%);
+}
+
+.testimonial-text {
+    font-family: 'Marcellus', serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1.6;
+    color: #444;
+    max-width: 90%;
+}
+
+.testimonial-author {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+.testimonial-arrow {
+    flex-shrink: 0;
+}
+
 
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
-  .intro-home,
-  .destinations-section,
-  .homepage-packages-section,
-  .quote-section {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
   
   header {
     padding: 8px 5%;
@@ -898,9 +975,30 @@ header {
       display: block;
       background-color: #ddd;
   }
+  
+  .package-display-card .card-details {
+    background-color: white;
+    padding: 1rem;
+  }
+
+  .package-display-card .card-title {
+    border-bottom: 1px solid #eee;
+  }
 
   .packages-grid > *:last-child .packages-divider {
       display: none;
+  }
+  
+  .testimonial-container {
+    gap: 0.5rem;
+  }
+
+  .testimonial-content-wrapper {
+    padding: 1.5rem;
+  }
+
+  .testimonial-text {
+    font-size: 1rem;
   }
 }
 
@@ -924,6 +1022,15 @@ h2{
 
 /* DESKTOP & TABLET Overrides */
 @media (min-width: 769px) {
+
+  .intro-home,
+  .destinations-section,
+  .homepage-packages-section,
+  .quote-section,
+  .homepage-testimonials-section {
+    padding-top: 6.25rem;
+    padding-bottom: 6.25rem;
+  }
 
   .hero {
       height: 100vh;
@@ -1066,6 +1173,10 @@ h2{
     grid-template-columns: repeat(2, 1fr);
     gap: 3rem;
   }
+
+  .package-display-card {
+    flex-direction: column;
+  }
 }
 
 /* Tablet adjustments */
@@ -1117,6 +1228,3 @@ h2{
   }
   
 }
-
-
-

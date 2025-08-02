@@ -23,6 +23,14 @@ export type Category = {
     name: string;
 };
 
+export type Testimonial = {
+  id: string;
+  text: string;
+  author: string;
+  location: string;
+};
+
+
 // This data is now seeded into Firestore and managed from the admin panel.
 // It is kept here as a reference or for potential future use if Firestore is empty.
 export const categories: Category[] = [

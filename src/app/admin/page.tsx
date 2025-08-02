@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import type { Package, Category, Destination } from "@/lib/data";
+import type { Package, Category, Destination, Testimonial } from "@/lib/data";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Trash2 } from "lucide-react";
 
@@ -62,6 +62,7 @@ export default function AdminHomePage() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
 
   const [loading, setLoading] = useState(true);
@@ -146,6 +147,11 @@ export default function AdminHomePage() {
         const packagesSnap = await getDocs(packagesCollectionRef);
         const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
         setPackages(packagesData);
+
+        const testimonialsCollectionRef = collection(db, "testimonials");
+        const testimonialsSnap = await getDocs(testimonialsCollectionRef);
+        const testimonialsData = testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
+        setTestimonials(testimonialsData);
 
       } catch (error) {
         console.error("Error fetching content data:", error);
@@ -240,7 +246,6 @@ export default function AdminHomePage() {
   
   const handleDeleteCategory = (id: string) => {
     setCategories(categories.filter(c => c.id !== id));
-    // Also remove associated packages from state
     setPackages(packages.filter(p => p.categoryId !== id));
   };
 
@@ -259,6 +264,24 @@ export default function AdminHomePage() {
 
   const handleDeletePackage = (id: string) => {
     setPackages(packages.filter(p => p.id !== id));
+  };
+
+  const handleTestimonialChange = (id: string, field: keyof Omit<Testimonial, 'id'>, value: any) => {
+    setTestimonials(prev => prev.map(t => t.id === id ? { ...t, [field]: value } : t));
+  };
+
+  const handleAddNewTestimonial = () => {
+    const newTestimonial: Testimonial = {
+      id: `new-testimonial-${Date.now()}`,
+      text: "New testimonial text...",
+      author: "New Author",
+      location: "Author's Location",
+    };
+    setTestimonials([...testimonials, newTestimonial]);
+  };
+
+  const handleDeleteTestimonial = (id: string) => {
+    setTestimonials(testimonials.filter(t => t.id !== id));
   };
 
   const handleSave = async () => {
@@ -318,6 +341,23 @@ export default function AdminHomePage() {
         const { id, ...pkgData } = pkg;
         const docRef = doc(db, "packages", id);
         batch.set(docRef, pkgData);
+      });
+
+      // Save testimonials
+      const testimonialsCollectionRef = collection(db, 'testimonials');
+      const existingTestimonialsSnap = await getDocs(testimonialsCollectionRef);
+      const existingTestimonialIds = existingTestimonialsSnap.docs.map(d => d.id);
+      const currentTestimonialIds = testimonials.map(t => t.id);
+
+      for (const id of existingTestimonialIds) {
+          if (!currentTestimonialIds.includes(id)) {
+              batch.delete(doc(db, "testimonials", id));
+          }
+      }
+      testimonials.forEach(t => {
+        const { id, ...testimonialData } = t;
+        const docRef = doc(db, "testimonials", id);
+        batch.set(docRef, testimonialData);
       });
 
       await batch.commit();
@@ -528,8 +568,7 @@ export default function AdminHomePage() {
                   </div>
                   
                   <div className="flex gap-2 pt-4 border-t">
-                    <Button size="sm" onClick={() => handleAddNewPackage(category.id)}>Add New Package</Button>
-                     <Button variant="destructive" size="sm" onClick={() => handleDeleteCategory(category.id)}>
+                    <Button size="sm" onClick={() => handleAddNewPackage(category.id)}>Add New Package</Button>                     <Button variant="destructive" size="sm" onClick={() => handleDeleteCategory(category.id)}>
                         <Trash2 className="mr-2 h-4 w-4" />
                         Delete Category
                     </Button>
@@ -540,6 +579,40 @@ export default function AdminHomePage() {
             ))}
           </Accordion>
           <Button onClick={handleAddNewCategory}>Add New Category</Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Manage Testimonials</CardTitle>
+          <CardDescription>Manage the customer testimonials displayed on the homepage.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-4">
+            {testimonials.map((t) => (
+              <div key={t.id} className="p-4 border rounded-md space-y-3 bg-slate-50">
+                <div className="space-y-1">
+                  <Label htmlFor={`testimonial-text-${t.id}`} className="text-xs">Testimonial Text</Label>
+                  <Textarea id={`testimonial-text-${t.id}`} value={t.text} onChange={(e) => handleTestimonialChange(t.id, 'text', e.target.value)} rows={3} />
+                </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                        <Label htmlFor={`testimonial-author-${t.id}`} className="text-xs">Author</Label>
+                        <Input id={`testimonial-author-${t.id}`} value={t.author} onChange={(e) => handleTestimonialChange(t.id, 'author', e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <Label htmlFor={`testimonial-location-${t.id}`} className="text-xs">Location</Label>
+                        <Input id={`testimonial-location-${t.id}`} value={t.location} onChange={(e) => handleTestimonialChange(t.id, 'location', e.target.value)} />
+                    </div>
+                 </div>
+                <Button variant="destructive" size="sm" onClick={() => handleDeleteTestimonial(t.id)}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete Testimonial
+                </Button>
+              </div>
+            ))}
+          </div>
+          <Button onClick={handleAddNewTestimonial}>Add New Testimonial</Button>
         </CardContent>
       </Card>
 
