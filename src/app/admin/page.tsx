@@ -315,7 +315,7 @@ export default function AdminHomePage() {
       }
       destinations.forEach(dest => {
           const { id, ...destData } = dest;
-          const docRef = doc(db, "destinations", id);
+          const docRef = doc(db, "destinations", id.startsWith('new-') ? `dest-${Date.now()}-${Math.random()}` : id);
           batch.set(docRef, destData);
       });
 
@@ -332,7 +332,7 @@ export default function AdminHomePage() {
       }
       categories.forEach(cat => {
           const { id, ...catData } = cat;
-          const docRef = doc(db, "categories", id);
+          const docRef = doc(db, "categories", id.startsWith('new-') ? `cat-${Date.now()}-${Math.random()}` : id);
           batch.set(docRef, catData);
       });
 
@@ -349,7 +349,7 @@ export default function AdminHomePage() {
       }
       packages.forEach(pkg => {
         const { id, ...pkgData } = pkg;
-        const docRef = doc(db, "packages", id);
+        const docRef = doc(db, "packages", id.startsWith('new-') ? `pkg-${Date.now()}-${Math.random()}` : id);
         batch.set(docRef, pkgData);
       });
 
@@ -366,7 +366,7 @@ export default function AdminHomePage() {
       }
       testimonials.forEach(t => {
         const { id, ...testimonialData } = t;
-        const docRef = doc(db, "testimonials", id);
+        const docRef = doc(db, "testimonials", id.startsWith('new-') ? `testimonial-${Date.now()}-${Math.random()}` : id);
         batch.set(docRef, testimonialData);
       });
 

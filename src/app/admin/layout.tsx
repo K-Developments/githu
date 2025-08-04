@@ -2,12 +2,16 @@
 'use client';
 import {SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset} from "@/components/ui/sidebar";
 import { Home } from "lucide-react";
+import { usePathname } from 'next/navigation';
+
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  
   return (
     <SidebarProvider>
         <Sidebar>
@@ -17,7 +21,7 @@ export default function AdminLayout({
             <SidebarContent>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton href="/admin" isActive={true} tooltip="Home Page">
+                        <SidebarMenuButton href="/app/admin" isActive={pathname === '/app/admin'} tooltip="Home Page">
                             <Home />
                             <span>Home Page</span>
                         </SidebarMenuButton>

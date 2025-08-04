@@ -1,13 +1,9 @@
+
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
-  typescript: {
-    ignoreBuildErrors: true, // Only for development, remove in production
-  },
-  eslint: {
-    ignoreDuringBuilds: true, // Only for development, remove in production
-  },
+
   images: {
     remotePatterns: [
       {
@@ -20,9 +16,27 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Removed the '/' redirect to fix the 404 error
-  async redirects() {
-    return []; // No redirects (or add valid ones)
+
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+    ];
   },
 };
 
