@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { Button } from "@/components/ui/button";
