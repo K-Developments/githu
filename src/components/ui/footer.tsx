@@ -1,8 +1,9 @@
-"use client";
 
+"use client";
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 
 export function Footer() {
+
   return (
     <footer className="site-footer">
       <div className="footer-content">
@@ -31,7 +32,7 @@ export function Footer() {
           <h4>Explore</h4>
           <ul className="footer-links">
             <li><a href="#">Destinations</a></li>
-            <li><a href="#">Experiences</a></li>
+            <li><a href="#">Packages</a></li>
             <li><a href="#">Inspiration</a></li>
             <li><a href="#">Journal</a></li>
           </ul>
