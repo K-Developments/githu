@@ -2,6 +2,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { Footer } from "@/components/ui/footer";
+import { Header } from "@/components/ui/header";
 
 export const metadata: Metadata = {
   title: "Island Hopes - Bespoke Luxury Travel",
@@ -47,7 +49,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Syne:wght@400..800&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
+        <Header />
         <main>{children}</main>
+        <Footer />
         <Toaster />
       </body>
     </html>

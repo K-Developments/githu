@@ -12,6 +12,37 @@ import { AnimatedHamburgerButton } from "@/components/ui/animated-hamburger";
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+        <header>
+            <div className="header-left">
+                <a href="/" className="logo">ISLAND<span>HOPES</span></a>
+            </div>
+            <div className="header-center">
+                <nav className="desktop-nav">
+                    <ul>
+                        <li><a href="#">Destinations</a></li>
+                        <li><a href="#">Packages</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+             <div className="header-right">
+                <Button asChild><a href="#">Plan Trip</a></Button>
+                <button className="search-button desktop-only" aria-label="Search">
+                    <Search size={20} />
+                </button>
+            </div>
+        </header>
+    )
+  }
 
   return (
     <>
