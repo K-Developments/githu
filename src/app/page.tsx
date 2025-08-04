@@ -252,7 +252,7 @@ export default function HomePage() {
               </nav>
           </div>
           <div className="header-right">
-              <a href="#" className="cta-button desktop-only">Plan Trip</a>
+              <Button asChild className="desktop-only"><a href="#">Plan Trip</a></Button>
               <button className="search-button desktop-only" aria-label="Search">
                   <Search size={20} />
               </button>
@@ -393,9 +393,7 @@ export default function HomePage() {
                                 <div className="card-details">
                                     <h3 className="card-title">{pkg.title}</h3>
                                     <p className="card-description">{pkg.description}</p>
-                                    <a href={`/packages/${pkg.id}`} className="view-button">
-                                        View Details
-                                    </a>
+                                    <Button asChild variant="outline" size="sm"><a href={`/packages/${pkg.id}`}>View Details</a></Button>
                                 </div>
                             </motion.div>
                             {index < activePackages.length - 1 && (
@@ -462,7 +460,7 @@ export default function HomePage() {
                 <p className="newsletter-subtitle">Receive travel inspiration, news and expert tips straight to your inbox.</p>
                 <form className="newsletter-form">
                     <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
-                    <Button type="submit" className="cta-button">Subscribe</Button>
+                    <Button type="submit">Subscribe</Button>
                 </form>
             </div>
         </section>
