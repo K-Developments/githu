@@ -358,7 +358,7 @@ export default function HomePage() {
 
          <section className="homepage-packages-section">
             <div className="packages-container">
-                <div className="packages-header">
+                <div className="packages-header-desktop">
                     <div className="button-wrapper-for-border">
                         <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
                             <ArrowLeft />
@@ -383,6 +383,35 @@ export default function HomePage() {
                         </Button>
                     </div>
                 </div>
+
+                <div className="packages-header-mobile">
+                     <h2 className="packages-category-title">
+                        <AnimatePresence mode="wait">
+                            <motion.span
+                                key={activeCategory ? activeCategory.id : 'empty'}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                               {activeCategory ? activeCategory.name : "Packages"}
+                            </motion.span>
+                        </AnimatePresence>
+                    </h2>
+                    <div className="packages-nav-buttons">
+                        <div className="button-wrapper-for-border">
+                            <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
+                                <ArrowLeft />
+                            </Button>
+                        </div>
+                         <div className="button-wrapper-for-border">
+                            <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
+                                <ArrowRight />
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+
 
                 <motion.div className="packages-grid" layout>
                     <AnimatePresence>
