@@ -63,9 +63,7 @@ export function Header() {
               <div className="desktop-only">
                  <DropdownMenu open={isDesktopMenuOpen} onOpenChange={setIsDesktopMenuOpen}>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="w-8 h-8">
-                           <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} setIsOpen={setIsDesktopMenuOpen} width={20} height={20} />
-                        </Button>
+                       <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} setIsOpen={setIsDesktopMenuOpen} width={20} height={20} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem><a href="#">FAQs</a></DropdownMenuItem>
