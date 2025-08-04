@@ -675,21 +675,12 @@ header {
   gap: 2rem;
 }
 
-.packages-header-mobile {
+.packages-category-navigator {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
-}
-
-.packages-header-desktop {
-  display: none;
-}
-
-.packages-nav-buttons {
-  display: flex;
-  gap: 1rem;
 }
 
 .packages-category-title {
@@ -702,8 +693,8 @@ header {
 
 .packages-grid {
   display: grid;
-  gap:2rem;
-
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
 .no-packages-message {
@@ -713,11 +704,12 @@ header {
 }
 
 .package-display-card {
-  background-color: transparent;
-  box-shadow: none;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border-radius: 0.5rem;
 }
 
 .package-display-card .card-image {
@@ -730,8 +722,7 @@ header {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding:1rem;
-  background-color:white;
+  padding: 1.5rem;
 }
 
 .package-display-card .card-title {
@@ -740,10 +731,6 @@ header {
   line-height: 1.2;
   margin-bottom: 0.75rem;
   color: #222;
-  text-transform: uppercase;
-  padding-bottom: 0.75rem;
-  letter-spacing:0.2rem !important;
-  border-bottom: 1px solid #000000;
 }
 
 .package-display-card .card-description {
@@ -757,6 +744,7 @@ header {
 .packages-divider {
   display: none;
 }
+
 
 /* Testimonials Section */
 .homepage-testimonials-section {
@@ -1322,28 +1310,17 @@ h2{
     display: none;
   }
   
-  .packages-header-mobile {
-    display: none;
-  }
-  
-  .packages-header-desktop {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .packages-container {
-    align-items: center;
-  }
-
   .packages-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
-
+  
   .package-display-card {
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
     flex-direction: column;
+    overflow: hidden;
+    border-radius: 0.5rem;
   }
 
   .newsletter-form {
@@ -1397,7 +1374,7 @@ h2{
   }
 
   .packages-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

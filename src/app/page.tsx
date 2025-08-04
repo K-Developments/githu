@@ -10,6 +10,8 @@ import type { Package, Category, Destination, Testimonial } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 // Define interfaces for the fetched data
 interface HeroData {
@@ -217,86 +219,96 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
 
 
 function PackagesSection({ categories, packages }: { categories: Category[], packages: Package[] }) {
-  const [activeCategory, setActiveCategory] = useState(categories[0]?.id || "");
-  const [activePackageIndex, setActivePackageIndex] = useState(0);
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
 
-  const filteredPackages = packages.filter(p => p.categoryId === activeCategory);
-  const activePackage = filteredPackages[activePackageIndex];
+  const handleNextCategory = () => {
+    setActiveCategoryIndex(prev => (prev + 1) % categories.length);
+  };
+  const handlePrevCategory = () => {
+    setActiveCategoryIndex(prev => (prev - 1 + categories.length) % categories.length);
+  };
 
-  const handleNextPackage = () => {
-    setActivePackageIndex(prev => (prev + 1) % filteredPackages.length);
-  };
-  const handlePrevPackage = () => {
-    setActivePackageIndex(prev => (prev - 1 + filteredPackages.length) % filteredPackages.length);
-  };
+  const activeCategory = categories[activeCategoryIndex];
+  const filteredPackages = packages.filter(p => p.categoryId === activeCategory.id);
+
+  if (categories.length === 0) return null;
   
-  useEffect(() => {
-    setActivePackageIndex(0);
-  }, [activeCategory]);
-
-  if (categories.length === 0 || packages.length === 0) return null;
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
     <section className="homepage-packages-section">
-        <div className="packages-container">
-             <div className="packages-header-desktop">
-                {categories.map((cat, index) => (
-                    <React.Fragment key={cat.id}>
-                        <Button
-                            variant={activeCategory === cat.id ? "default" : "ghost"}
-                            onClick={() => { setActiveCategory(cat.id); }}
-                        >
-                            {cat.name}
-                        </Button>
-                        {index < categories.length - 1 && <div className="h-6 w-px bg-border" />}
-                    </React.Fragment>
-                ))}
-            </div>
-             <div className="packages-header-mobile">
-                <h3 className="packages-category-title">{categories.find(c => c.id === activeCategory)?.name}</h3>
-                <div className="packages-nav-buttons">
-                    {categories.map(cat => (
-                        <Button
-                            key={cat.id}
-                            size="sm"
-                            variant={activeCategory === cat.id ? "default" : "outline"}
-                            onClick={() => { setActiveCategory(cat.id); }}
-                        >
-                            {cat.name}
-                        </Button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="packages-grid">
-              {filteredPackages.length > 0 && activePackage ? (
-                  <div className="package-display-card">
-                      <div className="card-image">
-                          <Image src={activePackage.images?.[0] || 'https://placehold.co/800x600.png'} alt={activePackage.title} fill style={{objectFit:'cover'}} sizes="90vw" data-ai-hint={activePackage.imageHints?.[0]} />
-                      </div>
-                      <div className="card-details">
-                          <h4 className="card-title">{activePackage.title}</h4>
-                          <p className="card-description">{activePackage.description}</p>
-                          <div className="flex justify-between items-center">
-                            <Button asChild>
-                              <Link href={activePackage.linkUrl || `/packages/${activePackage.id}`}>Explore Package</Link>
-                            </Button>
-                            {filteredPackages.length > 1 && (
-                                <div className="flex gap-2">
-                                    <Button variant="outline" size="icon" onClick={handlePrevPackage} aria-label="Previous Package"><ChevronLeft/></Button>
-                                    <Button variant="outline" size="icon" onClick={handleNextPackage} aria-label="Next Package"><ChevronRight/></Button>
-                                </div>
-                            )}
-                          </div>
-                      </div>
-                  </div>
-              ) : (
-                  <div className="no-packages-message">
-                      <p>No packages available in this category.</p>
-                  </div>
-              )}
-            </div>
+      <div className="packages-container">
+        <div className="packages-category-navigator">
+          <Button variant="ghost" size="icon" onClick={handlePrevCategory} aria-label="Previous Category">
+            <ChevronLeft />
+          </Button>
+          <AnimatePresence mode="wait">
+            <motion.h3 
+              key={activeCategory.id}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="packages-category-title"
+            >
+              {activeCategory.name}
+            </motion.h3>
+          </AnimatePresence>
+          <Button variant="ghost" size="icon" onClick={handleNextCategory} aria-label="Next Category">
+            <ChevronRight />
+          </Button>
         </div>
+
+        <motion.div 
+          className="packages-grid"
+          key={activeCategory.id} // Re-trigger animation on category change
+        >
+          <AnimatePresence>
+            {filteredPackages.length > 0 ? (
+              filteredPackages.map((pkg, index) => (
+                <motion.div
+                  key={pkg.id}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="package-display-card"
+                >
+                  <div className="card-image">
+                    <Image 
+                      src={pkg.images?.[0] || 'https://placehold.co/800x600.png'} 
+                      alt={pkg.title} 
+                      fill 
+                      style={{objectFit:'cover'}} 
+                      sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" 
+                      data-ai-hint={pkg.imageHints?.[0]} 
+                    />
+                  </div>
+                  <div className="card-details">
+                    <h4 className="card-title">{pkg.title}</h4>
+                    <p className="card-description">{pkg.description}</p>
+                    <Button asChild>
+                      <Link href={pkg.linkUrl || `/packages/${pkg.id}`}>Explore Package</Link>
+                    </Button>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="no-packages-message col-span-full"
+              >
+                <p>No packages available in this category.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
     </section>
   );
 }
