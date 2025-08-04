@@ -253,7 +253,6 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
 function PackagesSection({ categories, packages }: { categories: Category[], packages: Package[] }) {
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
 
-  // Create a "virtual" category for "Our Packages" that shows all packages
   const ourPackagesCategory: Category = { id: 'all', name: 'Our Packages' };
   const displayCategories = [ourPackagesCategory, ...categories];
 
@@ -267,10 +266,9 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
 
   const activeCategory = displayCategories[activeCategoryIndex];
   
-  // Filter packages based on the active category
-  const filteredPackages = activeCategory.id === 'all'
-    ? packages
-    : packages.filter(p => p.categoryId === activeCategory.id);
+  const filteredPackages = activeCategory && activeCategory.id !== 'all'
+    ? packages.filter(p => p.categoryId === activeCategory.id)
+    : packages;
   
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
