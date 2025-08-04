@@ -359,11 +359,6 @@ export default function HomePage() {
          <section className="homepage-packages-section">
             <div className="packages-container">
                 <div className="packages-header">
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
-                            <ArrowLeft />
-                        </Button>
-                    </div>
                     <h2 className="packages-category-title">
                         <AnimatePresence mode="wait">
                             <motion.span
@@ -377,10 +372,17 @@ export default function HomePage() {
                             </motion.span>
                         </AnimatePresence>
                     </h2>
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
-                            <ArrowRight />
-                        </Button>
+                    <div className="packages-nav-buttons">
+                      <div className="button-wrapper-for-border">
+                          <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
+                              <ArrowLeft />
+                          </Button>
+                      </div>
+                      <div className="button-wrapper-for-border">
+                          <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
+                              <ArrowRight />
+                          </Button>
+                      </div>
                     </div>
                 </div>
 
