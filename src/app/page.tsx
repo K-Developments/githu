@@ -89,6 +89,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   
   const allPackagesCategory: Category = { id: 'all', name: 'All Packages' };
 
@@ -263,10 +264,10 @@ export default function HomePage() {
                   </ul>
               </nav>
               <div className="desktop-only">
-                <DropdownMenu>
+                 <DropdownMenu open={isDesktopMenuOpen} onOpenChange={setIsDesktopMenuOpen}>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="w-8 h-8">
-                            <Menu size={20} />
+                           <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} setIsOpen={setIsDesktopMenuOpen} width={20} height={20} />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
