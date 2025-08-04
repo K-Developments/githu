@@ -252,7 +252,7 @@ export default function HomePage() {
               </nav>
           </div>
           <div className="header-right">
-              <Button asChild className="desktop-only"><a href="#">Plan Trip</a></Button>
+              <Button asChild><a href="#">Plan Trip</a></Button>
               <button className="search-button desktop-only" aria-label="Search">
                   <Search size={20} />
               </button>
@@ -395,7 +395,9 @@ export default function HomePage() {
                                 <div className="card-details">
                                     <h3 className="card-title">{pkg.title}</h3>
                                     <p className="card-description">{pkg.description}</p>
-                                    <Button asChild variant="outline" size="sm"><a href={`/packages/${pkg.id}`}>View Details</a></Button>
+                                    <div className="flex justify-center">
+                                      <Button asChild variant="outline" size="sm" className="w-auto"><a href={`/packages/${pkg.id}`}>View Details</a></Button>
+                                    </div>
                                 </div>
                             </motion.div>
                             {index < activePackages.length - 1 && (
