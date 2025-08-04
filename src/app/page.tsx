@@ -253,8 +253,11 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
 function PackagesSection({ categories, packages }: { categories: Category[], packages: Package[] }) {
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
 
-  const ourPackagesCategory: Category = { id: 'all', name: 'Our Packages' };
-  const displayCategories = [ourPackagesCategory, ...categories];
+  const displayCategories: Category[] = React.useMemo(() => [
+      { id: 'all', name: 'Our Packages' },
+      ...categories
+  ], [categories]);
+
 
   const handleNextCategory = () => {
     setActiveCategoryIndex(prev => (prev + 1) % displayCategories.length);
@@ -513,3 +516,5 @@ function NewsletterSection() {
         </section>
     );
 }
+
+    
