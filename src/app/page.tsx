@@ -276,7 +276,9 @@ export default function HomePage() {
                 >
                   <Image 
                     src={url}
-                    alt={`Luxury travel scene ${index + 1} for Island Hopes`}
+                    alt={`Luxury travel scene ${index + 1} for Island Hopes, showing a serene ${
+                        index === 0 ? "mountain and beach vista" : index === 1 ? "resort pool area" : "luxury resort exterior"
+                    }.`}
                     fill
                     sizes="100vw"
                     className="object-cover"
@@ -309,7 +311,7 @@ export default function HomePage() {
                  <div className="intro-image-cluster">
                     <div className="image-landscape-wrapper noise-overlay">
                         <Image 
-                          alt="Lush, inspiring travel landscape with mountains and water" 
+                          alt="Inspiring travel landscape with lush mountains and clear water, representing a bespoke Island Hopes experience." 
                           src={introContent.landscapeImage} 
                           width={1000} 
                           height={662}
@@ -318,7 +320,7 @@ export default function HomePage() {
                     </div>
                     <div className="image-portrait-wrapper noise-overlay">
                         <Image 
-                          alt="Happy traveler enjoying a bespoke experience" 
+                          alt="Happy traveler enjoying a unique, authentic Island Hopes experience." 
                           src={introContent.portraitImage} 
                           width={800} 
                           height={1000} 
