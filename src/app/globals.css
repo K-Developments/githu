@@ -973,6 +973,9 @@ header {
   .packages-header {
       gap: 1rem;
   }
+  .packages-header .button-wrapper-for-border {
+      flex-shrink: 0;
+  }
   .packages-category-title {
       min-width: 0;
       font-size: 1.2rem;
