@@ -515,5 +515,3 @@ function NewsletterSection() {
         </section>
     );
 }
-
-    
