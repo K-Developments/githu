@@ -63,7 +63,7 @@ export function Header() {
               <div className="desktop-only ml-[1rem] flex items-center justify-center">
                  <DropdownMenu open={isDesktopMenuOpen} onOpenChange={setIsDesktopMenuOpen}>
                     <DropdownMenuTrigger asChild>
-                       <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} setIsOpen={setIsDesktopMenuOpen} width={20} height={20} />
+                       <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} width={20} height={20} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem><a href="#">FAQs</a></DropdownMenuItem>
@@ -81,7 +81,7 @@ export function Header() {
               <div className="hamburger-button">
                  <AnimatedHamburgerButton
                     isOpen={isMenuOpen}
-                    setIsOpen={setIsMenuOpen}
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
                     width={20} 
                     height={20}
                   />

@@ -2,15 +2,13 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-interface AnimatedHamburgerButtonProps {
+interface AnimatedHamburgerButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
   color?: string;
   width?: number;
   height?: number;
-  onClick?: () => void;
 }
 
 const iconVariants = {
@@ -18,14 +16,13 @@ const iconVariants = {
   visible: { opacity: 1, rotate: 0, scale: 1 },
 };
 
-export const AnimatedHamburgerButton = ({
+export const AnimatedHamburgerButton = React.forwardRef<HTMLButtonElement, AnimatedHamburgerButtonProps>(({
   isOpen,
-  setIsOpen,
   color = "#333",
   width = 24,
   height = 24,
-  onClick,
-}: AnimatedHamburgerButtonProps) => {
+  ...props
+}, ref) => {
 
   const [isClient, setIsClient] = useState(false);
 
@@ -33,16 +30,9 @@ export const AnimatedHamburgerButton = ({
     setIsClient(true);
   }, []);
 
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-    if (onClick) {
-        onClick();
-    }
-  };
-
   if (!isClient) {
     return (
-        <button onClick={handleClick} className="relative" style={{ width, height }}>
+        <button ref={ref} className="relative" style={{ width, height }} {...props}>
             <div className="absolute inset-0 flex items-center justify-center">
                 <Menu size={width} color={color} />
             </div>
@@ -51,7 +41,7 @@ export const AnimatedHamburgerButton = ({
   }
 
   return (
-    <button onClick={handleClick} className="relative" style={{ width, height }}>
+    <button ref={ref} className="relative" style={{ width, height }} {...props}>
       <AnimatePresence mode="wait">
         {!isOpen ? (
           <motion.div
@@ -81,4 +71,6 @@ export const AnimatedHamburgerButton = ({
       </AnimatePresence>
     </button>
   );
-};
+});
+
+AnimatedHamburgerButton.displayName = "AnimatedHamburgerButton";
