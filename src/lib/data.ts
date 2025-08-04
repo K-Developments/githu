@@ -6,6 +6,7 @@ export type Destination = {
   description: string;
   image: string;
   imageHint?: string;
+  linkUrl?: string;
 };
 
 export type Package = {
@@ -16,6 +17,7 @@ export type Package = {
   description: string;
   images: string[];
   imageHints?: string[];
+  linkUrl?: string;
 };
 
 export type Category = {

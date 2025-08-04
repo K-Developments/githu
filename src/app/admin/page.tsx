@@ -214,6 +214,7 @@ export default function AdminHomePage() {
       description: "",
       image: "https://placehold.co/600x400.png",
       imageHint: "",
+      linkUrl: "",
     };
     setDestinations([...destinations, newDestination]);
   };
@@ -266,6 +267,7 @@ export default function AdminHomePage() {
       description: "",
       images: ["https://placehold.co/600x400.png"],
       imageHints: [],
+      linkUrl: "",
     };
     setPackages([...packages, newPackage]);
   };
@@ -526,6 +528,10 @@ export default function AdminHomePage() {
                   <Label htmlFor={`dest-img-${dest.id}`} className="text-xs">Image URL</Label>
                   <Input id={`dest-img-${dest.id}`} value={dest.image} onChange={(e) => handleDestinationChange(dest.id, 'image', e.target.value)} />
                 </div>
+                 <div className="space-y-1">
+                  <Label htmlFor={`dest-link-${dest.id}`} className="text-xs">Link URL (optional)</Label>
+                  <Input id={`dest-link-${dest.id}`} placeholder={`/destinations/${dest.id}`} value={dest.linkUrl || ''} onChange={(e) => handleDestinationChange(dest.id, 'linkUrl', e.target.value)} />
+                </div>
                 <Button variant="destructive" size="sm" onClick={() => handleDeleteDestination(dest.id)}>
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete Destination
@@ -574,6 +580,10 @@ export default function AdminHomePage() {
                         <div className="space-y-1">
                             <Label htmlFor={`pkg-img-${pkg.id}`} className="text-xs">Image URL</Label>
                             <Input id={`pkg-img-${pkg.id}`} value={pkg.images?.[0] || ''} onChange={(e) => handlePackageImageChange(pkg.id, 0, e.target.value)} />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor={`pkg-link-${pkg.id}`} className="text-xs">Link URL (optional)</Label>
+                            <Input id={`pkg-link-${pkg.id}`} placeholder={`/packages/${pkg.id}`} value={pkg.linkUrl || ''} onChange={(e) => handlePackageChange(pkg.id, 'linkUrl', e.target.value)} />
                         </div>
                          <Button variant="destructive" size="sm" onClick={() => handleDeletePackage(pkg.id)}>
                             <Trash2 className="mr-2 h-4 w-4" />

@@ -40,9 +40,10 @@ interface DestinationsData {
 }
 
 const DestinationCard = ({ destination }: { destination: Destination }) => {
+    const href = destination.linkUrl || `/destinations/${destination.id}`;
     return (
         <div className="destination-card noise-overlay">
-            <a href={`/destinations/${destination.id}`}>
+            <a href={href}>
                  <div className="card-title-absolute">
                     <h3 className="card-title">{destination.title}</h3>
                 </div>
@@ -133,7 +134,7 @@ export default function HomePage() {
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
             sliderImages: [
-              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%3D%3D&auto=format&fit=crop&w=2070&q=80",
+              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
               "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
               "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
             ],
@@ -446,7 +447,7 @@ export default function HomePage() {
                                     <p className="card-description">{pkg.description}</p>
                                     <div className="flex justify-center">
                                       <div className="button-wrapper-for-border">
-                                        <Button asChild variant="outline" size="sm" className="w-auto"><a href={`/packages/${pkg.id}`}>View Details</a></Button>
+                                        <Button asChild variant="outline" size="sm" className="w-auto"><a href={pkg.linkUrl || `/packages/${pkg.id}`}>View Details</a></Button>
                                       </div>
                                     </div>
                                 </div>
