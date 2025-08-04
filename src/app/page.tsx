@@ -335,6 +335,13 @@ export default function HomePage() {
         </section>
         
         <section className="destinations-section">
+            <div className="rotated-view-all-wrapper">
+                <div className="button-wrapper-for-border">
+                    <Button asChild variant="outline">
+                        <a href="/destinations">View All</a>
+                    </Button>
+                </div>
+            </div>
             <h2 className="section-title">{destinationsContent.title}</h2>
             <p className="section-subtitle">{destinationsContent.subtitle}</p>
             <div className="destinations-grid">

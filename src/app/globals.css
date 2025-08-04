@@ -540,6 +540,8 @@ header {
 .destinations-section {
   padding: 4rem 5%;
   background-color: #fefcfb;
+  position: relative;
+  overflow: hidden;
 }
 
 .destinations-section .section-title {
@@ -622,7 +624,7 @@ header {
     font-size: 0.8rem;
     line-height: 1.5;
     margin-top: 0.5rem;
-    color: #ddd;
+    color: #222;
     opacity: 0;
     transition: opacity 0.3s ease 0.2s;
 }
@@ -650,6 +652,10 @@ header {
 }
 
 .card-title-absolute {
+    display: none;
+}
+
+.rotated-view-all-wrapper {
     display: none;
 }
 
@@ -939,7 +945,7 @@ header {
     display: inline-flex;
     padding: 5px;
     border: 2px solid hsl(var(--primary));
-    border-radius: calc(var(--radius) + 5px); /* Match button radius + padding */
+    border-radius: calc(var(--radius) + 8px);
 }
 
 /* Mobile Responsive Adjustments */
@@ -1246,7 +1252,7 @@ h2{
   
   .destination-card .card-content {
     background: white;
-    color: #222;
+    color: #000000;
     text-align: center;
     position: absolute;
     bottom: 0;
@@ -1288,6 +1294,16 @@ h2{
 
   .newsletter-input {
       flex-grow: 1;
+  }
+  
+  .rotated-view-all-wrapper {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: 10;
+    transform-origin: center;
+    transform: translateY(-50%) translateX(-25%) rotate(-45deg);
   }
 }
 
