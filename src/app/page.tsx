@@ -13,6 +13,7 @@ import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-
 import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
+import { cn } from "@/lib/utils";
 
 
 // Define interfaces for the fetched data
@@ -273,11 +274,6 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
     ? packages.filter(p => p.categoryId === activeCategory.id)
     : packages;
   
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
     <section className="homepage-packages-section">
       <div className="packages-container">
@@ -340,12 +336,18 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
         </ScrollAnimation>
 
 
-        <motion.div className="packages-grid" layout>
+        <motion.div 
+            className={cn(
+                "packages-grid",
+                filteredPackages.length === 1 && "md:grid-cols-1 justify-center"
+            )}
+            layout
+        >
             <AnimatePresence>
                 {filteredPackages.map((pkg, index) => (
                 <React.Fragment key={pkg.id}>
                     <motion.div 
-                        className="package-display-card"
+                        className={cn("package-display-card", filteredPackages.length === 1 && "md:w-2/3 lg:w-1/2")}
                         layout
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
