@@ -712,7 +712,7 @@ header {
     min-height: 80vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 4rem 5%;
     overflow: hidden;
 }
@@ -751,18 +751,14 @@ header {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column; /* Mobile first */
-    gap: 2rem;
 }
 
 .cta-content {
     background: rgba(255, 255, 255, 0.9);
     padding: 3rem;
     width: 100%;
-    text-align: center;
+    max-width: 50%; /* Adjust as needed */
+    text-align: left;
 }
 
 .cta-title {
@@ -774,11 +770,16 @@ header {
 }
 
 .cta-interactive-panel {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 1px; /* Creates separator lines */
-    background-color: rgba(255,255,255,0.4); /* Separator color */
+    max-width: 350px;
+    gap: 1px;
+    background-color: rgba(255,255,255,0.4);
     border: 1px solid rgba(255,255,255,0.4);
 }
 
@@ -1042,6 +1043,10 @@ header {
     }
     .cta-content {
         padding: 2rem;
+        max-width: 100%;
+    }
+    .cta-interactive-panel {
+        display: none; /* Hide on mobile for simplicity, can be adapted */
     }
 }
 /* Small mobile adjustments */
@@ -1248,17 +1253,6 @@ h2{
     .cta-content-container {
         flex-direction: row;
         align-items: stretch;
-    }
-    .cta-content {
-        width: 50%;
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    .cta-interactive-panel {
-        flex-direction: column;
-        width: 50%;
     }
 }
 /* Tablet adjustments */

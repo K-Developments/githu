@@ -492,7 +492,7 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
             </AnimatePresence>
             <div className="cta-overlay"></div>
             <div className="cta-content-container">
-                <ScrollAnimation className="w-full md:w-1/2">
+                <ScrollAnimation>
                     <div className="cta-content">
                         <h2 className="cta-title">{data.title}</h2>
                         <div className="button-wrapper-for-border">
@@ -502,22 +502,22 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                         </div>
                     </div>
                 </ScrollAnimation>
-                 <ScrollAnimation className="w-full md:w-1/2">
-                    <div className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
-                        {interactiveItems.map((item, index) => (
-                            <Link
-                                key={index}
-                                href={item.linkUrl || '#'}
-                                className="cta-interactive-item"
-                                onMouseEnter={() => setHoveredItem(index)}
-                            >
-                                <h3 className="cta-item-title">{item.title}</h3>
-                                <p className="cta-item-description">{item.description}</p>
-                            </Link>
-                        ))}
-                    </div>
-                </ScrollAnimation>
             </div>
+             <ScrollAnimation>
+                <div className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
+                    {interactiveItems.map((item, index) => (
+                        <Link
+                            key={index}
+                            href={item.linkUrl || '#'}
+                            className="cta-interactive-item"
+                            onMouseEnter={() => setHoveredItem(index)}
+                        >
+                            <h3 className="cta-item-title">{item.title}</h3>
+                            <p className="cta-item-description">{item.description}</p>
+                        </Link>
+                    ))}
+                </div>
+            </ScrollAnimation>
         </section>
     );
 }
