@@ -65,7 +65,7 @@ export function Header() {
                     <DropdownMenuTrigger asChild>
                        <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} width={20} height={20} />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" sideOffset={16}>
+                    <DropdownMenuContent align="end" sideOffset={16} alignOffset={-104}>
                         <DropdownMenuItem><a href="#">FAQs</a></DropdownMenuItem>
                         <DropdownMenuItem><a href="#">Gallery</a></DropdownMenuItem>
                         <DropdownMenuItem><a href="#">Blog & News</a></DropdownMenuItem>
