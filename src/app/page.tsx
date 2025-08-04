@@ -103,6 +103,7 @@ export default function HomePage() {
       {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
       {categories.length > 0 && packages.length > 0 && <PackagesSection categories={categories} packages={packages} />}
       {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
+      <HomePageCallToActionSection />
       <NewsletterSection />
     </>
   );
@@ -449,6 +450,36 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
     );
 }
 
+function HomePageCallToActionSection() {
+    return (
+        <section className="home-page-call-to-action-section">
+            <div className="cta-background-image">
+                <Image 
+                    src="https://placehold.co/1920x1080.png" 
+                    alt="Serene travel destination" 
+                    fill 
+                    className="object-cover" 
+                    data-ai-hint="tropical beach"
+                />
+            </div>
+            <div className="cta-overlay"></div>
+            <div className="cta-content-container">
+                <ScrollAnimation>
+                    <div className="cta-content">
+                        <h2 className="cta-title">Ready to plan your journey?</h2>
+                        <div className="button-wrapper-for-border">
+                            <Button asChild size="lg" className="w-full">
+                                <a href="#">Plan Your Trip Now</a>
+                            </Button>
+                        </div>
+                    </div>
+                </ScrollAnimation>
+            </div>
+        </section>
+    );
+}
+
+
 function NewsletterSection() {
     return (
         <section className="newsletter-section">
@@ -473,3 +504,5 @@ function NewsletterSection() {
         </section>
     );
 }
+
+    
