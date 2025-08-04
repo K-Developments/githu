@@ -6,7 +6,7 @@ import Image from "next/image";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package, Destination, Category, Testimonial } from "@/lib/data";
-import { Search, Menu, ArrowLeft, ArrowRight, Quote } from "lucide-react";
+import { Search, Menu, ArrowLeft, ArrowRight, Quote, X } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -287,6 +287,8 @@ export default function HomePage() {
                  <AnimatedHamburgerButton
                     isOpen={isMenuOpen}
                     setIsOpen={setIsMenuOpen}
+                    width={20} 
+                    height={20}
                   />
               </div>
           </div>
