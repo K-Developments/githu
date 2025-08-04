@@ -251,24 +251,26 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
 
 
 function PackagesSection({ categories, packages }: { categories: Category[], packages: Package[] }) {
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+
+  // Create a "virtual" category for "Our Packages" that shows all packages
   const ourPackagesCategory: Category = { id: 'all', name: 'Our Packages' };
   const displayCategories = [ourPackagesCategory, ...categories];
-  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
 
   const handleNextCategory = () => {
     setActiveCategoryIndex(prev => (prev + 1) % displayCategories.length);
   };
+
   const handlePrevCategory = () => {
     setActiveCategoryIndex(prev => (prev - 1 + displayCategories.length) % displayCategories.length);
   };
 
   const activeCategory = displayCategories[activeCategoryIndex];
   
+  // Filter packages based on the active category
   const filteredPackages = activeCategory.id === 'all'
     ? packages
     : packages.filter(p => p.categoryId === activeCategory.id);
-
-  if (categories.length === 0) return null;
   
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -277,7 +279,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
 
   return (
     <section className="homepage-packages-section">
-    <div className="packages-container">
+      <div className="packages-container">
         <ScrollAnimation>
             <div className="packages-header-desktop">
                 <div className="button-wrapper-for-border">
@@ -376,7 +378,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                 ))}
             </AnimatePresence>
         </motion.div>
-        {filteredPackages.length === 0 && !loading && (
+        {filteredPackages.length === 0 && (
             <div className="no-packages-message">
                 <p>There are currently no packages available for this category.</p>
             </div>
@@ -513,3 +515,5 @@ function NewsletterSection() {
         </section>
     );
 }
+
+    
