@@ -971,8 +971,8 @@ header {
   }
 
   .packages-header {
-      flex-direction: column;
-      gap: 1rem;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .packages-header .packages-nav-buttons {
