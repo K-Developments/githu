@@ -204,7 +204,7 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
       </div>
       <div className="rotated-view-all-wrapper">
         <Button asChild variant="outline" size="lg">
-          <Link href={sectionData.buttonUrl}>View All</Link>
+          <Link href={sectionData.buttonUrl || '#'}>View All</Link>
         </Button>
       </div>
     </section>
