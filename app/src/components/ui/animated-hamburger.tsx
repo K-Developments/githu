@@ -2,6 +2,7 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface AnimatedHamburgerButtonProps {
   isOpen: boolean;
@@ -24,9 +25,25 @@ export const AnimatedHamburgerButton = ({
   height = 24,
 }: AnimatedHamburgerButtonProps) => {
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
+
+  if (!isClient) {
+    return (
+        <button onClick={handleClick} className="relative" style={{ width, height }}>
+            <div className="absolute inset-0 flex items-center justify-center">
+                <Menu size={width} color={color} />
+            </div>
+        </button>
+    );
+  }
 
   return (
     <button onClick={handleClick} className="relative" style={{ width, height }}>
