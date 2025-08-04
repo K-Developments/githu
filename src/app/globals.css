@@ -980,6 +980,14 @@ header {
     display: block;
   }
 
+  .packages-header-desktop {
+    display: none;
+  }
+
+  .packages-header-mobile {
+    display: flex;
+  }
+
   .packages-category-title {
       min-width: 0;
       font-size: 1.2rem;

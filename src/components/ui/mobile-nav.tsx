@@ -2,7 +2,6 @@
 "use client";
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 
 const navLinks = [
   { title: "Destinations", href: "#" },
@@ -73,14 +72,11 @@ export const MobileNav = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (
           initial="initial"
           animate="animate"
           exit="exit"
-          className="fixed inset-0 bg-[#f8f5f2] text-primary-foreground origin-top z-[1000]"
+          className="fixed inset-0 bg-[#f8f5f2] text-primary-foreground origin-top z-[999]"
         >
             <div className="flex h-full flex-col">
                 <div className="flex justify-between items-center p-4">
                      <a href="#" className="logo" style={{ color: '#222', fontFamily: "'Marcellus', serif" }}>ISLAND<span style={{color: 'hsl(188 55% 45%)'}}>HOPES</span></a>
-                     <button onClick={() => setIsOpen(false)} className="text-gray-800">
-                        <X size={28}/>
-                     </button>
                 </div>
                 <motion.div
                     variants={linkContainerVariants}

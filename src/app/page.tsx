@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AnimatedHamburgerButton } from "@/components/ui/animated-hamburger";
 
 interface HeroData {
   headline: string;
@@ -281,9 +282,12 @@ export default function HomePage() {
               <button className="search-button desktop-only" aria-label="Search">
                   <Search size={20} />
               </button>
-              <button onClick={() => setIsMenuOpen(true)} className="hamburger-button" aria-label="Open menu">
-                  <Menu size={24} />
-              </button>
+              <div className="hamburger-button">
+                 <AnimatedHamburgerButton
+                    isOpen={isMenuOpen}
+                    setIsOpen={setIsMenuOpen}
+                  />
+              </div>
           </div>
       </header>
       
