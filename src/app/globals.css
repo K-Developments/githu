@@ -148,6 +148,7 @@ header {
     flex: 2;
     display: flex;
     justify-content: center;
+    align-items:center;
 }
 
 .header-right {
@@ -1034,6 +1035,23 @@ header {
   
   .packages-grid {
     grid-template-columns:1fr;
+  }
+  
+  .packages-header-desktop {
+    display: none;
+  }
+
+  .packages-header-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .packages-nav-buttons {
+    display: flex;
+    gap: 1rem;
   }
 
   .packages-divider {

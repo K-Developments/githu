@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface HeroData {
   headline: string;
@@ -260,6 +261,20 @@ export default function HomePage() {
                       <li><a href="#">Contact</a></li>
                   </ul>
               </nav>
+              <div className="desktop-only">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="w-8 h-8">
+                            <Menu size={20} />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem><a href="#">FAQs</a></DropdownMenuItem>
+                        <DropdownMenuItem><a href="#">Gallery</a></DropdownMenuItem>
+                        <DropdownMenuItem><a href="#">Blog & News</a></DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
           </div>
           <div className="header-right">
               <Button asChild><a href="#">Plan Trip</a></Button>
