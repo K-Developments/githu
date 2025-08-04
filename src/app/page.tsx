@@ -1,13 +1,14 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package, Category, Destination, Testimonial } from "@/lib/data";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
 // Define interfaces for the fetched data
@@ -157,7 +158,7 @@ function IntroSection({ data }: { data: IntroData }) {
             <div className="intro-text-content">
                 <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: data.headline }} />
                 <p className="paragraph-style">{data.paragraph}</p>
-                <Link href={data.linkUrl} className="link-to">{data.linkText}</Link>
+                <Link href={data.linkUrl || '#'} className="link-to">{data.linkText}</Link>
             </div>
             <div className="intro-image-cluster">
                 <div className="image-landscape-wrapper">
@@ -224,6 +225,10 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
   const handlePrevPackage = () => {
     setActivePackageIndex(prev => (prev - 1 + filteredPackages.length) % filteredPackages.length);
   };
+  
+  useEffect(() => {
+    setActivePackageIndex(0);
+  }, [activeCategory]);
 
   if (categories.length === 0 || packages.length === 0) return null;
 
@@ -235,7 +240,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                     <React.Fragment key={cat.id}>
                         <Button
                             variant={activeCategory === cat.id ? "default" : "ghost"}
-                            onClick={() => { setActiveCategory(cat.id); setActivePackageIndex(0); }}
+                            onClick={() => { setActiveCategory(cat.id); }}
                         >
                             {cat.name}
                         </Button>
@@ -251,7 +256,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                             key={cat.id}
                             size="sm"
                             variant={activeCategory === cat.id ? "default" : "outline"}
-                            onClick={() => { setActiveCategory(cat.id); setActivePackageIndex(0); }}
+                            onClick={() => { setActiveCategory(cat.id); }}
                         >
                             {cat.name}
                         </Button>
@@ -300,6 +305,10 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
     const handlePrev = () => {
         setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
     };
+
+    if (testimonials.length === 0) {
+      return null;
+    }
 
     const activeTestimonial = testimonials[currentIndex];
 
