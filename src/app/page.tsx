@@ -220,17 +220,22 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
 
 
 function PackagesSection({ categories, packages }: { categories: Category[], packages: Package[] }) {
+  const ourPackagesCategory: Category = { id: 'all', name: 'Our Packages' };
+  const displayCategories = [ourPackagesCategory, ...categories];
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
 
   const handleNextCategory = () => {
-    setActiveCategoryIndex(prev => (prev + 1) % categories.length);
+    setActiveCategoryIndex(prev => (prev + 1) % displayCategories.length);
   };
   const handlePrevCategory = () => {
-    setActiveCategoryIndex(prev => (prev - 1 + categories.length) % categories.length);
+    setActiveCategoryIndex(prev => (prev - 1 + displayCategories.length) % displayCategories.length);
   };
 
-  const activeCategory = categories[activeCategoryIndex];
-  const filteredPackages = packages.filter(p => p.categoryId === activeCategory.id);
+  const activeCategory = displayCategories[activeCategoryIndex];
+  
+  const filteredPackages = activeCategory.id === 'all'
+    ? packages
+    : packages.filter(p => p.categoryId === activeCategory.id);
 
   if (categories.length === 0) return null;
   
@@ -244,7 +249,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
     <div className="packages-container">
         <div className="packages-header-desktop">
             <div className="button-wrapper-for-border">
-                <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
+                <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={displayCategories.length <= 1}>
                     <ArrowLeft />
                 </Button>
             </div>
@@ -262,7 +267,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                 </AnimatePresence>
             </h2>
             <div className="button-wrapper-for-border">
-                <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
+                <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={displayCategories.length <= 1}>
                     <ArrowRight />
                 </Button>
             </div>
@@ -284,12 +289,12 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
             </h2>
             <div className="packages-nav-buttons">
                 <div className="button-wrapper-for-border">
-                    <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
+                    <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={displayCategories.length <= 1}>
                         <ArrowLeft />
                     </Button>
                 </div>
                  <div className="button-wrapper-for-border">
-                    <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
+                    <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={displayCategories.length <= 1}>
                         <ArrowRight />
                     </Button>
                 </div>
@@ -420,5 +425,3 @@ function NewsletterSection() {
         </section>
     );
 }
-
-    
