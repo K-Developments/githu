@@ -28,7 +28,7 @@ export const AnimatedHamburgerButton = ({
     },
     opened: {
       rotate: 45,
-      translateY: 2,
+      translateY: 1.5,
     },
   };
   const center: Variants = {
@@ -46,7 +46,7 @@ export const AnimatedHamburgerButton = ({
     },
     opened: {
       rotate: -45,
-      translateY: -2,
+      translateY: -1.5,
     },
   };
 
@@ -62,7 +62,7 @@ export const AnimatedHamburgerButton = ({
       damping: 20
     }
   };
-  const unitHeight = 4;
+  const unitHeight = 3;
   const unitWidth = (unitHeight * (width)) / (height);
 
   return (
@@ -85,16 +85,16 @@ export const AnimatedHamburgerButton = ({
       <motion.line
         x1="0"
         x2={unitWidth}
-        y1="2"
-        y2="2"
+        y1="1.5"
+        y2="1.5"
         variants={center}
         {...lineProps}
       />
       <motion.line
         x1="0"
         x2={unitWidth}
-        y1="4"
-        y2="4"
+        y1="3"
+        y2="3"
         variants={bottom}
         {...lineProps}
       />
