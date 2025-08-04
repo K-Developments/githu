@@ -60,7 +60,7 @@ export function Header() {
                       <li><a href="#">Contact</a></li>
                   </ul>
               </nav>
-              <div className="desktop-only">
+              <div className="desktop-only ml-[1rem] flex items-center justify-center">
                  <DropdownMenu open={isDesktopMenuOpen} onOpenChange={setIsDesktopMenuOpen}>
                     <DropdownMenuTrigger asChild>
                        <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} setIsOpen={setIsDesktopMenuOpen} width={20} height={20} />

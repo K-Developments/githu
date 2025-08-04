@@ -809,7 +809,7 @@ header {
 }
 .button-wrapper-for-border {
 	display: inline-flex;
-	padding: 5px;
+	padding: 0.2rem;
 	border: 2px solid hsl(var(--primary));
 	border-radius: calc(var(--radius) + 8px);
 }

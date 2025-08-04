@@ -10,6 +10,7 @@ interface AnimatedHamburgerButtonProps {
   color?: string;
   width?: number;
   height?: number;
+  onClick?: () => void;
 }
 
 const iconVariants = {
@@ -23,6 +24,7 @@ export const AnimatedHamburgerButton = ({
   color = "#333",
   width = 24,
   height = 24,
+  onClick,
 }: AnimatedHamburgerButtonProps) => {
 
   const [isClient, setIsClient] = useState(false);
@@ -33,6 +35,9 @@ export const AnimatedHamburgerButton = ({
 
   const handleClick = () => {
     setIsOpen(!isOpen);
+    if (onClick) {
+        onClick();
+    }
   };
 
   if (!isClient) {
