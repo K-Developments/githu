@@ -24,6 +24,7 @@ interface IntroData {
   headline: string;
   paragraph: string;
   linkText: string;
+  linkUrl: string;
   portraitImage: string;
   landscapeImage: string;
 }
@@ -36,6 +37,7 @@ interface QuoteData {
 interface DestinationsData {
   title: string;
   subtitle: string;
+  buttonUrl: string;
 }
 
 export default function AdminHomePage() {
@@ -48,6 +50,7 @@ export default function AdminHomePage() {
     headline: "",
     paragraph: "",
     linkText: "",
+    linkUrl: "",
     portraitImage: "",
     landscapeImage: "",
   });
@@ -58,6 +61,7 @@ export default function AdminHomePage() {
   const [destinationsData, setDestinationsData] = useState<DestinationsData>({
     title: "",
     subtitle: "",
+    buttonUrl: "",
   });
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
@@ -89,6 +93,7 @@ export default function AdminHomePage() {
             headline: intro.headline || "",
             paragraph: intro.paragraph || "",
             linkText: intro.linkText || "",
+            linkUrl: intro.linkUrl || "#",
             portraitImage: intro.portraitImage || "",
             landscapeImage: intro.landscapeImage || "",
           });
@@ -103,6 +108,7 @@ export default function AdminHomePage() {
           setDestinationsData({
             title: destinations.title || "",
             subtitle: destinations.subtitle || "",
+            buttonUrl: destinations.buttonUrl || "/destinations",
           });
 
         } else {
@@ -120,6 +126,7 @@ export default function AdminHomePage() {
             headline: "Magical memories,<br>Bespoke experiences",
             paragraph: "Once you have travelled the voyage never ends. Island Hopes will open a world of wonders and create magical memories that will stay with you far beyond your travels.\n\nDiverge from the typical tourist destinations in favour of unique, authentic experiences. Experiences designed in the most inspiring surroundings that will be yours, and yours only. Journeys that create memorable moments and Island Hopes’s bespoke itineraries will make this happen. The wonders of the world are within your reach.",
             linkText: "Meet our team",
+            linkUrl: "#",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
           });
@@ -130,6 +137,7 @@ export default function AdminHomePage() {
           setDestinationsData({
             title: "Our Favourite Destinations",
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
+            buttonUrl: "/destinations",
           });
         }
         
@@ -435,6 +443,10 @@ export default function AdminHomePage() {
                 <Label htmlFor="linkText">Link Text</Label>
                 <Input id="linkText" value={introData.linkText} onChange={handleIntroChange} />
             </div>
+            <div className="space-y-2">
+                <Label htmlFor="linkUrl">Link URL</Label>
+                <Input id="linkUrl" value={introData.linkUrl} onChange={handleIntroChange} />
+            </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                     <Label htmlFor="portraitImage">Portrait Image URL</Label>
@@ -469,7 +481,7 @@ export default function AdminHomePage() {
       <Card>
         <CardHeader>
             <CardTitle>Destinations Section</CardTitle>
-            <CardDescription>Update the title and subtitle for the destinations section header.</CardDescription>
+            <CardDescription>Update the title, subtitle, and button URL for the destinations section.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
@@ -479,6 +491,10 @@ export default function AdminHomePage() {
             <div className="space-y-2">
                 <Label htmlFor="subtitle">Subtitle</Label>
                 <Textarea id="subtitle" value={destinationsData.subtitle} onChange={handleDestinationsSectionChange} />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="buttonUrl">View All Button URL</Label>
+                <Input id="buttonUrl" value={destinationsData.buttonUrl} onChange={handleDestinationsSectionChange} />
             </div>
         </CardContent>
       </Card>

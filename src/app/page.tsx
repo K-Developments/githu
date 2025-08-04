@@ -23,6 +23,7 @@ interface IntroData {
   headline: string;
   paragraph: string;
   linkText: string;
+  linkUrl: string;
   portraitImage: string;
   landscapeImage: string;
 }
@@ -35,6 +36,7 @@ interface QuoteData {
 interface DestinationsData {
   title: string;
   subtitle: string;
+  buttonUrl: string;
 }
 
 const DestinationCard = ({ destination }: { destination: Destination }) => {
@@ -113,6 +115,7 @@ export default function HomePage() {
             headline: "Magical memories,<br>Bespoke experiences",
             paragraph: "Once you have travelled the voyage never ends. Island Hopes will open a world of wonders and create magical memories that will stay with you far beyond your travels.\n\nDiverge from the typical tourist destinations in favour of unique, authentic experiences. Experiences designed in the most inspiring surroundings that will be yours, and yours only. Journeys that create memorable moments and Island Hopes’s bespoke itineraries will make this happen. The wonders of the world are within your reach.",
             linkText: "Meet our team",
+            linkUrl: "#",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
           });
@@ -123,13 +126,14 @@ export default function HomePage() {
           setDestinationsData(destinations || {
             title: "Our Favourite Destinations",
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
+            buttonUrl: "/destinations",
           });
         } else {
            setHeroData({
             headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
             description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
             sliderImages: [
-              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%3D%3D&auto=format&fit=crop&w=2070&q=80",
               "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
               "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
             ],
@@ -138,6 +142,7 @@ export default function HomePage() {
             headline: "Magical memories,<br>Bespoke experiences",
             paragraph: "Once you have travelled the voyage never ends. Island Hopes will open a world of wonders and create magical memories that will stay with you far beyond your travels.\n\nDiverge from the typical tourist destinations in favour of unique, authentic experiences. Experiences designed in the most inspiring surroundings that will be yours, and yours only. Journeys that create memorable moments and Island Hopes’s bespoke itineraries will make this happen. The wonders of the world are within your reach.",
             linkText: "Meet our team",
+            linkUrl: "#",
             portraitImage: "https://placehold.co/800x1000.png",
             landscapeImage: "https://placehold.co/1000x662.png",
           });
@@ -148,6 +153,7 @@ export default function HomePage() {
           setDestinationsData({
             title: "Our Favourite Destinations",
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
+            buttonUrl: "/destinations",
           });
         }
 
@@ -309,7 +315,7 @@ export default function HomePage() {
                 <div className="intro-text-content">
                    <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: introContent.headline }}></h2>
                     <p className="paragraph-style">{introContent.paragraph}</p>
-                    <a className="link-to" href="#">{introContent.linkText}</a>
+                    <a className="link-to" href={introContent.linkUrl}>{introContent.linkText}</a>
                 </div>
                  <div className="intro-image-cluster">
                     <div className="image-landscape-wrapper noise-overlay">
@@ -341,7 +347,7 @@ export default function HomePage() {
                 <div className="rotated-view-all-wrapper">
                     <div className="button-wrapper-for-border">
                         <Button asChild variant="outline">
-                            <a href="/destinations">View All</a>
+                            <a href={destinationsContent.buttonUrl}>View All</a>
                         </Button>
                     </div>
                 </div>
