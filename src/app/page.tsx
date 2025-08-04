@@ -6,14 +6,11 @@ import Image from "next/image";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package, Destination, Category, Testimonial } from "@/lib/data";
-import { Search, Menu, ArrowLeft, ArrowRight, Quote, X } from "lucide-react";
-import { MobileNav } from "@/components/ui/mobile-nav";
+import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { AnimatedHamburgerButton } from "@/components/ui/animated-hamburger";
 
 interface HeroData {
   headline: string;
@@ -67,12 +64,6 @@ const DestinationCard = ({ destination }: { destination: Destination }) => {
     );
 };
 
-const cardVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 },
-};
-
 export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
   const [introData, setIntroData] = useState<IntroData | null>(null);
@@ -88,8 +79,6 @@ export default function HomePage() {
 
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   
   const allPackagesCategory: Category = { id: 'all', name: 'All Packages' };
 
@@ -249,52 +238,6 @@ export default function HomePage() {
 
   return (
     <>
-      <MobileNav isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
-      <header>
-          <div className="header-left">
-              <a href="#" className="logo">ISLAND<span>HOPES</span></a>
-          </div>
-          <div className="header-center">
-              <nav className="desktop-nav">
-                  <ul>
-                      <li><a href="#">Destinations</a></li>
-                      <li><a href="#">Packages</a></li>
-                      <li><a href="#">About</a></li>
-                      <li><a href="#">Contact</a></li>
-                  </ul>
-              </nav>
-              <div className="desktop-only">
-                 <DropdownMenu open={isDesktopMenuOpen} onOpenChange={setIsDesktopMenuOpen}>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="w-8 h-8">
-                           <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} setIsOpen={setIsDesktopMenuOpen} width={20} height={20} />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem><a href="#">FAQs</a></DropdownMenuItem>
-                        <DropdownMenuItem><a href="#">Gallery</a></DropdownMenuItem>
-                        <DropdownMenuItem><a href="#">Blog & News</a></DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-          </div>
-          <div className="header-right">
-              <Button asChild><a href="#">Plan Trip</a></Button>
-              <button className="search-button desktop-only" aria-label="Search">
-                  <Search size={20} />
-              </button>
-              <div className="hamburger-button">
-                 <AnimatedHamburgerButton
-                    isOpen={isMenuOpen}
-                    setIsOpen={setIsMenuOpen}
-                    width={20} 
-                    height={20}
-                  />
-              </div>
-          </div>
-      </header>
-      
-      <main>
         <section className="hero">
           <div className="hero-content">
             <h1 dangerouslySetInnerHTML={{ __html: heroContent.headline }}></h1>
@@ -544,8 +487,6 @@ export default function HomePage() {
                 </form>
             </div>
         </section>
-
-      </main>
     </>
   );
 }
