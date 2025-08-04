@@ -567,6 +567,7 @@ header {
   gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
 }
 
 .destination-card {
@@ -1300,10 +1301,9 @@ h2{
     display: block;
     position: absolute;
     top: 50%;
-    left: 0;
+    left: 50%;
     z-index: 10;
-    transform-origin: center;
-    transform: translateY(-50%) translateX(-25%) rotate(-45deg);
+    transform: translate(-50%, -50%) rotate(-45deg);
   }
 }
 
