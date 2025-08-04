@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, writeBatch, documentId } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import type { Package, Category, Destination, Testimonial } from "@/lib/data";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -92,6 +92,7 @@ export default function AdminHomePage() {
 
   useEffect(() => {
     const fetchContentData = async () => {
+      setLoading(true);
       try {
         const contentDocRef = doc(db, "content", "home");
         const contentDocSnap = await getDoc(contentDocRef);
@@ -137,40 +138,6 @@ export default function AdminHomePage() {
             backgroundImage: cta.backgroundImage || "https://placehold.co/1920x1080.png",
           });
 
-        } else {
-          console.log("No content document! Using default values.");
-          setHeroData({
-            headline: "Discover the <span class=\"highlight\">Extraordinary</span>",
-            description: "Embark on meticulously crafted journeys to the world's most exclusive destinations. Where luxury meets adventure, and every moment becomes an unforgettable memory.",
-            sliderImages: [
-              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-              "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-              "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-            ],
-          });
-          setIntroData({
-            headline: "Magical memories,<br>Bespoke experiences",
-            paragraph: "Once you have travelled the voyage never ends. Island Hopes will open a world of wonders and create magical memories that will stay with you far beyond your travels.\n\nDiverge from the typical tourist destinations in favour of unique, authentic experiences. Experiences designed in the most inspiring surroundings that will be yours, and yours only. Journeys that create memorable moments and Island Hopes’s bespoke itineraries will make this happen. The wonders of the world are within your reach.",
-            linkText: "Meet our team",
-            linkUrl: "#",
-            portraitImage: "https://placehold.co/800x1000.png",
-            landscapeImage: "https://placehold.co/1000x662.png",
-          });
-          setQuoteData({
-            text: '"The world is a book and those who do not travel read only one page."',
-            image: "https://placehold.co/1920x600.png",
-          });
-          setDestinationsData({
-            title: "Our Favourite Destinations",
-            subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
-            buttonUrl: "/destinations",
-          });
-          setCtaData({
-            title: "Ready to plan your journey?",
-            buttonText: "Plan Your Trip Now",
-            buttonUrl: "#",
-            backgroundImage: "https://placehold.co/1920x1080.png",
-          });
         }
         
         const destinationsCollectionRef = collection(db, "destinations");
@@ -263,10 +230,8 @@ export default function AdminHomePage() {
     setDestinations(destinations.filter(d => d.id !== id));
   };
 
-  const handleCategoryChange = (index: number, value: string) => {
-    const newCategories = [...categories];
-    newCategories[index].name = value;
-    setCategories(newCategories);
+  const handleCategoryChange = (id: string, field: keyof Omit<Category, 'id'>, value: any) => {
+    setCategories(prev => prev.map(c => c.id === id ? { ...c, [field]: value } : c));
   };
   
   const handlePackageChange = (id: string, field: keyof Omit<Package, 'id'>, value: any) => {
@@ -345,60 +310,101 @@ export default function AdminHomePage() {
   };
 
   const handleSave = async () => {
+    setLoading(true);
     try {
-      const batch = writeBatch(db);
+        const batch = writeBatch(db);
+        const categoryIdMap = new Map<string, string>();
 
-      const contentDocRef = doc(db, "content", "home");
-      batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData, cta: ctaData }, { merge: true });
-      
-      deletedDestinationIds.forEach(id => batch.delete(doc(db, "destinations", id)));
-      destinations.forEach(dest => {
-          const { id, ...destData } = dest;
-          const docRef = doc(db, "destinations", id.startsWith('new-') ? doc(collection(db, 'destinations')).id : id);
-          batch.set(docRef, destData);
-      });
+        // Step 1: Handle new categories first to get their permanent IDs
+        const newCategories = categories.filter(cat => cat.id.startsWith('new-'));
+        for (const cat of newCategories) {
+            const newDocRef = doc(collection(db, 'categories'));
+            categoryIdMap.set(cat.id, newDocRef.id); // Map temporary ID to permanent ID
+            const { id, ...catData } = cat;
+            batch.set(newDocRef, catData);
+        }
 
-      deletedCategoryIds.forEach(id => batch.delete(doc(db, "categories", id)));
-      categories.forEach(cat => {
-          const { id, ...catData } = cat;
-          const docRef = doc(db, "categories", id.startsWith('new-') ? doc(collection(db, 'categories')).id : id);
-          batch.set(docRef, catData);
-      });
+        // Create a new array of packages with updated categoryIds
+        let updatedPackages = packages.map(pkg => {
+            if (pkg.categoryId.startsWith('new-') && categoryIdMap.has(pkg.categoryId)) {
+                return { ...pkg, categoryId: categoryIdMap.get(pkg.categoryId)! };
+            }
+            return pkg;
+        });
 
-      deletedPackageIds.forEach(id => batch.delete(doc(db, "packages", id)));
-      packages.forEach(pkg => {
-        const { id, ...pkgData } = pkg;
-        const docRef = doc(db, "packages", id.startsWith('new-') ? doc(collection(db, 'packages')).id : id);
-        batch.set(docRef, pkgData);
-      });
+        // Save static content
+        const contentDocRef = doc(db, "content", "home");
+        batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData, cta: ctaData }, { merge: true });
 
-      deletedTestimonialIds.forEach(id => batch.delete(doc(db, "testimonials", id)));
-      testimonials.forEach(t => {
-        const { id, ...testimonialData } = t;
-        const docRef = doc(db, "testimonials", id.startsWith('new-') ? doc(collection(db, 'testimonials')).id : id);
-        batch.set(docRef, testimonialData);
-      });
+        // Handle deletions
+        deletedDestinationIds.forEach(id => batch.delete(doc(db, "destinations", id)));
+        deletedCategoryIds.forEach(id => batch.delete(doc(db, "categories", id)));
+        deletedPackageIds.forEach(id => batch.delete(doc(db, "packages", id)));
+        deletedTestimonialIds.forEach(id => batch.delete(doc(db, "testimonials", id)));
 
-      await batch.commit();
+        // Handle destination updates and additions
+        destinations.forEach(dest => {
+            const { id, ...destData } = dest;
+            const docRef = doc(db, "destinations", id.startsWith('new-') ? doc(collection(db, 'destinations')).id : id);
+            batch.set(docRef, destData);
+        });
 
-      setDeletedDestinationIds([]);
-      setDeletedCategoryIds([]);
-      setDeletedPackageIds([]);
-      setDeletedTestimonialIds([]);
+        // Handle existing category updates
+        categories.filter(cat => !cat.id.startsWith('new-')).forEach(cat => {
+            const { id, ...catData } = cat;
+            batch.set(doc(db, "categories", id), catData);
+        });
 
-      toast({
-        title: "Success",
-        description: "All changes have been saved.",
-      });
+        // Handle package updates and additions
+        updatedPackages.forEach(pkg => {
+            const { id, ...pkgData } = pkg;
+            const docRef = doc(db, "packages", id.startsWith('new-') ? doc(collection(db, 'packages')).id : id);
+            batch.set(docRef, pkgData);
+        });
+
+        // Handle testimonial updates and additions
+        testimonials.forEach(t => {
+            const { id, ...testimonialData } = t;
+            const docRef = doc(db, "testimonials", id.startsWith('new-') ? doc(collection(db, 'testimonials')).id : id);
+            batch.set(docRef, testimonialData);
+        });
+
+        // Commit all changes
+        await batch.commit();
+        
+        // Update local state with new IDs
+        const finalCategories = categories.map(cat => {
+            if (categoryIdMap.has(cat.id)) {
+                return { ...cat, id: categoryIdMap.get(cat.id)! };
+            }
+            return cat;
+        });
+        setCategories(finalCategories);
+        setPackages(updatedPackages);
+
+        // Clear deleted IDs
+        setDeletedDestinationIds([]);
+        setDeletedCategoryIds([]);
+        setDeletedPackageIds([]);
+        setDeletedTestimonialIds([]);
+
+        toast({
+            title: "Success",
+            description: "All changes have been saved.",
+        });
+
     } catch (error) {
-      console.error("Error saving content:", error);
-      toast({
-        title: "Error",
-        description: "Failed to save data.",
-        variant: "destructive",
-      });
+        console.error("Error saving content:", error);
+        toast({
+            title: "Error",
+            description: "Failed to save data.",
+            variant: "destructive",
+        });
+    } finally {
+        setLoading(false);
     }
-  };
+};
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -564,13 +570,13 @@ export default function AdminHomePage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Accordion type="multiple" className="w-full">
-            {categories.map((category, catIndex) => (
+            {categories.map((category) => (
               <AccordionItem value={category.id} key={category.id}>
                 <AccordionTrigger>{category.name}</AccordionTrigger>
                 <AccordionContent className="space-y-6 bg-slate-50 p-4 rounded-md">
                   <div className="space-y-2">
-                    <Label htmlFor={`cat-name-${catIndex}`}>Category Name</Label>
-                    <Input id={`cat-name-${catIndex}`} value={category.name} onChange={(e) => handleCategoryChange(catIndex, e.target.value)} />
+                    <Label htmlFor={`cat-name-${category.id}`}>Category Name</Label>
+                    <Input id={`cat-name-${category.id}`} value={category.name} onChange={(e) => handleCategoryChange(category.id, 'name', e.target.value)} />
                   </div>
 
                   <div className="space-y-4">
@@ -608,7 +614,8 @@ export default function AdminHomePage() {
                   </div>
                   
                   <div className="flex gap-2 pt-4 border-t">
-                    <Button size="sm" onClick={() => handleAddNewPackage(category.id)}>Add New Package</Button>                     <Button variant="destructive" size="sm" onClick={() => handleDeleteCategory(category.id)}>
+                    <Button size="sm" onClick={() => handleAddNewPackage(category.id)}>Add New Package</Button>
+                     <Button variant="destructive" size="sm" onClick={() => handleDeleteCategory(category.id)}>
                         <Trash2 className="mr-2 h-4 w-4" />
                         Delete Category
                     </Button>
@@ -681,7 +688,9 @@ export default function AdminHomePage() {
         </CardContent>
       </Card>
 
-      <Button onClick={handleSave}>Save All Changes</Button>
+      <Button onClick={handleSave} disabled={loading}>{loading ? "Saving..." : "Save All Changes"}</Button>
     </div>
   );
 }
+
+    
