@@ -188,7 +188,7 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
       <h2 className="section-title">{sectionData.title}</h2>
       <p className="section-subtitle">{sectionData.subtitle}</p>
       <div className="destinations-grid">
-        {destinations.slice(0, 4).map(dest => (
+        {destinations.map(dest => (
           <div key={dest.id} className="destination-card">
             <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
                 <h3 className="card-title card-title-absolute">{dest.title}</h3>
