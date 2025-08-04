@@ -2,11 +2,10 @@
 'use client';
 
 import React, { useState } from "react";
-import { Search } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { AnimatedHamburgerButton } from "@/components/ui/animated-hamburger";
 
 
 export function Header() {
@@ -33,7 +32,7 @@ export function Header() {
                  <DropdownMenu open={isDesktopMenuOpen} onOpenChange={setIsDesktopMenuOpen}>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="w-8 h-8">
-                           <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} setIsOpen={setIsDesktopMenuOpen} width={20} height={20} />
+                           {isDesktopMenuOpen ? <X size={20} /> : <Menu size={20} />}
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -50,12 +49,9 @@ export function Header() {
                   <Search size={20} />
               </button>
               <div className="hamburger-button">
-                 <AnimatedHamburgerButton
-                    isOpen={isMenuOpen}
-                    setIsOpen={setIsMenuOpen}
-                    width={20} 
-                    height={20}
-                  />
+                 <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                 </button>
               </div>
           </div>
       </header>
