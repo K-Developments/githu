@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
+import { Separator } from "@/components/ui/separator";
 
 
 // Define interfaces for the fetched data
@@ -240,76 +241,108 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
 
   return (
     <section className="homepage-packages-section">
-      <div className="packages-container">
-        <div className="packages-category-navigator">
-          <Button variant="ghost" size="icon" onClick={handlePrevCategory} aria-label="Previous Category">
-            <ChevronLeft />
-          </Button>
-          <AnimatePresence mode="wait">
-            <motion.h3 
-              key={activeCategory.id}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.3 }}
-              className="packages-category-title"
-            >
-              {activeCategory.name}
-            </motion.h3>
-          </AnimatePresence>
-          <Button variant="ghost" size="icon" onClick={handleNextCategory} aria-label="Next Category">
-            <ChevronRight />
-          </Button>
+    <div className="packages-container">
+        <div className="packages-header-desktop">
+            <div className="button-wrapper-for-border">
+                <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
+                    <ArrowLeft />
+                </Button>
+            </div>
+            <h2 className="packages-category-title">
+                <AnimatePresence mode="wait">
+                    <motion.span
+                        key={activeCategory ? activeCategory.id : 'empty'}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                       {activeCategory ? activeCategory.name : "Packages"}
+                    </motion.span>
+                </AnimatePresence>
+            </h2>
+            <div className="button-wrapper-for-border">
+                <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
+                    <ArrowRight />
+                </Button>
+            </div>
         </div>
 
-        <motion.div 
-          className="packages-grid"
-          key={activeCategory.id} // Re-trigger animation on category change
-        >
-          <AnimatePresence>
-            {filteredPackages.length > 0 ? (
-              filteredPackages.map((pkg, index) => (
-                <motion.div
-                  key={pkg.id}
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="package-display-card"
-                >
-                  <div className="card-image">
-                    <Image 
-                      src={pkg.images?.[0] || 'https://placehold.co/800x600.png'} 
-                      alt={pkg.title} 
-                      fill 
-                      style={{objectFit:'cover'}} 
-                      sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" 
-                      data-ai-hint={pkg.imageHints?.[0]} 
-                    />
-                  </div>
-                  <div className="card-details">
-                    <h4 className="card-title">{pkg.title}</h4>
-                    <p className="card-description">{pkg.description}</p>
-                    <Button asChild>
-                      <Link href={pkg.linkUrl || `/packages/${pkg.id}`}>Explore Package</Link>
+        <div className="packages-header-mobile">
+             <h2 className="packages-category-title">
+                <AnimatePresence mode="wait">
+                    <motion.span
+                        key={activeCategory ? activeCategory.id : 'empty'}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                       {activeCategory ? activeCategory.name : "Packages"}
+                    </motion.span>
+                </AnimatePresence>
+            </h2>
+            <div className="packages-nav-buttons">
+                <div className="button-wrapper-for-border">
+                    <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
+                        <ArrowLeft />
                     </Button>
-                  </div>
-                </motion.div>
-              ))
-            ) : (
-              <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }}
-                className="no-packages-message col-span-full"
-              >
-                <p>No packages available in this category.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                </div>
+                 <div className="button-wrapper-for-border">
+                    <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
+                        <ArrowRight />
+                    </Button>
+                </div>
+            </div>
+        </div>
+
+
+        <motion.div className="packages-grid" layout>
+            <AnimatePresence>
+                {filteredPackages.map((pkg, index) => (
+                <React.Fragment key={pkg.id}>
+                    <motion.div 
+                        className="package-display-card"
+                        layout
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        >
+                        <div className="card-image">
+                            <Image
+                                src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x400.png"}
+                                alt={`Image of ${pkg.title} package in ${pkg.location}`}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="object-cover"
+                                data-ai-hint={(pkg.imageHints && pkg.imageHints[0]) || ''}
+                            />
+                        </div>
+                        <div className="card-details">
+                            <h3 className="card-title">{pkg.title}</h3>
+                            <p className="card-description">{pkg.description}</p>
+                            <div className="flex justify-center">
+                              <div className="button-wrapper-for-border">
+                                <Button asChild variant="outline" size="sm" className="w-auto"><a href={pkg.linkUrl || `/packages/${pkg.id}`}>View Details</a></Button>
+                              </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                    {index < filteredPackages.length - 1 && (
+                        <Separator className="packages-divider" />
+                     )}
+                </React.Fragment>
+                ))}
+            </AnimatePresence>
         </motion.div>
-      </div>
-    </section>
+        {filteredPackages.length === 0 && !loading && (
+            <div className="no-packages-message">
+                <p>There are currently no packages available for this category.</p>
+            </div>
+        )}
+    </div>
+</section>
   );
 }
 
@@ -387,3 +420,5 @@ function NewsletterSection() {
         </section>
     );
 }
+
+    
