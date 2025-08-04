@@ -41,6 +41,9 @@ const DestinationCard = ({ destination }: { destination: Destination }) => {
     return (
         <div className="destination-card noise-overlay">
             <a href={`/destinations/${destination.id}`}>
+                 <div className="card-title-absolute">
+                    <h3 className="card-title">{destination.title}</h3>
+                </div>
                 <Image
                     src={destination.image}
                     alt={`View of ${destination.title}`}
