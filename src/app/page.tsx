@@ -68,7 +68,11 @@ export default function HomePage() {
           setIntroData(data.intro as IntroData);
           setQuoteData(data.quote as QuoteData);
           setDestinationsData(data.destinations as DestinationsData);
-          setCtaData(data.cta as CtaData);
+           const cta = data.cta as CtaData;
+          if (cta && !cta.interactiveItems) {
+            cta.interactiveItems = [];
+          }
+          setCtaData(cta);
         }
 
         // Fetch collections
@@ -458,12 +462,14 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
     const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
     const getBackgroundImage = () => {
-        if (hoveredItem !== null && data.interactiveItems[hoveredItem]) {
+        if (hoveredItem !== null && data.interactiveItems && data.interactiveItems[hoveredItem]) {
             return data.interactiveItems[hoveredItem].backgroundImage;
         }
         return data.backgroundImage;
     };
     
+    const interactiveItems = data.interactiveItems || [];
+
     return (
         <section className="home-page-call-to-action-section">
             <AnimatePresence>
@@ -498,7 +504,7 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                 </ScrollAnimation>
                  <ScrollAnimation className="w-full md:w-1/2">
                     <div className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
-                        {data.interactiveItems.map((item, index) => (
+                        {interactiveItems.map((item, index) => (
                             <Link
                                 key={index}
                                 href={item.linkUrl || '#'}
