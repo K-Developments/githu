@@ -2,8 +2,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { Footer } from "@/components/ui/footer";
-import { Header } from "@/components/ui/header";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from "@/components/ui/sidebar";
+import { Home } from "lucide-react";
+
 
 export const metadata: Metadata = {
   title: "Island Hopes - Bespoke Luxury Travel",
@@ -49,11 +50,29 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Syne:wght@400..800&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-      <Header />
-      <main>{children}</main>
-      <Footer />
-  
-      <Toaster />
+        <SidebarProvider>
+            <Sidebar>
+                <SidebarHeader>
+                    <SidebarTrigger />
+                </SidebarHeader>
+                <SidebarContent>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton href="/" tooltip="Home Page">
+                                <Home />
+                                <span>Home Page</span>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarContent>
+            </Sidebar>
+            <SidebarInset>
+                <main className="p-4 md:p-6">
+                    {children}
+                </main>
+            </SidebarInset>
+        </SidebarProvider>
+        <Toaster />
       </body>
     </html>
   );
