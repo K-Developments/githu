@@ -110,10 +110,12 @@ function HeroSection({ data }: { data: HeroData }) {
     const [currentImage, setCurrentImage] = useState(0);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setCurrentImage((prevIndex) => (prevIndex + 1) % data.sliderImages.length);
-        }, 5000); // Change image every 5 seconds
-        return () => clearTimeout(timer);
+        if (data.sliderImages.length > 1) {
+            const timer = setTimeout(() => {
+                setCurrentImage((prevIndex) => (prevIndex + 1) % data.sliderImages.length);
+            }, 5000); // Change image every 5 seconds
+            return () => clearTimeout(timer);
+        }
     }, [currentImage, data.sliderImages.length]);
     
   return (
@@ -136,7 +138,8 @@ function HeroSection({ data }: { data: HeroData }) {
           </div>
         ))}
       </div>
-      <div className="pagination-bullets">
+      {data.sliderImages.length > 1 && (
+        <div className="pagination-bullets">
             {data.sliderImages.map((_, index) => (
                 <button
                     key={index}
@@ -145,7 +148,8 @@ function HeroSection({ data }: { data: HeroData }) {
                     aria-label={`Go to slide ${index + 1}`}
                 />
             ))}
-      </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -265,7 +269,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
             </div>
 
             <div className="packages-grid">
-              {filteredPackages.length > 0 ? (
+              {filteredPackages.length > 0 && activePackage ? (
                   <div className="package-display-card">
                       <div className="card-image">
                           <Image src={activePackage.images?.[0] || 'https://placehold.co/800x600.png'} alt={activePackage.title} fill style={{objectFit:'cover'}} sizes="90vw" data-ai-hint={activePackage.imageHints?.[0]} />
@@ -277,10 +281,12 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                             <Button asChild>
                               <Link href={activePackage.linkUrl || `/packages/${activePackage.id}`}>Explore Package</Link>
                             </Button>
-                            <div className="flex gap-2">
-                                <Button variant="outline" size="icon" onClick={handlePrevPackage} aria-label="Previous Package"><ChevronLeft/></Button>
-                                <Button variant="outline" size="icon" onClick={handleNextPackage} aria-label="Next Package"><ChevronRight/></Button>
-                            </div>
+                            {filteredPackages.length > 1 && (
+                                <div className="flex gap-2">
+                                    <Button variant="outline" size="icon" onClick={handlePrevPackage} aria-label="Previous Package"><ChevronLeft/></Button>
+                                    <Button variant="outline" size="icon" onClick={handleNextPackage} aria-label="Next Package"><ChevronRight/></Button>
+                                </div>
+                            )}
                           </div>
                       </div>
                   </div>
@@ -315,9 +321,11 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
     return (
         <section className="homepage-testimonials-section">
             <div className="testimonial-container">
-                <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handlePrev}>
-                    <ArrowLeft />
-                </Button>
+                {testimonials.length > 1 && (
+                    <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handlePrev}>
+                        <ArrowLeft />
+                    </Button>
+                )}
 
                 <div className="testimonial-content-wrapper">
                     <div className="testimonial-content">
@@ -327,20 +335,24 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
                     </div>
                 </div>
 
-                <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handleNext}>
-                    <ArrowRight />
-                </Button>
+                {testimonials.length > 1 && (
+                    <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handleNext}>
+                        <ArrowRight />
+                    </Button>
+                )}
             </div>
-             <div className="testimonial-pagination">
-                {testimonials.map((_, index) => (
-                    <button
-                        key={index}
-                        className={`testimonial-bullet ${index === currentIndex ? 'active' : ''}`}
-                        onClick={() => setCurrentIndex(index)}
-                        aria-label={`Go to testimonial ${index + 1}`}
-                    />
-                ))}
-            </div>
+            {testimonials.length > 1 && (
+                <div className="testimonial-pagination">
+                    {testimonials.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`testimonial-bullet ${index === currentIndex ? 'active' : ''}`}
+                            onClick={() => setCurrentIndex(index)}
+                            aria-label={`Go to testimonial ${index + 1}`}
+                        />
+                    ))}
+                </div>
+            )}
         </section>
     );
 }
