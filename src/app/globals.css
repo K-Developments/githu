@@ -943,10 +943,10 @@ header {
 }
 
 .button-wrapper-for-border {
-    display: inline-flex;
-    padding: 5px;
-    border: 2px solid hsl(var(--primary));
-    border-radius: calc(var(--radius) + 8px);
+  display: inline-flex;
+  padding: 5px;
+  border: 2px solid hsl(var(--primary));
+  border-radius: calc(var(--radius) + 8px);
 }
 
 /* Mobile Responsive Adjustments */
@@ -1301,9 +1301,9 @@ h2{
     display: block;
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 0;
     z-index: 10;
-    transform: translate(-50%, -50%) rotate(-45deg);
+    transform: translateY(-50%) translateX(-50%) rotate(-45deg);
   }
 }
 
