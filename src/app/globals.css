@@ -202,6 +202,7 @@ header {
 	z-index: 1001;
 	/* Ensure it's above other header content */
 }
+
 /* Hero Section */
 .hero {
 	height: 110vh;
