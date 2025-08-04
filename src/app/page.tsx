@@ -111,7 +111,7 @@ export default function HomePage() {
       {introData && <IntroSection data={introData} />}
       {quoteData && <QuoteSection data={quoteData} />}
       {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
-      {categories.length > 0 && packages.length > 0 && <PackagesSection categories={categories} packages={packages} />}
+      {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
       {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
       {ctaData && <HomePageCallToActionSection data={ctaData} />}
       <NewsletterSection />
@@ -339,7 +339,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
         <motion.div 
             className={cn(
                 "packages-grid",
-                filteredPackages.length === 1 && "md:grid-cols-1 justify-center"
+                filteredPackages.length === 1 && "md:grid-cols-1 justify-items-center"
             )}
             layout
         >
@@ -347,7 +347,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                 {filteredPackages.map((pkg, index) => (
                 <React.Fragment key={pkg.id}>
                     <motion.div 
-                        className={cn("package-display-card", filteredPackages.length === 1 && "md:w-2/3 lg:w-1/2")}
+                        className={cn("package-display-card", filteredPackages.length === 1 && "md:w-2/3")}
                         layout
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -518,5 +518,3 @@ function NewsletterSection() {
         </section>
     );
 }
-
-    
