@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
+import { ScrollAnimation } from "@/components/ui/scroll-animation";
 
 
 // Define interfaces for the fetched data
@@ -163,17 +164,27 @@ function IntroSection({ data }: { data: IntroData }) {
     <section className="intro-home">
         <div className="intro-container">
             <div className="intro-text-content">
+              <ScrollAnimation>
                 <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: data.headline }} />
+              </ScrollAnimation>
+              <ScrollAnimation>
                 <p className="paragraph-style">{data.paragraph}</p>
+              </ScrollAnimation>
+              <ScrollAnimation>
                 <Link href={data.linkUrl || '#'} className="link-to">{data.linkText}</Link>
+              </ScrollAnimation>
             </div>
             <div className="intro-image-cluster">
+              <ScrollAnimation>
                 <div className="image-landscape-wrapper">
                     <Image src={data.landscapeImage || "https://placehold.co/1000x662.png"} alt="Scenic landscape" width={1000} height={662} sizes="(min-width: 768px) 45vw, 90vw"/>
                 </div>
+              </ScrollAnimation>
+              <ScrollAnimation>
                 <div className="image-portrait-wrapper">
                     <Image src={data.portraitImage || "https://placehold.co/800x1000.png"} alt="Scenic portrait" width={800} height={1000} sizes="(min-width: 768px) 25vw, 40vw" />
                 </div>
+              </ScrollAnimation>
             </div>
         </div>
     </section>
@@ -184,7 +195,9 @@ function QuoteSection({ data }: { data: QuoteData }) {
   return (
     <section className="quote-section" style={{ backgroundImage: `url(${data.image})` }}>
         <div className="overlay"></div>
-        <p className="quote-text">{data.text}</p>
+        <ScrollAnimation>
+          <p className="quote-text">{data.text}</p>
+        </ScrollAnimation>
     </section>
   );
 }
@@ -192,28 +205,36 @@ function QuoteSection({ data }: { data: QuoteData }) {
 function DestinationsSection({ sectionData, destinations }: { sectionData: DestinationsData, destinations: Destination[] }) {
   return (
     <section className="destinations-section">
-      <h2 className="section-title">{sectionData.title}</h2>
-      <p className="section-subtitle">{sectionData.subtitle}</p>
+      <ScrollAnimation>
+        <h2 className="section-title">{sectionData.title}</h2>
+      </ScrollAnimation>
+      <ScrollAnimation>
+        <p className="section-subtitle">{sectionData.subtitle}</p>
+      </ScrollAnimation>
       <div className="destinations-grid">
-        {destinations.map(dest => (
-          <div key={dest.id} className="destination-card">
-            <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                <h3 className="card-title card-title-absolute">{dest.title}</h3>
-                <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 20vw, (min-width: 768px) 45vw, 45vw" data-ai-hint={dest.imageHint}/>
-                <div className="card-content">
-                    <span className="card-location">{dest.location}</span>
-                    <h3 className="card-title card-title-decorated">{dest.title}</h3>
-                    <p className="card-description">{dest.description}</p>
-                </div>
-            </Link>
-          </div>
+        {destinations.map((dest, i) => (
+          <ScrollAnimation key={dest.id} delay={i * 0.1}>
+            <div className="destination-card">
+              <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
+                  <h3 className="card-title card-title-absolute">{dest.title}</h3>
+                  <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 20vw, (min-width: 768px) 45vw, 45vw" data-ai-hint={dest.imageHint}/>
+                  <div className="card-content">
+                      <span className="card-location">{dest.location}</span>
+                      <h3 className="card-title card-title-decorated">{dest.title}</h3>
+                      <p className="card-description">{dest.description}</p>
+                  </div>
+              </Link>
+            </div>
+          </ScrollAnimation>
         ))}
       </div>
-      <div className="rotated-view-all-wrapper">
-        <Button asChild variant="outline" size="lg">
-          <Link href={sectionData.buttonUrl || '#'}>View All</Link>
-        </Button>
-      </div>
+      <ScrollAnimation>
+        <div className="rotated-view-all-wrapper">
+          <Button asChild variant="outline" size="lg">
+            <Link href={sectionData.buttonUrl || '#'}>View All</Link>
+          </Button>
+        </div>
+      </ScrollAnimation>
     </section>
   );
 }
@@ -247,59 +268,63 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
   return (
     <section className="homepage-packages-section">
     <div className="packages-container">
-        <div className="packages-header-desktop">
-            <div className="button-wrapper-for-border">
-                <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={displayCategories.length <= 1}>
-                    <ArrowLeft />
-                </Button>
-            </div>
-            <h2 className="packages-category-title">
-                <AnimatePresence mode="wait">
-                    <motion.span
-                        key={activeCategory ? activeCategory.id : 'empty'}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                       {activeCategory ? activeCategory.name : "Packages"}
-                    </motion.span>
-                </AnimatePresence>
-            </h2>
-            <div className="button-wrapper-for-border">
-                <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={displayCategories.length <= 1}>
-                    <ArrowRight />
-                </Button>
-            </div>
-        </div>
-
-        <div className="packages-header-mobile">
-             <h2 className="packages-category-title">
-                <AnimatePresence mode="wait">
-                    <motion.span
-                        key={activeCategory ? activeCategory.id : 'empty'}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                       {activeCategory ? activeCategory.name : "Packages"}
-                    </motion.span>
-                </AnimatePresence>
-            </h2>
-            <div className="packages-nav-buttons">
+        <ScrollAnimation>
+            <div className="packages-header-desktop">
                 <div className="button-wrapper-for-border">
                     <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={displayCategories.length <= 1}>
                         <ArrowLeft />
                     </Button>
                 </div>
-                 <div className="button-wrapper-for-border">
+                <h2 className="packages-category-title">
+                    <AnimatePresence mode="wait">
+                        <motion.span
+                            key={activeCategory ? activeCategory.id : 'empty'}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                        {activeCategory ? activeCategory.name : "Packages"}
+                        </motion.span>
+                    </AnimatePresence>
+                </h2>
+                <div className="button-wrapper-for-border">
                     <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={displayCategories.length <= 1}>
                         <ArrowRight />
                     </Button>
                 </div>
             </div>
-        </div>
+        </ScrollAnimation>
+
+        <ScrollAnimation>
+            <div className="packages-header-mobile">
+                <h2 className="packages-category-title">
+                    <AnimatePresence mode="wait">
+                        <motion.span
+                            key={activeCategory ? activeCategory.id : 'empty'}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                        {activeCategory ? activeCategory.name : "Packages"}
+                        </motion.span>
+                    </AnimatePresence>
+                </h2>
+                <div className="packages-nav-buttons">
+                    <div className="button-wrapper-for-border">
+                        <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={displayCategories.length <= 1}>
+                            <ArrowLeft />
+                        </Button>
+                    </div>
+                    <div className="button-wrapper-for-border">
+                        <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={displayCategories.length <= 1}>
+                            <ArrowRight />
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </ScrollAnimation>
 
 
         <motion.div className="packages-grid" layout>
@@ -370,38 +395,42 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
 
     return (
         <section className="homepage-testimonials-section">
-            <div className="testimonial-container">
-                {testimonials.length > 1 && (
-                    <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handlePrev}>
-                        <ArrowLeft />
-                    </Button>
-                )}
+            <ScrollAnimation>
+                <div className="testimonial-container">
+                    {testimonials.length > 1 && (
+                        <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handlePrev}>
+                            <ArrowLeft />
+                        </Button>
+                    )}
 
-                <div className="testimonial-content-wrapper">
-                    <div className="testimonial-content">
-                        <Quote className="testimonial-quote-icon" />
-                        <p className="testimonial-text">{activeTestimonial.text}</p>
-                        <p className="testimonial-author">{activeTestimonial.author}, {activeTestimonial.location}</p>
+                    <div className="testimonial-content-wrapper">
+                        <div className="testimonial-content">
+                            <Quote className="testimonial-quote-icon" />
+                            <p className="testimonial-text">{activeTestimonial.text}</p>
+                            <p className="testimonial-author">{activeTestimonial.author}, {activeTestimonial.location}</p>
+                        </div>
                     </div>
-                </div>
 
-                {testimonials.length > 1 && (
-                    <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handleNext}>
-                        <ArrowRight />
-                    </Button>
-                )}
-            </div>
-            {testimonials.length > 1 && (
-                <div className="testimonial-pagination">
-                    {testimonials.map((_, index) => (
-                        <button
-                            key={index}
-                            className={`testimonial-bullet ${index === currentIndex ? 'active' : ''}`}
-                            onClick={() => setCurrentIndex(index)}
-                            aria-label={`Go to testimonial ${index + 1}`}
-                        />
-                    ))}
+                    {testimonials.length > 1 && (
+                        <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handleNext}>
+                            <ArrowRight />
+                        </Button>
+                    )}
                 </div>
+            </ScrollAnimation>
+            {testimonials.length > 1 && (
+                <ScrollAnimation>
+                    <div className="testimonial-pagination">
+                        {testimonials.map((_, index) => (
+                            <button
+                                key={index}
+                                className={`testimonial-bullet ${index === currentIndex ? 'active' : ''}`}
+                                onClick={() => setCurrentIndex(index)}
+                                aria-label={`Go to testimonial ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                </ScrollAnimation>
             )}
         </section>
     );
@@ -411,17 +440,25 @@ function NewsletterSection() {
     return (
         <section className="newsletter-section">
             <div className="newsletter-container">
-                <h2 className="section-title">Join Our Journey</h2>
-                <p className="newsletter-subtitle">
-                    Sign up for our newsletter to receive the latest travel inspiration, exclusive offers, and updates from the world of luxury travel.
-                </p>
-                <form className="newsletter-form">
-                    <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
-                    <div className="button-wrapper-for-border">
-                        <Button type="submit" size="lg" className="w-full">Subscribe</Button>
-                    </div>
-                </form>
+                <ScrollAnimation>
+                  <h2 className="section-title">Join Our Journey</h2>
+                </ScrollAnimation>
+                <ScrollAnimation>
+                  <p className="newsletter-subtitle">
+                      Sign up for our newsletter to receive the latest travel inspiration, exclusive offers, and updates from the world of luxury travel.
+                  </p>
+                </ScrollAnimation>
+                <ScrollAnimation>
+                  <form className="newsletter-form">
+                      <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
+                      <div className="button-wrapper-for-border">
+                          <Button type="submit" size="lg" className="w-full">Subscribe</Button>
+                      </div>
+                  </form>
+                </ScrollAnimation>
             </div>
         </section>
     );
 }
+
+    
