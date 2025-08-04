@@ -32,6 +32,17 @@ export type Testimonial = {
   location: string;
 };
 
+export type CtaInteractiveItem = {
+    title: string;
+    description: string;
+    linkUrl: string;
+    backgroundImage: string;
+};
 
-// This data is now seeded into Firestore and managed from the admin panel.
-// This file only defines the data shapes (types).
+export type CtaData = {
+  title: string;
+  buttonText: string;
+  buttonUrl: string;
+  backgroundImage: string;
+  interactiveItems: CtaInteractiveItem[];
+};

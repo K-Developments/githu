@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, collection, getDocs, writeBatch, documentId } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import type { Package, Category, Destination, Testimonial } from "@/lib/data";
+import type { Package, Category, Destination, Testimonial, CtaData } from "@/lib/data";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Trash2 } from "lucide-react";
 
@@ -38,13 +38,6 @@ interface DestinationsData {
   title: string;
   subtitle: string;
   buttonUrl: string;
-}
-
-interface CtaData {
-  title: string;
-  buttonText: string;
-  buttonUrl: string;
-  backgroundImage: string;
 }
 
 export default function AdminHomePage() {
@@ -75,6 +68,11 @@ export default function AdminHomePage() {
     buttonText: "",
     buttonUrl: "",
     backgroundImage: "",
+    interactiveItems: [
+        { title: "FAQs", description: "Answers to your questions", linkUrl: "#", backgroundImage: "" },
+        { title: "Gallery", description: "Visual inspiration", linkUrl: "#", backgroundImage: "" },
+        { title: "Blog & News", description: "Latest stories", linkUrl: "#", backgroundImage: "" },
+    ]
   });
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
@@ -131,11 +129,22 @@ export default function AdminHomePage() {
           });
 
           const cta = (data.cta || {}) as CtaData;
+          const defaultItems = [
+             { title: "FAQs", description: "Answers to your questions", linkUrl: "#", backgroundImage: "https://placehold.co/1920x1080.png?text=FAQs+Image" },
+             { title: "Gallery", description: "Visual inspiration for your next trip", linkUrl: "#", backgroundImage: "https://placehold.co/1920x1080.png?text=Gallery+Image" },
+             { title: "Blog & News", description: "The latest stories from our travels", linkUrl: "#", backgroundImage: "https://placehold.co/1920x1080.png?text=Blog+Image" },
+          ];
+          const interactiveItems = (cta.interactiveItems || defaultItems).map((item, index) => ({
+                ...defaultItems[index],
+                ...item
+          }));
+
            setCtaData({
             title: cta.title || "Ready to plan your journey?",
             buttonText: cta.buttonText || "Plan Your Trip Now",
             buttonUrl: cta.buttonUrl || "#",
             backgroundImage: cta.backgroundImage || "https://placehold.co/1920x1080.png",
+            interactiveItems: interactiveItems,
           });
 
         }
@@ -204,6 +213,12 @@ export default function AdminHomePage() {
   const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setCtaData(prevData => ({ ...prevData, [id]: value }));
+  };
+
+  const handleCtaInteractiveItemChange = (index: number, field: string, value: string) => {
+    const newItems = [...ctaData.interactiveItems];
+    newItems[index] = { ...newItems[index], [field]: value };
+    setCtaData(prevData => ({ ...prevData, interactiveItems: newItems }));
   };
 
   const handleDestinationChange = (id: string, field: keyof Omit<Destination, 'id'>, value: any) => {
@@ -315,16 +330,15 @@ export default function AdminHomePage() {
         const batch = writeBatch(db);
         const categoryIdMap = new Map<string, string>();
 
-        // Step 1: Handle new categories first to get their permanent IDs
         const newCategories = categories.filter(cat => cat.id.startsWith('new-'));
-        for (const cat of newCategories) {
+        const newCategoryPromises = newCategories.map(async (cat) => {
             const newDocRef = doc(collection(db, 'categories'));
-            categoryIdMap.set(cat.id, newDocRef.id); // Map temporary ID to permanent ID
+            categoryIdMap.set(cat.id, newDocRef.id);
             const { id, ...catData } = cat;
             batch.set(newDocRef, catData);
-        }
+        });
+        await Promise.all(newCategoryPromises);
 
-        // Create a new array of packages with updated categoryIds
         let updatedPackages = packages.map(pkg => {
             if (pkg.categoryId.startsWith('new-') && categoryIdMap.has(pkg.categoryId)) {
                 return { ...pkg, categoryId: categoryIdMap.get(pkg.categoryId)! };
@@ -332,47 +346,39 @@ export default function AdminHomePage() {
             return pkg;
         });
 
-        // Save static content
         const contentDocRef = doc(db, "content", "home");
         batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData, cta: ctaData }, { merge: true });
 
-        // Handle deletions
         deletedDestinationIds.forEach(id => batch.delete(doc(db, "destinations", id)));
         deletedCategoryIds.forEach(id => batch.delete(doc(db, "categories", id)));
         deletedPackageIds.forEach(id => batch.delete(doc(db, "packages", id)));
         deletedTestimonialIds.forEach(id => batch.delete(doc(db, "testimonials", id)));
 
-        // Handle destination updates and additions
         destinations.forEach(dest => {
             const { id, ...destData } = dest;
-            const docRef = doc(db, "destinations", id.startsWith('new-') ? doc(collection(db, 'destinations')).id : id);
+            const docRef = id.startsWith('new-') ? doc(collection(db, 'destinations')) : doc(db, "destinations", id);
             batch.set(docRef, destData);
         });
 
-        // Handle existing category updates
         categories.filter(cat => !cat.id.startsWith('new-')).forEach(cat => {
             const { id, ...catData } = cat;
             batch.set(doc(db, "categories", id), catData);
         });
 
-        // Handle package updates and additions
         updatedPackages.forEach(pkg => {
             const { id, ...pkgData } = pkg;
-            const docRef = doc(db, "packages", id.startsWith('new-') ? doc(collection(db, 'packages')).id : id);
+            const docRef = id.startsWith('new-') ? doc(collection(db, 'packages')) : doc(db, "packages", id);
             batch.set(docRef, pkgData);
         });
 
-        // Handle testimonial updates and additions
         testimonials.forEach(t => {
             const { id, ...testimonialData } = t;
-            const docRef = doc(db, "testimonials", id.startsWith('new-') ? doc(collection(db, 'testimonials')).id : id);
+            const docRef = id.startsWith('new-') ? doc(collection(db, 'testimonials')) : doc(db, "testimonials", id);
             batch.set(docRef, testimonialData);
         });
 
-        // Commit all changes
         await batch.commit();
         
-        // Update local state with new IDs
         const finalCategories = categories.map(cat => {
             if (categoryIdMap.has(cat.id)) {
                 return { ...cat, id: categoryIdMap.get(cat.id)! };
@@ -380,9 +386,18 @@ export default function AdminHomePage() {
             return cat;
         });
         setCategories(finalCategories);
-        setPackages(updatedPackages);
 
-        // Clear deleted IDs
+        const finalPackages = updatedPackages.map(pkg => {
+             if (pkg.id.startsWith('new-')) {
+                // This part is tricky, as we don't get the new package IDs back from a batch write directly.
+                // A full refetch would be the most reliable way to get the new state.
+                // For now, we'll just update the categoryId locally.
+                return { ...pkg, id: `saved-pkg-${Date.now()}` }; // Mark as saved, but ID is not the real one
+            }
+            return pkg;
+        });
+        setPackages(finalPackages);
+
         setDeletedDestinationIds([]);
         setDeletedCategoryIds([]);
         setDeletedPackageIds([]);
@@ -390,8 +405,13 @@ export default function AdminHomePage() {
 
         toast({
             title: "Success",
-            description: "All changes have been saved.",
+            description: "All changes have been saved. Refreshing data...",
         });
+
+        // Optional: a quick refetch to get the latest state including new document IDs
+        const packagesSnap = await getDocs(collection(db, "packages"));
+        setPackages(packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package)));
+
 
     } catch (error) {
         console.error("Error saving content:", error);
@@ -666,31 +686,54 @@ export default function AdminHomePage() {
       <Card>
         <CardHeader>
           <CardTitle>Call to Action Section</CardTitle>
-          <CardDescription>Manage the content for the call to action section.</CardDescription>
+          <CardDescription>Manage the content for the interactive call to action section.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input id="title" value={ctaData.title} onChange={handleCtaChange} />
+            <Label htmlFor="cta-title-main">Main Title</Label>
+            <Input id="cta-title-main" value={ctaData.title} onChange={(e) => setCtaData(prev => ({...prev, title: e.target.value}))} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="buttonText">Button Text</Label>
-            <Input id="buttonText" value={ctaData.buttonText} onChange={handleCtaChange} />
+            <Label htmlFor="cta-buttonText">Button Text</Label>
+            <Input id="cta-buttonText" value={ctaData.buttonText} onChange={(e) => setCtaData(prev => ({...prev, buttonText: e.target.value}))} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="buttonUrl">Button URL</Label>
-            <Input id="buttonUrl" value={ctaData.buttonUrl} onChange={handleCtaChange} />
+            <Label htmlFor="cta-buttonUrl">Button URL</Label>
+            <Input id="cta-buttonUrl" value={ctaData.buttonUrl} onChange={(e) => setCtaData(prev => ({...prev, buttonUrl: e.target.value}))} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="backgroundImage">Background Image URL</Label>
-            <Input id="backgroundImage" value={ctaData.backgroundImage} onChange={handleCtaChange} />
+            <Label htmlFor="cta-backgroundImage">Default Background Image URL</Label>
+            <Input id="cta-backgroundImage" value={ctaData.backgroundImage} onChange={(e) => setCtaData(prev => ({...prev, backgroundImage: e.target.value}))} />
+          </div>
+          
+          <div className="space-y-4 pt-4 border-t">
+            <h4 className="font-medium text-lg">Interactive Items</h4>
+            {ctaData.interactiveItems.map((item, index) => (
+                <div key={index} className="p-4 border rounded-md space-y-3 bg-slate-50">
+                    <div className="space-y-1">
+                        <Label htmlFor={`cta-item-title-${index}`}>Item {index + 1} Title</Label>
+                        <Input id={`cta-item-title-${index}`} value={item.title} onChange={(e) => handleCtaInteractiveItemChange(index, 'title', e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <Label htmlFor={`cta-item-desc-${index}`}>Item {index + 1} Description</Label>
+                        <Textarea id={`cta-item-desc-${index}`} value={item.description} onChange={(e) => handleCtaInteractiveItemChange(index, 'description', e.target.value)} rows={2}/>
+                    </div>
+                     <div className="space-y-1">
+                        <Label htmlFor={`cta-item-link-${index}`}>Item {index + 1} Link URL</Label>
+                        <Input id={`cta-item-link-${index}`} value={item.linkUrl} onChange={(e) => handleCtaInteractiveItemChange(index, 'linkUrl', e.target.value)} />
+                    </div>
+                     <div className="space-y-1">
+                        <Label htmlFor={`cta-item-bg-${index}`}>Item {index + 1} Background Image URL</Label>
+                        <Input id={`cta-item-bg-${index}`} value={item.backgroundImage} onChange={(e) => handleCtaInteractiveItemChange(index, 'backgroundImage', e.target.value)} />
+                    </div>
+                </div>
+            ))}
           </div>
         </CardContent>
       </Card>
+
 
       <Button onClick={handleSave} disabled={loading}>{loading ? "Saving..." : "Save All Changes"}</Button>
     </div>
   );
 }
-
-    

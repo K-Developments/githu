@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
-import type { Package, Category, Destination, Testimonial } from "@/lib/data";
+import type { Package, Category, Destination, Testimonial, CtaData } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
@@ -41,13 +41,6 @@ interface DestinationsData {
   title: string;
   subtitle: string;
   buttonUrl: string;
-}
-
-interface CtaData {
-  title: string;
-  buttonText: string;
-  buttonUrl: string;
-  backgroundImage: string;
 }
 
 // Main component for the homepage
@@ -252,28 +245,25 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
 
 
 function PackagesSection({ categories, packages }: { categories: Category[], packages: Package[] }) {
-  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+    const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
 
-  const displayCategories: Category[] = React.useMemo(() => [
-      { id: 'all', name: 'Our Packages' },
-      ...categories
-  ], [categories]);
+    const displayCategories = React.useMemo(() => {
+        return [{ id: 'all', name: 'Our Packages' }, ...categories];
+    }, [categories]);
 
+    const handleNextCategory = () => {
+        setActiveCategoryIndex((prev) => (prev + 1) % displayCategories.length);
+    };
 
-  const handleNextCategory = () => {
-    setActiveCategoryIndex(prev => (prev + 1) % displayCategories.length);
-  };
+    const handlePrevCategory = () => {
+        setActiveCategoryIndex((prev) => (prev - 1 + displayCategories.length) % displayCategories.length);
+    };
 
-  const handlePrevCategory = () => {
-    setActiveCategoryIndex(prev => (prev - 1 + displayCategories.length) % displayCategories.length);
-  };
+    const activeCategory = displayCategories[activeCategoryIndex];
+    const filteredPackages = activeCategory.id === 'all'
+        ? packages
+        : packages.filter(p => p.categoryId === activeCategory.id);
 
-  const activeCategory = displayCategories[activeCategoryIndex];
-  
-  const filteredPackages = activeCategory && activeCategory.id !== 'all'
-    ? packages.filter(p => p.categoryId === activeCategory.id)
-    : packages;
-  
   return (
     <section className="homepage-packages-section">
       <div className="packages-container">
@@ -465,20 +455,38 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
 }
 
 function HomePageCallToActionSection({ data }: { data: CtaData }) {
+    const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+
+    const getBackgroundImage = () => {
+        if (hoveredItem !== null && data.interactiveItems[hoveredItem]) {
+            return data.interactiveItems[hoveredItem].backgroundImage;
+        }
+        return data.backgroundImage;
+    };
+    
     return (
         <section className="home-page-call-to-action-section">
-            <div className="cta-background-image">
-                <Image 
-                    src={data.backgroundImage || "https://placehold.co/1920x1080.png"} 
-                    alt="Serene travel destination" 
-                    fill 
-                    className="object-cover" 
-                    data-ai-hint="tropical beach"
-                />
-            </div>
+            <AnimatePresence>
+                <motion.div
+                    key={getBackgroundImage()}
+                    className="cta-background-image"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                >
+                    <Image 
+                        src={getBackgroundImage() || "https://placehold.co/1920x1080.png"} 
+                        alt="Serene travel destination" 
+                        fill 
+                        className="object-cover" 
+                        data-ai-hint="tropical beach"
+                    />
+                </motion.div>
+            </AnimatePresence>
             <div className="cta-overlay"></div>
             <div className="cta-content-container">
-                <ScrollAnimation>
+                <ScrollAnimation className="w-full md:w-1/2">
                     <div className="cta-content">
                         <h2 className="cta-title">{data.title}</h2>
                         <div className="button-wrapper-for-border">
@@ -486,6 +494,21 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                                 <a href={data.buttonUrl}>{data.buttonText}</a>
                             </Button>
                         </div>
+                    </div>
+                </ScrollAnimation>
+                 <ScrollAnimation className="w-full md:w-1/2">
+                    <div className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
+                        {data.interactiveItems.map((item, index) => (
+                            <Link
+                                key={index}
+                                href={item.linkUrl || '#'}
+                                className="cta-interactive-item"
+                                onMouseEnter={() => setHoveredItem(index)}
+                            >
+                                <h3 className="cta-item-title">{item.title}</h3>
+                                <p className="cta-item-description">{item.description}</p>
+                            </Link>
+                        ))}
                     </div>
                 </ScrollAnimation>
             </div>
