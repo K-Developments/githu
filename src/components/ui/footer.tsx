@@ -1,8 +1,14 @@
 
 "use client";
+import { useState, useEffect } from "react";
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 
 export function Footer() {
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer className="site-footer">
@@ -48,7 +54,7 @@ export function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} Island Hopes. All rights reserved.</p>
+        <p>&copy; {year} Island Hopes. All rights reserved.</p>
       </div>
     </footer>
   );
