@@ -339,7 +339,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
         <motion.div 
             className={cn(
                 "packages-grid",
-                filteredPackages.length === 1 && "md:grid-cols-1 justify-items-center"
+                filteredPackages.length === 1 && "md:grid-cols-1"
             )}
             layout
         >
@@ -347,7 +347,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                 {filteredPackages.map((pkg, index) => (
                 <React.Fragment key={pkg.id}>
                     <motion.div 
-                        className={cn("package-display-card", filteredPackages.length === 1 && "md:w-2/3")}
+                        className={cn("package-display-card")}
                         layout
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
