@@ -352,11 +352,11 @@ export default function HomePage() {
          <section className="homepage-packages-section">
             <div className="packages-container">
                 <div className="packages-header">
-                    
+                    <div className="button-wrapper-for-border">
                         <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={categories.length <= 1}>
                             <ArrowLeft />
                         </Button>
-                    
+                    </div>
                     <h2 className="packages-category-title">
                         <AnimatePresence mode="wait">
                             <motion.span
@@ -370,11 +370,11 @@ export default function HomePage() {
                             </motion.span>
                         </AnimatePresence>
                     </h2>
-                    
+                    <div className="button-wrapper-for-border">
                         <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={categories.length <= 1}>
                             <ArrowRight />
                         </Button>
-                    
+                    </div>
                 </div>
 
                 <motion.div className="packages-grid" layout>
@@ -403,7 +403,9 @@ export default function HomePage() {
                                     <h3 className="card-title">{pkg.title}</h3>
                                     <p className="card-description">{pkg.description}</p>
                                     <div className="flex justify-center">
-                                      <Button asChild variant="outline" size="sm" className="w-auto"><a href={`/packages/${pkg.id}`}>View Details</a></Button>
+                                      <div className="button-wrapper-for-border">
+                                        <Button asChild variant="outline" size="sm" className="w-auto"><a href={`/packages/${pkg.id}`}>View Details</a></Button>
+                                      </div>
                                     </div>
                                 </div>
                             </motion.div>
@@ -471,9 +473,9 @@ export default function HomePage() {
                 <p className="newsletter-subtitle">Receive travel inspiration, news and expert tips straight to your inbox.</p>
                 <form className="newsletter-form">
                     <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
-                    
+                    <div className="button-wrapper-for-border">
                       <Button type="submit">Subscribe</Button>
-                    
+                    </div>
                 </form>
             </div>
         </section>

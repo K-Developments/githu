@@ -935,6 +935,12 @@ header {
     margin-right: auto;
 }
 
+.button-wrapper-for-border {
+    display: inline-flex;
+    padding: 5px;
+    border: 2px solid hsl(var(--primary));
+    border-radius: calc(var(--radius) + 5px); /* Match button radius + padding */
+}
 
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
