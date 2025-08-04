@@ -391,7 +391,11 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
       return null;
     }
 
-    const activeTestimonial = testimonials[currentIndex];
+    const testimonialVariants = {
+        hidden: { opacity: 0, y: 15 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+        exit: { opacity: 0, y: -15, transition: { duration: 0.4 } },
+    };
 
     return (
         <section className="homepage-testimonials-section">
@@ -404,11 +408,20 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
                     )}
 
                     <div className="testimonial-content-wrapper">
-                        <div className="testimonial-content">
-                            <Quote className="testimonial-quote-icon" />
-                            <p className="testimonial-text">{activeTestimonial.text}</p>
-                            <p className="testimonial-author">{activeTestimonial.author}, {activeTestimonial.location}</p>
-                        </div>
+                         <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentIndex}
+                                variants={testimonialVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                className="testimonial-content"
+                            >
+                                <Quote className="testimonial-quote-icon" />
+                                <p className="testimonial-text">{testimonials[currentIndex].text}</p>
+                                <p className="testimonial-author">{testimonials[currentIndex].author}, {testimonials[currentIndex].location}</p>
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
 
                     {testimonials.length > 1 && (
@@ -460,5 +473,3 @@ function NewsletterSection() {
         </section>
     );
 }
-
-    
