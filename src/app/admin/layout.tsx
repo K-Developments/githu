@@ -30,7 +30,7 @@ export default function AdminLayout({
             </SidebarContent>
         </Sidebar>
         <SidebarInset>
-            <main className="p-4 md:p-6">
+            <main className="p-4 md:p-6 bg-white">
                 {children}
             </main>
         </SidebarInset>
