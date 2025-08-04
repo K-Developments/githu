@@ -42,12 +42,20 @@ interface DestinationsData {
   buttonUrl: string;
 }
 
+interface CtaData {
+  title: string;
+  buttonText: string;
+  buttonUrl: string;
+  backgroundImage: string;
+}
+
 // Main component for the homepage
 export default function HomePage() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
   const [introData, setIntroData] = useState<IntroData | null>(null);
   const [quoteData, setQuoteData] = useState<QuoteData | null>(null);
   const [destinationsData, setDestinationsData] = useState<DestinationsData | null>(null);
+  const [ctaData, setCtaData] = useState<CtaData | null>(null);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -66,6 +74,7 @@ export default function HomePage() {
           setIntroData(data.intro as IntroData);
           setQuoteData(data.quote as QuoteData);
           setDestinationsData(data.destinations as DestinationsData);
+          setCtaData(data.cta as CtaData);
         }
 
         // Fetch collections
@@ -103,7 +112,7 @@ export default function HomePage() {
       {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
       {categories.length > 0 && packages.length > 0 && <PackagesSection categories={categories} packages={packages} />}
       {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
-      <HomePageCallToActionSection />
+      {ctaData && <HomePageCallToActionSection data={ctaData} />}
       <NewsletterSection />
     </>
   );
@@ -450,12 +459,12 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
     );
 }
 
-function HomePageCallToActionSection() {
+function HomePageCallToActionSection({ data }: { data: CtaData }) {
     return (
         <section className="home-page-call-to-action-section">
             <div className="cta-background-image">
                 <Image 
-                    src="https://placehold.co/1920x1080.png" 
+                    src={data.backgroundImage || "https://placehold.co/1920x1080.png"} 
                     alt="Serene travel destination" 
                     fill 
                     className="object-cover" 
@@ -466,10 +475,10 @@ function HomePageCallToActionSection() {
             <div className="cta-content-container">
                 <ScrollAnimation>
                     <div className="cta-content">
-                        <h2 className="cta-title">Ready to plan your journey?</h2>
+                        <h2 className="cta-title">{data.title}</h2>
                         <div className="button-wrapper-for-border">
                             <Button asChild size="lg" className="w-full">
-                                <a href="#">Plan Your Trip Now</a>
+                                <a href={data.buttonUrl}>{data.buttonText}</a>
                             </Button>
                         </div>
                     </div>
@@ -504,5 +513,3 @@ function NewsletterSection() {
         </section>
     );
 }
-
-    

@@ -40,6 +40,13 @@ interface DestinationsData {
   buttonUrl: string;
 }
 
+interface CtaData {
+  title: string;
+  buttonText: string;
+  buttonUrl: string;
+  backgroundImage: string;
+}
+
 export default function AdminHomePage() {
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
@@ -62,6 +69,12 @@ export default function AdminHomePage() {
     title: "",
     subtitle: "",
     buttonUrl: "",
+  });
+  const [ctaData, setCtaData] = useState<CtaData>({
+    title: "",
+    buttonText: "",
+    buttonUrl: "",
+    backgroundImage: "",
   });
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
@@ -111,6 +124,14 @@ export default function AdminHomePage() {
             buttonUrl: destinations.buttonUrl || "/destinations",
           });
 
+          const cta = (data.cta || {}) as CtaData;
+           setCtaData({
+            title: cta.title || "Ready to plan your journey?",
+            buttonText: cta.buttonText || "Plan Your Trip Now",
+            buttonUrl: cta.buttonUrl || "#",
+            backgroundImage: cta.backgroundImage || "https://placehold.co/1920x1080.png",
+          });
+
         } else {
           console.log("No content document! Using default values.");
           setHeroData({
@@ -138,6 +159,12 @@ export default function AdminHomePage() {
             title: "Our Favourite Destinations",
             subtitle: "A curated selection of the world's most enchanting islands, waiting to be discovered.",
             buttonUrl: "/destinations",
+          });
+          setCtaData({
+            title: "Ready to plan your journey?",
+            buttonText: "Plan Your Trip Now",
+            buttonUrl: "#",
+            backgroundImage: "https://placehold.co/1920x1080.png",
           });
         }
         
@@ -200,6 +227,11 @@ export default function AdminHomePage() {
   const handleDestinationsSectionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setDestinationsData(prevData => ({ ...prevData, [id]: value }));
+  };
+
+  const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setCtaData(prevData => ({ ...prevData, [id]: value }));
   };
 
   const handleDestinationChange = (id: string, field: keyof Omit<Destination, 'id'>, value: any) => {
@@ -300,7 +332,7 @@ export default function AdminHomePage() {
 
       // Save content data
       const contentDocRef = doc(db, "content", "home");
-      batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData }, { merge: true });
+      batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData, cta: ctaData }, { merge: true });
       
       // Save destinations
       const destinationsCollectionRef = collection(db, 'destinations');
@@ -642,6 +674,30 @@ export default function AdminHomePage() {
         </CardContent>
       </Card>
 
+      <Card>
+        <CardHeader>
+          <CardTitle>Call to Action Section</CardTitle>
+          <CardDescription>Manage the content for the call to action section.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title">Title</Label>
+            <Input id="title" value={ctaData.title} onChange={handleCtaChange} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="buttonText">Button Text</Label>
+            <Input id="buttonText" value={ctaData.buttonText} onChange={handleCtaChange} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="buttonUrl">Button URL</Label>
+            <Input id="buttonUrl" value={ctaData.buttonUrl} onChange={handleCtaChange} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="backgroundImage">Background Image URL</Label>
+            <Input id="backgroundImage" value={ctaData.backgroundImage} onChange={handleCtaChange} />
+          </div>
+        </CardContent>
+      </Card>
 
       <Button onClick={handleSave}>Save All Changes</Button>
     </div>
