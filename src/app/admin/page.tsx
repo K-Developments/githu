@@ -80,6 +80,11 @@ export default function AdminHomePage() {
   const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  
+  const [deletedDestinationIds, setDeletedDestinationIds] = useState<string[]>([]);
+  const [deletedCategoryIds, setDeletedCategoryIds] = useState<string[]>([]);
+  const [deletedPackageIds, setDeletedPackageIds] = useState<string[]>([]);
+  const [deletedTestimonialIds, setDeletedTestimonialIds] = useState<string[]>([]);
 
 
   const [loading, setLoading] = useState(true);
@@ -252,9 +257,11 @@ export default function AdminHomePage() {
   };
 
   const handleDeleteDestination = (id: string) => {
+    if (!id.startsWith('new-')) {
+      setDeletedDestinationIds(prev => [...prev, id]);
+    }
     setDestinations(destinations.filter(d => d.id !== id));
   };
-
 
   const handleCategoryChange = (index: number, value: string) => {
     const newCategories = [...categories];
@@ -286,6 +293,11 @@ export default function AdminHomePage() {
   };
   
   const handleDeleteCategory = (id: string) => {
+    const packagesToDelete = packages.filter(p => p.categoryId === id).map(p => p.id);
+    if (!id.startsWith('new-')) {
+      setDeletedCategoryIds(prev => [...prev, id]);
+      setDeletedPackageIds(prev => [...prev, ...packagesToDelete.filter(pid => !pid.startsWith('new-'))]);
+    }
     setCategories(categories.filter(c => c.id !== id));
     setPackages(packages.filter(p => p.categoryId !== id));
   };
@@ -305,6 +317,9 @@ export default function AdminHomePage() {
   };
 
   const handleDeletePackage = (id: string) => {
+    if (!id.startsWith('new-')) {
+      setDeletedPackageIds(prev => [...prev, id]);
+    }
     setPackages(packages.filter(p => p.id !== id));
   };
 
@@ -323,6 +338,9 @@ export default function AdminHomePage() {
   };
 
   const handleDeleteTestimonial = (id: string) => {
+    if (!id.startsWith('new-')) {
+        setDeletedTestimonialIds(prev => [...prev, id]);
+    }
     setTestimonials(testimonials.filter(t => t.id !== id));
   };
 
@@ -330,79 +348,43 @@ export default function AdminHomePage() {
     try {
       const batch = writeBatch(db);
 
-      // Save content data
       const contentDocRef = doc(db, "content", "home");
       batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData, cta: ctaData }, { merge: true });
       
-      // Save destinations
-      const destinationsCollectionRef = collection(db, 'destinations');
-      const existingDestinationsSnap = await getDocs(destinationsCollectionRef);
-      const existingDestinationIds = existingDestinationsSnap.docs.map(d => d.id);
-      const currentDestinationIds = destinations.map(d => d.id);
-
-      for (const id of existingDestinationIds) {
-          if (!currentDestinationIds.includes(id)) {
-              batch.delete(doc(db, "destinations", id));
-          }
-      }
+      deletedDestinationIds.forEach(id => batch.delete(doc(db, "destinations", id)));
       destinations.forEach(dest => {
           const { id, ...destData } = dest;
-          const docRef = doc(db, "destinations", id.startsWith('new-') ? `dest-${Date.now()}-${Math.random()}` : id);
+          const docRef = doc(db, "destinations", id.startsWith('new-') ? doc(collection(db, 'destinations')).id : id);
           batch.set(docRef, destData);
       });
 
-      // Save categories
-      const categoriesCollectionRef = collection(db, 'categories');
-      const existingCategoriesSnap = await getDocs(categoriesCollectionRef);
-      const existingCategoryIds = existingCategoriesSnap.docs.map(d => d.id);
-      const currentCategoryIds = categories.map(c => c.id);
-
-      for (const id of existingCategoryIds) {
-          if (!currentCategoryIds.includes(id)) {
-              batch.delete(doc(db, "categories", id));
-          }
-      }
+      deletedCategoryIds.forEach(id => batch.delete(doc(db, "categories", id)));
       categories.forEach(cat => {
           const { id, ...catData } = cat;
-          const docRef = doc(db, "categories", id.startsWith('new-') ? `cat-${Date.now()}-${Math.random()}` : id);
+          const docRef = doc(db, "categories", id.startsWith('new-') ? doc(collection(db, 'categories')).id : id);
           batch.set(docRef, catData);
       });
 
-      // Save packages
-      const packagesCollectionRef = collection(db, 'packages');
-      const existingPackagesSnap = await getDocs(packagesCollectionRef);
-      const existingPackageIds = existingPackagesSnap.docs.map(d => d.id);
-      const currentPackageIds = packages.map(p => p.id);
-
-      for (const id of existingPackageIds) {
-          if (!currentPackageIds.includes(id)) {
-              batch.delete(doc(db, "packages", id));
-          }
-      }
+      deletedPackageIds.forEach(id => batch.delete(doc(db, "packages", id)));
       packages.forEach(pkg => {
         const { id, ...pkgData } = pkg;
-        const docRef = doc(db, "packages", id.startsWith('new-') ? `pkg-${Date.now()}-${Math.random()}` : id);
+        const docRef = doc(db, "packages", id.startsWith('new-') ? doc(collection(db, 'packages')).id : id);
         batch.set(docRef, pkgData);
       });
 
-      // Save testimonials
-      const testimonialsCollectionRef = collection(db, 'testimonials');
-      const existingTestimonialsSnap = await getDocs(testimonialsCollectionRef);
-      const existingTestimonialIds = existingTestimonialsSnap.docs.map(d => d.id);
-      const currentTestimonialIds = testimonials.map(t => t.id);
-
-      for (const id of existingTestimonialIds) {
-          if (!currentTestimonialIds.includes(id)) {
-              batch.delete(doc(db, "testimonials", id));
-          }
-      }
+      deletedTestimonialIds.forEach(id => batch.delete(doc(db, "testimonials", id)));
       testimonials.forEach(t => {
         const { id, ...testimonialData } = t;
-        const docRef = doc(db, "testimonials", id.startsWith('new-') ? `testimonial-${Date.now()}-${Math.random()}` : id);
+        const docRef = doc(db, "testimonials", id.startsWith('new-') ? doc(collection(db, 'testimonials')).id : id);
         batch.set(docRef, testimonialData);
       });
 
       await batch.commit();
+
+      setDeletedDestinationIds([]);
+      setDeletedCategoryIds([]);
+      setDeletedPackageIds([]);
+      setDeletedTestimonialIds([]);
 
       toast({
         title: "Success",
