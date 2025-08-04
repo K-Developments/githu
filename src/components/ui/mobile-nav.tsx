@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 
 const navLinks = [
   { title: "Destinations", href: "#" },
-  { title: "Experiences", href: "#" },
+  { title: "Packages", href: "#" },
   { title: "About", href: "#" },
   { title: "Contact", href: "#" },
   { title: "Plan Trip", href: "#" },

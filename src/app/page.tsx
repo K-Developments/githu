@@ -255,7 +255,7 @@ export default function HomePage() {
               <nav className="desktop-nav">
                   <ul>
                       <li><a href="#">Destinations</a></li>
-                      <li><a href="#">Experiences</a></li>
+                      <li><a href="#">Packages</a></li>
                       <li><a href="#">About</a></li>
                       <li><a href="#">Contact</a></li>
                   </ul>
