@@ -472,7 +472,7 @@ export default function HomePage() {
                 <form className="newsletter-form">
                     <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
                     <div className="button-decoration-wrapper">
-                      <Button type="submit" className="w-full button-decorated">Subscribe</Button>
+                      <Button type="submit" className="button-decorated">Subscribe</Button>
                     </div>
                 </form>
             </div>
