@@ -2,6 +2,7 @@
 "use client";
 
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 const navLinks = [
   { title: "Destinations", href: "#" },
@@ -76,7 +77,7 @@ export const MobileNav = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (
         >
             <div className="flex h-full flex-col">
                 <div className="flex justify-between items-center p-4">
-                     <a href="#" className="logo" style={{ color: '#222', fontFamily: "'Marcellus', serif" }}>ISLAND<span style={{color: 'hsl(188 55% 45%)'}}>HOPES</span></a>
+                     <Link href="/" className="logo" style={{ color: '#222', fontFamily: "'Marcellus', serif" }}>ISLAND<span style={{color: 'hsl(188 55% 45%)'}}>HOPES</span></Link>
                 </div>
                 <motion.div
                     variants={linkContainerVariants}
@@ -88,9 +89,9 @@ export const MobileNav = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (
                 {navLinks.map((link, index) => (
                     <div className="overflow-hidden" key={index}>
                         <motion.div variants={linkVariants}>
-                            <a href={link.href} className="text-4xl font-semibold text-gray-800 hover:text-cyan-600 transition-colors" onClick={() => setIsOpen(false)}>
+                            <Link href={link.href} className="text-4xl font-semibold text-gray-800 hover:text-cyan-600 transition-colors" onClick={() => setIsOpen(false)}>
                                 {link.title}
-                            </a>
+                            </Link>
                         </motion.div>
                     </div>
                 ))}

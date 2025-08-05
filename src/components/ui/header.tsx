@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { Button } from "@/components/ui/button";
@@ -49,15 +50,15 @@ export function Header() {
       <MobileNav isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
       <header>
           <div className="header-left">
-              <a href="/" className="logo">ISLAND<span>HOPES</span></a>
+              <Link href="/" className="logo">ISLAND<span>HOPES</span></Link>
           </div>
           <div className="header-center">
               <nav className="desktop-nav">
                   <ul>
-                      <li><a href="#">Destinations</a></li>
-                      <li><a href="#">Packages</a></li>
-                      <li><a href="/about">About</a></li>
-                      <li><a href="#">Contact</a></li>
+                      <li><Link href="#">Destinations</Link></li>
+                      <li><Link href="#">Packages</Link></li>
+                      <li><Link href="/about">About</Link></li>
+                      <li><Link href="#">Contact</Link></li>
                   </ul>
               </nav>
               <div className="desktop-only ml-[1rem] flex items-center justify-center">
@@ -66,15 +67,15 @@ export function Header() {
                        <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} width={20} height={20} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" sideOffset={16} alignOffset={-104}>
-                        <DropdownMenuItem><a href="#">FAQs</a></DropdownMenuItem>
-                        <DropdownMenuItem><a href="#">Gallery</a></DropdownMenuItem>
-                        <DropdownMenuItem><a href="#">Blog & News</a></DropdownMenuItem>
+                        <DropdownMenuItem><Link href="#">FAQs</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href="#">Gallery</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href="#">Blog & News</Link></DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
               </div>
           </div>
           <div className="header-right">
-              <Button asChild><a href="#">Plan Trip</a></Button>
+              <Button asChild><Link href="#">Plan Trip</Link></Button>
               <button className="search-button desktop-only" aria-label="Search">
                   <Search size={20} />
               </button>
