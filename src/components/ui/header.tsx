@@ -29,7 +29,7 @@ export function Header() {
                     <ul>
                         <li><a href="#">Destinations</a></li>
                         <li><a href="#">Packages</a></li>
-                        <li><a href="#">About</a></li>
+                        <li><a href="/about">About</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
                 </nav>
@@ -56,7 +56,7 @@ export function Header() {
                   <ul>
                       <li><a href="#">Destinations</a></li>
                       <li><a href="#">Packages</a></li>
-                      <li><a href="#">About</a></li>
+                      <li><a href="/about">About</a></li>
                       <li><a href="#">Contact</a></li>
                   </ul>
               </nav>

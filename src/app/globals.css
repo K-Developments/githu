@@ -792,7 +792,6 @@ header {
 .cta-mobile-card {
     position: relative;
     padding: 2rem;
-    border-radius: 0.5rem;
     overflow: hidden;
     color: white;
     text-decoration: none;
@@ -816,6 +815,7 @@ header {
      font-family: 'Marcellus', serif;
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
+	
 }
 .cta-mobile-card .cta-item-description {
     font-size: 0.9rem;
@@ -825,7 +825,7 @@ header {
 
 .cta-item-title {
     font-family: 'Marcellus', serif;
-    font-size: 1.2rem;
+    font-size: 3rem;
     margin-bottom: 0.5rem;
     letter-spacing: 0.05rem;
 
@@ -1283,26 +1283,25 @@ h2{
     }
     .cta-content-container {
         flex: 1;
-        justify-content: flex-start;
-        text-align: left;
+		flex-direction: column;
+        justify-content: center;
+		align-items: center;
+		width: 100%;
+       
     }
-    .cta-content {
-        align-items: flex-start;
-    }
+    
 
     .cta-interactive-panel {
         display: flex;
-        flex-direction: column;
-        width: 350px; /* Adjust width as needed */
+        flex-direction: row;
+        width: 100%;
         position: absolute;
         top: 0;
         right: 0;
-        height: 100%;
         background-color: transparent;
-        border-left: 1px solid rgba(255,255,255,0.4);
+       
         z-index: 4;
-        padding-top: 4rem;
-        padding-bottom: 4rem;
+       
     }
 
     .cta-interactive-item {
@@ -1317,10 +1316,9 @@ h2{
         flex-direction: column;
         justify-content: center;
         border-bottom: 1px solid rgba(255,255,255,0.4) ;
+		border-right: 1px solid rgba(255,255,255,0.4) ;
     }
-    .cta-interactive-item:last-child {
-        border-bottom: none;
-    }
+   
     
     .cta-interactive-item:hover {
         background: rgba(0,0,0,0.6);
