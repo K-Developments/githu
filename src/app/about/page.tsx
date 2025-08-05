@@ -29,19 +29,8 @@ async function getAboutPageData(): Promise<AboutPageData> {
 
         if (contentDocSnap.exists()) {
             const data = contentDocSnap.data();
-            // Ensure coreValues is an array and provide a default if it's missing
             const coreValues = Array.isArray(data.coreValues) ? data.coreValues : [];
-            // Ensure we have exactly 4 core values for the grid, adding placeholders if necessary
-            while (coreValues.length < 4) {
-              coreValues.push({
-                id: `placeholder-${coreValues.length + 1}`,
-                title: 'Our Value',
-                description: 'A description of this core value, emphasizing our commitment to excellence and customer satisfaction.',
-                image: 'https://placehold.co/600x600.png',
-                imageHint: 'abstract concept'
-              });
-            }
-
+            
             return {
                 hero: {
                   headline: data.hero?.headline || 'About Us',
@@ -55,7 +44,7 @@ async function getAboutPageData(): Promise<AboutPageData> {
                   visionTitle: data.journey?.visionTitle || 'Our Vision',
                   visionText: data.journey?.visionText || 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
                 },
-                coreValues: coreValues.slice(0, 4) // Ensure we only take 4
+                coreValues
             };
         }
     } catch (error) {
@@ -63,14 +52,6 @@ async function getAboutPageData(): Promise<AboutPageData> {
     }
 
     // Default data if Firestore fetch fails or document doesn't exist
-    const defaultCoreValues = Array(4).fill(0).map((_, i) => ({
-        id: `default-${i + 1}`,
-        title: 'Our Value',
-        description: 'A description of this core value, emphasizing our commitment to excellence and customer satisfaction.',
-        image: 'https://placehold.co/600x600.png',
-        imageHint: 'abstract concept'
-    }));
-    
     return {
         hero: {
             headline: 'About Us',
@@ -84,7 +65,7 @@ async function getAboutPageData(): Promise<AboutPageData> {
             visionTitle: 'Our Vision',
             visionText: 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
         },
-        coreValues: defaultCoreValues,
+        coreValues: [],
     };
 }
 

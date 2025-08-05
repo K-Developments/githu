@@ -70,16 +70,7 @@ export default function AdminAboutPage() {
           });
           
           const fetchedValues = Array.isArray(data.coreValues) ? data.coreValues : [];
-           while (fetchedValues.length < 4) {
-              fetchedValues.push({
-                id: `new-value-${Date.now()}-${fetchedValues.length}`,
-                title: 'New Core Value',
-                description: '',
-                image: 'https://placehold.co/600x600.png',
-                imageHint: ''
-              });
-            }
-          setCoreValues(fetchedValues.slice(0, 4));
+          setCoreValues(fetchedValues);
 
 
         } else {
@@ -96,14 +87,7 @@ export default function AdminAboutPage() {
                 visionTitle: "Our Vision",
                 visionText: "",
             });
-            const defaultCoreValues = Array(4).fill(0).map((_, i) => ({
-                id: `new-value-${Date.now()}-${i}`,
-                title: 'New Core Value',
-                description: '',
-                image: 'https://placehold.co/600x600.png',
-                imageHint: ''
-            }));
-            setCoreValues(defaultCoreValues);
+            setCoreValues([]);
         }
       } catch (error) {
         console.error("Error fetching about page data:", error);
@@ -135,6 +119,30 @@ export default function AdminAboutPage() {
     newValues[index] = { ...newValues[index], [field]: value };
     setCoreValues(newValues);
   };
+  
+  const handleAddNewCoreValue = () => {
+    if (coreValues.length < 4) {
+      const newValue: CoreValue = {
+        id: `new-value-${Date.now()}`,
+        title: 'New Core Value',
+        description: '',
+        image: 'https://placehold.co/600x600.png',
+        imageHint: ''
+      };
+      setCoreValues([...coreValues, newValue]);
+    } else {
+       toast({
+        title: "Limit Reached",
+        description: "You can only have a maximum of 4 core values.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteCoreValue = (id: string) => {
+    setCoreValues(coreValues.filter(value => value.id !== id));
+  };
+
 
   const handleSave = async () => {
     setLoading(true);
@@ -244,12 +252,15 @@ export default function AdminAboutPage() {
       <Card>
         <CardHeader>
           <CardTitle>Manage Core Values</CardTitle>
-          <CardDescription>Manage the four core values displayed on the about page.</CardDescription>
+          <CardDescription>Manage the core values displayed on the about page. (Max 4)</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {coreValues.map((value, index) => (
-              <div key={value.id} className="p-4 border rounded-md space-y-3 bg-slate-50">
+              <div key={value.id} className="p-4 border rounded-md space-y-3 bg-slate-50 relative">
+                <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6" onClick={() => handleDeleteCoreValue(value.id)}>
+                    <Trash2 className="h-4 w-4" />
+                </Button>
                 <h4 className="font-semibold">Value {index + 1}</h4>
                 <div className="space-y-1">
                   <Label htmlFor={`value-title-${index}`} className="text-xs">Title</Label>
@@ -270,6 +281,9 @@ export default function AdminAboutPage() {
               </div>
             ))}
           </div>
+          {coreValues.length < 4 && (
+            <Button onClick={handleAddNewCoreValue} className="mt-4">Add New Core Value</Button>
+          )}
         </CardContent>
       </Card>
 
