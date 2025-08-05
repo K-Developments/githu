@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { Separator } from '@/components/ui/separator';
+import type { CoreValue } from '@/lib/data';
 
 interface AboutPageData {
   hero: {
@@ -17,7 +18,8 @@ interface AboutPageData {
     missionText: string;
     visionTitle: string;
     visionText: string;
-  }
+  };
+  coreValues: CoreValue[];
 }
 
 async function getAboutPageData(): Promise<AboutPageData> {
@@ -27,6 +29,19 @@ async function getAboutPageData(): Promise<AboutPageData> {
 
         if (contentDocSnap.exists()) {
             const data = contentDocSnap.data();
+            // Ensure coreValues is an array and provide a default if it's missing
+            const coreValues = Array.isArray(data.coreValues) ? data.coreValues : [];
+            // Ensure we have exactly 4 core values for the grid, adding placeholders if necessary
+            while (coreValues.length < 4) {
+              coreValues.push({
+                id: `placeholder-${coreValues.length + 1}`,
+                title: 'Our Value',
+                description: 'A description of this core value, emphasizing our commitment to excellence and customer satisfaction.',
+                image: 'https://placehold.co/600x600.png',
+                imageHint: 'abstract concept'
+              });
+            }
+
             return {
                 hero: {
                   headline: data.hero?.headline || 'About Us',
@@ -39,7 +54,8 @@ async function getAboutPageData(): Promise<AboutPageData> {
                   missionText: data.journey?.missionText || 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
                   visionTitle: data.journey?.visionTitle || 'Our Vision',
                   visionText: data.journey?.visionText || 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
-                }
+                },
+                coreValues: coreValues.slice(0, 4) // Ensure we only take 4
             };
         }
     } catch (error) {
@@ -47,6 +63,14 @@ async function getAboutPageData(): Promise<AboutPageData> {
     }
 
     // Default data if Firestore fetch fails or document doesn't exist
+    const defaultCoreValues = Array(4).fill(0).map((_, i) => ({
+        id: `default-${i + 1}`,
+        title: 'Our Value',
+        description: 'A description of this core value, emphasizing our commitment to excellence and customer satisfaction.',
+        image: 'https://placehold.co/600x600.png',
+        imageHint: 'abstract concept'
+    }));
+    
     return {
         hero: {
             headline: 'About Us',
@@ -59,14 +83,15 @@ async function getAboutPageData(): Promise<AboutPageData> {
             missionText: 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
             visionTitle: 'Our Vision',
             visionText: 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
-        }
+        },
+        coreValues: defaultCoreValues,
     };
 }
 
 
 export default async function AboutPage() {
   const pageData = await getAboutPageData();
-  const { hero, journey } = pageData;
+  const { hero, journey, coreValues } = pageData;
 
   return (
     <div>
@@ -127,6 +152,37 @@ export default async function AboutPage() {
                   {journey.visionText}
                 </p>
               </div>
+            </div>
+        </section>
+
+        <section className="py-12 px-4 md:px-12 bg-white">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {coreValues.map((value, index) => (
+                <div
+                  key={value.id}
+                  className="flex flex-col border"
+                >
+                  <div className={`relative aspect-square w-full ${index === 1 || index === 2 ? 'order-2' : 'order-1'}`}>
+                    <Image
+                      src={value.image}
+                      alt={value.title}
+                      fill
+                      className="object-cover"
+                      data-ai-hint={value.imageHint}
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <h3 className="text-white text-3xl font-headline text-center p-4">
+                        {value.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <div className={`p-6 bg-card flex-grow flex flex-col justify-center ${index === 1 || index === 2 ? 'order-1' : 'order-2'}`}>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {value.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
         </section>
     </div>

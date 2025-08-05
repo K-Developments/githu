@@ -46,3 +46,11 @@ export type CtaData = {
   backgroundImage: string;
   interactiveItems: CtaInteractiveItem[];
 };
+
+export type CoreValue = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  imageHint?: string;
+};

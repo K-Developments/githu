@@ -10,6 +10,8 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
+import type { CoreValue } from "@/lib/data";
+import { Trash2 } from "lucide-react";
 
 interface AboutHeroData {
   headline: string;
@@ -38,6 +40,7 @@ export default function AdminAboutPage() {
     visionTitle: "",
     visionText: "",
   });
+  const [coreValues, setCoreValues] = useState<CoreValue[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -65,6 +68,19 @@ export default function AdminAboutPage() {
             visionTitle: journey.visionTitle || "Our Vision",
             visionText: journey.visionText || "",
           });
+          
+          const fetchedValues = Array.isArray(data.coreValues) ? data.coreValues : [];
+           while (fetchedValues.length < 4) {
+              fetchedValues.push({
+                id: `new-value-${Date.now()}-${fetchedValues.length}`,
+                title: 'New Core Value',
+                description: '',
+                image: 'https://placehold.co/600x600.png',
+                imageHint: ''
+              });
+            }
+          setCoreValues(fetchedValues.slice(0, 4));
+
 
         } else {
             // Set default values if the document doesn't exist
@@ -80,6 +96,14 @@ export default function AdminAboutPage() {
                 visionTitle: "Our Vision",
                 visionText: "",
             });
+            const defaultCoreValues = Array(4).fill(0).map((_, i) => ({
+                id: `new-value-${Date.now()}-${i}`,
+                title: 'New Core Value',
+                description: '',
+                image: 'https://placehold.co/600x600.png',
+                imageHint: ''
+            }));
+            setCoreValues(defaultCoreValues);
         }
       } catch (error) {
         console.error("Error fetching about page data:", error);
@@ -106,11 +130,22 @@ export default function AdminAboutPage() {
     setJourneyData(prevData => ({ ...prevData, [id]: value }));
   };
 
+  const handleCoreValueChange = (index: number, field: keyof Omit<CoreValue, 'id'>, value: string) => {
+    const newValues = [...coreValues];
+    newValues[index] = { ...newValues[index], [field]: value };
+    setCoreValues(newValues);
+  };
+
   const handleSave = async () => {
     setLoading(true);
     try {
       const contentDocRef = doc(db, "content", "about");
-      await setDoc(contentDocRef, { hero: heroData, journey: journeyData }, { merge: true });
+      const dataToSave = { 
+        hero: heroData, 
+        journey: journeyData,
+        coreValues: coreValues.map(value => ({...value})) // Create clean copies
+      };
+      await setDoc(contentDocRef, dataToSave, { merge: true });
       toast({
         title: "Success",
         description: "About page content has been saved.",
@@ -188,6 +223,38 @@ export default function AdminAboutPage() {
               <Label htmlFor="visionText">Vision Text</Label>
               <Textarea id="visionText" value={journeyData.visionText} onChange={handleJourneyChange} rows={5} />
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Manage Core Values</CardTitle>
+          <CardDescription>Manage the four core values displayed on the about page.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {coreValues.map((value, index) => (
+              <div key={value.id} className="p-4 border rounded-md space-y-3 bg-slate-50">
+                <h4 className="font-semibold">Value {index + 1}</h4>
+                <div className="space-y-1">
+                  <Label htmlFor={`value-title-${index}`} className="text-xs">Title</Label>
+                  <Input id={`value-title-${index}`} value={value.title} onChange={(e) => handleCoreValueChange(index, 'title', e.target.value)} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`value-desc-${index}`} className="text-xs">Description</Label>
+                  <Textarea id={`value-desc-${index}`} value={value.description} onChange={(e) => handleCoreValueChange(index, 'description', e.target.value)} rows={3} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`value-img-${index}`} className="text-xs">Image URL</Label>
+                  <Input id={`value-img-${index}`} value={value.image} onChange={(e) => handleCoreValueChange(index, 'image', e.target.value)} />
+                </div>
+                 <div className="space-y-1">
+                  <Label htmlFor={`value-hint-${index}`} className="text-xs">Image AI Hint (optional)</Label>
+                  <Input id={`value-hint-${index}`} value={value.imageHint || ''} onChange={(e) => handleCoreValueChange(index, 'imageHint', e.target.value)} />
+                </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
