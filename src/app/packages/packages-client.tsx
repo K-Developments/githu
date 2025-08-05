@@ -133,7 +133,7 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
                   className={cn(
                     "flex justify-between items-center w-full p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
                     openAccordion === pkg.id 
-                      ? "bg-primary text-primary-foreground sticky top-0 z-10" 
+                      ? "bg-primary text-primary-foreground sticky top-[68px] z-10" 
                       : "text-primary-foreground",
                   )}
                 >
