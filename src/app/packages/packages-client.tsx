@@ -271,7 +271,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
 
             <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
                     <motion.div
-                        initial={false}
+                        initial="hidden"
                         animate={isOpen ? 'visible' : 'hidden'}
                         exit="hidden"
                         variants={contentContainerVariants}
