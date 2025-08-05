@@ -9,16 +9,34 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 
 interface AboutHeroData {
   headline: string;
   heroImage: string;
 }
 
+interface JourneyData {
+    title: string;
+    image: string;
+    missionTitle: string;
+    missionText: string;
+    visionTitle: string;
+    visionText: string;
+}
+
 export default function AdminAboutPage() {
   const [heroData, setHeroData] = useState<AboutHeroData>({
     headline: "",
     heroImage: "",
+  });
+  const [journeyData, setJourneyData] = useState<JourneyData>({
+    title: "",
+    image: "",
+    missionTitle: "",
+    missionText: "",
+    visionTitle: "",
+    visionText: "",
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -37,11 +55,30 @@ export default function AdminAboutPage() {
             headline: hero.headline || "About Us",
             heroImage: hero.heroImage || "https://placehold.co/1920x600.png",
           });
+
+          const journey = (data.journey || {}) as JourneyData;
+          setJourneyData({
+            title: journey.title || "Our Journey",
+            image: journey.image || "https://placehold.co/1200x800.png",
+            missionTitle: journey.missionTitle || "Our Mission",
+            missionText: journey.missionText || "",
+            visionTitle: journey.visionTitle || "Our Vision",
+            visionText: journey.visionText || "",
+          });
+
         } else {
             // Set default values if the document doesn't exist
             setHeroData({
                 headline: "About Us",
                 heroImage: "https://placehold.co/1920x600.png",
+            });
+            setJourneyData({
+                title: "Our Journey",
+                image: "https://placehold.co/1200x800.png",
+                missionTitle: "Our Mission",
+                missionText: "",
+                visionTitle: "Our Vision",
+                visionText: "",
             });
         }
       } catch (error) {
@@ -63,12 +100,17 @@ export default function AdminAboutPage() {
     const { id, value } = e.target;
     setHeroData(prevData => ({ ...prevData, [id]: value }));
   };
+  
+  const handleJourneyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setJourneyData(prevData => ({ ...prevData, [id]: value }));
+  };
 
   const handleSave = async () => {
     setLoading(true);
     try {
       const contentDocRef = doc(db, "content", "about");
-      await setDoc(contentDocRef, { hero: heroData }, { merge: true });
+      await setDoc(contentDocRef, { hero: heroData, journey: journeyData }, { merge: true });
       toast({
         title: "Success",
         description: "About page content has been saved.",
@@ -109,6 +151,43 @@ export default function AdminAboutPage() {
           <div className="space-y-2">
             <Label htmlFor="heroImage">Hero Image URL</Label>
             <Input id="heroImage" value={heroData.heroImage} onChange={handleHeroChange} />
+          </div>
+        </CardContent>
+      </Card>
+      
+       <Card>
+        <CardHeader>
+          <CardTitle>Our Journey Section</CardTitle>
+          <CardDescription>Update the content of the journey section.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title">Section Title</Label>
+            <Input id="title" value={journeyData.title} onChange={handleJourneyChange} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="image">Main Image URL</Label>
+            <Input id="image" value={journeyData.image} onChange={handleJourneyChange} />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="missionTitle">Mission Title</Label>
+              <Input id="missionTitle" value={journeyData.missionTitle} onChange={handleJourneyChange} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="visionTitle">Vision Title</Label>
+              <Input id="visionTitle" value={journeyData.visionTitle} onChange={handleJourneyChange} />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="missionText">Mission Text</Label>
+              <Textarea id="missionText" value={journeyData.missionText} onChange={handleJourneyChange} rows={5} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="visionText">Vision Text</Label>
+              <Textarea id="visionText" value={journeyData.visionText} onChange={handleJourneyChange} rows={5} />
+            </div>
           </div>
         </CardContent>
       </Card>
