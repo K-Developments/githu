@@ -1,7 +1,4 @@
 
-'use client';
-
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
@@ -12,7 +9,6 @@ import { cn } from '@/lib/utils';
 import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 import { CtaSection } from '@/components/ui/cta-section';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { AnimatePresence } from 'framer-motion';
 
 interface AboutPageData {
   hero: {
@@ -32,85 +28,76 @@ interface AboutPageData {
   ctaData: CtaData | null;
 }
 
-export default function AboutPage() {
-  const [pageData, setPageData] = useState<AboutPageData | null>(null);
-  const [loading, setLoading] = useState(true);
+async function getAboutPageData(): Promise<AboutPageData | null> {
+    try {
+        const contentDocRef = doc(db, 'content', 'about');
+        const contentDocSnap = await getDoc(contentDocRef);
 
-  useEffect(() => {
-    async function getAboutPageData() {
-        try {
-            const contentDocRef = doc(db, 'content', 'about');
-            const contentDocSnap = await getDoc(contentDocRef);
-
-            const homeContentDocRef = doc(db, "content", "home");
-            const homeContentDocSnap = await getDoc(homeContentDocRef);
-            let ctaData: CtaData | null = null;
-            if (homeContentDocSnap.exists()) {
-                const homeData = homeContentDocSnap.data();
-                const cta = homeData.cta as CtaData;
-                if (cta && !cta.interactiveItems) {
-                    cta.interactiveItems = [];
-                }
-                ctaData = cta;
+        const homeContentDocRef = doc(db, "content", "home");
+        const homeContentDocSnap = await getDoc(homeContentDocRef);
+        let ctaData: CtaData | null = null;
+        if (homeContentDocSnap.exists()) {
+            const homeData = homeContentDocSnap.data();
+            const cta = homeData.cta as CtaData;
+            if (cta && !cta.interactiveItems) {
+                cta.interactiveItems = [];
             }
-
-            if (contentDocSnap.exists()) {
-                const data = contentDocSnap.data();
-                const coreValues = Array.isArray(data.coreValues) ? data.coreValues : [];
-                const workflow = Array.isArray(data.workflow) ? data.workflow : [];
-                
-                setPageData({
-                    hero: {
-                      headline: data.hero?.headline || 'About Us',
-                      heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
-                    },
-                    journey: {
-                      title: data.journey?.title || 'Our Journey',
-                      image: data.journey?.image || 'https://placehold.co/1200x800.png',
-                      missionTitle: data.journey?.missionTitle || 'Our Mission',
-                      missionText: data.journey?.missionText || 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
-                      visionTitle: data.journey?.visionTitle || 'Our Vision',
-                      visionText: data.journey?.visionText || 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
-                    },
-                    coreValues,
-                    workflow,
-                    ctaData
-                });
-            } else {
-                 setPageData({
-                    hero: {
-                        headline: 'About Us',
-                        heroImage: 'https://placehold.co/1920x600.png',
-                    },
-                    journey: {
-                        title: 'Our Journey',
-                        image: 'https://placehold.co/1200x800.png',
-                        missionTitle: 'Our Mission',
-                        missionText: 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
-                        visionTitle: 'Our Vision',
-                        visionText: 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
-                    },
-                    coreValues: [],
-                    workflow: [],
-                    ctaData,
-                });
-            }
-        } catch (error) {
-            console.error('Error fetching about page data:', error);
-             setPageData(null);
-        } finally {
-            setLoading(false);
+            ctaData = cta;
         }
-    }
-    getAboutPageData();
-  }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+        if (contentDocSnap.exists()) {
+            const data = contentDocSnap.data();
+            const coreValues = Array.isArray(data.coreValues) ? data.coreValues : [];
+            const workflow = Array.isArray(data.workflow) ? data.workflow : [];
+            
+            return {
+                hero: {
+                  headline: data.hero?.headline || 'About Us',
+                  heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
+                },
+                journey: {
+                  title: data.journey?.title || 'Our Journey',
+                  image: data.journey?.image || 'https://placehold.co/1200x800.png',
+                  missionTitle: data.journey?.missionTitle || 'Our Mission',
+                  missionText: data.journey?.missionText || 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
+                  visionTitle: data.journey?.visionTitle || 'Our Vision',
+                  visionText: data.journey?.visionText || 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
+                },
+                coreValues,
+                workflow,
+                ctaData
+            };
+        } else {
+             return {
+                hero: {
+                    headline: 'About Us',
+                    heroImage: 'https://placehold.co/1920x600.png',
+                },
+                journey: {
+                    title: 'Our Journey',
+                    image: 'https://placehold.co/1200x800.png',
+                    missionTitle: 'Our Mission',
+                    missionText: 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
+                    visionTitle: 'Our Vision',
+                    visionText: 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
+                },
+                coreValues: [],
+                workflow: [],
+                ctaData,
+            };
+        }
+    } catch (error) {
+        console.error('Error fetching about page data:', error);
+         return null;
+    }
+}
+
+
+export default async function AboutPage() {
+  const pageData = await getAboutPageData();
 
   if (!pageData) {
-      return <div>Error loading page data.</div>; // Or a proper error message
+      return <div>Error loading page data.</div>;
   }
 
   const { hero, journey, coreValues, workflow, ctaData } = pageData;
