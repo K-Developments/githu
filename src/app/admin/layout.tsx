@@ -3,6 +3,7 @@
 import {SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset} from "@/components/ui/sidebar";
 import { Home, User } from "lucide-react";
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 
 export default function AdminLayout({
@@ -21,16 +22,24 @@ export default function AdminLayout({
             <SidebarContent>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton href="/admin" isActive={pathname === '/admin'} tooltip="Home Page">
-                            <Home />
-                            <span>Home Page</span>
-                        </SidebarMenuButton>
+                        <Link href="/admin" passHref legacyBehavior>
+                            <SidebarMenuButton asChild isActive={pathname === '/admin'} tooltip="Home Page">
+                                <a>
+                                    <Home />
+                                    <span>Home Page</span>
+                                </a>
+                            </SidebarMenuButton>
+                        </Link>
                     </SidebarMenuItem>
                      <SidebarMenuItem>
-                        <SidebarMenuButton href="/admin/about" isActive={pathname === '/admin/about'} tooltip="About Page">
-                            <User />
-                            <span>About Page</span>
-                        </SidebarMenuButton>
+                        <Link href="/admin/about" passHref legacyBehavior>
+                            <SidebarMenuButton asChild isActive={pathname === '/admin/about'} tooltip="About Page">
+                                <a>
+                                    <User />
+                                    <span>About Page</span>
+                                </a>
+                            </SidebarMenuButton>
+                        </Link>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarContent>
