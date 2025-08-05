@@ -7,11 +7,9 @@ import { usePathname } from 'next/navigation';
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 5,
   },
   animate: {
     opacity: 1,
-    y: 0,
     transition: {
       duration: 0.4,
       ease: 'easeInOut',
@@ -19,7 +17,6 @@ const pageVariants = {
   },
   exit: {
     opacity: 0,
-    y: -5,
     transition: {
       duration: 0.4,
       ease: 'easeInOut',
