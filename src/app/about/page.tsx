@@ -35,7 +35,7 @@ export default async function AboutPage() {
   const heroData = await getAboutPageData();
 
   return (
-    <div className="bg-[#E3F7F4] py-12 md:py-20">
+    <div>
       <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
         <section className="h-[60vh] flex flex-col bg-white">
           <div className="flex-[0.7] flex items-center justify-center p-4">
