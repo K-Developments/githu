@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { CtaSection } from '@/components/ui/cta-section';
@@ -27,7 +28,7 @@ interface PackagesClientProps {
   categories: Category[];
 }
 
-export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesClientProps) {
+export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const packageRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -156,8 +157,6 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
     const [isSticky, setIsSticky] = useState(false);
     const headerHeight = 68;
     const isOpen = accordionValue === pkg.id;
-    const [isHovered, setIsHovered] = useState(false);
-
 
     useEffect(() => {
         const item = itemRef.current;
@@ -231,26 +230,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
     };
 
     return (
-        <div ref={itemRef} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="relative">
-            <AnimatePresence>
-                {isHovered && !isOpen && pkg.images?.[0] && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute top-1/2 -translate-y-1/2 right-0 transform translate-x-full ml-4 w-64 h-40 rounded-lg shadow-xl overflow-hidden pointer-events-none z-10 hidden md:block"
-                    >
-                        <Image
-                            src={pkg.images[0]}
-                            alt={`Preview of ${pkg.title}`}
-                            fill
-                            className="object-cover"
-                        />
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
+        <div ref={itemRef} className="relative">
             <AnimatePresence>
                 {isSticky && (
                     <motion.div
@@ -275,12 +255,23 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
             <AccordionTrigger
                 ref={triggerRef}
                 className={cn(
-                    "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
-                    isOpen ? "bg-primary text-primary-foreground" : "text-foreground"
+                    "relative flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors overflow-hidden",
+                    isOpen ? "bg-primary text-primary-foreground" : "text-white"
                 )}
             >
-                <span className="truncate">{pkg.title}</span>
-                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
+                {!isOpen && pkg.images?.[0] && (
+                    <>
+                      <Image
+                        src={pkg.images[0]}
+                        alt={`Preview of ${pkg.title}`}
+                        fill
+                        className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/50" />
+                    </>
+                )}
+                <span className="truncate z-10">{pkg.title}</span>
+                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 z-10", isOpen && "rotate-180")} />
             </AccordionTrigger>
 
             <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
@@ -370,8 +361,3 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
         </div>
     )
 }
-
-
-    
-
-    
