@@ -16,6 +16,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Preloader } from '@/components/ui/preloader';
+import { AnimatePresence } from 'framer-motion';
 
 
 interface PackagesPageData {
@@ -116,7 +118,11 @@ function PackagesPageComponent() {
   );
 
   if (loading) {
-      return <div>Loading...</div>;
+    return (
+        <AnimatePresence>
+            {loading && <Preloader />}
+        </AnimatePresence>
+    );
   }
 
   if (!pageData) {
@@ -153,7 +159,6 @@ function PackagesPageComponent() {
                     alt="Scenic view of a travel package destination"
                     fill
                     className="object-cover"
-                    data-ai-hint="travel destination"
                   />
               </ScrollAnimation>
               <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />

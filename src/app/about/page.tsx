@@ -12,6 +12,8 @@ import { cn } from '@/lib/utils';
 import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 import { CtaSection } from '@/components/ui/cta-section';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
+import { Preloader } from '@/components/ui/preloader';
+import { AnimatePresence } from 'framer-motion';
 
 interface AboutPageData {
   hero: {
@@ -105,7 +107,11 @@ export default function AboutPage() {
   }, []);
 
   if (loading) {
-      return <div>Loading...</div>; // Or a proper loading spinner
+    return (
+        <AnimatePresence>
+            {loading && <Preloader />}
+        </AnimatePresence>
+    );
   }
 
   if (!pageData) {
@@ -131,7 +137,6 @@ export default function AboutPage() {
                     alt="A diverse team collaborating on travel plans"
                     fill
                     className="object-cover"
-                    data-ai-hint="team collaboration"
                     />
                 </ScrollAnimation>
                 <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />
@@ -162,7 +167,6 @@ export default function AboutPage() {
                         alt="Landscape of a journey"
                         fill
                         className="object-cover rounded-md shadow-xl"
-                        data-ai-hint="journey landscape"
                         />
                     </div>
                 </ScrollAnimation>
