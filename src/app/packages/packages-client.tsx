@@ -11,7 +11,6 @@ import { CtaSection } from '@/components/ui/cta-section';
 import type { CtaData, Package, Category } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -44,14 +43,14 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
 
   useEffect(() => {
     if (openAccordion && packageRefs.current[openAccordion]) {
-        const headerOffset = 68; // height of the sticky header
-        const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-  
-        window.scrollTo({
-         top: offsetPosition,
-         behavior: "smooth"
-        });
+      const headerOffset = 68; // height of the sticky header
+      const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+       top: offsetPosition,
+       behavior: "smooth"
+      });
     }
   }, [openAccordion]);
 
@@ -151,10 +150,6 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
     const triggerRef = useRef<HTMLButtonElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     
-    // We are getting the accordion value from the parent context, so no need for isOpen prop
-    const accordionContext = AccordionPrimitive.useAccordionContext();
-    const isOpen = accordionContext.value?.includes(pkg.id) ?? false;
-
     const [isHovered, setIsHovered] = useState(false);
     
     const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
@@ -191,7 +186,7 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
     return (
         <div ref={itemRef} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="relative">
             <AnimatePresence>
-                {isHovered && !isOpen && pkg.images?.[0] && (
+                {isHovered && pkg.images?.[0] && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -212,17 +207,17 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
                 ref={triggerRef}
                 className={cn(
                     "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
-                    isOpen ? "bg-primary text-primary-foreground" : "text-foreground"
+                    "data-[state=open]:bg-primary data-[state=open]:text-primary-foreground"
                 )}
             >
                 <span className="truncate">{pkg.title}</span>
-                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
+                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", "data-[state=open]:rotate-180")} />
             </AccordionTrigger>
 
             <AccordionContent ref={contentRef} className="p-0 bg-card rounded-b-lg overflow-hidden">
                     <motion.div
                         initial="hidden"
-                        animate={isOpen ? 'visible' : 'hidden'}
+                        animate="visible"
                         exit="hidden"
                         variants={contentContainerVariants}
                         className="p-6 md:p-10"
@@ -304,8 +299,3 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
         </div>
     )
 }
-
-
-    
-
-
