@@ -356,7 +356,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                         </div>
                         <div className="card-details">
                             <h3 className="card-title">{pkg.title}</h3>
-                            <p className="card-description">{pkg.description}</p>
+                            <p className="card-description flex-grow text-muted-foreground mb-4">{pkg.location}</p>
                             <div className="flex justify-center">
                               <div className="button-wrapper-for-border">
                                 <Button asChild variant="outline" size="sm" className="w-auto"><Link href={pkg.linkUrl || `/packages/${pkg.id}`}>View Details</Link></Button>
