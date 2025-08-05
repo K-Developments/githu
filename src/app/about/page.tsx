@@ -35,56 +35,67 @@ export default async function AboutPage() {
   const heroData = await getAboutPageData();
 
   return (
-    <>
-      <section className="h-[60vh] flex flex-col bg-white">
-        <div className="flex-[0.7] flex items-center justify-center">
-          <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
-            {heroData.headline}
-          </h1>
-        </div>
-        <div className="flex-1 relative w-full">
-          <Image
-            src={heroData.heroImage}
-            alt="A diverse team collaborating on travel plans"
-            fill
-            className="object-cover"
-            data-ai-hint="team collaboration"
-          />
-          <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
-        </div>
-      </section>
-
-      <section className="py-20 px-4 md:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">Our Journey</h2>
-          
-          <div className="relative w-[60vw] h-[30vh] mx-auto mb-20">
-            <Image 
-              src="https://placehold.co/1200x400.png"
-              alt="Our Journey"
+    <div className="bg-[#E3F7F4] py-12 md:py-20">
+      <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <section className="h-[60vh] flex flex-col bg-white">
+          <div className="flex-[0.7] flex items-center justify-center p-4">
+            <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
+              {heroData.headline}
+            </h1>
+          </div>
+          <div className="flex-1 relative w-full">
+            <Image
+              src={heroData.heroImage}
+              alt="A diverse team collaborating on travel plans"
               fill
-              className="object-cover rounded-lg shadow-xl"
-              data-ai-hint="journey path"
+              className="object-cover"
+              data-ai-hint="team collaboration"
             />
+            <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div>
-              <h3 className="text-3xl font-headline mb-4">Our Mission</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world's most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it. Through meticulous planning, local expertise, and a commitment to luxury, we aim to inspire and fulfill the dreams of the modern explorer.
-              </p>
+        <section className="py-20 px-4 md:px-12 bg-white">
+            <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">Our Journey</h2>
+            
+            <div className="relative mb-16 md:mb-24">
+                <div className="w-full md:w-4/5 h-[40vh] md:h-[50vh] ml-auto">
+                    <Image 
+                      src="https://placehold.co/1200x800.png"
+                      alt="Landscape of a journey"
+                      fill
+                      className="object-cover rounded-md shadow-xl"
+                      data-ai-hint="journey landscape"
+                    />
+                </div>
+                <div className="absolute bottom-[-10%] left-0 w-1/2 md:w-1/3 h-[30vh] md:h-[40vh]">
+                     <Image 
+                      src="https://placehold.co/800x1000.png"
+                      alt="Portrait detail of the journey"
+                      fill
+                      className="object-cover rounded-md shadow-2xl border-4 border-white"
+                      data-ai-hint="journey portrait"
+                    />
+                </div>
             </div>
-            <div>
-              <h3 className="text-3xl font-headline mb-4">Our Vision</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures, nature, and themselves in profound ways. We strive to build a legacy of sustainable tourism and create a global community of passionate travelers.
-              </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 pt-12">
+              <div className="md:pl-[35%]">
+                <h3 className="text-3xl font-headline mb-4">Our Mission</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world's most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-3xl font-headline mb-4">Our Vision</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
-    </>
+        </section>
+      </div>
+    </div>
   );
 }
