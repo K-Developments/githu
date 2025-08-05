@@ -141,6 +141,11 @@ export default function AdminPackagesPage() {
       inclusions: [],
       exclusions: [],
       linkUrl: "",
+      duration: "",
+      groupSize: "",
+      destinationsCount: "",
+      rating: "",
+      reviewsCount: "",
     };
     setPackages([...packages, newPackage]);
   };
@@ -274,10 +279,37 @@ export default function AdminPackagesPage() {
                                 <Input id={`pkg-title-${pkg.id}`} value={pkg.title} onChange={(e) => handlePackageChange(pkg.id, 'title', e.target.value)} />
                             </div>
                             <div className="space-y-1">
-                                <Label htmlFor={`pkg-location-${pkg.id}`} className="text-xs">Location</Label>
+                                <Label htmlFor={`pkg-location-${pkg.id}`} className="text-xs">Location / Subtitle</Label>
                                 <Input id={`pkg-location-${pkg.id}`} value={pkg.location} onChange={(e) => handlePackageChange(pkg.id, 'location', e.target.value)} />
                             </div>
                         </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="space-y-1">
+                                <Label htmlFor={`pkg-duration-${pkg.id}`} className="text-xs">Duration</Label>
+                                <Input id={`pkg-duration-${pkg.id}`} value={pkg.duration || ''} onChange={(e) => handlePackageChange(pkg.id, 'duration', e.target.value)} />
+                            </div>
+                             <div className="space-y-1">
+                                <Label htmlFor={`pkg-groupSize-${pkg.id}`} className="text-xs">Group Size</Label>
+                                <Input id={`pkg-groupSize-${pkg.id}`} value={pkg.groupSize || ''} onChange={(e) => handlePackageChange(pkg.id, 'groupSize', e.target.value)} />
+                            </div>
+                             <div className="space-y-1">
+                                <Label htmlFor={`pkg-destinationsCount-${pkg.id}`} className="text-xs"># of Destinations</Label>
+                                <Input id={`pkg-destinationsCount-${pkg.id}`} value={pkg.destinationsCount || ''} onChange={(e) => handlePackageChange(pkg.id, 'destinationsCount', e.target.value)} />
+                            </div>
+                        </div>
+
+                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="space-y-1">
+                                <Label htmlFor={`pkg-rating-${pkg.id}`} className="text-xs">Rating (e.g., 4.8)</Label>
+                                <Input id={`pkg-rating-${pkg.id}`} value={pkg.rating || ''} onChange={(e) => handlePackageChange(pkg.id, 'rating', e.target.value)} />
+                            </div>
+                             <div className="space-y-1">
+                                <Label htmlFor={`pkg-reviewsCount-${pkg.id}`} className="text-xs"># of Reviews</Label>
+                                <Input id={`pkg-reviewsCount-${pkg.id}`} value={pkg.reviewsCount || ''} onChange={(e) => handlePackageChange(pkg.id, 'reviewsCount', e.target.value)} />
+                            </div>
+                        </div>
+
                         <div className="space-y-1">
                             <Label htmlFor={`pkg-desc-${pkg.id}`} className="text-xs">Tour Overview / Itinerary</Label>
                             <Textarea id={`pkg-desc-${pkg.id}`} value={pkg.description} onChange={(e) => handlePackageChange(pkg.id, 'description', e.target.value)} rows={10} />

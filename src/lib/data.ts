@@ -19,6 +19,11 @@ export type Package = {
   inclusions?: string[];
   exclusions?: string[];
   isFeatured?: boolean;
+  duration?: string;
+  groupSize?: string;
+  destinationsCount?: string;
+  rating?: string;
+  reviewsCount?: string;
 };
 
 export type Category = {
@@ -72,5 +77,3 @@ export type TourPackage = {
     images: string[];
     category: string;
 };
-
-    
