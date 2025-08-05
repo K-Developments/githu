@@ -43,14 +43,16 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
 
   useEffect(() => {
     if (openAccordion && packageRefs.current[openAccordion]) {
-      const headerOffset = 68; // height of the sticky header
-      const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-       top: offsetPosition,
-       behavior: "smooth"
-      });
+      setTimeout(() => {
+        const headerOffset = 68; // height of the sticky header
+        const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  
+        window.scrollTo({
+         top: offsetPosition,
+         behavior: "smooth"
+        });
+      }, 100); 
     }
   }, [openAccordion]);
 
@@ -128,6 +130,8 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
               >
                 <PackageAccordion 
                     pkg={pkg} 
+                    accordionValue={openAccordion}
+                    onValueChange={handleValueChange}
                 />
               </AccordionItem>
             ))}
@@ -145,12 +149,41 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
   );
 }
 
-function PackageAccordion({ pkg }: { pkg: Package }) {
+function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package, accordionValue: string | null, onValueChange: (value: string | null) => void }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    
+    const [isSticky, setIsSticky] = useState(false);
+    const headerHeight = 68;
+    const isOpen = accordionValue === pkg.id;
     const [isHovered, setIsHovered] = useState(false);
+
+
+    useEffect(() => {
+        const item = itemRef.current;
+        if (!item || !isOpen) {
+            setIsSticky(false);
+            return;
+        }
+
+        const handleScroll = () => {
+            if (!itemRef.current || !contentRef.current) return;
+
+            const itemRect = itemRef.current.getBoundingClientRect();
+            const contentRect = contentRef.current.getBoundingClientRect();
+            const triggerHeight = triggerRef.current?.offsetHeight ?? 0;
+            
+            const shouldBeSticky = itemRect.top <= headerHeight && contentRect.bottom - triggerHeight > headerHeight;
+            setIsSticky(shouldBeSticky);
+        };
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // Initial check
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [isOpen, headerHeight]);
     
     const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
         <ul className="space-y-2">
@@ -183,16 +216,30 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
       },
     };
 
+    const stickyHeaderVariants = {
+      hidden: { y: -20, opacity: 0 },
+      visible: { 
+        y: 0, 
+        opacity: 1,
+        transition: { type: 'spring', stiffness: 200, damping: 25 }
+      },
+      exit: {
+        y: -20,
+        opacity: 0,
+        transition: { duration: 0.2 }
+      }
+    };
+
     return (
         <div ref={itemRef} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="relative">
             <AnimatePresence>
-                {isHovered && pkg.images?.[0] && (
+                {isHovered && !isOpen && pkg.images?.[0] && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-1/2 -translate-y-1/2 right-0 transform translate-x-full ml-4 w-64 h-40 rounded-lg shadow-xl overflow-hidden pointer-events-none z-10"
+                        className="absolute top-1/2 -translate-y-1/2 right-0 transform translate-x-full ml-4 w-64 h-40 rounded-lg shadow-xl overflow-hidden pointer-events-none z-10 hidden md:block"
                     >
                         <Image
                             src={pkg.images[0]}
@@ -203,21 +250,45 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <AnimatePresence>
+                {isSticky && (
+                    <motion.div
+                        layout
+                        variants={stickyHeaderVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="fixed z-20 w-full left-0"
+                        style={{ top: headerHeight }}
+                        onClick={() => onValueChange(null)}
+                    >
+                        <div
+                            className="flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline rounded-t-lg transition-colors bg-primary text-primary-foreground cursor-pointer shadow-lg max-w-7xl mx-auto"
+                        >
+                            <span className="truncate">{pkg.title}</span>
+                            <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 rotate-180")} />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <AccordionTrigger
                 ref={triggerRef}
                 className={cn(
                     "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
-                    "data-[state=open]:bg-primary data-[state=open]:text-primary-foreground"
+                    isOpen ? "bg-primary text-primary-foreground" : "text-foreground"
                 )}
             >
                 <span className="truncate">{pkg.title}</span>
-                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", "data-[state=open]:rotate-180")} />
+                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
             </AccordionTrigger>
 
-            <AccordionContent ref={contentRef} className="p-0 bg-card rounded-b-lg overflow-hidden">
+            <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
+                    {isOpen && <div style={{ height: isSticky ? triggerRef.current?.offsetHeight : 0 }} className="transition-height duration-200"/>}
                     <motion.div
+                        ref={contentRef}
                         initial="hidden"
-                        animate="visible"
+                        animate={isOpen ? 'visible' : 'hidden'}
                         exit="hidden"
                         variants={contentContainerVariants}
                         className="p-6 md:p-10"
@@ -299,3 +370,8 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
         </div>
     )
 }
+
+
+    
+
+    
