@@ -10,7 +10,7 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
-import type { CoreValue } from "@/lib/data";
+import type { CoreValue, WorkflowStep } from "@/lib/data";
 import { Trash2 } from "lucide-react";
 
 interface AboutHeroData {
@@ -41,6 +41,7 @@ export default function AdminAboutPage() {
     visionText: "",
   });
   const [coreValues, setCoreValues] = useState<CoreValue[]>([]);
+  const [workflow, setWorkflow] = useState<WorkflowStep[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -72,6 +73,8 @@ export default function AdminAboutPage() {
           const fetchedValues = Array.isArray(data.coreValues) ? data.coreValues : [];
           setCoreValues(fetchedValues);
 
+          const fetchedWorkflow = Array.isArray(data.workflow) ? data.workflow : [];
+          setWorkflow(fetchedWorkflow);
 
         } else {
             // Set default values if the document doesn't exist
@@ -88,6 +91,7 @@ export default function AdminAboutPage() {
                 visionText: "",
             });
             setCoreValues([]);
+            setWorkflow([]);
         }
       } catch (error) {
         console.error("Error fetching about page data:", error);
@@ -143,30 +147,56 @@ export default function AdminAboutPage() {
     setCoreValues(coreValues.filter(value => value.id !== id));
   };
 
+  const handleWorkflowChange = (index: number, field: keyof Omit<WorkflowStep, 'id'>, value: string) => {
+    const newSteps = [...workflow];
+    newSteps[index] = { ...newSteps[index], [field]: value };
+    setWorkflow(newSteps);
+  };
+  
+  const handleAddNewWorkflowStep = () => {
+      const newStep: WorkflowStep = {
+        id: `new-step-${Date.now()}`,
+        title: 'New Step Title',
+        description: '',
+        image: 'https://placehold.co/800x600.png',
+        imageHint: ''
+      };
+      setWorkflow([...workflow, newStep]);
+  };
+
+  const handleDeleteWorkflowStep = (id: string) => {
+    setWorkflow(workflow.filter(step => step.id !== id));
+  };
+
 
   const handleSave = async () => {
     setLoading(true);
     try {
       const contentDocRef = doc(db, "content", "about");
-      // Create clean copies without the id for saving, but generate a stable one if it's a new item.
+      
       const valuesToSave = coreValues.map(value => {
         const { id, ...rest } = value;
-        return {
-          id: id.startsWith('new-') ? `value-${Date.now()}-${Math.random()}`: id,
-          ...rest
-        }
+        const newId = id.startsWith('new-') ? `value-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : id;
+        return { id: newId, ...rest };
+      });
+      
+      const workflowToSave = workflow.map(step => {
+        const { id, ...rest } = step;
+        const newId = id.startsWith('new-') ? `step-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`: id;
+        return { id: newId, ...rest };
       });
       
       const dataToSave = { 
         hero: heroData, 
         journey: journeyData,
-        coreValues: valuesToSave
+        coreValues: valuesToSave,
+        workflow: workflowToSave,
       };
       
       await setDoc(contentDocRef, dataToSave, { merge: true });
 
-      // Update local state with the potentially new IDs to avoid key issues
       setCoreValues(valuesToSave);
+      setWorkflow(workflowToSave);
 
       toast({
         title: "Success",
@@ -286,6 +316,41 @@ export default function AdminAboutPage() {
           )}
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Manage Our Workflow</CardTitle>
+          <CardDescription>Manage the steps in the "Our Workflow" timeline section.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+            {workflow.map((step, index) => (
+              <div key={step.id} className="p-4 border rounded-md space-y-3 bg-slate-50 relative">
+                <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6" onClick={() => handleDeleteWorkflowStep(step.id)}>
+                    <Trash2 className="h-4 w-4" />
+                </Button>
+                <h4 className="font-semibold">Step {index + 1}</h4>
+                <div className="space-y-1">
+                  <Label htmlFor={`wf-title-${index}`} className="text-xs">Title</Label>
+                  <Input id={`wf-title-${index}`} value={step.title} onChange={(e) => handleWorkflowChange(index, 'title', e.target.value)} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`wf-desc-${index}`} className="text-xs">Description</Label>
+                  <Textarea id={`wf-desc-${index}`} value={step.description} onChange={(e) => handleWorkflowChange(index, 'description', e.target.value)} rows={3} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`wf-img-${index}`} className="text-xs">Image URL</Label>
+                  <Input id={`wf-img-${index}`} value={step.image} onChange={(e) => handleWorkflowChange(index, 'image', e.target.value)} />
+                </div>
+                 <div className="space-y-1">
+                  <Label htmlFor={`wf-hint-${index}`} className="text-xs">Image AI Hint (optional)</Label>
+                  <Input id={`wf-hint-${index}`} value={step.imageHint || ''} onChange={(e) => handleWorkflowChange(index, 'imageHint', e.target.value)} />
+                </div>
+              </div>
+            ))}
+          <Button onClick={handleAddNewWorkflowStep} className="mt-4">Add New Step</Button>
+        </CardContent>
+      </Card>
+
 
       <Button onClick={handleSave} disabled={loading}>{loading ? "Saving..." : "Save Changes"}</Button>
     </div>

@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { Separator } from '@/components/ui/separator';
-import type { CoreValue } from '@/lib/data';
+import type { CoreValue, WorkflowStep } from '@/lib/data';
+import { cn } from '@/lib/utils';
 
 interface AboutPageData {
   hero: {
@@ -20,6 +21,7 @@ interface AboutPageData {
     visionText: string;
   };
   coreValues: CoreValue[];
+  workflow: WorkflowStep[];
 }
 
 async function getAboutPageData(): Promise<AboutPageData> {
@@ -30,6 +32,7 @@ async function getAboutPageData(): Promise<AboutPageData> {
         if (contentDocSnap.exists()) {
             const data = contentDocSnap.data();
             const coreValues = Array.isArray(data.coreValues) ? data.coreValues : [];
+            const workflow = Array.isArray(data.workflow) ? data.workflow : [];
             
             return {
                 hero: {
@@ -44,7 +47,8 @@ async function getAboutPageData(): Promise<AboutPageData> {
                   visionTitle: data.journey?.visionTitle || 'Our Vision',
                   visionText: data.journey?.visionText || 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
                 },
-                coreValues
+                coreValues,
+                workflow,
             };
         }
     } catch (error) {
@@ -66,13 +70,14 @@ async function getAboutPageData(): Promise<AboutPageData> {
             visionText: 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
         },
         coreValues: [],
+        workflow: [],
     };
 }
 
 
 export default async function AboutPage() {
   const pageData = await getAboutPageData();
-  const { hero, journey, coreValues } = pageData;
+  const { hero, journey, coreValues, workflow } = pageData;
 
   return (
     <div>
@@ -136,39 +141,83 @@ export default async function AboutPage() {
             </div>
         </section>
 
-        <section className="bg-white">
-            <div className="max-w-7xl mx-auto py-12 px-4 md:px-12">
-                <h2 className="text-4xl md:text-5xl font-headline text-center mb-12">Our Core Values</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {coreValues.map((value, index) => (
-                    <div
-                    key={value.id}
-                    className="flex flex-col border"
-                    >
-                     <div className={`relative aspect-square w-full ${index === 1 || index === 3 ? 'sm:order-2' : ''}`}>
-                        <Image
-                        src={value.image}
-                        alt={value.title}
-                        fill
-                        className="object-cover"
-                        data-ai-hint={value.imageHint || ''}
-                        />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <h3 className="text-white text-3xl font-headline text-center p-4">
-                            {value.title}
-                        </h3>
+        {coreValues.length > 0 && (
+            <section className="bg-white">
+                <div className="max-w-7xl mx-auto py-12 px-4 md:px-12">
+                    <h2 className="text-4xl md:text-5xl font-headline text-center mb-12">Our Core Values</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {coreValues.map((value, index) => (
+                        <div
+                        key={value.id}
+                        className="flex flex-col border"
+                        >
+                        <div className={cn('relative aspect-square w-full', (index === 1 || index === 3) && 'sm:order-2')}>
+                            <Image
+                            src={value.image}
+                            alt={value.title}
+                            fill
+                            className="object-cover"
+                            data-ai-hint={value.imageHint || ''}
+                            />
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <h3 className="text-white text-3xl font-headline text-center p-4">
+                                {value.title}
+                            </h3>
+                            </div>
                         </div>
+                        <div className={cn('p-6 bg-card flex-grow flex flex-col justify-center', (index === 1 || index === 3) && 'sm:order-1')}>
+                            <p className="text-muted-foreground leading-relaxed">
+                            {value.description}
+                            </p>
+                        </div>
+                        </div>
+                    ))}
                     </div>
-                     <div className={`p-6 bg-card flex-grow flex flex-col justify-center ${index === 1 || index === 3 ? 'sm:order-1' : ''}`}>
-                        <p className="text-muted-foreground leading-relaxed">
-                        {value.description}
-                        </p>
-                    </div>
-                    </div>
-                ))}
                 </div>
-            </div>
-        </section>
+            </section>
+        )}
+
+        {workflow.length > 0 && (
+            <section className="py-24 bg-white">
+                <div className="max-w-5xl mx-auto px-4 md:px-12">
+                    <h2 className="text-4xl md:text-5xl font-headline text-center mb-20">Our Workflow</h2>
+                    <div className="relative">
+                        {/* The main timeline vertical line could be added here if desired */}
+                        {workflow.map((step, index) => (
+                            <div key={step.id} className="relative mb-16">
+                                <div className={cn("flex items-center", index % 2 === 0 ? "flex-row" : "flex-row-reverse")}>
+                                    {/* Content */}
+                                    <div className="w-full md:w-5/12 p-6 bg-card border rounded-lg shadow-md">
+                                        <h3 className="text-2xl font-headline mb-3">{step.title}</h3>
+                                        <p className="text-muted-foreground leading-relaxed">{step.description}</p>
+                                    </div>
+                                    {/* Timeline Connector */}
+                                    <div className="w-2/12 flex justify-center">
+                                        <div className="relative w-1 bg-border h-24">
+                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                                                {index + 1}
+                                            </div>
+                                        </div>
+                                    </div>
+                                     {/* Image */}
+                                    <div className="w-full md:w-5/12">
+                                        <div className="relative aspect-video">
+                                            <Image 
+                                                src={step.image}
+                                                alt={step.title}
+                                                fill
+                                                className="object-cover rounded-lg shadow-xl"
+                                                data-ai-hint={step.imageHint || ''}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        )}
     </div>
   );
 }

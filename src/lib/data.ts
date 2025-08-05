@@ -54,3 +54,11 @@ export type CoreValue = {
   image: string;
   imageHint?: string;
 };
+
+export type WorkflowStep = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  imageHint?: string;
+};
