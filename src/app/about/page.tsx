@@ -16,6 +16,7 @@ export default function AboutPage() {
     headline: 'About Us',
     heroImage: 'https://placehold.co/1920x600.png',
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchContentData = async () => {
@@ -32,16 +33,22 @@ export default function AboutPage() {
         }
       } catch (error) {
         console.error('Error fetching about page data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchContentData();
   }, []);
 
+  if (loading) {
+    return null;
+  }
+
   return (
     <>
       <section className="h-[60vh] flex flex-col bg-card">
-        <div className="flex-1 flex items-center justify-center p-8">
+        <div className="flex-[0.7] flex items-center justify-center">
           <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
             {heroData.headline}
           </h1>
