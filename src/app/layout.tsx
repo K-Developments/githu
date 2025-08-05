@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
+import { PageTransition } from "@/components/ui/page-transition";
 
 
 export const metadata: Metadata = {
@@ -53,7 +54,9 @@ export default function RootLayout({
         <div className="noise-overlay"></div>
         <Header />
         <main>
+          <PageTransition>
             {children}
+          </PageTransition>
         </main>
         <Footer />
         <Toaster />
