@@ -130,7 +130,7 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
               >
                 <PackageAccordion 
                     pkg={pkg} 
-                    isOpen={openAccordion === pkg.id}
+                    accordionValue={openAccordion}
                     onValueChange={handleValueChange}
                 />
               </AccordionItem>
@@ -149,29 +149,25 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
   );
 }
 
-function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen: boolean, onValueChange: (value: string | null) => void }) {
+function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package, accordionValue: string | null, onValueChange: (value: string | null) => void }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const [isSticky, setIsSticky] = useState(false);
-    const headerHeight = 68; // defined in globals.css as var(--header-height)
+    const headerHeight = 68;
+    const isOpen = accordionValue === pkg.id;
 
     useEffect(() => {
-        if (!isOpen) {
-            setIsSticky(false);
-            return;
-        }
-
         const item = itemRef.current;
         if (!item) return;
 
         const handleScroll = () => {
             const itemRect = item.getBoundingClientRect();
-            const shouldBeSticky = itemRect.top <= headerHeight && itemRect.bottom - (triggerRef.current?.offsetHeight ?? 0) > headerHeight;
+            const shouldBeSticky = isOpen && itemRect.top <= headerHeight && itemRect.bottom - (triggerRef.current?.offsetHeight ?? 0) > headerHeight;
             setIsSticky(shouldBeSticky);
         };
-
+        
         window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll(); // Initial check
+        handleScroll();
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
@@ -228,14 +224,12 @@ function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
-                        className="fixed z-20 w-full max-w-7xl left-1/2 -translate-x-1/2"
+                        className="fixed z-20 w-full px-4"
                         style={{ top: headerHeight }}
                         onClick={() => onValueChange(null)}
                     >
                         <div
-                            className={cn(
-                                "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline rounded-t-lg transition-colors bg-primary text-primary-foreground cursor-pointer shadow-lg"
-                            )}
+                            className="flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline rounded-t-lg transition-colors bg-primary text-primary-foreground cursor-pointer shadow-lg max-w-7xl mx-auto"
                         >
                             <span className="truncate">{pkg.title}</span>
                             <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 rotate-180")} />
@@ -247,8 +241,7 @@ function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen
                 ref={triggerRef}
                 className={cn(
                     "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
-                    isOpen ? "bg-primary text-primary-foreground" : "text-foreground",
-                    isSticky && "invisible"
+                    isOpen ? "bg-primary text-primary-foreground" : "text-foreground"
                 )}
             >
                 <span className="truncate">{pkg.title}</span>
@@ -256,9 +249,6 @@ function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen
             </AccordionTrigger>
 
             <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
-                {isSticky && triggerRef.current && (
-                    <div style={{ height: triggerRef.current.offsetHeight }} />
-                )}
                 <AnimatePresence>
                     {isOpen && (
                          <motion.div
