@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import type { Package, Destination, Testimonial, CtaData } from "@/lib/data";
+import type { Package, Destination, Testimonial, CtaData, Category } from "@/lib/data";
 import { Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -80,6 +80,7 @@ export default function AdminHomePage() {
   });
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [allPackages, setAllPackages] = useState<Package[]>([]);
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [featuredPackagesData, setFeaturedPackagesData] = useState<FeaturedPackagesData>({ packageIds: [] });
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   
@@ -160,6 +161,11 @@ export default function AdminHomePage() {
         const destinationsSnap = await getDocs(destinationsCollectionRef);
         const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
         setDestinations(destinationsData);
+
+        const categoriesCollectionRef = collection(db, "categories");
+        const categoriesSnap = await getDocs(categoriesCollectionRef);
+        const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
+        setAllCategories(categoriesData);
 
         const packagesCollectionRef = collection(db, "packages");
         const packagesSnap = await getDocs(packagesCollectionRef);
@@ -492,22 +498,32 @@ export default function AdminHomePage() {
       
       <Card>
         <CardHeader>
-          <CardTitle>Manage Featured Packages</CardTitle>
-          <CardDescription>Select which packages to display on the homepage. Manage all packages on the "Packages" admin page.</CardDescription>
+            <CardTitle>Manage Featured Packages</CardTitle>
+            <CardDescription>Select which packages to display on the homepage. Manage all packages on the "Packages" admin page.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {allPackages.map(pkg => (
-                    <div key={pkg.id} className="flex items-center space-x-2 p-2 border rounded-md">
-                        <Checkbox
-                            id={`featured-${pkg.id}`}
-                            checked={featuredPackagesData.packageIds.includes(pkg.id)}
-                            onCheckedChange={(checked) => handleFeaturedPackageChange(pkg.id, checked)}
-                        />
-                        <Label htmlFor={`featured-${pkg.id}`} className="cursor-pointer">{pkg.title}</Label>
+            {allCategories.map(category => {
+                const packagesInCategory = allPackages.filter(p => p.categoryId === category.id);
+                if (packagesInCategory.length === 0) return null;
+
+                return (
+                    <div key={category.id} className="space-y-3">
+                        <h4 className="font-semibold text-md border-b pb-2">{category.name}</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {packagesInCategory.map(pkg => (
+                                <div key={pkg.id} className="flex items-center space-x-2 p-2 border rounded-md">
+                                    <Checkbox
+                                        id={`featured-${pkg.id}`}
+                                        checked={featuredPackagesData.packageIds.includes(pkg.id)}
+                                        onCheckedChange={(checked) => handleFeaturedPackageChange(pkg.id, checked)}
+                                    />
+                                    <Label htmlFor={`featured-${pkg.id}`} className="cursor-pointer">{pkg.title}</Label>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                ))}
-            </div>
+                );
+            })}
             {allPackages.length === 0 && <p className="text-muted-foreground">No packages found. Add packages in the 'Packages' admin page first.</p>}
         </CardContent>
       </Card>
@@ -600,3 +616,5 @@ export default function AdminHomePage() {
     </div>
   );
 }
+
+    

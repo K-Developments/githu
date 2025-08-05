@@ -77,3 +77,5 @@ export type TourPackage = {
     imageHints: string[];
     category: string;
 };
+
+    
