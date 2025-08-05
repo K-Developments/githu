@@ -1,11 +1,12 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firestore';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { CtaSection } from '@/components/ui/cta-section';
@@ -25,13 +26,22 @@ interface PackagesPageData {
   ctaData: CtaData | null;
 }
 
-export default function PackagesPage() {
+function PackagesPageComponent() {
   const [pageData, setPageData] = useState<PackagesPageData | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const openPackageId = searchParams.get('open');
+
+  useEffect(() => {
+    if (openPackageId) {
+      setOpenAccordion(openPackageId);
+    }
+  }, [openPackageId]);
 
 
   useEffect(() => {
@@ -221,7 +231,7 @@ export default function PackagesPage() {
                     <div className="md:col-span-3">
                       <h3 className="font-headline text-3xl mb-6">Tour Itinerary</h3>
                       <div className="space-y-6 prose prose-stone max-w-none text-muted-foreground">
-                        <div dangerouslySetInnerHTML={{ __html: pkg.description.replace(/\n/g, '<br />') }} />
+                        <div dangerouslySetInnerHTML={{ __html: pkg.description.replace(/\\n/g, '<br />') }} />
                       </div>
                     </div>
                     <div className="md:col-span-2">
@@ -270,5 +280,13 @@ export default function PackagesPage() {
       
       {ctaData && <CtaSection data={ctaData} />}
     </div>
+  );
+}
+
+export default function PackagesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PackagesPageComponent />
+    </Suspense>
   );
 }
