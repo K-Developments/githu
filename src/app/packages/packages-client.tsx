@@ -153,6 +153,9 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const [isSticky, setIsSticky] = useState(false);
+    const [placeholderHeight, setPlaceholderHeight] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
+
     const headerHeight = 68;
     const isOpen = accordionValue === pkg.id;
 
@@ -161,9 +164,18 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
         if (!item) return;
 
         const handleScroll = () => {
+            const triggerEl = triggerRef.current;
+            if (!triggerEl) return;
+            
             const itemRect = item.getBoundingClientRect();
-            const shouldBeSticky = isOpen && itemRect.top <= headerHeight && itemRect.bottom - (triggerRef.current?.offsetHeight ?? 0) > headerHeight;
+            const shouldBeSticky = isOpen && itemRect.top <= headerHeight && itemRect.bottom - triggerEl.offsetHeight > headerHeight;
+            
             setIsSticky(shouldBeSticky);
+             if (shouldBeSticky) {
+                setPlaceholderHeight(triggerEl.offsetHeight);
+            } else {
+                setPlaceholderHeight(0);
+            }
         };
         
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -212,10 +224,21 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
         opacity: 1,
         transition: { type: 'spring', stiffness: 200, damping: 25 }
       },
+      exit: { y: -20, opacity: 0 }
+    };
+
+     const imageHoverVariants = {
+        hidden: { opacity: 0, scale: 0.95, x: 20 },
+        visible: { 
+            opacity: 1, 
+            scale: 1, 
+            x: 0,
+            transition: { type: 'spring', stiffness: 200, damping: 20 }
+        },
     };
 
     return (
-        <div ref={itemRef}>
+        <div ref={itemRef} className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <AnimatePresence>
                 {isSticky && (
                     <motion.div
@@ -223,15 +246,15 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                         variants={stickyHeaderVariants}
                         initial="hidden"
                         animate="visible"
-                        exit="hidden"
-                        className="fixed z-20 w-full px-4"
+                        exit="exit"
+                        className="fixed z-20 w-full left-0"
                         style={{ top: headerHeight }}
                         onClick={() => onValueChange(null)}
                     >
                         <div
                             className="flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline rounded-t-lg transition-colors bg-primary text-primary-foreground cursor-pointer shadow-lg max-w-7xl mx-auto"
                         >
-                            <span className="truncate">{pkg.title}</span>
+                            <span>{pkg.title}</span>
                             <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 rotate-180")} />
                         </div>
                     </motion.div>
@@ -241,14 +264,35 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                 ref={triggerRef}
                 className={cn(
                     "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
-                    isOpen ? "bg-primary text-primary-foreground" : "text-foreground"
+                    isOpen ? "bg-primary text-primary-foreground" : "text-foreground",
+                    isSticky && "invisible"
                 )}
             >
-                <span className="truncate">{pkg.title}</span>
+                <span>{pkg.title}</span>
                 <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
             </AccordionTrigger>
 
+            <AnimatePresence>
+                {isHovered && !isOpen && pkg.images?.[0] && (
+                     <motion.div
+                        variants={imageHoverVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        className="absolute top-0 right-0 w-48 h-32 -mr-56 pointer-events-none hidden lg:block"
+                     >
+                        <Image 
+                            src={pkg.images[0]} 
+                            alt={`Preview of ${pkg.title}`} 
+                            fill 
+                            className="object-cover rounded-md shadow-xl"
+                        />
+                     </motion.div>
+                )}
+            </AnimatePresence>
+
             <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
+                <div style={{ height: placeholderHeight }} />
                 <AnimatePresence>
                     {isOpen && (
                          <motion.div
