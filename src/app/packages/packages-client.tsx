@@ -156,9 +156,8 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
         const handleScroll = () => {
             if (itemRef.current && triggerRef.current) {
                 const itemRect = itemRef.current.getBoundingClientRect();
-                const triggerHeight = triggerRef.current.offsetHeight;
                 
-                const shouldBeSticky = itemRect.top <= headerHeight && itemRect.bottom >= headerHeight + triggerHeight;
+                const shouldBeSticky = itemRect.top <= headerHeight && itemRect.bottom >= headerHeight;
 
                 setIsSticky(shouldBeSticky);
             }
@@ -184,9 +183,25 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
       );
       
     const stickyHeaderVariants = {
-        initial: { opacity: 0, y: -20 },
-        animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
-        exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: 'easeIn' } }
+        initial: { opacity: 0, y: -50 },
+        animate: { 
+            opacity: 1, 
+            y: 0, 
+            transition: { 
+                type: "spring",
+                stiffness: 100,
+                damping: 20,
+                mass: 1
+            } 
+        },
+        exit: { 
+            opacity: 0, 
+            y: -50, 
+            transition: { 
+                duration: 0.2, 
+                ease: 'easeOut' 
+            } 
+        }
     };
 
     return (
@@ -199,13 +214,11 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                         animate="animate"
                         exit="exit"
                         className={cn(
-                            'fixed w-full left-0 px-4',
-                            'flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl',
-                            'bg-primary text-primary-foreground rounded-t-lg z-20',
+                            'fixed w-full left-0 px-4 z-20',
                         )}
                         style={{ top: `${headerHeight}px`}}
                     >
-                      <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
+                      <div className="max-w-7xl mx-auto w-full flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl bg-primary text-primary-foreground rounded-t-lg">
                         <span className="truncate">{pkg.title}</span>
                         <ChevronDown className="h-6 w-6 shrink-0 transition-transform duration-200 rotate-180"/>
                       </div>
