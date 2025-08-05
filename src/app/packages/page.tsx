@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, getDocs } from 'firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { CtaSection } from '@/components/ui/cta-section';
