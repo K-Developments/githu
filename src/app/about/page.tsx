@@ -36,7 +36,7 @@ export default async function AboutPage() {
 
   return (
     <div>
-      <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+      <div>
         <section className="h-[60vh] flex flex-col bg-white">
           <div className="flex-[0.7] flex items-center justify-center p-4">
             <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
