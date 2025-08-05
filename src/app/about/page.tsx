@@ -7,9 +7,10 @@ import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { Separator } from '@/components/ui/separator';
-import type { CoreValue, WorkflowStep } from '@/lib/data';
+import type { CoreValue, WorkflowStep, CtaData } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
+import { CtaSection } from '@/components/ui/cta-section';
 
 interface AboutPageData {
   hero: {
@@ -26,6 +27,7 @@ interface AboutPageData {
   };
   coreValues: CoreValue[];
   workflow: WorkflowStep[];
+  ctaData: CtaData | null;
 }
 
 export default function AboutPage() {
@@ -37,6 +39,18 @@ export default function AboutPage() {
         try {
             const contentDocRef = doc(db, 'content', 'about');
             const contentDocSnap = await getDoc(contentDocRef);
+
+            const homeContentDocRef = doc(db, "content", "home");
+            const homeContentDocSnap = await getDoc(homeContentDocRef);
+            let ctaData: CtaData | null = null;
+            if (homeContentDocSnap.exists()) {
+                const homeData = homeContentDocSnap.data();
+                const cta = homeData.cta as CtaData;
+                if (cta && !cta.interactiveItems) {
+                    cta.interactiveItems = [];
+                }
+                ctaData = cta;
+            }
 
             if (contentDocSnap.exists()) {
                 const data = contentDocSnap.data();
@@ -58,6 +72,7 @@ export default function AboutPage() {
                     },
                     coreValues,
                     workflow,
+                    ctaData
                 });
             } else {
                  setPageData({
@@ -75,6 +90,7 @@ export default function AboutPage() {
                     },
                     coreValues: [],
                     workflow: [],
+                    ctaData,
                 });
             }
         } catch (error) {
@@ -95,7 +111,7 @@ export default function AboutPage() {
       return <div>Error loading page data.</div>; // Or a proper error message
   }
 
-  const { hero, journey, coreValues, workflow } = pageData;
+  const { hero, journey, coreValues, workflow, ctaData } = pageData;
 
   return (
     <div>
@@ -203,6 +219,7 @@ export default function AboutPage() {
                 </div>
             </section>
         )}
+        {ctaData && <CtaSection data={ctaData} />}
     </div>
   );
 }

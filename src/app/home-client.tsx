@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
 import { Preloader } from "@/components/ui/preloader";
+import { CtaSection } from "@/components/ui/cta-section";
 
 
 // Define interfaces for the fetched data
@@ -105,7 +106,7 @@ export default function HomeClient({
       {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
       {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
       {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
-      {ctaData && <HomePageCallToActionSection data={ctaData} />}
+      {ctaData && <CtaSection data={ctaData} />}
       <NewsletterSection />
     </>
   );
@@ -454,88 +455,6 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
     );
 }
 
-function HomePageCallToActionSection({ data }: { data: CtaData }) {
-    const [hoveredItem, setHoveredItem] = useState<number | null>(null);
-
-    const getBackgroundImage = () => {
-        if (hoveredItem !== null && data.interactiveItems && data.interactiveItems[hoveredItem]) {
-            return data.interactiveItems[hoveredItem].backgroundImage;
-        }
-        return data.backgroundImage;
-    };
-    
-    const interactiveItems = data.interactiveItems || [];
-
-    return (
-        <section className="home-page-call-to-action-section">
-            <AnimatePresence>
-                <motion.div
-                    key={getBackgroundImage()}
-                    className="cta-background-image"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5, ease: 'easeInOut' }}
-                >
-                    <Image 
-                        src={getBackgroundImage() || "https://placehold.co/1920x1080.png"} 
-                        alt="Serene travel destination" 
-                        fill 
-                        className="object-cover" 
-                        data-ai-hint="tropical beach"
-                    />
-                </motion.div>
-            </AnimatePresence>
-            <div className="cta-overlay"></div>
-
-            <div className="cta-content-container">
-                <ScrollAnimation>
-                    <div className="cta-content">
-                        <h2 className="cta-title">{data.title}</h2>
-                        <div className="button-wrapper-for-border">
-                            <Button asChild size="lg" className="w-full md:w-auto">
-                                <Link href={data.buttonUrl}>{data.buttonText}</Link>
-                            </Button>
-                        </div>
-                    </div>
-                </ScrollAnimation>
-            </div>
-            
-            <div className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
-                {interactiveItems.map((item, index) => (
-                    <Link
-                        key={index}
-                        href={item.linkUrl || '#'}
-                        className="cta-interactive-item"
-                        onMouseEnter={() => setHoveredItem(index)}
-                    >
-                        <h3 className="cta-item-title">{item.title}</h3>
-                        <p className="cta-item-description">{item.description}</p>
-                    </Link>
-                ))}
-            </div>
-
-            <div className="cta-mobile-panel">
-                {interactiveItems.map((item, index) => (
-                    <Link key={index} href={item.linkUrl || '#'} className="cta-mobile-card">
-                        <Image 
-                            src={item.backgroundImage || "https://placehold.co/1920x1080.png"} 
-                            alt={item.title}
-                            fill
-                            className="object-cover -z-10"
-                        />
-                        <div className="cta-mobile-card-overlay"></div>
-                        <h3 className="cta-item-title">{item.title}</h3>
-                        <p className="cta-item-description">{item.description}</p>
-                    </Link>
-                ))}
-            </div>
-
-        </section>
-    );
-}
-
-
 function NewsletterSection() {
     return (
         <section className="newsletter-section">
@@ -560,5 +479,3 @@ function NewsletterSection() {
         </section>
     );
 }
-
-    
