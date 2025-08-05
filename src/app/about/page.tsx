@@ -157,6 +157,7 @@ export default async function AboutPage() {
 
         <section className="bg-white">
             <div className="max-w-7xl mx-auto py-12 px-4 md:px-12">
+                <h2 className="text-4xl md:text-5xl font-headline text-center mb-12">Our Core Values</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {coreValues.map((value, index) => (
                     <div
