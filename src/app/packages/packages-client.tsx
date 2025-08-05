@@ -204,6 +204,26 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
         }
     };
 
+    const contentContainerVariants = {
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.15,
+          delayChildren: 0.1,
+        },
+      },
+    };
+
+    const contentItemVariants = {
+      hidden: { y: 20, opacity: 0 },
+      visible: {
+        y: 0,
+        opacity: 1,
+        transition: { type: 'spring', stiffness: 50 },
+      },
+    };
+
     return (
         <div ref={itemRef}>
             <AnimatePresence>
@@ -244,9 +264,15 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
 
 
             <AccordionContent className="p-6 md:p-10 bg-card rounded-b-lg">
-                <p className="text-lg text-muted-foreground mb-6">{pkg.location}</p>
+              <motion.div
+                  variants={contentContainerVariants}
+                  initial="hidden"
+                  animate={isOpen ? "visible" : "hidden"}
+                  className="space-y-8"
+              >
+                <motion.p variants={contentItemVariants} className="text-lg text-muted-foreground mb-6">{pkg.location}</motion.p>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 pb-8 border-b">
+                <motion.div variants={contentItemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 pb-8 border-b">
                     <div className="flex items-center gap-3">
                         <Calendar className="h-8 w-8 text-primary" />
                         <div>
@@ -275,16 +301,16 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                             <p className="text-muted-foreground">{pkg.rating}/5 ({pkg.reviewsCount} reviews)</p>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
-                    <div className="md:col-span-3">
+                    <motion.div variants={contentItemVariants} className="md:col-span-3">
                         <h3 className="font-headline text-3xl mb-6">Tour Itinerary</h3>
                         <div className="space-y-6 prose prose-stone max-w-none text-muted-foreground">
                             <div dangerouslySetInnerHTML={{ __html: pkg.description.replace(/\\n/g, '<br />') }} />
                         </div>
-                    </div>
-                    <div className="md:col-span-2">
+                    </motion.div>
+                    <motion.div variants={contentItemVariants} className="md:col-span-2">
                         <div className="grid grid-cols-2 gap-4 mb-8">
                             {(pkg.images || []).filter(img => img).map((image, index) => (
                                 <div key={index} className="relative aspect-square">
@@ -314,8 +340,9 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                                 </Button>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
+              </motion.div>
             </AccordionContent>
         </div>
     )
