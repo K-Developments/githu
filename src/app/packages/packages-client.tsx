@@ -59,6 +59,28 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
   const filteredPackages = packages.filter(pkg => 
     selectedCategory === 'all' || pkg.categoryId === selectedCategory
   );
+    
+  const stickyHeaderVariants = {
+    initial: { opacity: 0, y: -50 },
+    animate: { 
+        opacity: 1, 
+        y: 0, 
+        transition: { 
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 1
+        } 
+    },
+    exit: { 
+        opacity: 0, 
+        y: -50, 
+        transition: { 
+            duration: 0.2, 
+            ease: 'easeOut' 
+        } 
+    }
+  };
 
   return (
     <div>
