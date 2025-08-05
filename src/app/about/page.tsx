@@ -164,13 +164,13 @@ export default async function AboutPage() {
                     key={value.id}
                     className="flex flex-col border"
                     >
-                    <div className={`relative aspect-square w-full ${index === 1 || index === 2 ? 'order-2' : 'order-1'}`}>
+                    <div className={`relative aspect-square w-full ${index === 1 || index === 2 ? 'order-2 sm:order-1' : 'order-1 sm:order-1'}`}>
                         <Image
                         src={value.image}
                         alt={value.title}
                         fill
                         className="object-cover"
-                        data-ai-hint={value.imageHint}
+                        data-ai-hint={value.imageHint || ''}
                         />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <h3 className="text-white text-3xl font-headline text-center p-4">
@@ -178,7 +178,7 @@ export default async function AboutPage() {
                         </h3>
                         </div>
                     </div>
-                    <div className={`p-6 bg-card flex-grow flex flex-col justify-center ${index === 1 || index === 2 ? 'order-1' : 'order-2'}`}>
+                    <div className={`p-6 bg-card flex-grow flex flex-col justify-center ${index === 1 || index === 2 ? 'order-1 sm:order-2' : 'order-2 sm:order-2'}`}>
                         <p className="text-muted-foreground leading-relaxed">
                         {value.description}
                         </p>

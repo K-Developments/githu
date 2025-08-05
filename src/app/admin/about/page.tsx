@@ -140,12 +140,26 @@ export default function AdminAboutPage() {
     setLoading(true);
     try {
       const contentDocRef = doc(db, "content", "about");
+      // Create clean copies without the id for saving, but generate a stable one if it's a new item.
+      const valuesToSave = coreValues.map(value => {
+        const { id, ...rest } = value;
+        return {
+          id: id.startsWith('new-') ? `value-${Date.now()}-${Math.random()}`: id,
+          ...rest
+        }
+      });
+      
       const dataToSave = { 
         hero: heroData, 
         journey: journeyData,
-        coreValues: coreValues.map(value => ({...value})) // Create clean copies
+        coreValues: valuesToSave
       };
+      
       await setDoc(contentDocRef, dataToSave, { merge: true });
+
+      // Update local state with the potentially new IDs to avoid key issues
+      setCoreValues(valuesToSave);
+
       toast({
         title: "Success",
         description: "About page content has been saved.",
