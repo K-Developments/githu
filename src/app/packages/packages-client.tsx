@@ -77,7 +77,6 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
                     alt="Scenic view of a travel package destination"
                     fill
                     className="object-cover"
-                    data-ai-hint="exotic travel"
                   />
               </ScrollAnimation>
               <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />
@@ -159,7 +158,6 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                 const itemRect = itemRef.current.getBoundingClientRect();
                 const triggerHeight = triggerRef.current.offsetHeight;
                 
-                // Sticky when the top of the item reaches the header, and the bottom of the item is still visible
                 const shouldBeSticky = itemRect.top <= headerHeight && itemRect.bottom >= headerHeight + triggerHeight;
 
                 setIsSticky(shouldBeSticky);
@@ -202,12 +200,12 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                         exit="exit"
                         className={cn(
                             'fixed w-full max-w-7xl mx-auto left-1/2 -translate-x-1/2 px-4 md:px-12',
-                            'flex justify-between items-center p-6 text-left font-headline text-2xl md:text-4xl',
+                            'flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl',
                             'bg-primary text-primary-foreground rounded-t-lg z-20',
                         )}
                         style={{ top: `${headerHeight}px`}}
                     >
-                        <span>{pkg.title}</span>
+                        <span className="truncate">{pkg.title}</span>
                         <ChevronDown className="h-6 w-6 shrink-0 transition-transform duration-200 rotate-180"/>
                     </motion.div>
                 )}
@@ -216,18 +214,17 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
             <AccordionTrigger
                 ref={triggerRef}
                 className={cn(
-                    "flex justify-between items-center w-full p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
+                    "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
                     isOpen
                         ? "bg-primary text-primary-foreground"
                         : "text-primary-foreground",
                     isSticky && 'invisible' // Hide original trigger when sticky one is active
                 )}
             >
-                <span>{pkg.title}</span>
+                <span className="truncate">{pkg.title}</span>
                 <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
             </AccordionTrigger>
             
-            {/* This placeholder prevents content jump when the header becomes fixed */}
             <div style={{ height: isSticky ? triggerRef.current?.offsetHeight : 0 }} />
 
 
@@ -281,7 +278,6 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                                         alt={`${pkg.title} - image ${index + 1}`}
                                         fill
                                         className="object-cover rounded-md"
-                                        data-ai-hint="tourist destination"
                                     />
                                 </div>
                             ))}
