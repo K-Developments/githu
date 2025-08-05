@@ -505,7 +505,7 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                 </ScrollAnimation>
             </div>
             
-            <ScrollAnimation className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
+            <div className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
                 {interactiveItems.map((item, index) => (
                     <Link
                         key={index}
@@ -517,7 +517,7 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                         <p className="cta-item-description">{item.description}</p>
                     </Link>
                 ))}
-            </ScrollAnimation>
+            </div>
 
             <div className="cta-mobile-panel">
                 {interactiveItems.map((item, index) => (
@@ -564,5 +564,3 @@ function NewsletterSection() {
         </section>
     );
 }
-
-    
