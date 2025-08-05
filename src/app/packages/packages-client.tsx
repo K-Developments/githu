@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -124,7 +124,7 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
                 className="border-b-0"
                 ref={el => (packageRefs.current[pkg.id] = el)}
               >
-                <PackageAccordion pkg={pkg} onValueChange={setOpenAccordion} openAccordionId={openAccordion}/>
+                <PackageAccordion pkg={pkg} />
               </AccordionItem>
             ))}
           </Accordion>
@@ -141,34 +141,41 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
   );
 }
 
-function PackageAccordion({ pkg, onValueChange, openAccordionId }: { pkg: Package, onValueChange: (value: string | null) => void, openAccordionId: string | null}) {
-    const [isSticky, setIsSticky] = useState(false);
+function PackageAccordion({ pkg }: { pkg: Package }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const headerHeight = 68; // defined in globals.css as var(--header-height)
-    const isOpen = openAccordionId === pkg.id;
-
+    
     useEffect(() => {
-        if (!isOpen) {
-            setIsSticky(false);
-            return;
-        }
+        const trigger = triggerRef.current;
+        const item = itemRef.current;
+        if (!trigger || !item) return;
 
         const handleScroll = () => {
-            if (itemRef.current && triggerRef.current) {
-                const itemRect = itemRef.current.getBoundingClientRect();
-                const shouldBeSticky = itemRect.top <= headerHeight && itemRect.bottom >= headerHeight;
-                setIsSticky(shouldBeSticky);
+            const itemRect = item.getBoundingClientRect();
+            const isSticking = itemRect.top <= headerHeight && itemRect.bottom - trigger.offsetHeight > headerHeight;
+            
+            if (isSticking) {
+                trigger.classList.add('accordion-trigger-sticky');
+                trigger.style.width = `${item.offsetWidth}px`;
+            } else {
+                trigger.classList.remove('accordion-trigger-sticky');
+                trigger.style.width = '';
             }
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll();
+        
+        // Also check on resize
+        const observer = new ResizeObserver(handleScroll);
+        observer.observe(item);
+
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
+            observer.disconnect();
         };
-    }, [isOpen]);
+    }, []);
     
     const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
         <ul className="space-y-2">
@@ -180,28 +187,6 @@ function PackageAccordion({ pkg, onValueChange, openAccordionId }: { pkg: Packag
             ))}
         </ul>
       );
-      
-    const stickyHeaderVariants = {
-        initial: { opacity: 0, y: -50 },
-        animate: { 
-            opacity: 1, 
-            y: 0, 
-            transition: { 
-                type: "spring",
-                stiffness: 100,
-                damping: 20,
-                mass: 1
-            } 
-        },
-        exit: { 
-            opacity: 0, 
-            y: -50, 
-            transition: { 
-                duration: 0.2, 
-                ease: 'easeOut' 
-            } 
-        }
-    };
 
     const contentContainerVariants = {
       hidden: { opacity: 0 },
@@ -225,46 +210,23 @@ function PackageAccordion({ pkg, onValueChange, openAccordionId }: { pkg: Packag
 
     return (
         <div ref={itemRef}>
-            <AnimatePresence>
-                {isSticky && (
-                    <motion.div
-                        variants={stickyHeaderVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="fixed w-full left-0 px-4 z-20"
-                        style={{ top: `var(--header-height)`}}
-                        onClick={() => onValueChange(isOpen ? null : pkg.id)}
-                    >
-                      <div className="w-full max-w-7xl mx-auto flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl bg-primary text-primary-foreground rounded-t-lg">
-                        <span className="truncate">{pkg.title}</span>
-                        <ChevronDown className="h-6 w-6 shrink-0 transition-transform duration-200 rotate-180"/>
-                      </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
             <AccordionTrigger
                 ref={triggerRef}
                 className={cn(
-                    "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
-                     isOpen
-                        ? "bg-primary text-primary-foreground"
-                        : "text-foreground"
+                    "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors text-foreground",
+                     "[&[data-state=open]]:bg-primary [&[data-state=open]]:text-primary-foreground"
                 )}
             >
                 <span className="truncate">{pkg.title}</span>
-                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
+                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", "[&[data-state=open]]:rotate-180")} />
             </AccordionTrigger>
-            
-            <div style={{ height: isSticky ? triggerRef.current?.offsetHeight : 0 }} />
-
 
             <AccordionContent className="p-6 md:p-10 bg-card rounded-b-lg">
               <motion.div
                   variants={contentContainerVariants}
                   initial="hidden"
-                  animate={isOpen ? "visible" : "hidden"}
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
                   className="space-y-8"
               >
                 <motion.p variants={contentItemVariants} className="text-lg text-muted-foreground mb-6">{pkg.location}</motion.p>
