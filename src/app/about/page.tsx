@@ -11,6 +11,7 @@ import type { CoreValue, WorkflowStep, CtaData } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 import { CtaSection } from '@/components/ui/cta-section';
+import { ScrollAnimation } from '@/components/ui/scroll-animation';
 
 interface AboutPageData {
   hero: {
@@ -116,22 +117,26 @@ export default function AboutPage() {
   return (
     <div>
         <section className="h-[70vh] flex flex-col bg-white">
-          <div className="flex-[0.7] flex items-center justify-center p-4">
-            <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
-              {hero.headline}
-            </h1>
-          </div>
-          <div className="flex-1 relative w-full">
-            <Image
-              src={hero.heroImage}
-              alt="A diverse team collaborating on travel plans"
-              fill
-              className="object-cover"
-              data-ai-hint="team collaboration"
-            />
-            <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
-          </div>
+            <div className="flex-[0.7] flex items-center justify-center p-4">
+                <ScrollAnimation>
+                    <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
+                    {hero.headline}
+                    </h1>
+                </ScrollAnimation>
+            </div>
+            <div className="flex-1 relative w-full">
+                <ScrollAnimation>
+                    <Image
+                    src={hero.heroImage}
+                    alt="A diverse team collaborating on travel plans"
+                    fill
+                    className="object-cover"
+                    data-ai-hint="team collaboration"
+                    />
+                </ScrollAnimation>
+                <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
+            </div>
         </section>
 
         <div className="bg-white px-4 md:px-12">
@@ -145,66 +150,77 @@ export default function AboutPage() {
         </div>
 
         <section className="py-12 px-4 md:px-12 bg-white">
-            <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">{journey.title}</h2>
+            <ScrollAnimation>
+                <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">{journey.title}</h2>
+            </ScrollAnimation>
             
             <div className="mb-16 md:mb-24">
-                <div className="w-full h-[40vh] md:h-[60vh] relative">
-                    <Image 
-                      src={journey.image}
-                      alt="Landscape of a journey"
-                      fill
-                      className="object-cover rounded-md shadow-xl"
-                      data-ai-hint="journey landscape"
-                    />
-                </div>
+                <ScrollAnimation>
+                    <div className="w-full h-[40vh] md:h-[60vh] relative">
+                        <Image 
+                        src={journey.image}
+                        alt="Landscape of a journey"
+                        fill
+                        className="object-cover rounded-md shadow-xl"
+                        data-ai-hint="journey landscape"
+                        />
+                    </div>
+                </ScrollAnimation>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-              <div>
-                <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {journey.missionText}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {journey.visionText}
-                </p>
-              </div>
+              <ScrollAnimation>
+                <div>
+                  <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {journey.missionText}
+                  </p>
+                </div>
+              </ScrollAnimation>
+              <ScrollAnimation delay={0.2}>
+                <div>
+                  <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {journey.visionText}
+                  </p>
+                </div>
+              </ScrollAnimation>
             </div>
         </section>
 
         {coreValues.length > 0 && (
             <section className="bg-white">
                 <div className="max-w-7xl mx-auto py-12 px-4 md:px-12">
-                    <h2 className="text-4xl md:text-5xl font-headline text-center mb-12">Our Core Values</h2>
+                    <ScrollAnimation>
+                        <h2 className="text-4xl md:text-5xl font-headline text-center mb-12">Our Core Values</h2>
+                    </ScrollAnimation>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {coreValues.map((value, index) => (
-                        <div
-                        key={value.id}
-                        className="flex flex-col border"
-                        >
-                        <div className={cn('relative aspect-square w-full', (index === 1 || index === 3) && 'sm:order-2')}>
-                            <Image
-                            src={value.image}
-                            alt={value.title}
-                            fill
-                            className="object-cover"
-                            data-ai-hint={value.imageHint || ''}
-                            />
-                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <h3 className="text-white text-3xl font-headline text-center p-4">
-                                {value.title}
-                            </h3>
+                        <ScrollAnimation key={value.id} delay={index * 0.1}>
+                            <div
+                            className="flex flex-col border"
+                            >
+                            <div className={cn('relative aspect-square w-full', (index === 1 || index === 3) && 'sm:order-2')}>
+                                <Image
+                                src={value.image}
+                                alt={value.title}
+                                fill
+                                className="object-cover"
+                                data-ai-hint={value.imageHint || ''}
+                                />
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                <h3 className="text-white text-3xl font-headline text-center p-4">
+                                    {value.title}
+                                </h3>
+                                </div>
                             </div>
-                        </div>
-                        <div className={cn('p-6 bg-card flex-grow flex flex-col justify-center', (index === 1 || index === 3) && 'sm:order-1')}>
-                            <p className="text-muted-foreground leading-relaxed">
-                            {value.description}
-                            </p>
-                        </div>
-                        </div>
+                            <div className={cn('p-6 bg-card flex-grow flex flex-col justify-center', (index === 1 || index === 3) && 'sm:order-1')}>
+                                <p className="text-muted-foreground leading-relaxed">
+                                {value.description}
+                                </p>
+                            </div>
+                            </div>
+                        </ScrollAnimation>
                     ))}
                     </div>
                 </div>
@@ -214,8 +230,12 @@ export default function AboutPage() {
         {workflow.length > 0 && (
             <section className="py-24 bg-white">
                 <div className="max-w-5xl mx-auto px-4 md:px-12">
-                    <h2 className="text-4xl md:text-5xl font-headline text-center mb-20">Our Workflow</h2>
-                    <WorkflowCarousel steps={workflow} />
+                    <ScrollAnimation>
+                        <h2 className="text-4xl md:text-5xl font-headline text-center mb-20">Our Workflow</h2>
+                    </ScrollAnimation>
+                    <ScrollAnimation delay={0.2}>
+                        <WorkflowCarousel steps={workflow} />
+                    </ScrollAnimation>
                 </div>
             </section>
         )}
