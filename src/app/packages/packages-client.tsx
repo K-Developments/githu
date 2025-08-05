@@ -252,7 +252,7 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                     "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
                     isOpen
                         ? "bg-primary text-primary-foreground"
-                        : "text-primary-foreground",
+                        : "text-foreground",
                     isSticky && 'invisible' // Hide original trigger when sticky one is active
                 )}
             >
