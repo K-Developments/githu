@@ -62,38 +62,40 @@ export function WorkflowCarousel({ steps }: WorkflowCarouselProps) {
               x: { type: 'spring', stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },
             }}
-            className="absolute w-full h-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
+            className="absolute w-full h-full flex flex-col justify-between"
           >
-            <div className="flex flex-col justify-center">
-              <h3 className="text-4xl font-headline mb-4 uppercase">{currentStep.title}</h3>
-              <p className="text-muted-foreground leading-relaxed mb-8">{currentStep.description}</p>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => paginate(-1)}
-                  disabled={steps.length <= 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => paginate(1)}
-                  disabled={steps.length <= 1}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-end flex-grow">
+               <h3 className="text-4xl font-headline uppercase">{currentStep.title}</h3>
+               <div className="relative aspect-video h-full">
+                  <Image
+                    src={currentStep.image}
+                    alt={currentStep.title}
+                    fill
+                    className="object-cover rounded-lg shadow-xl"
+                    data-ai-hint={currentStep.imageHint || ''}
+                  />
+                </div>
             </div>
-            <div className="relative aspect-video">
-              <Image
-                src={currentStep.image}
-                alt={currentStep.title}
-                fill
-                className="object-cover rounded-lg shadow-xl"
-                data-ai-hint={currentStep.imageHint || ''}
-              />
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="flex items-center space-x-2">
+                    <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => paginate(-1)}
+                    disabled={steps.length <= 1}
+                    >
+                    <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => paginate(1)}
+                    disabled={steps.length <= 1}
+                    >
+                    <ChevronRight className="h-4 w-4" />
+                    </Button>
+                </div>
+                <p className="text-muted-foreground leading-relaxed">{currentStep.description}</p>
             </div>
           </motion.div>
         </AnimatePresence>
