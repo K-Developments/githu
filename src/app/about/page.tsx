@@ -47,7 +47,7 @@ export default function AboutPage() {
 
   return (
     <>
-      <section className="h-[60vh] flex flex-col bg-card">
+      <section className="h-[60vh] flex flex-col bg-white">
         <div className="flex-[0.7] flex items-center justify-center">
           <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
             {heroData.headline}
