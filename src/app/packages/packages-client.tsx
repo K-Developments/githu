@@ -11,6 +11,7 @@ import { CtaSection } from '@/components/ui/cta-section';
 import type { CtaData, Package, Category } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -149,47 +150,12 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const [isSticky, setIsSticky] = useState(false);
-    const headerHeight = 68;
     
     // We are getting the accordion value from the parent context, so no need for isOpen prop
     const accordionContext = AccordionPrimitive.useAccordionContext();
     const isOpen = accordionContext.value?.includes(pkg.id) ?? false;
 
     const [isHovered, setIsHovered] = useState(false);
-
-
-    useEffect(() => {
-        const trigger = triggerRef.current;
-        if (!trigger || !isOpen) {
-            trigger?.classList.remove('accordion-trigger-sticky');
-            return;
-        }
-
-        const handleScroll = () => {
-            if (!itemRef.current || !contentRef.current || !triggerRef.current) return;
-
-            const itemRect = itemRef.current.getBoundingClientRect();
-            const contentRect = contentRef.current.getBoundingClientRect();
-            const triggerHeight = triggerRef.current?.offsetHeight ?? 0;
-            
-            const shouldBeSticky = itemRect.top <= headerHeight && contentRect.bottom - triggerHeight > headerHeight;
-            
-            if (shouldBeSticky) {
-                triggerRef.current?.classList.add('accordion-trigger-sticky');
-            } else {
-                triggerRef.current?.classList.remove('accordion-trigger-sticky');
-            }
-        };
-        
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll(); // Initial check
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-            trigger?.classList.remove('accordion-trigger-sticky');
-        };
-    }, [isOpen, headerHeight]);
     
     const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
         <ul className="space-y-2">
@@ -341,4 +307,5 @@ function PackageAccordion({ pkg }: { pkg: Package }) {
 
 
     
+
 
