@@ -103,6 +103,8 @@ export default function HomePage() {
                 setIsLoading(false);
                 sessionStorage.setItem('hasVisitedIslandHopes', 'true');
             }, 2000); // Simulate preloader time
+        } else {
+            setIsLoading(false);
         }
       }
     };
@@ -111,24 +113,24 @@ export default function HomePage() {
   }, []);
 
 
-  return (
-    <>
+  if (isLoading) {
+    return (
       <AnimatePresence>
         {isLoading && <Preloader />}
       </AnimatePresence>
-      
-      {!isLoading && (
-        <>
-          {heroData && <HeroSection data={heroData} />}
-          {introData && <IntroSection data={introData} />}
-          {quoteData && <QuoteSection data={quoteData} />}
-          {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
-          {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
-          {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
-          {ctaData && <HomePageCallToActionSection data={ctaData} />}
-          <NewsletterSection />
-        </>
-      )}
+    );
+  }
+
+  return (
+    <>
+      {heroData && <HeroSection data={heroData} />}
+      {introData && <IntroSection data={introData} />}
+      {quoteData && <QuoteSection data={quoteData} />}
+      {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
+      {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
+      {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
+      {ctaData && <HomePageCallToActionSection data={ctaData} />}
+      <NewsletterSection />
     </>
   );
 }
