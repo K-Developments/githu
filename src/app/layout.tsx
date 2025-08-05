@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
+import { ScrollRestoration } from "@/components/ui/scroll-restoration";
 
 
 export const metadata: Metadata = {
@@ -50,6 +51,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Syne:wght@400..800&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
+        <ScrollRestoration />
         <div className="noise-overlay"></div>
         <Header />
         <main>
