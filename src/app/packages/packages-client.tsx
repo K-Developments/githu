@@ -199,14 +199,16 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                         animate="animate"
                         exit="exit"
                         className={cn(
-                            'fixed w-full max-w-7xl mx-auto left-1/2 -translate-x-1/2 px-4 md:px-12',
+                            'fixed w-full left-0 px-4',
                             'flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl',
                             'bg-primary text-primary-foreground rounded-t-lg z-20',
                         )}
                         style={{ top: `${headerHeight}px`}}
                     >
+                      <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
                         <span className="truncate">{pkg.title}</span>
                         <ChevronDown className="h-6 w-6 shrink-0 transition-transform duration-200 rotate-180"/>
+                      </div>
                     </motion.div>
                 )}
             </AnimatePresence>
