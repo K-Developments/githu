@@ -1,4 +1,7 @@
 
+'use client';
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
@@ -6,6 +9,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { Separator } from '@/components/ui/separator';
 import type { CoreValue, WorkflowStep } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 
 interface AboutPageData {
   hero: {
@@ -24,59 +28,73 @@ interface AboutPageData {
   workflow: WorkflowStep[];
 }
 
-async function getAboutPageData(): Promise<AboutPageData> {
-    try {
-        const contentDocRef = doc(db, 'content', 'about');
-        const contentDocSnap = await getDoc(contentDocRef);
+export default function AboutPage() {
+  const [pageData, setPageData] = useState<AboutPageData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-        if (contentDocSnap.exists()) {
-            const data = contentDocSnap.data();
-            const coreValues = Array.isArray(data.coreValues) ? data.coreValues : [];
-            const workflow = Array.isArray(data.workflow) ? data.workflow : [];
-            
-            return {
-                hero: {
-                  headline: data.hero?.headline || 'About Us',
-                  heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
-                },
-                journey: {
-                  title: data.journey?.title || 'Our Journey',
-                  image: data.journey?.image || 'https://placehold.co/1200x800.png',
-                  missionTitle: data.journey?.missionTitle || 'Our Mission',
-                  missionText: data.journey?.missionText || 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
-                  visionTitle: data.journey?.visionTitle || 'Our Vision',
-                  visionText: data.journey?.visionText || 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
-                },
-                coreValues,
-                workflow,
-            };
+  useEffect(() => {
+    async function getAboutPageData() {
+        try {
+            const contentDocRef = doc(db, 'content', 'about');
+            const contentDocSnap = await getDoc(contentDocRef);
+
+            if (contentDocSnap.exists()) {
+                const data = contentDocSnap.data();
+                const coreValues = Array.isArray(data.coreValues) ? data.coreValues : [];
+                const workflow = Array.isArray(data.workflow) ? data.workflow : [];
+                
+                setPageData({
+                    hero: {
+                      headline: data.hero?.headline || 'About Us',
+                      heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
+                    },
+                    journey: {
+                      title: data.journey?.title || 'Our Journey',
+                      image: data.journey?.image || 'https://placehold.co/1200x800.png',
+                      missionTitle: data.journey?.missionTitle || 'Our Mission',
+                      missionText: data.journey?.missionText || 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
+                      visionTitle: data.journey?.visionTitle || 'Our Vision',
+                      visionText: data.journey?.visionText || 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
+                    },
+                    coreValues,
+                    workflow,
+                });
+            } else {
+                 setPageData({
+                    hero: {
+                        headline: 'About Us',
+                        heroImage: 'https://placehold.co/1920x600.png',
+                    },
+                    journey: {
+                        title: 'Our Journey',
+                        image: 'https://placehold.co/1200x800.png',
+                        missionTitle: 'Our Mission',
+                        missionText: 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
+                        visionTitle: 'Our Vision',
+                        visionText: 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
+                    },
+                    coreValues: [],
+                    workflow: [],
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching about page data:', error);
+             setPageData(null);
+        } finally {
+            setLoading(false);
         }
-    } catch (error) {
-        console.error('Error fetching about page data:', error);
     }
+    getAboutPageData();
+  }, []);
 
-    // Default data if Firestore fetch fails or document doesn't exist
-    return {
-        hero: {
-            headline: 'About Us',
-            heroImage: 'https://placehold.co/1920x600.png',
-        },
-        journey: {
-            title: 'Our Journey',
-            image: 'https://placehold.co/1200x800.png',
-            missionTitle: 'Our Mission',
-            missionText: 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
-            visionTitle: 'Our Vision',
-            visionText: 'To be the most trusted and innovative name in luxury travel, setting the standard for personalized service and extraordinary adventures. We envision a world where travel transcends the ordinary, connecting people with cultures and nature.',
-        },
-        coreValues: [],
-        workflow: [],
-    };
-}
+  if (loading) {
+      return <div>Loading...</div>; // Or a proper loading spinner
+  }
 
+  if (!pageData) {
+      return <div>Error loading page data.</div>; // Or a proper error message
+  }
 
-export default async function AboutPage() {
-  const pageData = await getAboutPageData();
   const { hero, journey, coreValues, workflow } = pageData;
 
   return (
@@ -181,40 +199,7 @@ export default async function AboutPage() {
             <section className="py-24 bg-white">
                 <div className="max-w-5xl mx-auto px-4 md:px-12">
                     <h2 className="text-4xl md:text-5xl font-headline text-center mb-20">Our Workflow</h2>
-                    <div className="relative">
-                        {/* The main timeline vertical line could be added here if desired */}
-                        {workflow.map((step, index) => (
-                            <div key={step.id} className="relative mb-16">
-                                <div className={cn("flex items-center", index % 2 === 0 ? "flex-row" : "flex-row-reverse")}>
-                                    {/* Content */}
-                                    <div className="w-full md:w-5/12 p-6 bg-card border rounded-lg shadow-md">
-                                        <h3 className="text-2xl font-headline mb-3">{step.title}</h3>
-                                        <p className="text-muted-foreground leading-relaxed">{step.description}</p>
-                                    </div>
-                                    {/* Timeline Connector */}
-                                    <div className="w-2/12 flex justify-center">
-                                        <div className="relative w-1 bg-border h-24">
-                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
-                                                {index + 1}
-                                            </div>
-                                        </div>
-                                    </div>
-                                     {/* Image */}
-                                    <div className="w-full md:w-5/12">
-                                        <div className="relative aspect-video">
-                                            <Image 
-                                                src={step.image}
-                                                alt={step.title}
-                                                fill
-                                                className="object-cover rounded-lg shadow-xl"
-                                                data-ai-hint={step.imageHint || ''}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <WorkflowCarousel steps={workflow} />
                 </div>
             </section>
         )}
