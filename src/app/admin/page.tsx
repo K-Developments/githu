@@ -240,7 +240,6 @@ export default function AdminHomePage() {
       location: "",
       description: "",
       image: "https://placehold.co/600x400.png",
-      imageHint: "",
       linkUrl: "",
     };
     setDestinations([...destinations, newDestination]);

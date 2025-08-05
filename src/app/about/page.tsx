@@ -206,7 +206,6 @@ export default function AboutPage() {
                                 alt={value.title}
                                 fill
                                 className="object-cover"
-                                data-ai-hint={value.imageHint || ''}
                                 />
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                                 <h3 className="text-white text-3xl font-headline text-center p-4">

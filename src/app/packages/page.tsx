@@ -205,7 +205,6 @@ export default function PackagesPage() {
                           alt={`${pkg.title} - image ${index + 1}`} 
                           fill
                           className="object-cover rounded-md"
-                          data-ai-hint={(pkg.imageHints && pkg.imageHints[index]) || 'travel landscape'}
                           />
                       </div>
                     ))}

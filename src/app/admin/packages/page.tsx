@@ -112,18 +112,6 @@ export default function AdminPackagesPage() {
     }));
   };
 
- const handlePackageImageHintChange = (id: string, imgIndex: number, value: string) => {
-    setPackages(prevPackages => prevPackages.map(p => {
-        if (p.id === id) {
-            const newImageHints = [...(p.imageHints || [])];
-            while (newImageHints.length < 4) newImageHints.push("");
-            newImageHints[imgIndex] = value;
-            return { ...p, imageHints: newImageHints };
-        }
-        return p;
-    }));
-};
-
   const handleAddNewCategory = () => {
     const newCategory: Category = {
       id: `new-cat-${Date.now()}`,
@@ -150,7 +138,6 @@ export default function AdminPackagesPage() {
       location: "",
       description: "",
       images: ["https://placehold.co/600x400.png", "", "", ""],
-      imageHints: ["", "", "", ""],
       inclusions: [],
       exclusions: [],
       linkUrl: "",
@@ -311,10 +298,6 @@ export default function AdminPackagesPage() {
                                     <div className="space-y-1">
                                         <Label htmlFor={`pkg-img-${pkg.id}-${i}`} className="text-xs">Image {i + 1} URL</Label>
                                         <Input id={`pkg-img-${pkg.id}-${i}`} value={pkg.images?.[i] || ''} onChange={(e) => handlePackageImageChange(pkg.id, i, e.target.value)} />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <Label htmlFor={`pkg-imghint-${pkg.id}-${i}`} className="text-xs">Image {i + 1} Hint (AI)</Label>
-                                        <Input id={`pkg-imghint-${pkg.id}-${i}`} value={pkg.imageHints?.[i] || ''} onChange={(e) => handlePackageImageHintChange(pkg.id, i, e.target.value)} />
                                     </div>
                                 </div>
                             ))}

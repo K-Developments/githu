@@ -5,7 +5,6 @@ export type Destination = {
   location: string;
   description: string;
   image: string;
-  imageHint?: string;
   linkUrl?: string;
 };
 
@@ -16,7 +15,6 @@ export type Package = {
   location: string;
   description: string;
   images: string[];
-  imageHints?: string[];
   linkUrl?: string;
   inclusions?: string[];
   exclusions?: string[];
@@ -55,7 +53,6 @@ export type CoreValue = {
   title: string;
   description: string;
   image: string;
-  imageHint?: string;
 };
 
 export type WorkflowStep = {
@@ -63,7 +60,6 @@ export type WorkflowStep = {
   title: string;
   description: string;
   image: string;
-  imageHint?: string;
 };
 
 export type TourPackage = {
@@ -74,7 +70,6 @@ export type TourPackage = {
     inclusions: string[];
     exclusions: string[];
     images: string[];
-    imageHints: string[];
     category: string;
 };
 

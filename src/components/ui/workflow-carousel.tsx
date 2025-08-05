@@ -75,7 +75,6 @@ export function WorkflowCarousel({ steps }: WorkflowCarouselProps) {
                             alt={currentStep.title}
                             fill
                             className="object-cover rounded-lg shadow-xl"
-                            data-ai-hint={currentStep.imageHint || ''}
                             sizes="(max-width: 768px) 100vw, 50vw"
                         />
                         </div>

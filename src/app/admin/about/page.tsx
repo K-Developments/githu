@@ -131,7 +131,6 @@ export default function AdminAboutPage() {
         title: 'New Core Value',
         description: '',
         image: 'https://placehold.co/600x600.png',
-        imageHint: ''
       };
       setCoreValues([...coreValues, newValue]);
     } else {
@@ -159,7 +158,6 @@ export default function AdminAboutPage() {
         title: 'New Step Title',
         description: '',
         image: 'https://placehold.co/800x600.png',
-        imageHint: ''
       };
       setWorkflow([...workflow, newStep]);
   };
@@ -304,10 +302,6 @@ export default function AdminAboutPage() {
                   <Label htmlFor={`value-img-${index}`} className="text-xs">Image URL</Label>
                   <Input id={`value-img-${index}`} value={value.image} onChange={(e) => handleCoreValueChange(index, 'image', e.target.value)} />
                 </div>
-                 <div className="space-y-1">
-                  <Label htmlFor={`value-hint-${index}`} className="text-xs">Image AI Hint (optional)</Label>
-                  <Input id={`value-hint-${index}`} value={value.imageHint || ''} onChange={(e) => handleCoreValueChange(index, 'imageHint', e.target.value)} />
-                </div>
               </div>
             ))}
           </div>
@@ -340,10 +334,6 @@ export default function AdminAboutPage() {
                 <div className="space-y-1">
                   <Label htmlFor={`wf-img-${index}`} className="text-xs">Image URL</Label>
                   <Input id={`wf-img-${index}`} value={step.image} onChange={(e) => handleWorkflowChange(index, 'image', e.target.value)} />
-                </div>
-                 <div className="space-y-1">
-                  <Label htmlFor={`wf-hint-${index}`} className="text-xs">Image AI Hint (optional)</Label>
-                  <Input id={`wf-hint-${index}`} value={step.imageHint || ''} onChange={(e) => handleWorkflowChange(index, 'imageHint', e.target.value)} />
                 </div>
               </div>
             ))}

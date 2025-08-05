@@ -222,7 +222,7 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
             <div className="destination-card">
               <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
                   <h3 className="card-title card-title-absolute">{dest.title}</h3>
-                  <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 20vw, (min-width: 768px) 45vw, 45vw" data-ai-hint={dest.imageHint}/>
+                  <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 20vw, (min-width: 768px) 45vw, 45vw" />
                   <div className="card-content">
                       <span className="card-location">{dest.location}</span>
                       <h3 className="card-title card-title-decorated">{dest.title}</h3>
@@ -352,7 +352,6 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover"
-                                data-ai-hint={(pkg.imageHints && pkg.imageHints[0]) || ''}
                             />
                         </div>
                         <div className="card-details">
