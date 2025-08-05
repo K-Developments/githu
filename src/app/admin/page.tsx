@@ -8,11 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, collection, getDocs, writeBatch, documentId } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import type { Package, Category, Destination, Testimonial, CtaData } from "@/lib/data";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import type { Package, Destination, Testimonial, CtaData } from "@/lib/data";
 import { Trash2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface HeroData {
   headline: string;
@@ -38,6 +38,10 @@ interface DestinationsData {
   title: string;
   subtitle: string;
   buttonUrl: string;
+}
+
+interface FeaturedPackagesData {
+    packageIds: string[];
 }
 
 export default function AdminHomePage() {
@@ -75,13 +79,11 @@ export default function AdminHomePage() {
     ]
   });
   const [destinations, setDestinations] = useState<Destination[]>([]);
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [allPackages, setAllPackages] = useState<Package[]>([]);
+  const [featuredPackagesData, setFeaturedPackagesData] = useState<FeaturedPackagesData>({ packageIds: [] });
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   
   const [deletedDestinationIds, setDeletedDestinationIds] = useState<string[]>([]);
-  const [deletedCategoryIds, setDeletedCategoryIds] = useState<string[]>([]);
-  const [deletedPackageIds, setDeletedPackageIds] = useState<string[]>([]);
   const [deletedTestimonialIds, setDeletedTestimonialIds] = useState<string[]>([]);
 
 
@@ -147,6 +149,11 @@ export default function AdminHomePage() {
             interactiveItems: interactiveItems,
           });
 
+          const featuredPackages = (data.featuredPackages || {}) as FeaturedPackagesData;
+          setFeaturedPackagesData({
+            packageIds: featuredPackages.packageIds || []
+          });
+
         }
         
         const destinationsCollectionRef = collection(db, "destinations");
@@ -154,15 +161,10 @@ export default function AdminHomePage() {
         const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
         setDestinations(destinationsData);
 
-        const categoriesCollectionRef = collection(db, "categories");
-        const categoriesSnap = await getDocs(categoriesCollectionRef);
-        const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
-        setCategories(categoriesData);
-
         const packagesCollectionRef = collection(db, "packages");
         const packagesSnap = await getDocs(packagesCollectionRef);
         const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
-        setPackages(packagesData);
+        setAllPackages(packagesData);
 
         const testimonialsCollectionRef = collection(db, "testimonials");
         const testimonialsSnap = await getDocs(testimonialsCollectionRef);
@@ -245,75 +247,16 @@ export default function AdminHomePage() {
     setDestinations(destinations.filter(d => d.id !== id));
   };
 
-  const handleCategoryChange = (id: string, field: keyof Omit<Category, 'id'>, value: any) => {
-    setCategories(prev => prev.map(c => c.id === id ? { ...c, [field]: value } : c));
-  };
-  
-  const handlePackageChange = (id: string, field: keyof Omit<Package, 'id'>, value: any) => {
-    setPackages(prevPackages => prevPackages.map(p => p.id === id ? { ...p, [field]: value } : p));
-  };
-  
-  const handlePackageImageChange = (id: string, imgIndex: number, value: string) => {
-    setPackages(prevPackages => prevPackages.map(p => {
-        if (p.id === id) {
-            const newImages = [...(p.images || [])];
-            while (newImages.length < 4) newImages.push("");
-            newImages[imgIndex] = value;
-            return { ...p, images: newImages };
+  const handleFeaturedPackageChange = (packageId: string, checked: boolean | 'indeterminate') => {
+    setFeaturedPackagesData(prev => {
+        const newPackageIds = new Set(prev.packageIds);
+        if (checked) {
+            newPackageIds.add(packageId);
+        } else {
+            newPackageIds.delete(packageId);
         }
-        return p;
-    }));
-  };
-
- const handlePackageImageHintChange = (id: string, imgIndex: number, value: string) => {
-    setPackages(prevPackages => prevPackages.map(p => {
-        if (p.id === id) {
-            const newImageHints = [...(p.imageHints || [])];
-            while (newImageHints.length < 4) newImageHints.push("");
-            newImageHints[imgIndex] = value;
-            return { ...p, imageHints: newImageHints };
-        }
-        return p;
-    }));
-};
-
-  const handleAddNewCategory = () => {
-    const newCategory: Category = {
-      id: `new-cat-${Date.now()}`,
-      name: "New Category",
-    };
-    setCategories([...categories, newCategory]);
-  };
-  
-  const handleDeleteCategory = (id: string) => {
-    const packagesToDelete = packages.filter(p => p.categoryId === id).map(p => p.id);
-    if (!id.startsWith('new-')) {
-      setDeletedCategoryIds(prev => [...prev, id]);
-      setDeletedPackageIds(prev => [...prev, ...packagesToDelete.filter(pid => !pid.startsWith('new-'))]);
-    }
-    setCategories(categories.filter(c => c.id !== id));
-    setPackages(packages.filter(p => p.categoryId !== id));
-  };
-
-  const handleAddNewPackage = (categoryId: string) => {
-    const newPackage: Package = {
-      id: `new-pkg-${Date.now()}`,
-      categoryId: categoryId,
-      title: "New Package",
-      location: "",
-      description: "",
-      images: ["https://placehold.co/600x400.png", "", "", ""],
-      imageHints: ["", "", "", ""],
-      linkUrl: "",
-    };
-    setPackages([...packages, newPackage]);
-  };
-
-  const handleDeletePackage = (id: string) => {
-    if (!id.startsWith('new-')) {
-      setDeletedPackageIds(prev => [...prev, id]);
-    }
-    setPackages(packages.filter(p => p.id !== id));
+        return { packageIds: Array.from(newPackageIds) };
+    });
   };
 
   const handleTestimonialChange = (id: string, field: keyof Omit<Testimonial, 'id'>, value: any) => {
@@ -341,47 +284,24 @@ export default function AdminHomePage() {
     setLoading(true);
     try {
         const batch = writeBatch(db);
-        const categoryIdMap = new Map<string, string>();
-
-        const newCategories = categories.filter(cat => cat.id.startsWith('new-'));
-        const newCategoryPromises = newCategories.map(async (cat) => {
-            const newDocRef = doc(collection(db, 'categories'));
-            categoryIdMap.set(cat.id, newDocRef.id);
-            const { id, ...catData } = cat;
-            batch.set(newDocRef, catData);
-        });
-        await Promise.all(newCategoryPromises);
-
-        let updatedPackages = packages.map(pkg => {
-            if (pkg.categoryId.startsWith('new-') && categoryIdMap.has(pkg.categoryId)) {
-                return { ...pkg, categoryId: categoryIdMap.get(pkg.categoryId)! };
-            }
-            return pkg;
-        });
 
         const contentDocRef = doc(db, "content", "home");
-        batch.set(contentDocRef, { hero: heroData, intro: introData, quote: quoteData, destinations: destinationsData, cta: ctaData }, { merge: true });
+        batch.set(contentDocRef, { 
+            hero: heroData, 
+            intro: introData, 
+            quote: quoteData, 
+            destinations: destinationsData, 
+            cta: ctaData,
+            featuredPackages: featuredPackagesData
+        }, { merge: true });
 
         deletedDestinationIds.forEach(id => batch.delete(doc(db, "destinations", id)));
-        deletedCategoryIds.forEach(id => batch.delete(doc(db, "categories", id)));
-        deletedPackageIds.forEach(id => batch.delete(doc(db, "packages", id)));
         deletedTestimonialIds.forEach(id => batch.delete(doc(db, "testimonials", id)));
 
         destinations.forEach(dest => {
             const { id, ...destData } = dest;
             const docRef = id.startsWith('new-') ? doc(collection(db, 'destinations')) : doc(db, "destinations", id);
             batch.set(docRef, destData);
-        });
-
-        categories.filter(cat => !cat.id.startsWith('new-')).forEach(cat => {
-            const { id, ...catData } = cat;
-            batch.set(doc(db, "categories", id), catData);
-        });
-
-        updatedPackages.forEach(pkg => {
-            const { id, ...pkgData } = pkg;
-            const docRef = id.startsWith('new-') ? doc(collection(db, 'packages')) : doc(db, "packages", id);
-            batch.set(docRef, pkgData);
         });
 
         testimonials.forEach(t => {
@@ -392,39 +312,13 @@ export default function AdminHomePage() {
 
         await batch.commit();
         
-        const finalCategories = categories.map(cat => {
-            if (categoryIdMap.has(cat.id)) {
-                return { ...cat, id: categoryIdMap.get(cat.id)! };
-            }
-            return cat;
-        });
-        setCategories(finalCategories);
-
-        const finalPackages = updatedPackages.map(pkg => {
-             if (pkg.id.startsWith('new-')) {
-                // This part is tricky, as we don't get the new package IDs back from a batch write directly.
-                // A full refetch would be the most reliable way to get the new state.
-                // For now, we'll just update the categoryId locally.
-                return { ...pkg, id: `saved-pkg-${Date.now()}` }; // Mark as saved, but ID is not the real one
-            }
-            return pkg;
-        });
-        setPackages(finalPackages);
-
         setDeletedDestinationIds([]);
-        setDeletedCategoryIds([]);
-        setDeletedPackageIds([]);
         setDeletedTestimonialIds([]);
 
         toast({
             title: "Success",
             description: "All changes have been saved. Refreshing data...",
         });
-
-        // Optional: a quick refetch to get the latest state including new document IDs
-        const packagesSnap = await getDocs(collection(db, "packages"));
-        setPackages(packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package)));
-
 
     } catch (error) {
         console.error("Error saving content:", error);
@@ -446,7 +340,7 @@ export default function AdminHomePage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">Admin Panel</h1>
+        <h1 className="text-2xl font-bold">Admin Panel - Home Page</h1>
         <p className="text-muted-foreground">Manage your website content here.</p>
       </div>
 
@@ -598,77 +492,23 @@ export default function AdminHomePage() {
       
       <Card>
         <CardHeader>
-          <CardTitle>Manage Categories & Packages</CardTitle>
-          <CardDescription>Organize packages within categories for the interactive preview section.</CardDescription>
+          <CardTitle>Manage Featured Packages</CardTitle>
+          <CardDescription>Select which packages to display on the homepage. Manage all packages on the "Packages" admin page.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Accordion type="multiple" className="w-full">
-            {categories.map((category) => (
-              <AccordionItem value={category.id} key={category.id}>
-                <AccordionTrigger>{category.name}</AccordionTrigger>
-                <AccordionContent className="space-y-6 bg-slate-50 p-4 rounded-md">
-                  <div className="space-y-2">
-                    <Label htmlFor={`cat-name-${category.id}`}>Category Name</Label>
-                    <Input id={`cat-name-${category.id}`} value={category.name} onChange={(e) => handleCategoryChange(category.id, 'name', e.target.value)} />
-                  </div>
-
-                  <div className="space-y-4">
-                    <Label>Packages in this Category</Label>
-                    {packages.filter(p => p.categoryId === category.id).map((pkg) => (
-                      <div key={pkg.id} className="p-4 border rounded-md space-y-3 bg-white">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-1">
-                                <Label htmlFor={`pkg-title-${pkg.id}`} className="text-xs">Title</Label>
-                                <Input id={`pkg-title-${pkg.id}`} value={pkg.title} onChange={(e) => handlePackageChange(pkg.id, 'title', e.target.value)} />
-                            </div>
-                            <div className="space-y-1">
-                                <Label htmlFor={`pkg-location-${pkg.id}`} className="text-xs">Location</Label>
-                                <Input id={`pkg-location-${pkg.id}`} value={pkg.location} onChange={(e) => handlePackageChange(pkg.id, 'location', e.target.value)} />
-                            </div>
-                        </div>
-                        <div className="space-y-1">
-                            <Label htmlFor={`pkg-desc-${pkg.id}`} className="text-xs">Tour Overview / Itinerary</Label>
-                            <Textarea id={`pkg-desc-${pkg.id}`} value={pkg.description} onChange={(e) => handlePackageChange(pkg.id, 'description', e.target.value)} rows={10} />
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {[0, 1, 2, 3].map(i => (
-                                <div key={i} className="space-y-2">
-                                    <div className="space-y-1">
-                                        <Label htmlFor={`pkg-img-${pkg.id}-${i}`} className="text-xs">Image {i + 1} URL</Label>
-                                        <Input id={`pkg-img-${pkg.id}-${i}`} value={pkg.images?.[i] || ''} onChange={(e) => handlePackageImageChange(pkg.id, i, e.target.value)} />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <Label htmlFor={`pkg-imghint-${pkg.id}-${i}`} className="text-xs">Image {i + 1} Hint (AI)</Label>
-                                        <Input id={`pkg-imghint-${pkg.id}-${i}`} value={pkg.imageHints?.[i] || ''} onChange={(e) => handlePackageImageHintChange(pkg.id, i, e.target.value)} />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="space-y-1">
-                            <Label htmlFor={`pkg-link-${pkg.id}`} className="text-xs">Link URL (optional)</Label>
-                            <Input id={`pkg-link-${pkg.id}`} placeholder={`/packages/${pkg.id}`} value={pkg.linkUrl || ''} onChange={(e) => handlePackageChange(pkg.id, 'linkUrl', e.target.value)} />
-                        </div>
-                         <Button variant="destructive" size="sm" onClick={() => handleDeletePackage(pkg.id)}>
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete Package
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="flex gap-2 pt-4 border-t">
-                    <Button size="sm" onClick={() => handleAddNewPackage(category.id)}>Add New Package</Button>
-                     <Button variant="destructive" size="sm" onClick={() => handleDeleteCategory(category.id)}>
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Category
-                    </Button>
-                  </div>
-
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-          <Button onClick={handleAddNewCategory}>Add New Category</Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {allPackages.map(pkg => (
+                    <div key={pkg.id} className="flex items-center space-x-2 p-2 border rounded-md">
+                        <Checkbox
+                            id={`featured-${pkg.id}`}
+                            checked={featuredPackagesData.packageIds.includes(pkg.id)}
+                            onCheckedChange={(checked) => handleFeaturedPackageChange(pkg.id, checked)}
+                        />
+                        <Label htmlFor={`featured-${pkg.id}`} className="cursor-pointer">{pkg.title}</Label>
+                    </div>
+                ))}
+            </div>
+            {allPackages.length === 0 && <p className="text-muted-foreground">No packages found. Add packages in the 'Packages' admin page first.</p>}
         </CardContent>
       </Card>
 

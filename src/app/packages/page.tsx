@@ -12,7 +12,7 @@ import { CtaSection } from '@/components/ui/cta-section';
 import type { CtaData, Package, Category } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, CheckCircle, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 
@@ -102,6 +102,17 @@ export default function PackagesPage() {
 
   const { hero, ctaData } = pageData;
 
+  const renderList = (items: string[] | undefined, icon: React.ReactNode) => (
+    <ul className="space-y-2">
+        {items?.map((item, index) => (
+            <li key={index} className="flex items-start">
+                <span className="mr-2 mt-1 flex-shrink-0">{icon}</span>
+                <span>{item}</span>
+            </li>
+        ))}
+    </ul>
+  );
+
   return (
     <div>
       <section className="h-[70vh] flex flex-col bg-white">
@@ -175,9 +186,19 @@ export default function PackagesPage() {
                   <div>
                     <h3 className="font-headline text-2xl mb-4">Tour Overview</h3>
                     <p className="text-muted-foreground whitespace-pre-line">{pkg.description}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-8">
+                        <div>
+                            <h4 className="font-headline text-xl mb-3">Inclusions</h4>
+                            {renderList(pkg.inclusions, <CheckCircle className="h-5 w-5 text-green-500" />)}
+                        </div>
+                         <div>
+                            <h4 className="font-headline text-xl mb-3">Exclusions</h4>
+                            {renderList(pkg.exclusions, <XCircle className="h-5 w-5 text-red-500" />)}
+                        </div>
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    {pkg.images.filter(img => img).map((image, index) => (
+                    {(pkg.images || []).filter(img => img).map((image, index) => (
                       <div key={index} className="relative aspect-square">
                         <Image 
                           src={image} 

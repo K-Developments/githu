@@ -18,6 +18,9 @@ export type Package = {
   images: string[];
   imageHints?: string[];
   linkUrl?: string;
+  inclusions?: string[];
+  exclusions?: string[];
+  isFeatured?: boolean;
 };
 
 export type Category = {

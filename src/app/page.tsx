@@ -1,6 +1,6 @@
 
 import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
 import type { Package, Category, Destination, Testimonial, CtaData } from "@/lib/data";
 import HomeClient from "./home-client";
 
@@ -31,6 +31,10 @@ interface DestinationsData {
   buttonUrl: string;
 }
 
+interface FeaturedPackagesData {
+    packageIds: string[];
+}
+
 async function getHomePageData() {
     try {
         // Fetch content from the 'home' document
@@ -42,6 +46,7 @@ async function getHomePageData() {
         let quoteData: QuoteData | null = null;
         let destinationsData: DestinationsData | null = null;
         let ctaData: CtaData | null = null;
+        let featuredPackageIds: string[] = [];
 
         if (contentDocSnap.exists()) {
           const data = contentDocSnap.data();
@@ -54,6 +59,10 @@ async function getHomePageData() {
             cta.interactiveItems = [];
           }
           ctaData = cta;
+          const featuredPackages = data.featuredPackages as FeaturedPackagesData;
+          if (featuredPackages && featuredPackages.packageIds) {
+            featuredPackageIds = featuredPackages.packageIds;
+          }
         }
 
         // Fetch collections
@@ -63,8 +72,12 @@ async function getHomePageData() {
         const categoriesSnap = await getDocs(collection(db, "categories"));
         const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
 
-        const packagesSnap = await getDocs(collection(db, "packages"));
-        const packages = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+        let packages: Package[] = [];
+        if (featuredPackageIds.length > 0) {
+            const packagesQuery = query(collection(db, "packages"), where('__name__', 'in', featuredPackageIds));
+            const packagesSnap = await getDocs(packagesQuery);
+            packages = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+        }
 
         const testimonialsSnap = await getDocs(collection(db, "testimonials"));
         const testimonials = testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
