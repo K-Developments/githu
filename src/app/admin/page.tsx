@@ -257,12 +257,25 @@ export default function AdminHomePage() {
     setPackages(prevPackages => prevPackages.map(p => {
         if (p.id === id) {
             const newImages = [...(p.images || [])];
+            while (newImages.length < 4) newImages.push("");
             newImages[imgIndex] = value;
             return { ...p, images: newImages };
         }
         return p;
     }));
   };
+
+ const handlePackageImageHintChange = (id: string, imgIndex: number, value: string) => {
+    setPackages(prevPackages => prevPackages.map(p => {
+        if (p.id === id) {
+            const newImageHints = [...(p.imageHints || [])];
+            while (newImageHints.length < 4) newImageHints.push("");
+            newImageHints[imgIndex] = value;
+            return { ...p, imageHints: newImageHints };
+        }
+        return p;
+    }));
+};
 
   const handleAddNewCategory = () => {
     const newCategory: Category = {
@@ -289,8 +302,8 @@ export default function AdminHomePage() {
       title: "New Package",
       location: "",
       description: "",
-      images: ["https://placehold.co/600x400.png"],
-      imageHints: [],
+      images: ["https://placehold.co/600x400.png", "", "", ""],
+      imageHints: ["", "", "", ""],
       linkUrl: "",
     };
     setPackages([...packages, newPackage]);
@@ -614,12 +627,22 @@ export default function AdminHomePage() {
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <Label htmlFor={`pkg-desc-${pkg.id}`} className="text-xs">Short Description</Label>
-                            <Textarea id={`pkg-desc-${pkg.id}`} value={pkg.description} onChange={(e) => handlePackageChange(pkg.id, 'description', e.target.value)} rows={2} />
+                            <Label htmlFor={`pkg-desc-${pkg.id}`} className="text-xs">Tour Overview / Itinerary</Label>
+                            <Textarea id={`pkg-desc-${pkg.id}`} value={pkg.description} onChange={(e) => handlePackageChange(pkg.id, 'description', e.target.value)} rows={10} />
                         </div>
-                        <div className="space-y-1">
-                            <Label htmlFor={`pkg-img-${pkg.id}`} className="text-xs">Image URL</Label>
-                            <Input id={`pkg-img-${pkg.id}`} value={pkg.images?.[0] || ''} onChange={(e) => handlePackageImageChange(pkg.id, 0, e.target.value)} />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {[0, 1, 2, 3].map(i => (
+                                <div key={i} className="space-y-2">
+                                    <div className="space-y-1">
+                                        <Label htmlFor={`pkg-img-${pkg.id}-${i}`} className="text-xs">Image {i + 1} URL</Label>
+                                        <Input id={`pkg-img-${pkg.id}-${i}`} value={pkg.images?.[i] || ''} onChange={(e) => handlePackageImageChange(pkg.id, i, e.target.value)} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label htmlFor={`pkg-imghint-${pkg.id}-${i}`} className="text-xs">Image {i + 1} Hint (AI)</Label>
+                                        <Input id={`pkg-imghint-${pkg.id}-${i}`} value={pkg.imageHints?.[i] || ''} onChange={(e) => handlePackageImageHintChange(pkg.id, i, e.target.value)} />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor={`pkg-link-${pkg.id}`} className="text-xs">Link URL (optional)</Label>

@@ -5,11 +5,16 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { CtaSection } from '@/components/ui/cta-section';
-import type { CtaData } from '@/lib/data';
+import type { CtaData, Package, Category } from '@/lib/data';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
 
 interface PackagesPageData {
   hero: {
@@ -21,7 +26,12 @@ interface PackagesPageData {
 
 export default function PackagesPage() {
   const [pageData, setPageData] = useState<PackagesPageData | null>(null);
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
 
   useEffect(() => {
     async function getPackagesPageData() {
@@ -59,6 +69,15 @@ export default function PackagesPage() {
                     ctaData,
                 });
             }
+
+            const categoriesSnap = await getDocs(collection(db, "categories"));
+            const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
+            setCategories(categoriesData);
+
+            const packagesSnap = await getDocs(collection(db, "packages"));
+            const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+            setPackages(packagesData);
+
         } catch (error) {
             console.error('Error fetching packages page data:', error);
              setPageData(null);
@@ -68,6 +87,10 @@ export default function PackagesPage() {
     }
     getPackagesPageData();
   }, []);
+
+  const filteredPackages = packages.filter(pkg => 
+    selectedCategory === 'all' || pkg.categoryId === selectedCategory
+  );
 
   if (loading) {
       return <div>Loading...</div>;
@@ -114,7 +137,69 @@ export default function PackagesPage() {
           <Separator />
       </div>
 
-      {/* Future content will go here */}
+       <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
+        <div className="flex justify-end mb-8">
+          <Select onValueChange={setSelectedCategory} defaultValue="all">
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Filter by Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {categories.map(category => (
+                <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Accordion 
+          type="single" 
+          collapsible 
+          className="w-full space-y-4"
+          value={openAccordion || undefined}
+          onValueChange={setOpenAccordion}
+        >
+          {filteredPackages.map(pkg => (
+            <AccordionItem value={pkg.id} key={pkg.id} className="border-b">
+              <AccordionTrigger 
+                className={cn(
+                  "flex justify-between items-center w-full py-4 text-left font-headline text-2xl md:text-4xl hover:no-underline",
+                  openAccordion === pkg.id && "text-primary"
+                  )}
+              >
+                <span>{pkg.title}</span>
+                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", openAccordion === pkg.id && "rotate-180")}/>
+              </AccordionTrigger>
+              <AccordionContent className="pt-4 pb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                  <div>
+                    <h3 className="font-headline text-2xl mb-4">Tour Overview</h3>
+                    <p className="text-muted-foreground whitespace-pre-line">{pkg.description}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {pkg.images.filter(img => img).map((image, index) => (
+                      <div key={index} className="relative aspect-square">
+                        <Image 
+                          src={image} 
+                          alt={`${pkg.title} - image ${index + 1}`} 
+                          fill
+                          className="object-cover rounded-md"
+                          data-ai-hint={(pkg.imageHints && pkg.imageHints[index]) || 'travel landscape'}
+                          />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+        {filteredPackages.length === 0 && (
+          <div className="text-center py-16 text-muted-foreground">
+            <p>No packages found for the selected category.</p>
+          </div>
+        )}
+      </section>
       
       {ctaData && <CtaSection data={ctaData} />}
     </div>

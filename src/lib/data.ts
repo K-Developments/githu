@@ -56,9 +56,21 @@ export type CoreValue = {
 };
 
 export type WorkflowStep = {
-  id: string;
+  id:string;
   title: string;
   description: string;
   image: string;
   imageHint?: string;
+};
+
+export type TourPackage = {
+    id: string;
+    name: string;
+    overview: string;
+    itinerary: string;
+    inclusions: string[];
+    exclusions: string[];
+    images: string[];
+    imageHints: string[];
+    category: string;
 };
