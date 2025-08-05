@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
+import { Preloader } from "@/components/ui/preloader";
 
 
 // Define interfaces for the fetched data
@@ -98,20 +99,25 @@ export default function HomePage() {
     fetchAllData();
   }, []);
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  }
 
   return (
     <>
-      {heroData && <HeroSection data={heroData} />}
-      {introData && <IntroSection data={introData} />}
-      {quoteData && <QuoteSection data={quoteData} />}
-      {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
-      {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
-      {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
-      {ctaData && <HomePageCallToActionSection data={ctaData} />}
-      <NewsletterSection />
+      <AnimatePresence>
+        {loading && <Preloader />}
+      </AnimatePresence>
+      
+      {!loading && (
+        <>
+          {heroData && <HeroSection data={heroData} />}
+          {introData && <IntroSection data={introData} />}
+          {quoteData && <QuoteSection data={quoteData} />}
+          {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
+          {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
+          {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
+          {ctaData && <HomePageCallToActionSection data={ctaData} />}
+          <NewsletterSection />
+        </>
+      )}
     </>
   );
 }
@@ -363,7 +369,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
                             <p className="card-description">{pkg.description}</p>
                             <div className="flex justify-center">
                               <div className="button-wrapper-for-border">
-                                <Button asChild variant="outline" size="sm" className="w-auto"><a href={pkg.linkUrl || `/packages/${pkg.id}`}>View Details</a></Button>
+                                <Button asChild variant="outline" size="sm" className="w-auto"><Link href={pkg.linkUrl || `/packages/${pkg.id}`}>View Details</Link></Button>
                               </div>
                             </div>
                         </div>
@@ -498,7 +504,7 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                         <h2 className="cta-title">{data.title}</h2>
                         <div className="button-wrapper-for-border">
                             <Button asChild size="lg" className="w-full">
-                                <a href={data.buttonUrl}>{data.buttonText}</a>
+                                <Link href={data.buttonUrl}>{data.buttonText}</Link>
                             </Button>
                         </div>
                     </div>
@@ -564,3 +570,5 @@ function NewsletterSection() {
         </section>
     );
 }
+
+    
