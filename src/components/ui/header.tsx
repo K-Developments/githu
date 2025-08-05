@@ -29,7 +29,7 @@ export function Header() {
                 <nav className="desktop-nav">
                     <ul>
                         <li><a href="#">Destinations</a></li>
-                        <li><a href="#">Packages</a></li>
+                        <li><a href="/packages">Packages</a></li>
                         <li><a href="/about">About</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
@@ -56,7 +56,7 @@ export function Header() {
               <nav className="desktop-nav">
                   <ul>
                       <li><Link href="#">Destinations</Link></li>
-                      <li><Link href="#">Packages</Link></li>
+                      <li><Link href="/packages">Packages</Link></li>
                       <li><Link href="/about">About</Link></li>
                       <li><Link href="#">Contact</Link></li>
                   </ul>
