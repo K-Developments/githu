@@ -27,7 +27,7 @@ interface PackagesClientProps {
   categories: Category[];
 }
 
-export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesPageClientProps) {
+export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const packageRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -43,7 +43,6 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
 
   useEffect(() => {
     if (openAccordion && packageRefs.current[openAccordion]) {
-      setTimeout(() => {
         const headerOffset = 68; // height of the sticky header
         const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -52,7 +51,6 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
          top: offsetPosition,
          behavior: "smooth"
         });
-      }, 100); 
     }
   }, [openAccordion]);
 
@@ -130,8 +128,6 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
               >
                 <PackageAccordion 
                     pkg={pkg} 
-                    accordionValue={openAccordion}
-                    onValueChange={handleValueChange}
                 />
               </AccordionItem>
             ))}
@@ -149,32 +145,41 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
   );
 }
 
-function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package, accordionValue: string | null, onValueChange: (value: string | null) => void }) {
+function PackageAccordion({ pkg }: { pkg: Package }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [isSticky, setIsSticky] = useState(false);
     const headerHeight = 68;
-    const isOpen = accordionValue === pkg.id;
+    
+    // We are getting the accordion value from the parent context, so no need for isOpen prop
+    const accordionContext = AccordionPrimitive.useAccordionContext();
+    const isOpen = accordionContext.value?.includes(pkg.id) ?? false;
+
     const [isHovered, setIsHovered] = useState(false);
 
 
     useEffect(() => {
-        const item = itemRef.current;
-        if (!item || !isOpen) {
-            setIsSticky(false);
+        const trigger = triggerRef.current;
+        if (!trigger || !isOpen) {
+            trigger?.classList.remove('accordion-trigger-sticky');
             return;
         }
 
         const handleScroll = () => {
-            if (!itemRef.current || !contentRef.current) return;
+            if (!itemRef.current || !contentRef.current || !triggerRef.current) return;
 
             const itemRect = itemRef.current.getBoundingClientRect();
             const contentRect = contentRef.current.getBoundingClientRect();
             const triggerHeight = triggerRef.current?.offsetHeight ?? 0;
             
             const shouldBeSticky = itemRect.top <= headerHeight && contentRect.bottom - triggerHeight > headerHeight;
-            setIsSticky(shouldBeSticky);
+            
+            if (shouldBeSticky) {
+                triggerRef.current?.classList.add('accordion-trigger-sticky');
+            } else {
+                triggerRef.current?.classList.remove('accordion-trigger-sticky');
+            }
         };
         
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -182,6 +187,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
+            trigger?.classList.remove('accordion-trigger-sticky');
         };
     }, [isOpen, headerHeight]);
     
@@ -216,20 +222,6 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
       },
     };
 
-    const stickyHeaderVariants = {
-      hidden: { y: -20, opacity: 0 },
-      visible: { 
-        y: 0, 
-        opacity: 1,
-        transition: { type: 'spring', stiffness: 200, damping: 25 }
-      },
-      exit: {
-        y: -20,
-        opacity: 0,
-        transition: { duration: 0.2 }
-      }
-    };
-
     return (
         <div ref={itemRef} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="relative">
             <AnimatePresence>
@@ -250,28 +242,6 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            <AnimatePresence>
-                {isSticky && (
-                    <motion.div
-                        layout
-                        variants={stickyHeaderVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className="fixed z-20 w-full left-0"
-                        style={{ top: headerHeight }}
-                        onClick={() => onValueChange(null)}
-                    >
-                        <div
-                            className="flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline rounded-t-lg transition-colors bg-primary text-primary-foreground cursor-pointer shadow-lg max-w-7xl mx-auto"
-                        >
-                            <span className="truncate">{pkg.title}</span>
-                            <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 rotate-180")} />
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
             <AccordionTrigger
                 ref={triggerRef}
                 className={cn(
@@ -283,10 +253,8 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                 <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
             </AccordionTrigger>
 
-            <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
-                    {isOpen && <div style={{ height: isSticky ? triggerRef.current?.offsetHeight : 0 }} className="transition-height duration-200"/>}
+            <AccordionContent ref={contentRef} className="p-0 bg-card rounded-b-lg overflow-hidden">
                     <motion.div
-                        ref={contentRef}
                         initial="hidden"
                         animate={isOpen ? 'visible' : 'hidden'}
                         exit="hidden"
@@ -373,3 +341,4 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
 
 
     
+
