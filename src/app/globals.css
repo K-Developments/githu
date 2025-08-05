@@ -711,8 +711,9 @@ header {
     position: relative;
     min-height: 80vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     padding: 4rem 5%;
     overflow: hidden;
 }
@@ -751,58 +752,83 @@ header {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .cta-content {
-    background: rgba(255, 255, 255, 0.9);
     padding: 3rem;
     width: 100%;
-    max-width: 50%; /* Adjust as needed */
-    text-align: left;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .cta-title {
     font-family: 'Marcellus', serif;
     font-size: clamp(2rem, 4vw, 3rem);
-    color: #222;
+    color: #ffffff;
     line-height: 1.2;
     margin-bottom: 2rem;
 }
 
 .cta-interactive-panel {
-    position: absolute;
-    top: 5%;
-    right: 5%;
-    z-index: 4;
+    display: none;
+}
+
+.cta-mobile-panel {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
     width: 100%;
-    max-width: 350px;
-    gap: 1px;
-    background-color: rgba(255,255,255,0.4);
-    border: 1px solid rgba(255,255,255,0.4);
+    margin-top: 2rem;
+    position: relative;
+    z-index: 3;
 }
 
-.cta-interactive-item {
-    background: rgba(0,0,0,0.4);
+.cta-mobile-card {
+    position: relative;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
     color: white;
-    padding: 1.5rem;
-    flex-grow: 1;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
     text-decoration: none;
-    display: block;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.cta-mobile-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+    z-index: 0;
+}
+.cta-mobile-card .cta-item-title,
+.cta-mobile-card .cta-item-description {
+    position: relative;
+    z-index: 1;
+}
+.cta-mobile-card .cta-item-title {
+     font-family: 'Marcellus', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+.cta-mobile-card .cta-item-description {
+    font-size: 0.9rem;
+    opacity: 0.9;
 }
 
-.cta-interactive-item:hover {
-    background: rgba(0,0,0,0.6);
-}
 
 .cta-item-title {
     font-family: 'Marcellus', serif;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    letter-spacing: 0.1rem;
+    letter-spacing: 0.05rem;
+
 }
 
 .cta-item-description {
@@ -1046,7 +1072,7 @@ header {
         max-width: 100%;
     }
     .cta-interactive-panel {
-        display: none; /* Hide on mobile for simplicity, can be adapted */
+        display: none;
     }
 }
 /* Small mobile adjustments */
@@ -1250,10 +1276,59 @@ h2{
 		z-index: 10;
 		transform: translateY(-50%) translateX(-50%) rotate(-45deg);
 	}
-    .cta-content-container {
+    .home-page-call-to-action-section {
         flex-direction: row;
         align-items: stretch;
+        justify-content: flex-start;
     }
+    .cta-content-container {
+        flex: 1;
+        justify-content: flex-start;
+        text-align: left;
+    }
+    .cta-content {
+        align-items: flex-start;
+    }
+
+    .cta-interactive-panel {
+        display: flex;
+        flex-direction: column;
+        width: 350px; /* Adjust width as needed */
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        background-color: transparent;
+        border-left: 1px solid rgba(255,255,255,0.4);
+        z-index: 4;
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    .cta-interactive-item {
+        background: transparent;
+        color: white;
+        padding: 1.5rem 2rem;
+        flex-grow: 1;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-bottom: 1px solid rgba(255,255,255,0.4) ;
+    }
+    .cta-interactive-item:last-child {
+        border-bottom: none;
+    }
+    
+    .cta-interactive-item:hover {
+        background: rgba(0,0,0,0.6);
+    }
+    .cta-mobile-panel {
+        display: none;
+    }
+
 }
 /* Tablet adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -1296,3 +1371,5 @@ h2{
 		font-size: 1.2rem;
 	}
 }
+
+    

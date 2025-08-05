@@ -24,7 +24,7 @@ interface HeroData {
 }
 
 interface IntroData {
-  headline: string;
+  headline:string;
   paragraph: string;
   linkText: string;
   linkUrl: string;
@@ -68,7 +68,7 @@ export default function HomePage() {
           setIntroData(data.intro as IntroData);
           setQuoteData(data.quote as QuoteData);
           setDestinationsData(data.destinations as DestinationsData);
-           const cta = data.cta as CtaData;
+          const cta = data.cta as CtaData;
           if (cta && !cta.interactiveItems) {
             cta.interactiveItems = [];
           }
@@ -333,7 +333,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
         <motion.div 
             className={cn(
                 "packages-grid",
-                filteredPackages.length === 1 && "md:grid-cols-1"
+                 filteredPackages.length === 1 && "md:grid-cols-1"
             )}
             layout
         >
@@ -491,6 +491,7 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                 </motion.div>
             </AnimatePresence>
             <div className="cta-overlay"></div>
+
             <div className="cta-content-container">
                 <ScrollAnimation>
                     <div className="cta-content">
@@ -503,21 +504,37 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                     </div>
                 </ScrollAnimation>
             </div>
-             <ScrollAnimation>
-                <div className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
-                    {interactiveItems.map((item, index) => (
-                        <Link
-                            key={index}
-                            href={item.linkUrl || '#'}
-                            className="cta-interactive-item"
-                            onMouseEnter={() => setHoveredItem(index)}
-                        >
-                            <h3 className="cta-item-title">{item.title}</h3>
-                            <p className="cta-item-description">{item.description}</p>
-                        </Link>
-                    ))}
-                </div>
+            
+            <ScrollAnimation className="cta-interactive-panel" onMouseLeave={() => setHoveredItem(null)}>
+                {interactiveItems.map((item, index) => (
+                    <Link
+                        key={index}
+                        href={item.linkUrl || '#'}
+                        className="cta-interactive-item"
+                        onMouseEnter={() => setHoveredItem(index)}
+                    >
+                        <h3 className="cta-item-title">{item.title}</h3>
+                        <p className="cta-item-description">{item.description}</p>
+                    </Link>
+                ))}
             </ScrollAnimation>
+
+            <div className="cta-mobile-panel">
+                {interactiveItems.map((item, index) => (
+                    <Link key={index} href={item.linkUrl || '#'} className="cta-mobile-card">
+                        <Image 
+                            src={item.backgroundImage || "https://placehold.co/1920x1080.png"} 
+                            alt={item.title}
+                            fill
+                            className="object-cover -z-10"
+                        />
+                        <div className="cta-mobile-card-overlay"></div>
+                        <h3 className="cta-item-title">{item.title}</h3>
+                        <p className="cta-item-description">{item.description}</p>
+                    </Link>
+                ))}
+            </div>
+
         </section>
     );
 }
@@ -547,3 +564,5 @@ function NewsletterSection() {
         </section>
     );
 }
+
+    
