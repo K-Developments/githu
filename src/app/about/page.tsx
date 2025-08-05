@@ -12,10 +12,8 @@ interface AboutHeroData {
 }
 
 export default function AboutPage() {
-  const [heroData, setHeroData] = useState<AboutHeroData>({
-    headline: 'About Us',
-    heroImage: 'https://placehold.co/1920x600.png',
-  });
+  const [heroData, setHeroData] = useState<AboutHeroData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchContentData = async () => {
@@ -29,27 +27,41 @@ export default function AboutPage() {
             headline: data.hero?.headline || 'About Us',
             heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
           });
+        } else {
+            setHeroData({
+                headline: 'About Us',
+                heroImage: 'https://placehold.co/1920x600.png',
+            });
         }
       } catch (error) {
         console.error('Error fetching about page data:', error);
+         setHeroData({
+            headline: 'About Us',
+            heroImage: 'https://placehold.co/1920x600.png',
+        });
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchContentData();
   }, []);
 
+  if (loading) {
+    return null;
+  }
 
   return (
     <>
       <section className="h-[60vh] flex flex-col bg-card">
         <div className="flex-1 flex items-center justify-center p-8">
           <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
-            {heroData.headline}
+            {heroData?.headline}
           </h1>
         </div>
         <div className="flex-1 relative w-full">
           <Image
-            src={heroData.heroImage}
+            src={heroData?.heroImage || 'https://placehold.co/1920x600.png'}
             alt="A diverse team collaborating on travel plans"
             fill
             className="object-cover"
