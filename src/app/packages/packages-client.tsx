@@ -247,7 +247,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="fixed z-20 w-full left-0"
+                        className="fixed z-20 w-full left-0 px-4"
                         style={{ top: headerHeight }}
                         onClick={() => onValueChange(null)}
                     >
@@ -263,7 +263,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
             <AccordionTrigger
                 ref={triggerRef}
                 className={cn(
-                    "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
+                    "flex-1 font-medium [&[data-state=open]>svg]:rotate-180 flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
                     isOpen ? "bg-primary text-primary-foreground" : "text-foreground",
                     isSticky && "invisible"
                 )}
@@ -279,7 +279,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
-                        className="absolute top-0 right-0 w-48 h-32 -mr-56 pointer-events-none hidden lg:block"
+                        className="absolute top-1/2 -translate-y-1/2 right-0 translate-x-[calc(100%+1rem)] w-48 h-32 pointer-events-none hidden lg:block"
                      >
                         <Image 
                             src={pkg.images[0]} 
