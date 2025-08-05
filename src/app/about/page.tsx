@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { Separator } from '@/components/ui/separator';
 
 interface AboutPageData {
   hero: {
@@ -88,12 +89,14 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <div className="bg-white px-4 md:px-12 pt-8">
-            <div className="text-sm text-muted-foreground">
+        <div className="bg-white px-4 md:px-12">
+            <Separator />
+            <div className="text-sm text-muted-foreground py-4">
                 <Link href="/" className="hover:text-primary">Home</Link>
                 <span className="mx-2">||</span>
                 <span>About</span>
             </div>
+            <Separator />
         </div>
 
         <section className="py-12 px-4 md:px-12 bg-white">
