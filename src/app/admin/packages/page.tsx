@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Trash2 } from "lucide-react";
-import type { Package, Category } from "@/lib/data";
+import type { Package, Category, ItineraryDay } from "@/lib/data";
 
 interface PackagesHeroData {
   headline: string;
@@ -77,7 +77,7 @@ export default function AdminPackagesPage() {
 
         const packagesCollectionRef = collection(db, "packages");
         const packagesSnap = await getDocs(packagesCollectionRef);
-        const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+        const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data(), itinerary: doc.data().itinerary || [] } as Package));
         setPackages(packagesData);
 
       } catch (error) {
@@ -134,6 +134,41 @@ export default function AdminPackagesPage() {
     }));
   };
 
+  const handleItineraryDayChange = (pkgId: string, dayIndex: number, field: 'title' | 'activities', value: string | string[]) => {
+      setPackages(prev => prev.map(pkg => {
+          if (pkg.id === pkgId) {
+              const newItinerary = [...pkg.itinerary];
+              if (field === 'activities') {
+                newItinerary[dayIndex] = { ...newItinerary[dayIndex], [field]: Array.isArray(value) ? value : value.split('\n') };
+              } else {
+                newItinerary[dayIndex] = { ...newItinerary[dayIndex], [field]: value };
+              }
+              return { ...pkg, itinerary: newItinerary };
+          }
+          return pkg;
+      }));
+  };
+
+  const handleAddItineraryDay = (pkgId: string) => {
+      setPackages(prev => prev.map(pkg => {
+          if (pkg.id === pkgId) {
+              const newDay: ItineraryDay = { title: `Day ${pkg.itinerary.length + 1}`, activities: [] };
+              return { ...pkg, itinerary: [...pkg.itinerary, newDay] };
+          }
+          return pkg;
+      }));
+  };
+
+  const handleDeleteItineraryDay = (pkgId: string, dayIndex: number) => {
+      setPackages(prev => prev.map(pkg => {
+          if (pkg.id === pkgId) {
+              const newItinerary = pkg.itinerary.filter((_, index) => index !== dayIndex);
+              return { ...pkg, itinerary: newItinerary };
+          }
+          return pkg;
+      }));
+  };
+
   const handleAddNewCategory = () => {
     const newCategory: Category = {
       id: `new-cat-${Date.now()}`,
@@ -158,7 +193,8 @@ export default function AdminPackagesPage() {
       categoryId: categoryId,
       title: "New Package",
       location: "",
-      description: "",
+      overview: "",
+      itinerary: [],
       images: ["https://placehold.co/600x400.png", "", "", ""],
       inclusions: [],
       exclusions: [],
@@ -332,10 +368,32 @@ export default function AdminPackagesPage() {
                             </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <Label htmlFor={`pkg-desc-${pkg.id}`} className="text-xs">Tour Overview / Itinerary</Label>
-                            <Textarea id={`pkg-desc-${pkg.id}`} value={pkg.description} onChange={(e) => handlePackageChange(pkg.id, 'description', e.target.value)} rows={10} />
+                        <div className="space-y-2">
+                            <Label htmlFor={`pkg-overview-${pkg.id}`}>Tour Overview</Label>
+                            <Textarea id={`pkg-overview-${pkg.id}`} value={pkg.overview} onChange={(e) => handlePackageChange(pkg.id, 'overview', e.target.value)} rows={5} />
                         </div>
+                        
+                        <div className="space-y-4 pt-4 border-t">
+                            <h4 className="font-semibold">Detailed Itinerary</h4>
+                            {pkg.itinerary.map((day, dayIndex) => (
+                                <div key={dayIndex} className="p-4 border rounded-md space-y-3 bg-slate-50 relative">
+                                    <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6" onClick={() => handleDeleteItineraryDay(pkg.id, dayIndex)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                    <div className="space-y-1">
+                                        <Label htmlFor={`pkg-day-title-${pkg.id}-${dayIndex}`} className="text-xs">Day {dayIndex + 1} Title</Label>
+                                        <Input id={`pkg-day-title-${pkg.id}-${dayIndex}`} value={day.title} onChange={(e) => handleItineraryDayChange(pkg.id, dayIndex, 'title', e.target.value)} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label htmlFor={`pkg-day-activities-${pkg.id}-${dayIndex}`} className="text-xs">Activities (one per line)</Label>
+                                        <Textarea id={`pkg-day-activities-${pkg.id}-${dayIndex}`} value={day.activities.join('\n')} onChange={(e) => handleItineraryDayChange(pkg.id, dayIndex, 'activities', e.target.value)} rows={4} />
+                                    </div>
+                                </div>
+                            ))}
+                            <Button size="sm" variant="outline" onClick={() => handleAddItineraryDay(pkg.id)}>Add Day</Button>
+                        </div>
+
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor={`pkg-inclusions-${pkg.id}`}>Inclusions (one per line)</Label>
@@ -409,5 +467,3 @@ export default function AdminPackagesPage() {
     </div>
   );
 }
-
-    

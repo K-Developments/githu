@@ -8,12 +8,18 @@ export type Destination = {
   linkUrl?: string;
 };
 
+export type ItineraryDay = {
+  title: string;
+  activities: string[];
+};
+
 export type Package = {
   id: string;
   categoryId: string;
   title: string;
   location: string;
-  description: string;
+  overview: string;
+  itinerary: ItineraryDay[];
   images: string[];
   linkUrl?: string;
   inclusions?: string[];

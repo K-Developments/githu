@@ -43,15 +43,20 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
   }, [openPackageId]);
 
   useEffect(() => {
-    if (openAccordion && packageRefs.current[openAccordion]) {
-      const headerOffset = 68; // height of the sticky header
-      const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-       top: offsetPosition,
-       behavior: "smooth"
-      });
+    if (openAccordion) {
+      setTimeout(() => {
+        const element = packageRefs.current[openAccordion];
+        if (element) {
+          const headerOffset = 68; // height of the sticky header
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+          window.scrollTo({
+           top: offsetPosition,
+           behavior: "smooth"
+          });
+        }
+      }, 300); // Delay to allow accordion to open
     }
   }, [openAccordion]);
 
@@ -159,8 +164,6 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
     const headerHeight = 68;
     const isOpen = accordionValue === pkg.id;
 
-    const [isHovered, setIsHovered] = useState(false);
-
     useEffect(() => {
         const item = itemRef.current;
         if (!item || !isOpen) {
@@ -236,8 +239,6 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
         <div 
           ref={itemRef} 
           className="relative"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
         >
             <AnimatePresence>
                 {isSticky && (
@@ -325,7 +326,7 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
 
                         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
                             <motion.div variants={contentItemVariants} className="md:col-span-3">
-                                <TourItinerary text={pkg.description} />
+                                <TourItinerary overview={pkg.overview} itinerary={pkg.itinerary} />
                             </motion.div>
                             <motion.div variants={contentItemVariants} className="md:col-span-2">
                                 <div className="grid grid-cols-2 gap-4 mb-8">
