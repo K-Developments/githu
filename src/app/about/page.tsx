@@ -1,5 +1,6 @@
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -68,7 +69,7 @@ export default async function AboutPage() {
 
   return (
     <div>
-        <section className="h-[60vh] flex flex-col bg-white">
+        <section className="h-[70vh] flex flex-col bg-white">
           <div className="flex-[0.7] flex items-center justify-center p-4">
             <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
               {hero.headline}
@@ -87,7 +88,15 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <section className="py-20 px-4 md:px-12 bg-white">
+        <div className="bg-white px-4 md:px-12 pt-8">
+            <div className="text-sm text-muted-foreground">
+                <Link href="/" className="hover:text-primary">Home</Link>
+                <span className="mx-2">||</span>
+                <span>About</span>
+            </div>
+        </div>
+
+        <section className="py-12 px-4 md:px-12 bg-white">
             <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">{journey.title}</h2>
             
             <div className="mb-16 md:mb-24">
