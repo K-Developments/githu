@@ -16,7 +16,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Preloader } from '@/components/ui/preloader';
 import { AnimatePresence } from 'framer-motion';
 
 
@@ -118,11 +117,7 @@ function PackagesPageComponent() {
   );
 
   if (loading) {
-    return (
-        <AnimatePresence>
-            {loading && <Preloader />}
-        </AnimatePresence>
-    );
+    return <div>Loading...</div>;
   }
 
   if (!pageData) {

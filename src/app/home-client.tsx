@@ -12,7 +12,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
-import { Preloader } from "@/components/ui/preloader";
 import { CtaSection } from "@/components/ui/cta-section";
 
 
@@ -70,25 +69,14 @@ export default function HomeClient({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const hasVisited = sessionStorage.getItem('hasVisitedIslandHopes');
-    if (hasVisited) {
-        setIsLoading(false);
-    } else {
-        setTimeout(() => {
-            setIsLoading(false);
-            sessionStorage.setItem('hasVisitedIslandHopes', 'true');
-        }, 2000); 
-    }
+    // Simulate loading for presentation if needed, otherwise just set to false.
+    setIsLoading(false);
   }, []);
 
-
   if (isLoading) {
-    return (
-      <AnimatePresence>
-        {isLoading && <Preloader />}
-      </AnimatePresence>
-    );
+    return null; // Or a very minimal loader like <div>Loading...</div>
   }
+
 
   if (!heroData) {
     return (

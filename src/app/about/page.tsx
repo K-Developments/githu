@@ -12,7 +12,6 @@ import { cn } from '@/lib/utils';
 import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 import { CtaSection } from '@/components/ui/cta-section';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { Preloader } from '@/components/ui/preloader';
 import { AnimatePresence } from 'framer-motion';
 
 interface AboutPageData {
@@ -107,11 +106,7 @@ export default function AboutPage() {
   }, []);
 
   if (loading) {
-    return (
-        <AnimatePresence>
-            {loading && <Preloader />}
-        </AnimatePresence>
-    );
+    return <div>Loading...</div>;
   }
 
   if (!pageData) {
