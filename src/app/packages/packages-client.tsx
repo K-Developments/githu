@@ -124,7 +124,7 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
                 className="border-b-0"
                 ref={el => (packageRefs.current[pkg.id] = el)}
               >
-                <PackageAccordion pkg={pkg} isOpen={openAccordion === pkg.id} onValueChange={setOpenAccordion} />
+                <PackageAccordion pkg={pkg} onValueChange={setOpenAccordion} openAccordionId={openAccordion}/>
               </AccordionItem>
             ))}
           </Accordion>
@@ -141,11 +141,12 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
   );
 }
 
-function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen: boolean, onValueChange: (value: string | null) => void }) {
+function PackageAccordion({ pkg, onValueChange, openAccordionId }: { pkg: Package, onValueChange: (value: string | null) => void, openAccordionId: string | null}) {
     const [isSticky, setIsSticky] = useState(false);
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const headerHeight = 68; // defined in globals.css as var(--header-height)
+    const isOpen = openAccordionId === pkg.id;
 
     useEffect(() => {
         if (!isOpen) {
@@ -235,7 +236,7 @@ function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen
                         exit="exit"
                         className="fixed w-full left-0 px-4 z-20"
                         style={{ top: `var(--header-height)`}}
-                        onClick={() => onValueChange(null)}
+                        onClick={() => onValueChange(isOpen ? null : pkg.id)}
                     >
                       <div className="w-full mx-auto flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl bg-primary text-primary-foreground rounded-t-lg">
                         <span className="truncate">{pkg.title}</span>
@@ -346,3 +347,5 @@ function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen
         </div>
     )
 }
+
+    
