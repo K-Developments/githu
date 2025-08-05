@@ -16,11 +16,9 @@ export default function AboutPage() {
     headline: 'About Us',
     heroImage: 'https://placehold.co/1920x600.png',
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchContentData = async () => {
-      setLoading(true);
       try {
         const contentDocRef = doc(db, 'content', 'about');
         const contentDocSnap = await getDoc(contentDocRef);
@@ -34,17 +32,12 @@ export default function AboutPage() {
         }
       } catch (error) {
         console.error('Error fetching about page data:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchContentData();
   }, []);
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  }
 
   return (
     <>
