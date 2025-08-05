@@ -1,0 +1,82 @@
+
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { Separator } from '@/components/ui/separator';
+import { ScrollAnimation } from '@/components/ui/scroll-animation';
+import type { Destination } from '@/lib/data';
+
+interface DestinationsClientProps {
+  hero: {
+    headline: string;
+    heroImage: string;
+  };
+  destinations: Destination[];
+}
+
+export function DestinationsPageClient({ hero, destinations }: DestinationsClientProps) {
+
+  return (
+    <div>
+      <section className="h-[70vh] flex flex-col bg-white">
+          <div className="flex-[0.7] flex items-center justify-center p-4">
+              <ScrollAnimation>
+                  <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
+                  {hero.headline}
+                  </h1>
+              </ScrollAnimation>
+          </div>
+          <div className="flex-1 relative w-full left-0">
+              <ScrollAnimation>
+                  <Image
+                    src={hero.heroImage}
+                    alt="Scenic view of a travel destination"
+                    fill
+                    className="object-cover"
+                  />
+              </ScrollAnimation>
+              <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-white to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
+          </div>
+      </section>
+
+      <div className="bg-white px-4 md:px-12">
+          <Separator />
+          <div className="text-sm text-muted-foreground py-4">
+              <Link href="/" className="hover:text-primary">Home</Link>
+              <span className="mx-2">||</span>
+              <span>Destinations</span>
+          </div>
+          <Separator />
+      </div>
+
+       <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {destinations.map((dest, i) => (
+                <ScrollAnimation key={dest.id} delay={i * 0.1}>
+                    <div className="destination-card h-auto aspect-[4/5]">
+                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
+                        <h3 className="card-title card-title-absolute">{dest.title}</h3>
+                        <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" />
+                        <div className="card-content">
+                            <span className="card-location">{dest.location}</span>
+                            <h3 className="card-title card-title-decorated">{dest.title}</h3>
+                            <p className="card-description">{dest.description}</p>
+                        </div>
+                    </Link>
+                    </div>
+                </ScrollAnimation>
+                ))}
+            </div>
+          {destinations.length === 0 && (
+            <div className="text-center py-16 text-muted-foreground">
+              <p>No destinations have been added yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}

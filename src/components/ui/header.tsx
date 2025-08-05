@@ -28,7 +28,7 @@ export function Header() {
             <div className="header-center">
                 <nav className="desktop-nav">
                     <ul>
-                        <li><a href="#">Destinations</a></li>
+                        <li><a href="/destinations">Destinations</a></li>
                         <li><a href="/packages">Packages</a></li>
                         <li><a href="/about">About</a></li>
                         <li><a href="#">Contact</a></li>
@@ -55,7 +55,7 @@ export function Header() {
           <div className="header-center">
               <nav className="desktop-nav">
                   <ul>
-                      <li><Link href="#">Destinations</Link></li>
+                      <li><Link href="/destinations">Destinations</Link></li>
                       <li><Link href="/packages">Packages</Link></li>
                       <li><Link href="/about">About</Link></li>
                       <li><Link href="#">Contact</Link></li>
