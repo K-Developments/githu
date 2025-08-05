@@ -55,11 +55,17 @@ export default function HomePage() {
   const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
+        // Only show preloader on first visit per session
+        const hasVisited = sessionStorage.getItem('hasVisitedIslandHopes');
+        if (hasVisited) {
+          setIsLoading(false);
+        }
+
         // Fetch content from the 'home' document
         const contentDocRef = doc(db, "content", "home");
         const contentDocSnap = await getDoc(contentDocRef);
@@ -92,7 +98,12 @@ export default function HomePage() {
       } catch (error) {
         console.error("Error fetching homepage data:", error);
       } finally {
-        setLoading(false);
+        if (!sessionStorage.getItem('hasVisitedIslandHopes')) {
+            setTimeout(() => {
+                setIsLoading(false);
+                sessionStorage.setItem('hasVisitedIslandHopes', 'true');
+            }, 2000); // Simulate preloader time
+        }
       }
     };
 
@@ -103,10 +114,10 @@ export default function HomePage() {
   return (
     <>
       <AnimatePresence>
-        {loading && <Preloader />}
+        {isLoading && <Preloader />}
       </AnimatePresence>
       
-      {!loading && (
+      {!isLoading && (
         <>
           {heroData && <HeroSection data={heroData} />}
           {introData && <IntroSection data={introData} />}
@@ -503,7 +514,7 @@ function HomePageCallToActionSection({ data }: { data: CtaData }) {
                     <div className="cta-content">
                         <h2 className="cta-title">{data.title}</h2>
                         <div className="button-wrapper-for-border">
-                            <Button asChild size="lg" className="w-full">
+                            <Button asChild size="lg" className="w-full md:w-auto">
                                 <Link href={data.buttonUrl}>{data.buttonText}</Link>
                             </Button>
                         </div>
