@@ -27,7 +27,7 @@ interface PackagesClientProps {
   categories: Category[];
 }
 
-export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesClientProps) {
+export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const packageRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -279,7 +279,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
-                        className="absolute top-1/2 -translate-y-1/2 right-0 translate-x-[calc(100%+1rem)] w-48 h-32 pointer-events-none hidden lg:block"
+                        className="absolute top-1/2 -translate-y-1/2 right-0 translate-x-[calc(100%+1rem)] w-64 h-40 pointer-events-none hidden lg:block z-10"
                      >
                         <Image 
                             src={pkg.images[0]} 
