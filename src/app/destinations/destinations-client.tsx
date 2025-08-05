@@ -22,7 +22,7 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
       <section className="h-[70vh] flex flex-col bg-white">
           <div className="flex-[0.7] flex items-center justify-center p-4">
               <ScrollAnimation>
-                  <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
+                  <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
                   {hero.headline}
                   </h1>
               </ScrollAnimation>
