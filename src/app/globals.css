@@ -343,7 +343,7 @@ header {
 /* Intro Section */
 .intro-home {
 	padding: 4rem 5%;
-	background-color: #f8f5f2;
+	background-color: white;
 	overflow:hidden;
 }
 .intro-container {
@@ -1369,3 +1369,5 @@ h2{
 		font-size: 1.2rem;
 	}
 }
+
+    
