@@ -2,7 +2,7 @@
 import { Suspense } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import type { CtaData, Package, Category } from '@/lib/data';
+import type { Package, Category } from '@/lib/data';
 import { PackagesPageClient } from './packages-client';
 
 interface PackagesPageData {
@@ -10,7 +10,6 @@ interface PackagesPageData {
     headline: string;
     heroImage: string;
   };
-  ctaData: CtaData | null;
   packages: Package[];
   categories: Category[];
 }
@@ -19,18 +18,6 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
     try {
         const contentDocRef = doc(db, 'content', 'packages');
         const contentDocSnap = await getDoc(contentDocRef);
-
-        const homeContentDocRef = doc(db, "content", "home");
-        const homeContentDocSnap = await getDoc(homeContentDocRef);
-        let ctaData: CtaData | null = null;
-        if (homeContentDocSnap.exists()) {
-            const homeData = homeContentDocSnap.data();
-            const cta = homeData.cta as CtaData;
-            if (cta && !cta.interactiveItems) {
-                cta.interactiveItems = [];
-            }
-            ctaData = cta;
-        }
 
         let pageData: PackagesPageData['hero'];
         if (contentDocSnap.exists()) {
@@ -54,7 +41,6 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
 
         return {
             hero: pageData,
-            ctaData,
             categories: categoriesData,
             packages: packagesData
         };
@@ -77,7 +63,6 @@ export default async function PackagesPage() {
     <Suspense fallback={<div>Loading...</div>}>
       <PackagesPageClient 
         hero={pageData.hero}
-        ctaData={pageData.ctaData}
         packages={pageData.packages}
         categories={pageData.categories}
       />

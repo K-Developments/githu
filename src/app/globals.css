@@ -1378,4 +1378,10 @@ h2{
 	}
 }
 
+.truncate {
+	white-space: inherit !important;
+    overflow: visible !important;
+	padding:1rem;
+}
+
     

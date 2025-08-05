@@ -8,8 +8,8 @@ import { useSearchParams } from 'next/navigation';
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { CtaSection } from '@/components/ui/cta-section';
-import type { CtaData, Package, Category } from '@/lib/data';
+import { PackagesCtaSection } from '@/components/ui/packages-cta-section';
+import type { Package, Category } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star } from 'lucide-react';
@@ -23,12 +23,11 @@ interface PackagesClientProps {
     headline: string;
     heroImage: string;
   };
-  ctaData: CtaData | null;
   packages: Package[];
   categories: Category[];
 }
 
-export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesPageClientProps) {
+export function PackagesPageClient({ hero, packages, categories }: PackagesClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const packageRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -44,16 +43,14 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
 
   useEffect(() => {
     if (openAccordion && packageRefs.current[openAccordion]) {
-      setTimeout(() => {
-        const headerOffset = 68; // height of the sticky header
-        const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-  
-        window.scrollTo({
-         top: offsetPosition,
-         behavior: "smooth"
-        });
-      }, 100); 
+      const headerOffset = 68; // height of the sticky header
+      const elementPosition = packageRefs.current[openAccordion]?.getBoundingClientRect().top ?? 0;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+       top: offsetPosition,
+       behavior: "smooth"
+      });
     }
   }, [openAccordion]);
 
@@ -132,7 +129,6 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
                 <PackageAccordion 
                     pkg={pkg} 
                     accordionValue={openAccordion}
-                    onValueChange={handleValueChange}
                 />
               </AccordionItem>
             ))}
@@ -145,12 +141,12 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
         </div>
       </section>
       
-      {ctaData && <CtaSection data={ctaData} />}
+      <PackagesCtaSection />
     </div>
   );
 }
 
-function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package, accordionValue: string | null, onValueChange: (value: string | null) => void }) {
+function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValue: string | null }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
@@ -241,14 +237,13 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                         exit="exit"
                         className="fixed z-20 w-full left-0"
                         style={{ top: headerHeight }}
-                        onClick={() => onValueChange(null)}
                     >
-                        <div
+                        <AccordionTrigger
                             className="flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline rounded-t-lg transition-colors bg-primary text-primary-foreground cursor-pointer shadow-lg max-w-7xl mx-auto"
                         >
                             <span className="truncate">{pkg.title}</span>
                             <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 rotate-180")} />
-                        </div>
+                        </AccordionTrigger>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -256,7 +251,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                 ref={triggerRef}
                 className={cn(
                     "relative flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors overflow-hidden",
-                    isOpen ? "bg-primary text-primary-foreground" : "text-white"
+                    isOpen && "bg-primary text-primary-foreground" 
                 )}
             >
                 {!isOpen && pkg.images?.[0] && (
