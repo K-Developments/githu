@@ -77,3 +77,11 @@ export type TourPackage = {
     images: string[];
     category: string;
 };
+
+export type PackagesCtaData = {
+  title: string;
+  description: string;
+  image: string;
+};
+
+    

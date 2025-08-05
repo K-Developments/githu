@@ -2,7 +2,7 @@
 import { Suspense } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import type { Package, Category } from '@/lib/data';
+import type { Package, Category, PackagesCtaData } from '@/lib/data';
 import { PackagesPageClient } from './packages-client';
 
 interface PackagesPageData {
@@ -10,6 +10,7 @@ interface PackagesPageData {
     headline: string;
     heroImage: string;
   };
+  cta: PackagesCtaData,
   packages: Package[];
   categories: Category[];
 }
@@ -19,17 +20,29 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
         const contentDocRef = doc(db, 'content', 'packages');
         const contentDocSnap = await getDoc(contentDocRef);
 
-        let pageData: PackagesPageData['hero'];
+        let heroData: PackagesPageData['hero'];
+        let ctaData: PackagesPageData['cta'];
+
         if (contentDocSnap.exists()) {
             const data = contentDocSnap.data();
-            pageData = {
+            heroData = {
                 headline: data.hero?.headline || 'Our Packages',
                 heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
             };
+            ctaData = {
+                title: data.cta?.title || 'Your Adventure Awaits',
+                description: data.cta?.description || "Found a package that sparks your interest? Or perhaps you have a unique vision for your trip. Every journey with us can be tailored to your desires. Contact our travel experts to customize any package or build a completely new adventure from scratch.",
+                image: data.cta?.image || 'https://placehold.co/800x900.png',
+            };
         } else {
-             pageData = {
+             heroData = {
                 headline: 'Our Packages',
                 heroImage: 'https://placehold.co/1920x600.png',
+            };
+            ctaData = {
+                title: 'Your Adventure Awaits',
+                description: "Found a package that sparks your interest? Or perhaps you have a unique vision for your trip. Every journey with us can be tailored to your desires. Contact our travel experts to customize any package or build a completely new adventure from scratch.",
+                image: 'https://placehold.co/800x900.png',
             };
         }
 
@@ -40,7 +53,8 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
         const packagesData = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
 
         return {
-            hero: pageData,
+            hero: heroData,
+            cta: ctaData,
             categories: categoriesData,
             packages: packagesData
         };
@@ -65,7 +79,10 @@ export default async function PackagesPage() {
         hero={pageData.hero}
         packages={pageData.packages}
         categories={pageData.categories}
+        cta={pageData.cta}
       />
     </Suspense>
   );
 }
+
+    

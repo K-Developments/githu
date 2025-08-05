@@ -19,10 +19,21 @@ interface PackagesHeroData {
   heroImage: string;
 }
 
+interface PackagesCtaData {
+    title: string;
+    description: string;
+    image: string;
+}
+
 export default function AdminPackagesPage() {
   const [heroData, setHeroData] = useState<PackagesHeroData>({
     headline: "",
     heroImage: "",
+  });
+  const [ctaData, setCtaData] = useState<PackagesCtaData>({
+      title: "Your Adventure Awaits",
+      description: "Found a package that sparks your interest? Or perhaps you have a unique vision for your trip. Every journey with us can be tailored to your desires. Contact our travel experts to customize any package or build a completely new adventure from scratch.",
+      image: "https://placehold.co/800x900.png"
   });
   const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -46,6 +57,12 @@ export default function AdminPackagesPage() {
             headline: hero.headline || "Our Packages",
             heroImage: hero.heroImage || "https://placehold.co/1920x600.png",
           });
+          const cta = (data.cta || {}) as PackagesCtaData;
+           setCtaData({
+                title: cta.title || "Your Adventure Awaits",
+                description: cta.description || "Found a package that sparks your interest? Or perhaps you have a unique vision for your trip. Every journey with us can be tailored to your desires. Contact our travel experts to customize any package or build a completely new adventure from scratch.",
+                image: cta.image || "https://placehold.co/800x900.png",
+            });
         } else {
             setHeroData({
                 headline: "Our Packages",
@@ -81,6 +98,11 @@ export default function AdminPackagesPage() {
   const handleHeroChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setHeroData(prevData => ({ ...prevData, [id]: value }));
+  };
+  
+  const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setCtaData(prevData => ({ ...prevData, [id]: value }));
   };
 
   const handleCategoryChange = (id: string, field: keyof Omit<Category, 'id'>, value: any) => {
@@ -181,7 +203,7 @@ export default function AdminPackagesPage() {
         });
 
         const contentDocRef = doc(db, "content", "packages");
-        batch.set(contentDocRef, { hero: heroData }, { merge: true });
+        batch.set(contentDocRef, { hero: heroData, cta: ctaData }, { merge: true });
 
         deletedCategoryIds.forEach(id => batch.delete(doc(db, "categories", id)));
         deletedPackageIds.forEach(id => batch.delete(doc(db, "packages", id)));
@@ -362,7 +384,30 @@ export default function AdminPackagesPage() {
         </CardContent>
       </Card>
       
+       <Card>
+        <CardHeader>
+          <CardTitle>Call to Action Section</CardTitle>
+          <CardDescription>Update the content of the CTA section at the bottom of the page.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title">Headline</Label>
+            <Input id="title" value={ctaData.title} onChange={handleCtaChange} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea id="description" value={ctaData.description} onChange={handleCtaChange} rows={4} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="image">Image URL</Label>
+            <Input id="image" value={ctaData.image} onChange={handleCtaChange} />
+          </div>
+        </CardContent>
+      </Card>
+
       <Button onClick={handleSave} disabled={loading}>{loading ? "Saving..." : "Save All Changes"}</Button>
     </div>
   );
 }
+
+    
