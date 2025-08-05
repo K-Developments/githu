@@ -27,7 +27,7 @@ interface PackagesClientProps {
   categories: Category[];
 }
 
-export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesClientProps) {
+export function PackagesPageClient({ hero, ctaData, packages, categories }: PackagesPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const packageRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -152,6 +152,7 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
 function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package, accordionValue: string | null, onValueChange: (value: string | null) => void }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
     const [isSticky, setIsSticky] = useState(false);
     const headerHeight = 68;
     const isOpen = accordionValue === pkg.id;
@@ -160,16 +161,24 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
 
     useEffect(() => {
         const item = itemRef.current;
-        if (!item) return;
+        if (!item || !isOpen) {
+            setIsSticky(false);
+            return;
+        }
 
         const handleScroll = () => {
-            const itemRect = item.getBoundingClientRect();
-            const shouldBeSticky = isOpen && itemRect.top <= headerHeight && itemRect.bottom - (triggerRef.current?.offsetHeight ?? 0) > headerHeight;
+            if (!itemRef.current || !contentRef.current) return;
+
+            const itemRect = itemRef.current.getBoundingClientRect();
+            const contentRect = contentRef.current.getBoundingClientRect();
+            const triggerHeight = triggerRef.current?.offsetHeight ?? 0;
+            
+            const shouldBeSticky = itemRect.top <= headerHeight && contentRect.bottom - triggerHeight > headerHeight;
             setIsSticky(shouldBeSticky);
         };
         
         window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll();
+        handleScroll(); // Initial check
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
@@ -192,7 +201,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
       visible: {
         opacity: 1,
         transition: {
-          staggerChildren: 0.1,
+          staggerChildren: 0.07,
           delayChildren: 0.1,
         },
       },
@@ -203,7 +212,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
       visible: {
         y: 0,
         opacity: 1,
-        transition: { type: 'spring', stiffness: 50 },
+        transition: { type: 'spring', stiffness: 60, damping: 15 },
       },
     };
 
@@ -214,6 +223,11 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
         opacity: 1,
         transition: { type: 'spring', stiffness: 200, damping: 25 }
       },
+      exit: {
+        y: -20,
+        opacity: 0,
+        transition: { duration: 0.2 }
+      }
     };
 
     return (
@@ -244,7 +258,7 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                         variants={stickyHeaderVariants}
                         initial="hidden"
                         animate="visible"
-                        exit="hidden"
+                        exit="exit"
                         className="fixed z-20 w-full left-0"
                         style={{ top: headerHeight }}
                         onClick={() => onValueChange(null)}
@@ -270,7 +284,9 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
             </AccordionTrigger>
 
             <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
+                    {isOpen && <div style={{ height: isSticky ? triggerRef.current?.offsetHeight : 0 }} className="transition-height duration-200"/>}
                     <motion.div
+                        ref={contentRef}
                         initial="hidden"
                         animate={isOpen ? 'visible' : 'hidden'}
                         exit="hidden"
@@ -340,13 +356,13 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
                                         {renderList(pkg.exclusions, <XCircle className="h-5 w-5 text-red-500" />, 'text-muted-foreground')}
                                     </div>
                                 </div>
-                                <div className="mt-8 flex justify-center">
+                                <motion.div variants={contentItemVariants} className="mt-8 flex justify-center">
                                     <div className="button-wrapper-for-border">
                                         <Button asChild size="lg">
                                             <Link href={pkg.linkUrl || '#'}>Book This Tour</Link>
                                         </Button>
                                     </div>
-                                </div>
+                                </motion.div>
                             </motion.div>
                         </div>
                     </motion.div>
@@ -354,3 +370,6 @@ function PackageAccordion({ pkg, accordionValue, onValueChange }: { pkg: Package
         </div>
     )
 }
+
+
+    
