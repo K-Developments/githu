@@ -1,7 +1,4 @@
 
-'use client';
-
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -11,39 +8,31 @@ interface AboutHeroData {
   heroImage: string;
 }
 
-export default function AboutPage() {
-  const [heroData, setHeroData] = useState<AboutHeroData>({
-    headline: 'About Us',
-    heroImage: 'https://placehold.co/1920x600.png',
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContentData = async () => {
-      try {
+async function getAboutPageData(): Promise<AboutHeroData> {
+    try {
         const contentDocRef = doc(db, 'content', 'about');
         const contentDocSnap = await getDoc(contentDocRef);
 
         if (contentDocSnap.exists()) {
-          const data = contentDocSnap.data();
-          setHeroData({
-            headline: data.hero?.headline || 'About Us',
-            heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
-          });
+            const data = contentDocSnap.data();
+            return {
+                headline: data.hero?.headline || 'About Us',
+                heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
+            };
         }
-      } catch (error) {
+    } catch (error) {
         console.error('Error fetching about page data:', error);
-      } finally {
-        setLoading(false);
-      }
+    }
+
+    return {
+        headline: 'About Us',
+        heroImage: 'https://placehold.co/1920x600.png',
     };
+}
 
-    fetchContentData();
-  }, []);
 
-  if (loading) {
-    return null;
-  }
+export default async function AboutPage() {
+  const heroData = await getAboutPageData();
 
   return (
     <>
