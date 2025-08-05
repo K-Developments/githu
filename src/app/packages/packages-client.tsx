@@ -5,7 +5,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { PackagesCtaSection } from '@/components/ui/packages-cta-section';
@@ -16,6 +15,7 @@ import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star } from
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TourItinerary } from '@/components/ui/tour-itinerary';
 
 
 interface PackagesClientProps {
@@ -189,9 +189,9 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
     
     const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
         <ul className="space-y-2">
-            {items?.map((item, index) => (
+            {(items || []).filter(item => item.trim() !== '').map((item, index) => (
                 <li key={index} className="flex items-start">
-                    <span className="mr-3 mt-1 flex-shrink-0">{icon}</span>
+                    <span className="mr-3 mt-1 flex-shrink-0 ">{icon}</span>
                     <span className={itemClassName}>{item}</span>
                 </li>
             ))}
@@ -262,7 +262,7 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
             <AccordionTrigger
                 ref={triggerRef}
                 className={cn(
-                    "relative flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors overflow-hidden group",
+                    "relative flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors overflow-hidden group h-32 md:h-48",
                     isOpen && "bg-primary text-primary-foreground" 
                 )}
             >
@@ -277,10 +277,9 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
                       <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/50" />
                     </>
                 )}
-                <span className="truncate z-10 relative">{pkg.title}</span>
-                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 z-10 relative", isOpen && "rotate-180")} />
+                <span className="z-10 relative text-white">{pkg.title}</span>
+                <ChevronDown className={cn("h-6 w-6 shrink-0 transition-transform duration-200 z-10 relative text-white", isOpen && "rotate-180")} />
             </AccordionTrigger>
-
             <AccordionContent className="p-0 bg-card rounded-b-lg overflow-hidden">
                     {isOpen && <div style={{ height: isSticky ? triggerRef.current?.offsetHeight : 0 }} className="transition-height duration-200"/>}
                     <motion.div
@@ -326,14 +325,11 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
 
                         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
                             <motion.div variants={contentItemVariants} className="md:col-span-3">
-                                <h3 className="font-headline text-3xl mb-6">Tour Itinerary</h3>
-                                <div className="space-y-6 prose prose-stone max-w-none text-muted-foreground">
-                                    <div dangerouslySetInnerHTML={{ __html: pkg.description.replace(/\\n/g, '<br />') }} />
-                                </div>
+                                <TourItinerary text={pkg.description} />
                             </motion.div>
                             <motion.div variants={contentItemVariants} className="md:col-span-2">
                                 <div className="grid grid-cols-2 gap-4 mb-8">
-                                    {(pkg.images || []).filter(img => img).map((image, index) => (
+                                    {(pkg.images || []).slice(0, 4).filter(img => img).map((image, index) => (
                                         <div key={index} className="relative aspect-square">
                                             <Image
                                                 src={image}
@@ -368,5 +364,3 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
         </div>
     )
 }
-
-    
