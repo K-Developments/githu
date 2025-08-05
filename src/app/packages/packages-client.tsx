@@ -238,7 +238,7 @@ function PackageAccordion({ pkg, onValueChange, openAccordionId }: { pkg: Packag
                         style={{ top: `var(--header-height)`}}
                         onClick={() => onValueChange(isOpen ? null : pkg.id)}
                     >
-                      <div className="w-full mx-auto flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl bg-primary text-primary-foreground rounded-t-lg">
+                      <div className="w-full max-w-7xl mx-auto flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl bg-primary text-primary-foreground rounded-t-lg">
                         <span className="truncate">{pkg.title}</span>
                         <ChevronDown className="h-6 w-6 shrink-0 transition-transform duration-200 rotate-180"/>
                       </div>
@@ -250,7 +250,7 @@ function PackageAccordion({ pkg, onValueChange, openAccordionId }: { pkg: Packag
                 ref={triggerRef}
                 className={cn(
                     "flex justify-between items-center w-full p-4 md:p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg transition-colors",
-                    isOpen
+                     isOpen
                         ? "bg-primary text-primary-foreground"
                         : "text-foreground",
                     isSticky && 'invisible' // Hide original trigger when sticky one is active
@@ -347,5 +347,3 @@ function PackageAccordion({ pkg, onValueChange, openAccordionId }: { pkg: Packag
         </div>
     )
 }
-
-    
