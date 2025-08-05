@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -33,6 +33,7 @@ function PackagesPageComponent() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const packageRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const searchParams = useSearchParams();
   const openPackageId = searchParams.get('open');
@@ -42,6 +43,17 @@ function PackagesPageComponent() {
       setOpenAccordion(openPackageId);
     }
   }, [openPackageId]);
+
+  useEffect(() => {
+    if (openAccordion && packageRefs.current[openAccordion]) {
+      setTimeout(() => {
+        packageRefs.current[openAccordion]?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100); // Small delay to allow layout to settle
+    }
+  }, [openAccordion]);
 
 
   useEffect(() => {
@@ -183,7 +195,12 @@ function PackagesPageComponent() {
             onValueChange={setOpenAccordion}
           >
             {filteredPackages.map(pkg => (
-              <AccordionItem value={pkg.id} key={pkg.id} className="border-b-0">
+              <AccordionItem 
+                value={pkg.id} 
+                key={pkg.id} 
+                className="border-b-0"
+                ref={el => (packageRefs.current[pkg.id] = el)}
+              >
                 <AccordionTrigger 
                   className={cn(
                     "flex justify-between items-center w-full p-6 text-left font-headline text-2xl md:text-4xl hover:no-underline bg-card rounded-t-lg",
