@@ -124,7 +124,7 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
                 className="border-b-0"
                 ref={el => (packageRefs.current[pkg.id] = el)}
               >
-                <PackageAccordion pkg={pkg} isOpen={openAccordion === pkg.id} />
+                <PackageAccordion pkg={pkg} isOpen={openAccordion === pkg.id} onValueChange={setOpenAccordion} />
               </AccordionItem>
             ))}
           </Accordion>
@@ -141,7 +141,7 @@ export function PackagesPageClient({ hero, ctaData, packages, categories }: Pack
   );
 }
 
-function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
+function PackageAccordion({ pkg, isOpen, onValueChange }: { pkg: Package, isOpen: boolean, onValueChange: (value: string | null) => void }) {
     const [isSticky, setIsSticky] = useState(false);
     const itemRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -233,12 +233,11 @@ function PackageAccordion({ pkg, isOpen }: { pkg: Package, isOpen: boolean }) {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className={cn(
-                            'fixed w-full left-0 px-4 z-20',
-                        )}
-                        style={{ top: `${headerHeight}px`}}
+                        className="fixed w-full left-0 px-4 z-20"
+                        style={{ top: `var(--header-height)`}}
+                        onClick={() => onValueChange(null)}
                     >
-                      <div className="max-w-7xl mx-auto w-full flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl bg-primary text-primary-foreground rounded-t-lg">
+                      <div className="w-full mx-auto flex justify-between items-center p-4 md:p-6 text-left font-headline text-2xl md:text-4xl bg-primary text-primary-foreground rounded-t-lg">
                         <span className="truncate">{pkg.title}</span>
                         <ChevronDown className="h-6 w-6 shrink-0 transition-transform duration-200 rotate-180"/>
                       </div>
