@@ -204,18 +204,25 @@ function HeroSection({ data }: { data: HeroData }) {
 
     return (
         <section ref={containerRef} className="hero">
-            <div className="hero-content">
+            <div 
+                className="hero-content"
+                style={{
+                    backgroundImage: data.contentBackgroundImage ? `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${data.contentBackgroundImage})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
                  <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
                  <div className="flex flex-col items-end gap-4">
                     {data.subtitle && (
-                        <p className="text-right max-w-xs text-lg">{data.subtitle}</p>
+                        <p className="text-right max-w-xs text-lg text-white">{data.subtitle}</p>
                     )}
                     <button 
                         onClick={() => {
                             const nextSection = containerRef.current?.nextElementSibling;
                             nextSection?.scrollIntoView({ behavior: 'smooth' });
                         }}
-                        className="border rounded-full h-14 w-14 flex items-center justify-center hover:bg-white/10 transition-colors text-foreground"
+                        className="border rounded-full h-14 w-14 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
                         aria-label="Scroll down"
                     >
                         <ArrowDown />
