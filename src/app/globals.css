@@ -503,7 +503,6 @@ header {
 	width: 100%;
 	padding: 1.5rem;
 	background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
-	transition: all 0.3s ease;
 }
 .destination-card-title {
 	font-family: 'Marcellus', serif;
@@ -518,11 +517,6 @@ header {
 	width: 100%;
 	padding: 1.5rem;
 	background-color: white;
-	transform: translateY(100%);
-	opacity: 0;
-	transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.destination-card:hover .destination-card-description-box {
 	transform: translateY(0);
 	opacity: 1;
 }
@@ -530,13 +524,6 @@ header {
 	color: #555;
 	font-size: 0.9rem;
 	line-height: 1.6;
-}
-.destination-card:hover .destination-card-title-box {
-	transform: translateY(-100%);
-	opacity: 0;
-}
-.destination-card:hover img {
-	transform: scale(1.05);
 }
 .rotated-view-all-wrapper {
 	display: none;
