@@ -132,6 +132,8 @@ function HeroImageSlider({ images }: { images: string[] }) {
         )
     }
 
+    const duplicatedImages = [...images, ...images];
+
     return (
         <>
             {isMobile ? (
@@ -143,16 +145,16 @@ function HeroImageSlider({ images }: { images: string[] }) {
                     ))}
                 </>
             ) : (
-                <div className="scrolling-grid-container">
-                    <div className="scrolling-grid">
-                        {(images || []).map((src, index) => (
+                <div className="scrolling-zigzag-container">
+                    <div className="scrolling-zigzag-grid">
+                        {duplicatedImages.map((src, index) => (
                             <div key={`grid1-${index}`} className="image-wrapper">
                                 <Image src={src} alt="" fill className="object-cover" priority />
                             </div>
                         ))}
                     </div>
-                     <div className="scrolling-grid">
-                        {(images || []).map((src, index) => (
+                     <div className="scrolling-zigzag-grid">
+                        {duplicatedImages.map((src, index) => (
                             <div key={`grid2-${index}`} className="image-wrapper">
                                 <Image src={src} alt="" fill className="object-cover" priority />
                             </div>
@@ -199,6 +201,7 @@ export default function AboutPage() {
                     <HeroImageSlider images={hero.sliderImages || []} />
                 </div>
             </section>
+            
             <Separator />
 
             <div className="bg-white px-4 md:px-12">
