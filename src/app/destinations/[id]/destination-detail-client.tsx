@@ -126,10 +126,20 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
 
       {otherDestinations.length > 0 && (
           <section className="py-12 md:py-24 px-4 md:px-12" style={{ backgroundColor: '#f8f5f2' }}>
-            <div className="max-w-7xl mx-auto relative">
-                <ScrollAnimation>
-                    <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">Explore Other Destinations</h2>
-                </ScrollAnimation>
+            <div className="max-w-7xl mx-auto">
+                <div className="flex justify-between items-center mb-12">
+                    <ScrollAnimation>
+                        <h2 className="text-3xl md:text-4xl font-headline text-center">Explore Other Destinations</h2>
+                    </ScrollAnimation>
+                    <div className="hidden md:flex gap-2">
+                        <div className="button-wrapper-for-border">
+                            <CarouselPrevious variant="outline" size="icon" />
+                        </div>
+                        <div className="button-wrapper-for-border">
+                            <CarouselNext variant="outline" size="icon" />
+                        </div>
+                    </div>
+                </div>
                 
                 <Carousel 
                     opts={{
@@ -138,14 +148,6 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                     }}
                     className="w-full"
                 >
-                    <div className="absolute top-0 right-0 hidden md:flex gap-2">
-                        <div className="button-wrapper-for-border">
-                            <CarouselPrevious variant="outline" size="icon" />
-                        </div>
-                        <div className="button-wrapper-for-border">
-                            <CarouselNext variant="outline" size="icon" />
-                        </div>
-                    </div>
                     <CarouselContent className="-ml-4">
                         {otherDestinations.map((dest) => (
                         <CarouselItem key={dest.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
