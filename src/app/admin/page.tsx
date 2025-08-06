@@ -53,7 +53,7 @@ export default function AdminHomePage() {
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
     description: "",
-    sliderImages: ["", "", ""],
+    sliderImages: [],
     contentBackgroundImage: "",
   });
   const [introData, setIntroData] = useState<IntroData>({
@@ -108,11 +108,7 @@ export default function AdminHomePage() {
           const data = contentDocSnap.data();
           
           const hero = (data.hero || {}) as HeroData;
-          const images = hero.sliderImages || [];
-          while (images.length < 3) {
-            images.push("");
-          }
-          setHeroData({ ...hero, sliderImages: images.slice(0, 3) });
+          setHeroData({ ...hero, sliderImages: hero.sliderImages || [] });
 
           const intro = (data.intro || {}) as IntroData;
           setIntroData({
@@ -208,9 +204,8 @@ export default function AdminHomePage() {
     setHeroData(prevData => ({ ...prevData, [id]: value }));
   };
   
-  const handleImageChange = (index: number, value: string) => {
-    const newSliderImages = [...heroData.sliderImages];
-    newSliderImages[index] = value;
+  const handleImageChange = (value: string) => {
+    const newSliderImages = value.split('\n').filter(url => url.trim() !== '');
     setHeroData(prevData => ({ ...prevData, sliderImages: newSliderImages }));
   };
 
@@ -362,16 +357,16 @@ export default function AdminHomePage() {
           </div>
           
            <div className="space-y-4">
-            <Label>Slider Images</Label>
-            {heroData.sliderImages.map((url, index) => (
-                 <div className="space-y-2" key={index}>
-                    <Label htmlFor={`sliderImage${index + 1}`}>Image {index + 1} URL</Label>
-                    <Input 
-                        id={`sliderImage${index + 1}`} 
-                        value={url} 
-                        onChange={(e) => handleImageChange(index, e.target.value)} />
-                </div>
-            ))}
+            <Label>Slider/Grid Images (one URL per line)</Label>
+            <Textarea
+                id="sliderImages"
+                value={heroData.sliderImages.join('\n')}
+                onChange={(e) => handleImageChange(e.target.value)}
+                rows={5}
+                placeholder="https://example.com/image1.png
+https://example.com/image2.png
+https://example.com/image3.png"
+            />
           </div>
         </CardContent>
       </Card>

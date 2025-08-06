@@ -188,12 +188,6 @@ export default function HomePage() {
 
 function HeroSection({ data }: { data: HeroData }) {
     const [currentImage, setCurrentImage] = useState(0);
-    const heroRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: heroRef,
-        offset: ["start start", "end start"]
-    });
-    const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
     useEffect(() => {
         if (data.sliderImages.length > 1) {
@@ -205,7 +199,7 @@ function HeroSection({ data }: { data: HeroData }) {
     }, [currentImage, data.sliderImages.length]);
     
   return (
-    <section className="hero" ref={heroRef}>
+    <section className="hero">
         <div 
             className="hero-content"
             style={{
@@ -214,39 +208,50 @@ function HeroSection({ data }: { data: HeroData }) {
                 backgroundPosition: 'center'
             }}
         >
-            <div className="absolute inset-0 bg-black/30 z-0"></div>
+          
             <h1 
                 dangerouslySetInnerHTML={{ __html: data.headline }} 
-                className="relative z-10 text-white"
+                className="relative z-10"
             />
         </div>
-      <div className="hero-image">
-        {data.sliderImages.map((src, index) => (
-          <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
-             <Image 
-                src={src || "https://placehold.co/1920x1080.png"} 
-                alt="Luxury travel destination" 
-                fill
-                priority={index === 0}
-                style={{ objectFit: 'cover' }}
-                sizes="100vw" 
-             />
-          </div>
-        ))}
-         <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
-      </div>
-      {data.sliderImages.length > 1 && (
-        <div className="pagination-bullets">
-            {data.sliderImages.map((_, index) => (
-                <button
-                    key={index}
-                    className={`pagination-bullet ${index === currentImage ? 'active' : ''}`}
-                    onClick={() => setCurrentImage(index)}
-                    aria-label={`Go to slide ${index + 1}`}
+
+        {/* Mobile Hero Image */}
+        <div className="hero-image md:hidden">
+            {data.sliderImages.map((src, index) => (
+            <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
+                <Image 
+                    src={src || "https://placehold.co/1920x1080.png"} 
+                    alt="Luxury travel destination" 
+                    fill
+                    priority={index === 0}
+                    style={{ objectFit: 'cover' }}
+                    sizes="100vw" 
                 />
+            </div>
             ))}
+            <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
         </div>
-      )}
+        
+        {/* Desktop Scrolling Grid */}
+        <div className="hero-image hidden md:block">
+            <div className="scrolling-grid-container">
+                {/* We render the grid twice for a seamless loop */}
+                {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
+                    <div key={`grid-1-${index}`} className="scrolling-grid">
+                        <div className="image-wrapper">
+                            <Image 
+                                src={src || "https://placehold.co/1920x1080.png"} 
+                                alt={`Luxury travel destination ${index + 1}`}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                sizes="33.3vw"
+                            />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
     </section>
   );
 }
