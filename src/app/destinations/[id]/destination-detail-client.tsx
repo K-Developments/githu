@@ -1,14 +1,14 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import type { Destination } from '@/lib/data';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface DestinationDetailClientProps {
@@ -17,7 +17,9 @@ interface DestinationDetailClientProps {
 }
 
 export function DestinationDetailClient({ destination, otherDestinations }: DestinationDetailClientProps) {
-  const [api, setApi] = useState<CarouselApi>()
+  const [mainApi, setMainApi] = useState<CarouselApi>()
+  const [otherApi, setOtherApi] = useState<CarouselApi>()
+  
   const sliderImages = [destination.image, ...(destination.galleryImages || [])].filter(Boolean);
 
   return (
@@ -57,7 +59,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="relative">
                     <Carousel
-                        setApi={setApi}
+                        setApi={setMainApi}
                         opts={{
                         align: "start",
                         loop: true,
@@ -79,21 +81,21 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                             </CarouselItem>
                         ))}
                         </CarouselContent>
-                        {sliderImages.length > 1 && (
-                            <>
-                                <div className="absolute top-1/2 -translate-y-1/2 left-4">
-                                    <div className="button-wrapper-for-border">
-                                        <CarouselPrevious variant="outline" size="icon" />
-                                    </div>
-                                </div>
-                                <div className="absolute top-1/2 -translate-y-1/2 right-4">
-                                     <div className="button-wrapper-for-border">
-                                        <CarouselNext variant="outline" size="icon" />
-                                    </div>
-                                </div>
-                            </>
-                        )}
                     </Carousel>
+                    {sliderImages.length > 1 && (
+                         <div className="flex justify-center items-center gap-2 mt-8">
+                            <div className="button-wrapper-for-border">
+                               <Button variant="outline" size="icon" onClick={() => mainApi?.scrollPrev()}>
+                                 <ChevronLeft className="h-4 w-4" />
+                               </Button>
+                            </div>
+                             <div className="button-wrapper-for-border">
+                               <Button variant="outline" size="icon" onClick={() => mainApi?.scrollNext()}>
+                                 <ChevronRight className="h-4 w-4" />
+                               </Button>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div>
                     <ScrollAnimation>
@@ -132,7 +134,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
       </section>
 
       {otherDestinations.length > 0 && (
-          <section className="py-12 md:py-24 px-4 md:px-12" style={{ backgroundColor: '#f8f5f2' }}>
+          <section className="py-12 md:py-24 px-4 md:px-12 bg-[#f8f5f2]">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-12">
                     <ScrollAnimation>
@@ -141,6 +143,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                 </div>
                 
                 <Carousel 
+                    setApi={setOtherApi}
                     opts={{
                         align: "start",
                         loop: otherDestinations.length > 3,
@@ -174,15 +177,19 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                         </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <div className="flex justify-center items-center gap-2 mt-8">
-                        <div className="button-wrapper-for-border">
-                            <CarouselPrevious variant="outline" size="icon" />
-                        </div>
-                        <div className="button-wrapper-for-border">
-                            <CarouselNext variant="outline" size="icon" />
-                        </div>
-                    </div>
                 </Carousel>
+                <div className="flex justify-center items-center gap-2 mt-8">
+                    <div className="button-wrapper-for-border">
+                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollPrev()}>
+                           <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                    </div>
+                    <div className="button-wrapper-for-border">
+                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollNext()}>
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
             </div>
           </section>
       )}
