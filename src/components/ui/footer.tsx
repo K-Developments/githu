@@ -1,14 +1,24 @@
 
-import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 
-export function Footer() {
+import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import Image from 'next/image';
+
+export function Footer({ logoUrl }: { logoUrl?: string }) {
   const year = new Date().getFullYear();
 
   return (
     <footer className="site-footer">
       <div className="footer-content">
         <div className="footer-column">
-          <a href="#" className="logo">ISLAND<span>HOPES</span></a>
+          <a href="#" className="logo">
+             {logoUrl ? (
+              <div style={{ position: 'relative', width: '150px', height: '40px' }}>
+                <Image src={logoUrl} alt="Island Hopes Logo" fill style={{ objectFit: 'contain', objectPosition: 'left' }} />
+              </div>
+            ) : (
+              <>ISLAND<span>HOPES</span></>
+            )}
+          </a>
           <p>
             Crafting unforgettable journeys to the world's most exquisite island destinations.
           </p>
@@ -53,3 +63,5 @@ export function Footer() {
     </footer>
   );
 }
+
+    

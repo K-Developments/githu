@@ -3,6 +3,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const navLinks = [
   { title: "Destinations", href: "/destinations" },
@@ -64,7 +65,7 @@ const linkVariants = {
 }
 
 
-export const MobileNav = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (isOpen: boolean) => void; }) => {
+export const MobileNav = ({ isOpen, setIsOpen, logoUrl }: { isOpen: boolean; setIsOpen: (isOpen: boolean) => void; logoUrl?: string; }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -77,7 +78,15 @@ export const MobileNav = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (
         >
             <div className="flex h-full flex-col">
                 <div className="flex justify-between items-center p-4">
-                     <Link href="/" className="logo" style={{ color: '#222', fontFamily: "'Marcellus', serif" }}>ISLAND<span style={{color: 'hsl(188 55% 45%)'}}>HOPES</span></Link>
+                    <Link href="/" className="logo">
+                        {logoUrl ? (
+                            <div style={{ position: 'relative', width: '150px', height: '40px' }}>
+                            <Image src={logoUrl} alt="Island Hopes Logo" fill style={{ objectFit: 'contain' }} />
+                            </div>
+                        ) : (
+                            <span style={{ color: '#222', fontFamily: "'Marcellus', serif" }}>ISLAND<span style={{color: 'hsl(188 55% 45%)'}}>HOPES</span></span>
+                        )}
+                    </Link>
                 </div>
                 <motion.div
                     variants={linkContainerVariants}
@@ -102,3 +111,5 @@ export const MobileNav = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (
     </AnimatePresence>
   );
 };
+
+    

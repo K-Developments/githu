@@ -1,4 +1,10 @@
 
+export type SiteSettings = {
+  logoUrl?: string;
+  introBackgroundImage?: string;
+  newsletterBackgroundImage?: string;
+};
+
 export type Destination = {
   id: string;
   title: string;

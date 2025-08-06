@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
-import type { Package, Category, Destination, Testimonial, CtaData } from "@/lib/data";
+import type { Package, Category, Destination, Testimonial, CtaData, SiteSettings } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
@@ -51,6 +51,10 @@ interface FeaturedPackagesData {
 
 interface FeaturedDestinationsData {
     destinationIds: string[];
+}
+
+interface HomePageProps {
+    siteSettings: SiteSettings | null;
 }
 
 
@@ -139,7 +143,7 @@ async function getHomePageData() {
 
 
 // Main component for the homepage
-export default function HomePage() {
+export default function HomePage({ siteSettings }: HomePageProps) {
   const [pageData, setPageData] = useState<Awaited<ReturnType<typeof getHomePageData>> | null>(null);
 
   useEffect(() => {
@@ -173,13 +177,13 @@ export default function HomePage() {
   return (
     <>
       <HeroSection data={heroData} />
-      {introData && <IntroSection data={introData} />}
+      {introData && <IntroSection data={introData} backgroundImage={siteSettings?.introBackgroundImage} />}
       {quoteData && <QuoteSection data={quoteData} />}
       {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
       {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
       {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
       {ctaData && <CtaSection data={ctaData} />}
-      <NewsletterSection />
+      <NewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage}/>
     </>
   );
 }
@@ -269,9 +273,17 @@ function HeroSection({ data }: { data: HeroData }) {
 }
 
 
-function IntroSection({ data }: { data: IntroData }) {
+function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
   return (
-    <section className="intro-home">
+    <section 
+        className="intro-home"
+        style={{
+            backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed'
+        }}
+    >
         <div className="intro-container">
             <div className="intro-text-content">
               <ScrollAnimation>
@@ -561,9 +573,16 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
     );
 }
 
-function NewsletterSection() {
+function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
     return (
-        <section className="newsletter-section">
+        <section 
+            className="newsletter-section"
+            style={{
+                backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }}
+        >
             <div className="newsletter-container">
                 <ScrollAnimation>
                   <h2 className="section-title">Join Our Journey</h2>
@@ -585,3 +604,5 @@ function NewsletterSection() {
         </section>
     );
 }
+
+    

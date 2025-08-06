@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Search } from "lucide-react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { AnimatedHamburgerButton } from "@/components/ui/animated-hamburger";
 
 
-export function Header() {
+export function Header({ logoUrl }: { logoUrl?: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -18,6 +19,18 @@ export function Header() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const Logo = () => (
+    <Link href="/" className="logo">
+      {logoUrl ? (
+        <div style={{ position: 'relative', width: '150px', height: '40px' }}>
+          <Image src={logoUrl} alt="Island Hopes Logo" fill style={{ objectFit: 'contain' }} />
+        </div>
+      ) : (
+        <>ISLAND<span>HOPES</span></>
+      )}
+    </Link>
+  );
 
   if (!isClient) {
     return (
@@ -47,10 +60,10 @@ export function Header() {
 
   return (
     <>
-      <MobileNav isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
+      <MobileNav isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} logoUrl={logoUrl} />
       <header>
           <div className="header-left">
-              <Link href="/" className="logo">ISLAND<span>HOPES</span></Link>
+              <Logo />
           </div>
           <div className="header-center">
               <nav className="desktop-nav">
@@ -92,3 +105,5 @@ export function Header() {
     </>
   );
 }
+
+    

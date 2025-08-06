@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import type { Package, Destination, Testimonial, CtaData, Category } from "@/lib/data";
+import type { Package, Destination, Testimonial, CtaData, Category, SiteSettings } from "@/lib/data";
 import { Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -50,6 +50,11 @@ interface FeaturedDestinationsData {
 }
 
 export default function AdminHomePage() {
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>({
+    logoUrl: "",
+    introBackgroundImage: "",
+    newsletterBackgroundImage: "",
+  });
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
     description: "",
@@ -107,6 +112,9 @@ export default function AdminHomePage() {
         if (contentDocSnap.exists()) {
           const data = contentDocSnap.data();
           
+          const settings = (data.siteSettings || {}) as SiteSettings;
+          setSiteSettings(settings);
+
           const hero = (data.hero || {}) as HeroData;
           setHeroData({ ...hero, sliderImages: hero.sliderImages || [] });
 
@@ -199,6 +207,11 @@ export default function AdminHomePage() {
     fetchContentData();
   }, [toast]);
 
+  const handleSettingsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setSiteSettings(prevData => ({ ...prevData, [id]: value }));
+  };
+
   const handleHeroChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setHeroData(prevData => ({ ...prevData, [id]: value }));
@@ -287,6 +300,7 @@ export default function AdminHomePage() {
 
         const contentDocRef = doc(db, "content", "home");
         batch.set(contentDocRef, { 
+            siteSettings,
             hero: heroData, 
             intro: introData, 
             quote: quoteData, 
@@ -336,6 +350,28 @@ export default function AdminHomePage() {
         <h1 className="text-2xl font-bold">Admin Panel - Home Page</h1>
         <p className="text-muted-foreground">Manage your website content here.</p>
       </div>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Site-wide Settings</CardTitle>
+          <CardDescription>Manage settings that apply across the entire site.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="logoUrl">Logo Image URL</Label>
+            <Input id="logoUrl" value={siteSettings.logoUrl} onChange={handleSettingsChange} placeholder="e.g., /logo.png" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="introBackgroundImage">Intro Section Background Image URL</Label>
+            <Input id="introBackgroundImage" value={siteSettings.introBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/intro-bg.jpg"/>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="newsletterBackgroundImage">Newsletter Section Background Image URL</Label>
+            <Input id="newsletterBackgroundImage" value={siteSettings.newsletterBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/newsletter-bg.jpg"/>
+          </div>
+        </CardContent>
+      </Card>
+
 
       <Card>
         <CardHeader>
@@ -587,3 +623,5 @@ https://example.com/image3.png"
     </div>
   );
 }
+
+    

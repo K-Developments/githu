@@ -5,6 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
 import { ScrollRestoration } from "@/components/ui/scroll-restoration";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import type { SiteSettings } from "@/lib/data";
+import React from "react";
 
 
 export const metadata: Metadata = {
@@ -38,11 +42,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+async function getSiteSettings(): Promise<SiteSettings | null> {
+    try {
+        const contentDocRef = doc(db, "content", "home");
+        const contentDocSnap = await getDoc(contentDocRef);
+        if (contentDocSnap.exists()) {
+            const data = contentDocSnap.data();
+            return (data.siteSettings || null) as SiteSettings | null;
+        }
+        return null;
+    } catch (error) {
+        console.error("Error fetching site settings:", error);
+        return null;
+    }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteSettings = await getSiteSettings();
+
   return (
     <html lang="en" className="scroll-smooth">
       <head>
@@ -53,13 +74,15 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <ScrollRestoration />
         <div className="noise-overlay"></div>
-        <Header />
+        <Header logoUrl={siteSettings?.logoUrl} />
         <main>
-          {children}
+           {React.cloneElement(children as React.ReactElement, { siteSettings })}
         </main>
-        <Footer />
+        <Footer logoUrl={siteSettings?.logoUrl} />
         <Toaster />
       </body>
     </html>
   );
 }
+
+    
