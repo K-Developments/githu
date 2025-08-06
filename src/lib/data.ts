@@ -4,7 +4,10 @@ export type Destination = {
   title: string;
   location: string;
   description: string;
+  longDescription?: string;
   image: string;
+  galleryImages?: string[];
+  highlights?: string[];
   linkUrl?: string;
 };
 

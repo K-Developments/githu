@@ -52,7 +52,15 @@ export default function AdminDestinationsPage() {
 
         const destinationsCollectionRef = collection(db, "destinations");
         const destinationsSnap = await getDocs(destinationsCollectionRef);
-        const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+        const destinationsData = destinationsSnap.docs.map(doc => {
+            const data = doc.data();
+            return { 
+                id: doc.id, 
+                ...data,
+                galleryImages: data.galleryImages || [],
+                highlights: data.highlights || [],
+            } as Destination
+        });
         setDestinations(destinationsData);
 
       } catch (error) {
@@ -79,13 +87,25 @@ export default function AdminDestinationsPage() {
     setDestinations(prevDestinations => prevDestinations.map(d => d.id === id ? { ...d, [field]: value } : d));
   };
 
+  const handleDestinationListChange = (id: string, field: 'highlights' | 'galleryImages', value: string) => {
+    setDestinations(prevDestinations => prevDestinations.map(d => {
+        if (d.id === id) {
+            return { ...d, [field]: value.split('\n') };
+        }
+        return d;
+    }));
+  };
+
   const handleAddNewDestination = () => {
     const newDestination: Destination = {
       id: `new-dest-${Date.now()}`,
       title: "New Destination",
       location: "",
       description: "",
+      longDescription: "",
       image: "https://placehold.co/600x400.png",
+      galleryImages: [],
+      highlights: [],
       linkUrl: "",
     };
     setDestinations([...destinations, newDestination]);
@@ -183,15 +203,27 @@ export default function AdminDestinationsPage() {
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor={`dest-desc-${dest.id}`} className="text-xs">Short Description</Label>
+                  <Label htmlFor={`dest-desc-${dest.id}`} className="text-xs">Short Description (for cards)</Label>
                   <Textarea id={`dest-desc-${dest.id}`} value={dest.description} onChange={(e) => handleDestinationChange(dest.id, 'description', e.target.value)} rows={2} />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor={`dest-img-${dest.id}`} className="text-xs">Image URL</Label>
+                  <Label htmlFor={`dest-long-desc-${dest.id}`} className="text-xs">Long Description (for detail page)</Label>
+                  <Textarea id={`dest-long-desc-${dest.id}`} value={dest.longDescription || ''} onChange={(e) => handleDestinationChange(dest.id, 'longDescription', e.target.value)} rows={4} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`dest-highlights-${dest.id}`} className="text-xs">Highlights (one per line)</Label>
+                  <Textarea id={`dest-highlights-${dest.id}`} value={(dest.highlights || []).join('\n')} onChange={(e) => handleDestinationListChange(dest.id, 'highlights', e.target.value)} rows={4} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`dest-img-${dest.id}`} className="text-xs">Cover Image URL</Label>
                   <Input id={`dest-img-${dest.id}`} value={dest.image} onChange={(e) => handleDestinationChange(dest.id, 'image', e.target.value)} />
                 </div>
                  <div className="space-y-1">
-                  <Label htmlFor={`dest-link-${dest.id}`} className="text-xs">Link URL (optional)</Label>
+                  <Label htmlFor={`dest-gallery-${dest.id}`} className="text-xs">Gallery Images (one URL per line)</Label>
+                  <Textarea id={`dest-gallery-${dest.id}`} value={(dest.galleryImages || []).join('\n')} onChange={(e) => handleDestinationListChange(dest.id, 'galleryImages', e.target.value)} rows={4} />
+                </div>
+                 <div className="space-y-1">
+                  <Label htmlFor={`dest-link-${dest.id}`} className="text-xs">Link URL (optional, defaults to /destinations/ID)</Label>
                   <Input id={`dest-link-${dest.id}`} placeholder={`/destinations/${dest.id}`} value={dest.linkUrl || ''} onChange={(e) => handleDestinationChange(dest.id, 'linkUrl', e.target.value)} />
                 </div>
                 <Button variant="destructive" size="sm" onClick={() => handleDeleteDestination(dest.id)}>
