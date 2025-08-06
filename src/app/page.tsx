@@ -208,20 +208,22 @@ function HeroSection({ data }: { data: HeroData }) {
     <section className="hero" ref={heroRef}>
         <div className="hero-content">
             <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
-            <div className="relative w-full max-w-2xl aspect-[4/3] overflow-hidden my-4">
-                {data.parallaxImage ? (
-                    <motion.div className="absolute inset-0" style={{ y: parallaxY }}>
-                        <Image 
-                            src={data.parallaxImage} 
-                            alt="Luxury travel destination collage" 
-                            fill
-                            className="object-cover"
-                        />
-                    </motion.div>
-                ) : (
-                    <p>{data.description}</p>
-                )}
-            </div>
+            {(data.parallaxImage || data.description) && (
+              <p className="relative w-full max-w-2xl aspect-[4/3] overflow-hidden my-4 !p-0">
+                  {data.parallaxImage ? (
+                      <motion.div className="absolute inset-0" style={{ y: parallaxY }}>
+                          <Image 
+                              src={data.parallaxImage} 
+                              alt="Luxury travel destination collage" 
+                              fill
+                              className="object-cover"
+                          />
+                      </motion.div>
+                  ) : (
+                      <span className="flex items-center justify-center h-full p-2">{data.description}</span>
+                  )}
+              </p>
+            )}
         </div>
       <div className="hero-image">
         {data.sliderImages.map((src, index) => (
