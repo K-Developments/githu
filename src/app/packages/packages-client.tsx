@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TourItinerary } from '@/components/ui/tour-itinerary';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 
 interface PackagesClientProps {
@@ -23,10 +24,67 @@ interface PackagesClientProps {
     headline: string;
     heroImage: string;
     contentBackgroundImage?: string;
+    sliderImages?: string[];
   };
   packages: Package[];
   categories: Category[];
   cta: PackagesCtaData;
+}
+
+function HeroImageSlider({ images }: { images: string[] }) {
+    const isMobile = useIsMobile();
+    const [currentImage, setCurrentImage] = useState(0);
+
+    useEffect(() => {
+        if (isMobile) {
+            const timer = setInterval(() => {
+                setCurrentImage((prev) => (prev + 1) % (images?.length || 1));
+            }, 5000);
+            return () => clearInterval(timer);
+        }
+    }, [images, isMobile]);
+
+    if (!images || images.length === 0) {
+        return (
+             <Image
+                src={'https://placehold.co/1920x600.png'}
+                alt="Scenic view of a travel package destination"
+                fill
+                className="object-cover"
+            />
+        )
+    }
+
+    return (
+        <>
+            {isMobile ? (
+                <>
+                    {(images || []).map((src, index) => (
+                        <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
+                            <Image src={src} alt="" fill className="object-cover" priority={index === 0} />
+                        </div>
+                    ))}
+                </>
+            ) : (
+                <div className="scrolling-grid-container">
+                    <div className="scrolling-grid">
+                        {(images || []).map((src, index) => (
+                            <div key={`grid1-${index}`} className="image-wrapper">
+                                <Image src={src} alt="" fill className="object-cover" priority />
+                            </div>
+                        ))}
+                    </div>
+                     <div className="scrolling-grid">
+                        {(images || []).map((src, index) => (
+                            <div key={`grid2-${index}`} className="image-wrapper">
+                                <Image src={src} alt="" fill className="object-cover" priority />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </>
+    );
 }
 
 export function PackagesPageClient({ hero, packages, categories, cta }: PackagesClientProps) {
@@ -86,20 +144,13 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                   </h1>
               </ScrollAnimation>
           </div>
-          <div className="flex-1 relative w-full left-0">
-              <ScrollAnimation>
-                  <Image
-                    src={hero.heroImage}
-                    alt="Scenic view of a travel package destination"
-                    fill
-                    className="object-cover"
-                  />
-              </ScrollAnimation>
+          <div className="flex-1 relative w-full left-0 overflow-hidden">
+             <HeroImageSlider images={hero.sliderImages || []} />
           </div>
       </section>
+      <Separator />
 
       <div className="bg-white px-4 md:px-12">
-          <Separator />
           <div className="text-sm text-muted-foreground py-4">
               <Link href="/" className="hover:text-primary">Home</Link>
               <span className="mx-2">||</span>

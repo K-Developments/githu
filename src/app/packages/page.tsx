@@ -10,6 +10,7 @@ interface PackagesPageData {
     headline: string;
     heroImage: string;
     contentBackgroundImage?: string;
+    sliderImages?: string[];
   };
   cta: PackagesCtaData,
   packages: Package[];
@@ -20,9 +21,19 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
     try {
         const contentDocRef = doc(db, 'content', 'packages');
         const contentDocSnap = await getDoc(contentDocRef);
+        const homeContentDocRef = doc(db, "content", "home");
+        const homeContentDocSnap = await getDoc(homeContentDocRef);
 
         let heroData: PackagesPageData['hero'];
         let ctaData: PackagesPageData['cta'];
+        let sliderImages: string[] = [];
+
+         if (homeContentDocSnap.exists()) {
+            const homeData = homeContentDocSnap.data();
+             if (homeData.hero && homeData.hero.sliderImages) {
+                sliderImages = homeData.hero.sliderImages;
+            }
+        }
 
         if (contentDocSnap.exists()) {
             const data = contentDocSnap.data();
@@ -30,6 +41,7 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
                 headline: data.hero?.headline || 'Our Packages',
                 heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: data.hero?.contentBackgroundImage || '',
+                sliderImages,
             };
             ctaData = {
                 title: data.cta?.title || 'Your Adventure Awaits',
@@ -41,6 +53,7 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
                 headline: 'Our Packages',
                 heroImage: 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: '',
+                sliderImages,
             };
             ctaData = {
                 title: 'Your Adventure Awaits',
@@ -87,5 +100,3 @@ export default async function PackagesPage() {
     </Suspense>
   );
 }
-
-    

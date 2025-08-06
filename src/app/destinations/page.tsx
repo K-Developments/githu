@@ -10,6 +10,7 @@ interface DestinationsPageData {
     headline: string;
     heroImage: string;
     contentBackgroundImage?: string;
+    sliderImages?: string[];
   };
   destinations: Destination[];
 }
@@ -18,8 +19,18 @@ async function getDestinationsPageData(): Promise<DestinationsPageData | null> {
     try {
         const contentDocRef = doc(db, 'content', 'destinations');
         const contentDocSnap = await getDoc(contentDocRef);
+        const homeContentDocRef = doc(db, "content", "home");
+        const homeContentDocSnap = await getDoc(homeContentDocRef);
 
         let heroData: DestinationsPageData['hero'];
+        let sliderImages: string[] = [];
+
+        if (homeContentDocSnap.exists()) {
+            const homeData = homeContentDocSnap.data();
+             if (homeData.hero && homeData.hero.sliderImages) {
+                sliderImages = homeData.hero.sliderImages;
+            }
+        }
 
         if (contentDocSnap.exists()) {
             const data = contentDocSnap.data();
@@ -27,12 +38,14 @@ async function getDestinationsPageData(): Promise<DestinationsPageData | null> {
                 headline: data.hero?.headline || 'Our Destinations',
                 heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: data.hero?.contentBackgroundImage || '',
+                sliderImages,
             };
         } else {
              heroData = {
                 headline: 'Our Destinations',
                 heroImage: 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: '',
+                sliderImages,
             };
         }
 

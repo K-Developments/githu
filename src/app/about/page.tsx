@@ -1,4 +1,7 @@
 
+'use client';
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
@@ -9,12 +12,14 @@ import { cn } from '@/lib/utils';
 import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 import { CtaSection } from '@/components/ui/cta-section';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AboutPageData {
   hero: {
     headline: string;
     heroImage: string;
     contentBackgroundImage?: string;
+    sliderImages?: string[];
   };
   journey: {
     title: string;
@@ -36,7 +41,10 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
 
         const homeContentDocRef = doc(db, "content", "home");
         const homeContentDocSnap = await getDoc(homeContentDocRef);
+        
         let ctaData: CtaData | null = null;
+        let sliderImages: string[] = [];
+
         if (homeContentDocSnap.exists()) {
             const homeData = homeContentDocSnap.data();
             const cta = homeData.cta as CtaData;
@@ -44,6 +52,9 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 cta.interactiveItems = [];
             }
             ctaData = cta;
+            if (homeData.hero && homeData.hero.sliderImages) {
+                sliderImages = homeData.hero.sliderImages;
+            }
         }
 
         if (contentDocSnap.exists()) {
@@ -56,6 +67,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                   headline: data.hero?.headline || 'About Us',
                   heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
                   contentBackgroundImage: data.hero?.contentBackgroundImage || '',
+                  sliderImages,
                 },
                 journey: {
                   title: data.journey?.title || 'Our Journey',
@@ -75,6 +87,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                     headline: 'About Us',
                     heroImage: 'https://placehold.co/1920x600.png',
                     contentBackgroundImage: '',
+                    sliderImages,
                 },
                 journey: {
                     title: 'Our Journey',
@@ -95,144 +108,197 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
     }
 }
 
+function HeroImageSlider({ images }: { images: string[] }) {
+    const isMobile = useIsMobile();
+    const [currentImage, setCurrentImage] = useState(0);
 
-export default async function AboutPage() {
-  const pageData = await getAboutPageData();
+    useEffect(() => {
+        if (isMobile) {
+            const timer = setInterval(() => {
+                setCurrentImage((prev) => (prev + 1) % (images?.length || 1));
+            }, 5000);
+            return () => clearInterval(timer);
+        }
+    }, [images, isMobile]);
 
-  if (!pageData) {
-      return <div>Error loading page data.</div>;
-  }
+    if (!images || images.length === 0) {
+        return (
+             <Image
+                src={'https://placehold.co/1920x600.png'}
+                alt="A diverse team collaborating on travel plans"
+                fill
+                className="object-cover"
+            />
+        )
+    }
 
-  const { hero, journey, coreValues, workflow, ctaData } = pageData;
-
-  return (
-    <div>
-        <section className="h-[70vh] flex flex-col bg-white">
-            <div 
-                className="flex-[0.7] flex items-center justify-center p-4 relative"
-                style={{
-                    backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : 'none',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}
-            >
-                <ScrollAnimation>
-                    <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground relative">
-                    {hero.headline}
-                    </h1>
-                </ScrollAnimation>
-            </div>
-            <div className="flex-1 relative w-full">
-                <ScrollAnimation>
-                    <Image
-                    src={hero.heroImage}
-                    alt="A diverse team collaborating on travel plans"
-                    fill
-                    className="object-cover"
-                    />
-                </ScrollAnimation>
-            </div>
-        </section>
-
-        <div className="bg-white px-4 md:px-12">
-            <Separator />
-            <div className="text-sm text-muted-foreground py-4">
-                <Link href="/" className="hover:text-primary">Home</Link>
-                <span className="mx-2">||</span>
-                <span>About</span>
-            </div>
-            <Separator />
-        </div>
-
-        <section className="py-12 px-4 md:px-12 bg-white">
-            <ScrollAnimation>
-                <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">{journey.title}</h2>
-            </ScrollAnimation>
-            
-            <div className="mb-16 md:mb-24">
-                <ScrollAnimation>
-                    <div className="w-full h-[40vh] md:h-[60vh] relative">
-                        <Image 
-                        src={journey.image}
-                        alt="Landscape of a journey"
-                        fill
-                        className="object-cover rounded-md shadow-xl"
-                        />
-                    </div>
-                </ScrollAnimation>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-              <ScrollAnimation>
-                <div>
-                  <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {journey.missionText}
-                  </p>
-                </div>
-              </ScrollAnimation>
-              <ScrollAnimation delay={0.2}>
-                <div>
-                  <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {journey.visionText}
-                  </p>
-                </div>
-              </ScrollAnimation>
-            </div>
-        </section>
-
-        {coreValues.length > 0 && (
-            <section className="bg-white">
-                <div className="max-w-7xl mx-auto py-12 px-4 md:px-12">
-                    <ScrollAnimation>
-                        <h2 className="text-4xl md:text-5xl font-headline text-center mb-12">Our Core Values</h2>
-                    </ScrollAnimation>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {coreValues.map((value, index) => (
-                        <ScrollAnimation key={value.id} delay={index * 0.1}>
-                            <div
-                            className="flex flex-col border"
-                            >
-                            <div className={cn('relative aspect-square w-full', (index === 1 || index === 3) && 'sm:order-2')}>
-                                <Image
-                                src={value.image}
-                                alt={value.title}
-                                fill
-                                className="object-cover"
-                                />
-                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                <h3 className="text-white text-3xl font-headline text-center p-4">
-                                    {value.title}
-                                </h3>
-                                </div>
-                            </div>
-                            <div className={cn('p-6 bg-card flex-grow flex flex-col justify-center', (index === 1 || index === 3) && 'sm:order-1')}>
-                                <p className="text-muted-foreground leading-relaxed">
-                                {value.description}
-                                </p>
-                            </div>
-                            </div>
-                        </ScrollAnimation>
+    return (
+        <>
+            {isMobile ? (
+                <>
+                    {(images || []).map((src, index) => (
+                        <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
+                            <Image src={src} alt="" fill className="object-cover" priority={index === 0} />
+                        </div>
                     ))}
+                </>
+            ) : (
+                <div className="scrolling-grid-container">
+                    <div className="scrolling-grid">
+                        {(images || []).map((src, index) => (
+                            <div key={`grid1-${index}`} className="image-wrapper">
+                                <Image src={src} alt="" fill className="object-cover" priority />
+                            </div>
+                        ))}
+                    </div>
+                     <div className="scrolling-grid">
+                        {(images || []).map((src, index) => (
+                            <div key={`grid2-${index}`} className="image-wrapper">
+                                <Image src={src} alt="" fill className="object-cover" priority />
+                            </div>
+                        ))}
                     </div>
                 </div>
-            </section>
-        )}
+            )}
+        </>
+    );
+}
 
-        {workflow.length > 0 && (
-            <section className="py-24 bg-white">
-                <div className="max-w-5xl mx-auto px-4 md:px-12">
+
+export default function AboutPage() {
+    const [pageData, setPageData] = useState<AboutPageData | null>(null);
+
+    useEffect(() => {
+        getAboutPageData().then(setPageData);
+    }, []);
+
+    if (!pageData) {
+        return <div>Loading...</div>; // Or a proper loading skeleton
+    }
+
+    const { hero, journey, coreValues, workflow, ctaData } = pageData;
+
+    return (
+        <div>
+            <section className="h-[70vh] flex flex-col bg-white">
+                <div 
+                    className="flex-[0.7] flex items-center justify-center p-4 relative"
+                    style={{
+                        backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : 'none',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                    }}
+                >
                     <ScrollAnimation>
-                        <h2 className="text-4xl md:text-5xl font-headline text-center mb-20">Our Workflow</h2>
-                    </ScrollAnimation>
-                    <ScrollAnimation delay={0.2}>
-                        <WorkflowCarousel steps={workflow} />
+                        <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground relative">
+                        {hero.headline}
+                        </h1>
                     </ScrollAnimation>
                 </div>
+                <div className="flex-1 relative w-full overflow-hidden">
+                    <HeroImageSlider images={hero.sliderImages || []} />
+                </div>
             </section>
-        )}
-        {ctaData && <CtaSection data={ctaData} />}
-    </div>
-  );
+            <Separator />
+
+            <div className="bg-white px-4 md:px-12">
+                <div className="text-sm text-muted-foreground py-4">
+                    <Link href="/" className="hover:text-primary">Home</Link>
+                    <span className="mx-2">||</span>
+                    <span>About</span>
+                </div>
+                <Separator />
+            </div>
+
+            <section className="py-12 px-4 md:px-12 bg-white">
+                <ScrollAnimation>
+                    <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">{journey.title}</h2>
+                </ScrollAnimation>
+                
+                <div className="mb-16 md:mb-24">
+                    <ScrollAnimation>
+                        <div className="w-full h-[40vh] md:h-[60vh] relative">
+                            <Image 
+                            src={journey.image}
+                            alt="Landscape of a journey"
+                            fill
+                            className="object-cover rounded-md shadow-xl"
+                            />
+                        </div>
+                    </ScrollAnimation>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+                <ScrollAnimation>
+                    <div>
+                    <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                        {journey.missionText}
+                    </p>
+                    </div>
+                </ScrollAnimation>
+                <ScrollAnimation delay={0.2}>
+                    <div>
+                    <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                        {journey.visionText}
+                    </p>
+                    </div>
+                </ScrollAnimation>
+                </div>
+            </section>
+
+            {coreValues.length > 0 && (
+                <section className="bg-white">
+                    <div className="max-w-7xl mx-auto py-12 px-4 md:px-12">
+                        <ScrollAnimation>
+                            <h2 className="text-4xl md:text-5xl font-headline text-center mb-12">Our Core Values</h2>
+                        </ScrollAnimation>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {coreValues.map((value, index) => (
+                            <ScrollAnimation key={value.id} delay={index * 0.1}>
+                                <div
+                                className="flex flex-col border"
+                                >
+                                <div className={cn('relative aspect-square w-full', (index === 1 || index === 3) && 'sm:order-2')}>
+                                    <Image
+                                    src={value.image}
+                                    alt={value.title}
+                                    fill
+                                    className="object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <h3 className="text-white text-3xl font-headline text-center p-4">
+                                        {value.title}
+                                    </h3>
+                                    </div>
+                                </div>
+                                <div className={cn('p-6 bg-card flex-grow flex flex-col justify-center', (index === 1 || index === 3) && 'sm:order-1')}>
+                                    <p className="text-muted-foreground leading-relaxed">
+                                    {value.description}
+                                    </p>
+                                </div>
+                                </div>
+                            </ScrollAnimation>
+                        ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {workflow.length > 0 && (
+                <section className="py-24 bg-white">
+                    <div className="max-w-5xl mx-auto px-4 md:px-12">
+                        <ScrollAnimation>
+                            <h2 className="text-4xl md:text-5xl font-headline text-center mb-20">Our Workflow</h2>
+                        </ScrollAnimation>
+                        <ScrollAnimation delay={0.2}>
+                            <WorkflowCarousel steps={workflow} />
+                        </ScrollAnimation>
+                    </div>
+                </section>
+            )}
+            {ctaData && <CtaSection data={ctaData} />}
+        </div>
+    );
 }
