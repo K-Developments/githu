@@ -22,7 +22,7 @@ interface HeroData {
   headline: string;
   description: string;
   sliderImages: string[];
-  parallaxImage?: string;
+  contentBackgroundImage?: string;
 }
 
 interface IntroData {
@@ -206,24 +206,19 @@ function HeroSection({ data }: { data: HeroData }) {
     
   return (
     <section className="hero" ref={heroRef}>
-        <div className="hero-content">
-            <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
-            {(data.parallaxImage || data.description) && (
-              <p className="relative w-full max-w-2xl aspect-[4/3] overflow-hidden my-4 !p-0">
-                  {data.parallaxImage ? (
-                      <motion.div className="absolute inset-0" style={{ y: parallaxY }}>
-                          <Image 
-                              src={data.parallaxImage} 
-                              alt="Luxury travel destination collage" 
-                              fill
-                              className="object-cover"
-                          />
-                      </motion.div>
-                  ) : (
-                      <span className="flex items-center justify-center h-full p-2">{data.description}</span>
-                  )}
-              </p>
-            )}
+        <div 
+            className="hero-content"
+            style={{
+                backgroundImage: data.contentBackgroundImage ? `url(${data.contentBackgroundImage})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }}
+        >
+            <div className="absolute inset-0 bg-black/30 z-0"></div>
+            <h1 
+                dangerouslySetInnerHTML={{ __html: data.headline }} 
+                className="relative z-10 text-white"
+            />
         </div>
       <div className="hero-image">
         {data.sliderImages.map((src, index) => (
