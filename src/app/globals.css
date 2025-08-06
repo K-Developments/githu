@@ -81,7 +81,7 @@ main img {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
+	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
 	pointer-events: none;
 	mix-blend-mode: overlay;
 	opacity: 0.15;
@@ -256,7 +256,7 @@ header {
     display: flex;
     flex-wrap: nowrap;
     animation: scroll 50s linear infinite;
-    width: 100%;
+    width: 200%;
 	gap:1rem;
 	height:100%;
 	
@@ -295,7 +295,6 @@ header {
 	width: 100%;
 	padding: 15% 8% 10%;
 	order: 2;
-	/* Mobile first order */
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -303,11 +302,11 @@ header {
 	align-items: center;
 	position: relative;
 	z-index: 2;
+    gap: 1.5rem;
 }
 .hero-content h1 {
 	font-family: 'Marcellus', serif;
 	font-size: clamp(2.5rem, 10vw, 3rem);
-	margin-bottom: 1.5rem;
 	line-height: 1.1;
 	color: #222;
 	opacity: 0;
@@ -321,37 +320,15 @@ header {
 	position: relative;
 }
 .hero-content p {
-	position: relative;
 	font-size: 0.95rem;
 	color: #666;
-	margin-bottom: 2.5rem;
 	max-width: 90%;
 	line-height: 1.7;
 	font-weight: 400;
 	opacity: 0;
 	animation: fadeInUp 1s ease 0.6s forwards;
-	padding: 2rem;
-	border: 2px solid #666;
 }
-.hero-content p::before {
-	content: '';
-	position: absolute;
-	top: 8px;
-	left: 8px;
-	right: 8px;
-	bottom: 8px;
-	border: 1px solid #666;
-	pointer-events: none;
-}
-.hero-buttons {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 15px;
-	width: 100%;
-	opacity: 0;
-	animation: fadeInUp 1s ease 0.8s forwards;
-}
+
 /* Fade in animation */
 @keyframes fadeInUp {
 	from {
@@ -1116,7 +1093,7 @@ header {
 /* Small mobile adjustments */
 @media (max-width: 480px) {
 	.hero-content {
-		padding: 0;
+		padding: 10% 8% 10%;
 	}
 	.hero-content h1{
 		font-size:3.5rem;
@@ -1166,33 +1143,35 @@ h2{
 	}
 	.hero-content {
 		width: 100%;
-		height: 40vh;
+		height: auto;
 		order: 1;
 		background: white;
-		justify-content: center;
-		text-align: center;
-		align-items: center;
-		padding: 6% 8%;
+		justify-content: space-between;
+		align-items: flex-end;
+		padding: 2% 8% 4%;
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+        text-align: left;
 	}
 	.hero-content h1 {
 		color: #222;
-		font-size: clamp(3rem, 6vw, 4rem);
+		font-size: clamp(3rem, 8vw, 8rem);
 		text-shadow: none;
-	}
-	.hero-content h1 .highlight {
-		color: hsl(188 55% 45%);
+        text-align: left;
+        max-width: 70%;
+        line-height: 1;
+        animation: none;
+        opacity: 1;
 	}
 	.hero-content p {
 		color: #666;
 		opacity: 1;
 		max-width: 700px;
-		margin-left: auto;
-		margin-right: auto;
 		font-size: 1.1rem;
 		text-shadow: none;
 		margin-bottom: 0;
+        animation: none;
+        opacity: 1;
 	}
 	.pagination-bullets {
 		position: absolute;
@@ -1262,16 +1241,16 @@ h2{
 		transition: transform 0.4s ease, opacity 0.4s ease;
 		text-align: center;
 	}
+	.destinations-grid .destination-card:hover .card-content {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+		pointer-events: auto;
+	}
 	.destinations-grid .destination-card .card-title {
 		font-family: 'Marcellus', serif;
 		font-size: 1.2rem;
 		line-height: 1.2;
 		display: none;
-	}
-	.destinations-grid .destination-card:hover .card-content {
-		transform: translateY(0) scale(1);
-		opacity: 1;
-		pointer-events: auto;
 	}
 	.destinations-grid .destination-card .card-location {
 		font-size: 0.7rem;
@@ -1424,9 +1403,15 @@ h2{
 	}
 	.hero-content {
 		padding: 5% 5%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
 	}
 	.hero-content h1 {
-		font-size: 3rem;
+		font-size: 4rem;
+        text-align: center;
+        max-width: 100%;
 	}
 	.intro-container {
 		gap: 2rem;
@@ -1445,7 +1430,7 @@ h2{
 /* Large screen enhancements */
 @media (min-width: 1400px) {
 	.hero-content h1 {
-		font-size: 5rem;
+		font-size: 8rem;
 	}
 	.hero-content p {
 		font-size: 1.2rem;
@@ -1458,3 +1443,4 @@ h2{
 	padding:1rem;
 }
 
+    

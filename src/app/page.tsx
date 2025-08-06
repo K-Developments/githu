@@ -16,6 +16,7 @@ import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
 import { CtaSection } from "@/components/ui/cta-section";
 import { useSiteSettings } from "@/context/site-settings-context";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 
 // Define interfaces for the fetched data
@@ -188,57 +189,67 @@ export default function HomePage() {
 // --- Sub-components for each section ---
 
 function HeroSection({ data }: { data: HeroData }) {
+    const isMobile = useIsMobile();
     const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end start"]
-    });
-    
-    // More pronounced parallax values
-    const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+    const [currentImage, setCurrentImage] = useState(0);
+
+    useEffect(() => {
+        if (isMobile) {
+            const timer = setInterval(() => {
+                setCurrentImage((prev) => (prev + 1) % (data.sliderImages?.length || 1));
+            }, 5000);
+            return () => clearInterval(timer);
+        }
+    }, [data.sliderImages, isMobile]);
 
     return (
-        <section 
-            ref={containerRef}
-            className="relative h-screen overflow-hidden"
-        >
-            <motion.div 
-                className="absolute inset-0"
-                style={{ y: backgroundY }}
-            >
-                <Image
-                    src={data.sliderImages[0] || "https://placehold.co/1920x1080.png"}
-                    alt="Luxury travel destination"
-                    fill
-                    className="object-cover"
-                    priority
-                />
-            </motion.div>
-            
-             <div className="absolute inset-0 bg-black/30"></div>
-
-            <div className="relative z-10 h-full flex flex-col justify-between p-8 md:p-16 text-white">
-                <div className="flex-grow flex items-center">
-                    <h1 
-                        dangerouslySetInnerHTML={{ __html: data.headline }} 
-                        className="text-5xl md:text-8xl font-headline font-bold text-left max-w-4xl"
-                    />
-                </div>
-                <div className="flex justify-end items-end gap-4">
-                     {data.subtitle && (
+        <section ref={containerRef} className="hero">
+            <div className="hero-content">
+                 <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
+                 <div className="flex flex-col items-end gap-4">
+                    {data.subtitle && (
                         <p className="text-right max-w-xs text-lg">{data.subtitle}</p>
-                     )}
+                    )}
                     <button 
                         onClick={() => {
                             const nextSection = containerRef.current?.nextElementSibling;
                             nextSection?.scrollIntoView({ behavior: 'smooth' });
                         }}
-                        className="border rounded-full h-14 w-14 flex items-center justify-center hover:bg-white/10 transition-colors"
+                        className="border rounded-full h-14 w-14 flex items-center justify-center hover:bg-white/10 transition-colors text-foreground"
                         aria-label="Scroll down"
                     >
                         <ArrowDown />
                     </button>
-                </div>
+                 </div>
+            </div>
+
+            <div className="hero-image">
+                {isMobile ? (
+                    <>
+                        {(data.sliderImages || []).map((src, index) => (
+                            <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
+                                <Image src={src} alt="" fill className="object-cover" priority={index === 0} />
+                            </div>
+                        ))}
+                    </>
+                ) : (
+                    <div className="scrolling-grid-container">
+                        <div className="scrolling-grid">
+                            {(data.sliderImages || []).map((src, index) => (
+                                <div key={`grid1-${index}`} className="image-wrapper">
+                                    <Image src={src} alt="" fill className="object-cover" priority />
+                                </div>
+                            ))}
+                        </div>
+                         <div className="scrolling-grid">
+                            {(data.sliderImages || []).map((src, index) => (
+                                <div key={`grid2-${index}`} className="image-wrapper">
+                                    <Image src={src} alt="" fill className="object-cover" priority />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </section>
     );
@@ -576,3 +587,5 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
+
+    
