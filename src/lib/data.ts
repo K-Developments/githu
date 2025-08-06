@@ -3,6 +3,10 @@ export type SiteSettings = {
   logoUrl?: string;
   introBackgroundImage?: string;
   newsletterBackgroundImage?: string;
+  quoteBackgroundImage?: string;
+  destinationsBackgroundImage?: string;
+  packagesBackgroundImage?: string;
+  testimonialsBackgroundImage?: string;
 };
 
 export type Destination = {

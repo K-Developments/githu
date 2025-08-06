@@ -54,6 +54,10 @@ export default function AdminHomePage() {
     logoUrl: "",
     introBackgroundImage: "",
     newsletterBackgroundImage: "",
+    quoteBackgroundImage: "",
+    destinationsBackgroundImage: "",
+    packagesBackgroundImage: "",
+    testimonialsBackgroundImage: "",
   });
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
@@ -365,6 +369,22 @@ export default function AdminHomePage() {
             <Label htmlFor="introBackgroundImage">Intro Section Background Image URL</Label>
             <Input id="introBackgroundImage" value={siteSettings.introBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/intro-bg.jpg"/>
           </div>
+           <div className="space-y-2">
+            <Label htmlFor="quoteBackgroundImage">Quote Section Background Image URL</Label>
+            <Input id="quoteBackgroundImage" value={siteSettings.quoteBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/quote-bg.jpg"/>
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="destinationsBackgroundImage">Destinations Section Background Image URL</Label>
+            <Input id="destinationsBackgroundImage" value={siteSettings.destinationsBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/destinations-bg.jpg"/>
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="packagesBackgroundImage">Packages Section Background Image URL</Label>
+            <Input id="packagesBackgroundImage" value={siteSettings.packagesBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/packages-bg.jpg"/>
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="testimonialsBackgroundImage">Testimonials Section Background Image URL</Label>
+            <Input id="testimonialsBackgroundImage" value={siteSettings.testimonialsBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/testimonials-bg.jpg"/>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="newsletterBackgroundImage">Newsletter Section Background Image URL</Label>
             <Input id="newsletterBackgroundImage" value={siteSettings.newsletterBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/newsletter-bg.jpg"/>
@@ -453,7 +473,7 @@ https://example.com/image3.png"
                 <Textarea id="text" value={quoteData.text} onChange={handleQuoteChange} />
             </div>
             <div className="space-y-2">
-                <Label htmlFor="image">Background Image URL</Label>
+                <Label htmlFor="image">Parallax Background Image URL</Label>
                 <Input id="image" value={quoteData.image} onChange={handleQuoteChange} />
             </div>
         </CardContent>
@@ -623,5 +643,3 @@ https://example.com/image3.png"
     </div>
   );
 }
-
-    

@@ -176,10 +176,10 @@ export default function HomePage() {
     <>
       <HeroSection data={heroData} />
       {introData && <IntroSection data={introData} backgroundImage={siteSettings?.introBackgroundImage} />}
-      {quoteData && <QuoteSection data={quoteData} />}
-      {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} />}
-      {categories.length > 0 && <PackagesSection categories={categories} packages={packages} />}
-      {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} />}
+      {quoteData && <QuoteSection data={quoteData} backgroundImage={siteSettings?.quoteBackgroundImage} />}
+      {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} backgroundImage={siteSettings?.destinationsBackgroundImage} />}
+      {categories.length > 0 && <PackagesSection categories={categories} packages={packages} backgroundImage={siteSettings?.packagesBackgroundImage} />}
+      {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} backgroundImage={siteSettings?.testimonialsBackgroundImage} />}
       {ctaData && <CtaSection data={ctaData} />}
       <NewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage}/>
     </>
@@ -215,7 +215,7 @@ function HeroSection({ data }: { data: HeroData }) {
                  <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
                  <div className="flex flex-row-reverse  items-end gap-4">
                     {data.subtitle && (
-                        <p className="text-right max-w-xs text-lg text-white" style={{ fontVariant: 'small-caps' }}>{data.subtitle}</p>
+                        <p className="text-right max-w-xs text-lg text-black" style={{ fontVariant: 'small-caps' }}>{data.subtitle}</p>
                     )}
                     <button 
                         onClick={() => {
@@ -303,9 +303,9 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
   );
 }
 
-function QuoteSection({ data }: { data: QuoteData }) {
+function QuoteSection({ data, backgroundImage }: { data: QuoteData, backgroundImage?: string }) {
   return (
-    <section className="quote-section" style={{ backgroundImage: `url(${data.image})` }}>
+    <section className="quote-section" style={{ backgroundImage: `url(${backgroundImage || data.image})` }}>
         <div className="overlay"></div>
         <ScrollAnimation>
           <p className="quote-text">{data.text}</p>
@@ -314,9 +314,16 @@ function QuoteSection({ data }: { data: QuoteData }) {
   );
 }
 
-function DestinationsSection({ sectionData, destinations }: { sectionData: DestinationsData, destinations: Destination[] }) {
+function DestinationsSection({ sectionData, destinations, backgroundImage }: { sectionData: DestinationsData, destinations: Destination[], backgroundImage?: string }) {
   return (
-    <section className="destinations-section">
+    <section 
+        className="destinations-section"
+        style={{
+            backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+        }}
+    >
       <ScrollAnimation>
         <h2 className="section-title">{sectionData.title}</h2>
       </ScrollAnimation>
@@ -354,7 +361,7 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
 }
 
 
-function PackagesSection({ categories, packages }: { categories: Category[], packages: Package[] }) {
+function PackagesSection({ categories, packages, backgroundImage }: { categories: Category[], packages: Package[], backgroundImage?: string }) {
     const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
 
     const displayCategories = React.useMemo(() => {
@@ -375,7 +382,14 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
         : packages.filter(p => p.categoryId === activeCategory.id);
 
   return (
-    <section className="homepage-packages-section">
+    <section 
+        className="homepage-packages-section"
+        style={{
+            backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+        }}
+    >
       <div className="packages-container">
         <ScrollAnimation>
             <div className="packages-header-desktop">
@@ -491,7 +505,7 @@ function PackagesSection({ categories, packages }: { categories: Category[], pac
 }
 
 
-function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
+function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: Testimonial[], backgroundImage?: string }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handleNext = () => {
@@ -512,7 +526,14 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
     };
 
     return (
-        <section className="homepage-testimonials-section">
+        <section 
+            className="homepage-testimonials-section"
+            style={{
+                backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
+        >
             <ScrollAnimation>
                 <div className="testimonial-container">
                     {testimonials.length > 1 && (
@@ -594,5 +615,3 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
-
-    
