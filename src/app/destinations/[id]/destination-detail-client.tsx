@@ -68,7 +68,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
         <div className="max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2">
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex justify-between items-center mb-4">
                         <ScrollAnimation>
                             <h1 className="text-4xl md:text-6xl font-headline text-foreground">{destination.title}</h1>
                         </ScrollAnimation>
