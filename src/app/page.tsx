@@ -15,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
 import { CtaSection } from "@/components/ui/cta-section";
+import { useSiteSettings } from "@/context/site-settings-context";
 
 
 // Define interfaces for the fetched data
@@ -52,11 +53,6 @@ interface FeaturedPackagesData {
 interface FeaturedDestinationsData {
     destinationIds: string[];
 }
-
-interface HomePageProps {
-    siteSettings: SiteSettings | null;
-}
-
 
 async function getHomePageData() {
     try {
@@ -143,8 +139,9 @@ async function getHomePageData() {
 
 
 // Main component for the homepage
-export default function HomePage({ siteSettings }: HomePageProps) {
+export default function HomePage() {
   const [pageData, setPageData] = useState<Awaited<ReturnType<typeof getHomePageData>> | null>(null);
+  const siteSettings = useSiteSettings();
 
   useEffect(() => {
     getHomePageData().then(data => setPageData(data));
@@ -205,7 +202,7 @@ function HeroSection({ data }: { data: HeroData }) {
   return (
     <section className="hero">
         <div 
-            className="hero-content"
+            className="hero-content flex"
             style={{
                 backgroundImage: data.contentBackgroundImage ? `url(${data.contentBackgroundImage})` : 'none',
                 backgroundSize: 'cover',
@@ -604,5 +601,3 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
-
-    

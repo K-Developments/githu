@@ -74,7 +74,7 @@ export const MobileNav = ({ isOpen, setIsOpen, logoUrl }: { isOpen: boolean; set
           initial="initial"
           animate="animate"
           exit="exit"
-          className="fixed inset-0 bg-[#f8f5f2] text-primary-foreground origin-top z-[999]"
+          className="fixed inset-0 bg-[#f8f5f2] text-primary-foreground origin-top z-[99]"
         >
             <div className="flex h-full flex-col">
                 <div className="flex justify-between items-center p-4">
@@ -111,5 +111,3 @@ export const MobileNav = ({ isOpen, setIsOpen, logoUrl }: { isOpen: boolean; set
     </AnimatePresence>
   );
 };
-
-    

@@ -8,7 +8,7 @@ import { ScrollRestoration } from "@/components/ui/scroll-restoration";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import type { SiteSettings } from "@/lib/data";
-import React from "react";
+import { SiteSettingsProvider } from "@/context/site-settings-context";
 
 
 export const metadata: Metadata = {
@@ -72,17 +72,17 @@ export default async function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Syne:wght@400..800&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <ScrollRestoration />
-        <div className="noise-overlay"></div>
-        <Header logoUrl={siteSettings?.logoUrl} />
-        <main>
-           {React.cloneElement(children as React.ReactElement, { siteSettings })}
-        </main>
-        <Footer logoUrl={siteSettings?.logoUrl} />
-        <Toaster />
+        <SiteSettingsProvider settings={siteSettings}>
+            <ScrollRestoration />
+            <div className="noise-overlay"></div>
+            <Header logoUrl={siteSettings?.logoUrl} />
+            <main>
+                {children}
+            </main>
+            <Footer logoUrl={siteSettings?.logoUrl} />
+            <Toaster />
+        </SiteSettingsProvider>
       </body>
     </html>
   );
 }
-
-    

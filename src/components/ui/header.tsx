@@ -105,5 +105,3 @@ export function Header({ logoUrl }: { logoUrl?: string }) {
     </>
   );
 }
-
-    
