@@ -209,13 +209,15 @@ function DestinationsSection({ sectionData, destinations }: { sectionData: Desti
           <ScrollAnimation key={dest.id} delay={i * 0.1}>
             <div className="destination-card">
               <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                  <h3 className="card-title card-title-absolute">{dest.title}</h3>
+                <>
+                  <h3 className="card-title-absolute">{dest.title}</h3>
                   <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 20vw, (min-width: 768px) 45vw, 45vw" />
                   <div className="card-content">
                       <span className="card-location">{dest.location}</span>
                       <h3 className="card-title card-title-decorated">{dest.title}</h3>
                       <p className="card-description">{dest.description}</p>
                   </div>
+                </>
               </Link>
             </div>
           </ScrollAnimation>
