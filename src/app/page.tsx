@@ -9,7 +9,7 @@ import { doc, getDoc, collection, getDocs, query, where } from "firebase/firesto
 import type { Package, Category, Destination, Testimonial, CtaData, SiteSettings } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowDown, Quote } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
@@ -21,7 +21,7 @@ import { useSiteSettings } from "@/context/site-settings-context";
 // Define interfaces for the fetched data
 interface HeroData {
   headline: string;
-  description: string;
+  subtitle: string;
   sliderImages: string[];
   contentBackgroundImage?: string;
 }
@@ -215,11 +215,30 @@ function HeroSection({ data }: { data: HeroData }) {
                 />
             </motion.div>
             
-            <div className="absolute inset-0 flex items-center justify-center">
-                <h1 
-                    dangerouslySetInnerHTML={{ __html: data.headline }} 
-                    className="text-white text-4xl md:text-6xl font-bold relative z-10"
-                />
+             <div className="absolute inset-0 bg-black/30"></div>
+
+            <div className="relative z-10 h-full flex flex-col justify-between p-8 md:p-16 text-white">
+                <div className="flex-grow flex items-center">
+                    <h1 
+                        dangerouslySetInnerHTML={{ __html: data.headline }} 
+                        className="text-5xl md:text-8xl font-headline font-bold text-left max-w-4xl"
+                    />
+                </div>
+                <div className="flex justify-end items-end gap-4">
+                     {data.subtitle && (
+                        <p className="text-right max-w-xs text-lg">{data.subtitle}</p>
+                     )}
+                    <button 
+                        onClick={() => {
+                            const nextSection = containerRef.current?.nextElementSibling;
+                            nextSection?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className="border rounded-full h-14 w-14 flex items-center justify-center hover:bg-white/10 transition-colors"
+                        aria-label="Scroll down"
+                    >
+                        <ArrowDown />
+                    </button>
+                </div>
             </div>
         </section>
     );

@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 interface HeroData {
   headline: string;
-  description: string;
+  subtitle: string;
   sliderImages: string[];
   contentBackgroundImage?: string;
 }
@@ -57,7 +57,7 @@ export default function AdminHomePage() {
   });
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
-    description: "",
+    subtitle: "",
     sliderImages: [],
     contentBackgroundImage: "",
   });
@@ -384,8 +384,8 @@ export default function AdminHomePage() {
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Description (Fallback if no image)</Label>
-            <Textarea id="description" value={heroData.description} onChange={handleHeroChange} />
+            <Label htmlFor="subtitle">Subtitle</Label>
+            <Textarea id="subtitle" value={heroData.subtitle} onChange={handleHeroChange} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="contentBackgroundImage">Content Background Image URL</Label>

@@ -99,4 +99,11 @@ export type PackagesCtaData = {
   image: string;
 };
 
+
+export type HeroData = {
+  headline: string;
+  subtitle: string;
+  sliderImages: string[];
+  contentBackgroundImage?: string;
+};
     
