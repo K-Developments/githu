@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { db } from "@/lib/firebase";
@@ -10,7 +10,7 @@ import type { Package, Category, Destination, Testimonial, CtaData } from "@/lib
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
@@ -22,6 +22,7 @@ interface HeroData {
   headline: string;
   description: string;
   sliderImages: string[];
+  parallaxImage?: string;
 }
 
 interface IntroData {
@@ -187,6 +188,12 @@ export default function HomePage() {
 
 function HeroSection({ data }: { data: HeroData }) {
     const [currentImage, setCurrentImage] = useState(0);
+    const heroRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: heroRef,
+        offset: ["start start", "end start"]
+    });
+    const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
     useEffect(() => {
         if (data.sliderImages.length > 1) {
@@ -198,10 +205,23 @@ function HeroSection({ data }: { data: HeroData }) {
     }, [currentImage, data.sliderImages.length]);
     
   return (
-    <section className="hero">
+    <section className="hero" ref={heroRef}>
         <div className="hero-content">
             <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
-            <p>{data.description}</p>
+            <div className="relative w-full max-w-2xl aspect-[4/3] overflow-hidden my-4">
+                {data.parallaxImage ? (
+                    <motion.div className="absolute inset-0" style={{ y: parallaxY }}>
+                        <Image 
+                            src={data.parallaxImage} 
+                            alt="Luxury travel destination collage" 
+                            fill
+                            className="object-cover"
+                        />
+                    </motion.div>
+                ) : (
+                    <p>{data.description}</p>
+                )}
+            </div>
         </div>
       <div className="hero-image">
         {data.sliderImages.map((src, index) => (

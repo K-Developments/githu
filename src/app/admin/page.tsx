@@ -18,6 +18,7 @@ interface HeroData {
   headline: string;
   description: string;
   sliderImages: string[];
+  parallaxImage?: string;
 }
 
 interface IntroData {
@@ -53,6 +54,7 @@ export default function AdminHomePage() {
     headline: "",
     description: "",
     sliderImages: ["", "", ""],
+    parallaxImage: "",
   });
   const [introData, setIntroData] = useState<IntroData>({
     headline: "",
@@ -351,8 +353,12 @@ export default function AdminHomePage() {
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Description (Fallback if no image)</Label>
             <Textarea id="description" value={heroData.description} onChange={handleHeroChange} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="parallaxImage">Parallax Image URL</Label>
+            <Input id="parallaxImage" value={heroData.parallaxImage} onChange={handleHeroChange} />
           </div>
           
            <div className="space-y-4">
