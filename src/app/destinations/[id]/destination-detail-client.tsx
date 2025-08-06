@@ -68,7 +68,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
         <div className="max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2">
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex justify-between items-start mb-4">
                         <ScrollAnimation>
                             <h1 className="text-4xl md:text-6xl font-headline text-foreground">{destination.title}</h1>
                         </ScrollAnimation>
@@ -125,7 +125,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
       </section>
 
       {otherDestinations.length > 0 && (
-          <section className="py-12 md:py-24 px-4 md:px-12 bg-accent/50">
+          <section className="py-12 md:py-24 px-4 md:px-12" style={{ backgroundColor: '#f8f5f2' }}>
             <div className="max-w-7xl mx-auto relative">
                 <ScrollAnimation>
                     <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">Explore Other Destinations</h2>
@@ -136,7 +136,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                         align: "start",
                         loop: otherDestinations.length > 3,
                     }}
-                    className="w-full mt-8"
+                    className="w-full"
                 >
                     <div className="absolute top-0 right-0 hidden md:flex gap-2">
                         <div className="button-wrapper-for-border">
