@@ -22,6 +22,7 @@ interface PackagesClientProps {
   hero: {
     headline: string;
     heroImage: string;
+    contentBackgroundImage?: string;
   };
   packages: Package[];
   categories: Category[];
@@ -71,9 +72,17 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
   return (
     <div>
       <section className="h-[70vh] flex flex-col bg-white">
-          <div className="flex-[0.7] flex items-center justify-center p-4">
+          <div 
+            className="flex-[0.7] flex items-center justify-center p-4 relative"
+            style={{
+                backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
+          >
+              {hero.contentBackgroundImage && <div className="absolute inset-0 bg-black/20"></div>}
               <ScrollAnimation>
-                  <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
+                  <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-white relative">
                   {hero.headline}
                   </h1>
               </ScrollAnimation>
@@ -365,3 +374,5 @@ function PackageAccordion({ pkg, accordionValue }: { pkg: Package, accordionValu
         </div>
     )
 }
+
+    

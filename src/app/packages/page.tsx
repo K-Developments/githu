@@ -9,6 +9,7 @@ interface PackagesPageData {
   hero: {
     headline: string;
     heroImage: string;
+    contentBackgroundImage?: string;
   };
   cta: PackagesCtaData,
   packages: Package[];
@@ -28,6 +29,7 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
             heroData = {
                 headline: data.hero?.headline || 'Our Packages',
                 heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
+                contentBackgroundImage: data.hero?.contentBackgroundImage || '',
             };
             ctaData = {
                 title: data.cta?.title || 'Your Adventure Awaits',
@@ -38,6 +40,7 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
              heroData = {
                 headline: 'Our Packages',
                 heroImage: 'https://placehold.co/1920x600.png',
+                contentBackgroundImage: '',
             };
             ctaData = {
                 title: 'Your Adventure Awaits',

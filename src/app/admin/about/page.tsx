@@ -16,6 +16,7 @@ import { Trash2 } from "lucide-react";
 interface AboutHeroData {
   headline: string;
   heroImage: string;
+  contentBackgroundImage?: string;
 }
 
 interface JourneyData {
@@ -31,6 +32,7 @@ export default function AdminAboutPage() {
   const [heroData, setHeroData] = useState<AboutHeroData>({
     headline: "",
     heroImage: "",
+    contentBackgroundImage: "",
   });
   const [journeyData, setJourneyData] = useState<JourneyData>({
     title: "",
@@ -58,6 +60,7 @@ export default function AdminAboutPage() {
           setHeroData({
             headline: hero.headline || "About Us",
             heroImage: hero.heroImage || "https://placehold.co/1920x600.png",
+            contentBackgroundImage: hero.contentBackgroundImage || "",
           });
 
           const journey = (data.journey || {}) as JourneyData;
@@ -81,6 +84,7 @@ export default function AdminAboutPage() {
             setHeroData({
                 headline: "About Us",
                 heroImage: "https://placehold.co/1920x600.png",
+                contentBackgroundImage: "",
             });
             setJourneyData({
                 title: "Our Journey",
@@ -237,6 +241,10 @@ export default function AdminAboutPage() {
             <Label htmlFor="heroImage">Hero Image URL</Label>
             <Input id="heroImage" value={heroData.heroImage} onChange={handleHeroChange} />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="contentBackgroundImage">Content Background Image URL</Label>
+            <Input id="contentBackgroundImage" value={heroData.contentBackgroundImage} onChange={handleHeroChange} />
+          </div>
         </CardContent>
       </Card>
       
@@ -346,3 +354,5 @@ export default function AdminAboutPage() {
     </div>
   );
 }
+
+    

@@ -14,6 +14,7 @@ interface AboutPageData {
   hero: {
     headline: string;
     heroImage: string;
+    contentBackgroundImage?: string;
   };
   journey: {
     title: string;
@@ -54,6 +55,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 hero: {
                   headline: data.hero?.headline || 'About Us',
                   heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
+                  contentBackgroundImage: data.hero?.contentBackgroundImage || '',
                 },
                 journey: {
                   title: data.journey?.title || 'Our Journey',
@@ -72,6 +74,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 hero: {
                     headline: 'About Us',
                     heroImage: 'https://placehold.co/1920x600.png',
+                    contentBackgroundImage: '',
                 },
                 journey: {
                     title: 'Our Journey',
@@ -105,9 +108,17 @@ export default async function AboutPage() {
   return (
     <div>
         <section className="h-[70vh] flex flex-col bg-white">
-            <div className="flex-[0.7] flex items-center justify-center p-4">
+            <div 
+                className="flex-[0.7] flex items-center justify-center p-4 relative"
+                style={{
+                    backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
+                {hero.contentBackgroundImage && <div className="absolute inset-0 bg-black/20"></div>}
                 <ScrollAnimation>
-                    <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground">
+                    <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-white relative">
                     {hero.headline}
                     </h1>
                 </ScrollAnimation>
@@ -228,3 +239,5 @@ export default async function AboutPage() {
     </div>
   );
 }
+
+    
