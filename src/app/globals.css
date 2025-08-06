@@ -487,9 +487,14 @@ header {
 	position: relative;
 }
 .destination-card {
-	position: relative;
-	overflow: hidden;
-	height: 60vh;
+    position: relative;
+    overflow: hidden;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: hsl(var(--foreground));
 }
 .destination-card a {
 	display: block;
@@ -502,61 +507,48 @@ header {
 	height: 100%;
 	object-fit: cover;
 	transition: transform 0.4s ease;
+    position: absolute;
+    z-index: -1;
 }
 .destination-card:hover img {
 	transform: scale(1.05);
 }
-.destination-card .card-content {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	padding: 1.5rem;
-	background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-	color: white;
-	transition: transform 0.4s ease, background-color 0.4s ease, color 0.4s ease;
+.destination-card-title-box {
+    background-color: hsl(var(--background));
+    padding: 0.75rem 1.25rem;
+    margin: 1rem;
+    align-self: flex-start;
+    border: 1px solid hsl(var(--border));
 }
-.destination-card .card-location {
-	font-size: 0.7rem;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	opacity: 0.8;
-	margin-bottom: 0.25rem;
+.destination-card-title {
+    font-family: 'Marcellus', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
 }
-.destination-card .card-title {
-	font-family: 'Marcellus', serif;
-	font-size: 1.2rem;
-	line-height: 1.2;
+.destination-card-description-box {
+    background-color: hsl(var(--background));
+    padding: 1.25rem;
+    margin: 1rem;
+    border: 1px solid hsl(var(--border));
 }
-.destination-card .card-description {
-	font-size: 0.8rem;
-	line-height: 1.5;
-	margin-top: 0.5rem;
-	color: #222;
-	opacity: 0;
-	transition: opacity 0.3s ease 0.2s;
+.destination-card-description {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: hsl(var(--muted-foreground));
 }
-.destination-card:hover .card-description {
-	opacity: 1;
-}
-.destination-card .card-title-decorated {
-	position: relative;
-	border: 1px solid #222;
-	padding: 0.5rem;
-	display: inline-block;
-}
-.destination-card .card-title-decorated::before {
-	content: '';
-	position: absolute;
-	top: 4px;
-	left: 4px;
-	right: 4px;
-	bottom: 4px;
-	border: 1px solid #222;
-	pointer-events: none;
-}
+
 .card-title-absolute {
-	display: none;
+	position: absolute;
+    top: 0;
+    left: 0;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 0.5rem 1rem;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+}
+.destination-card:hover .card-title-absolute {
+	opacity: 0;
 }
 .rotated-view-all-wrapper {
 	display: none;
@@ -984,32 +976,6 @@ header {
 		height: auto;
 		aspect-ratio: 1 / 1;
 	}
-	.destination-card .card-title-absolute {
-		display: none;
-	}
-	.destination-card .card-content {
-		transform: translateY(0);
-		background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 100%);
-		padding: 1rem;
-	}
-	.destination-card .card-content .card-title-decorated {
-		color: white;
-		border: 1px solid white;
-		font-size: 0.8rem;
-		display: inline-block;
-	}
-	.destination-card .card-location {
-		font-size: 0.5rem;
-	}
-	.destination-card .card-title {
-		font-size: 0.8rem;
-	}
-	.destination-card .card-title-decorated::before {
-		display: none;
-	}
-	.destination-card .card-description {
-		display: none;
-	}
 	.packages-grid {
 		grid-template-columns:1fr;
 	}
@@ -1213,43 +1179,6 @@ h2{
 	.destinations-grid {
 		grid-template-columns: repeat(4, 1fr);
 		position: relative;
-	}
-	.card-title-absolute {
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		background-color: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
-		padding: 0.5rem 1rem;
-		z-index: 2;
-		transition: opacity 0.3s ease;
-	}
-	.destination-card:hover .card-title-absolute {
-		opacity: 0;
-	}
-	.destination-card .card-content {
-		background: white;
-		color: #000000;
-		text-align: center;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		width: auto;
-		transform: translateY(50px) scale(0.95);
-		opacity: 0;
-		pointer-events: none;
-		transition: transform 0.4s ease, opacity 0.4s ease;
-		padding: 1.5rem;
-	}
-	.destination-card:hover .card-content {
-		transform: translateY(0) scale(1);
-		opacity: 1;
-		pointer-events: auto;
-	}
-	.destination-card .card-content .card-title-decorated {
-		display: none;
 	}
 	.packages-header-mobile {
 		display: none;

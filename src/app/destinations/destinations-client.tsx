@@ -56,17 +56,17 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {destinations.map((dest, i) => (
                 <ScrollAnimation key={dest.id} delay={i * 0.1}>
-                    <div className="destination-card h-auto aspect-[4/5]">
                     <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                        <h3 className="card-title card-title-absolute">{dest.title}</h3>
-                        <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" />
-                        <div className="card-content">
-                            <span className="card-location">{dest.location}</span>
-                            <h3 className="card-title card-title-decorated">{dest.title}</h3>
-                            <p className="card-description">{dest.description}</p>
+                        <div className="destination-card">
+                            <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" />
+                            <div className="destination-card-title-box">
+                                <h3 className="destination-card-title">{dest.title}</h3>
+                            </div>
+                            <div className="destination-card-description-box">
+                                <p className="destination-card-description">{dest.description}</p>
+                            </div>
                         </div>
                     </Link>
-                    </div>
                 </ScrollAnimation>
                 ))}
             </div>
