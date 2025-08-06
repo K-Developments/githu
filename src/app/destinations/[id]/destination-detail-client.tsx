@@ -1,14 +1,14 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import type { Destination } from '@/lib/data';
-import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface DestinationDetailClientProps {
@@ -20,37 +20,25 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
   const [api, setApi] = useState<CarouselApi>()
   const sliderImages = [destination.image, ...(destination.galleryImages || [])].filter(Boolean);
 
-  const scrollPrev = () => api?.scrollPrev();
-  const scrollNext = () => api?.scrollNext();
-
   return (
     <div className="bg-white">
-        <Carousel
-            setApi={setApi}
-            opts={{
-            align: "start",
-            loop: true,
-            }}
-            className="w-full"
-        >
-            <CarouselContent>
-            {sliderImages.map((src, index) => (
-                <CarouselItem key={index}>
-                <div className="relative h-[80vh] w-full">
-                    <Image
-                    src={src}
-                    alt={`${destination.title} - view ${index + 1}`}
+        <section className="h-[50vh] flex flex-col bg-white">
+            <div className="flex-1 flex items-center justify-center p-4 relative">
+                 <Image
+                    src={sliderImages[0]}
+                    alt={`${destination.title} hero background`}
                     fill
                     className="object-cover"
-                    priority={index === 0}
-                    />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                </div>
-                </CarouselItem>
-            ))}
-            </CarouselContent>
-        </Carousel>
-
+                    priority
+                />
+                <div className="absolute inset-0 bg-black/40" />
+                <ScrollAnimation>
+                    <h1 className="text-5xl md:text-7xl font-bold font-headline text-center uppercase tracking-widest text-white z-10 relative">
+                    {destination.title}
+                    </h1>
+                </ScrollAnimation>
+            </div>
+        </section>
 
         <div className="bg-white px-4 md:px-12">
             <Separator />
@@ -66,37 +54,56 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
 
        <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
         <div className="max-w-7xl mx-auto">
-           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                <div className="lg:col-span-2">
-                    <div className="flex justify-between items-start mb-4">
-                        <ScrollAnimation>
-                            <h1 className="text-4xl md:text-6xl font-headline text-foreground">{destination.title}</h1>
-                        </ScrollAnimation>
-                        {sliderImages.length > 1 && (
-                            <div className="hidden md:flex items-center gap-2 flex-shrink-0 ml-4">
-                                <div className="button-wrapper-for-border">
-                                    <Button variant="outline" size="icon" onClick={scrollPrev}>
-                                        <ChevronLeft />
-                                    </Button>
-                                </div>
-                                <div className="button-wrapper-for-border">
-                                    <Button variant="outline" size="icon" onClick={scrollNext}>
-                                        <ChevronRight />
-                                    </Button>
-                                </div>
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div className="relative">
+                    <Carousel
+                        setApi={setApi}
+                        opts={{
+                        align: "start",
+                        loop: true,
+                        }}
+                        className="w-full"
+                    >
+                        <CarouselContent>
+                        {sliderImages.map((src, index) => (
+                            <CarouselItem key={index}>
+                            <div className="relative aspect-[4/3] w-full">
+                                <Image
+                                src={src}
+                                alt={`${destination.title} - view ${index + 1}`}
+                                fill
+                                className="object-cover rounded-lg shadow-xl"
+                                priority={index === 0}
+                                />
                             </div>
+                            </CarouselItem>
+                        ))}
+                        </CarouselContent>
+                        {sliderImages.length > 1 && (
+                            <>
+                                <div className="absolute top-1/2 -translate-y-1/2 left-4">
+                                    <div className="button-wrapper-for-border">
+                                        <CarouselPrevious variant="outline" size="icon" />
+                                    </div>
+                                </div>
+                                <div className="absolute top-1/2 -translate-y-1/2 right-4">
+                                     <div className="button-wrapper-for-border">
+                                        <CarouselNext variant="outline" size="icon" />
+                                    </div>
+                                </div>
+                            </>
                         )}
-                    </div>
+                    </Carousel>
+                </div>
+                <div>
                     <ScrollAnimation>
-                        <p className="text-lg text-muted-foreground mb-8">{destination.location}</p>
+                        <p className="text-lg text-muted-foreground mb-4">{destination.location}</p>
                     </ScrollAnimation>
                     <ScrollAnimation>
-                        <p className="text-base leading-relaxed whitespace-pre-line">
+                        <p className="text-base leading-relaxed whitespace-pre-line mb-8">
                             {destination.longDescription || destination.description}
                         </p>
                     </ScrollAnimation>
-                </div>
-                <div>
                      {(destination.highlights && destination.highlights.length > 0) && (
                          <ScrollAnimation>
                             <div className="bg-card p-6 rounded-lg shadow-sm border">
@@ -127,63 +134,67 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
       {otherDestinations.length > 0 && (
           <section className="py-12 md:py-24 px-4 md:px-12" style={{ backgroundColor: '#f8f5f2' }}>
             <div className="max-w-7xl mx-auto">
-                <ScrollAnimation>
-                    <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">Explore Other Destinations</h2>
-                </ScrollAnimation>
+                <div className="flex justify-between items-center mb-12">
+                    <ScrollAnimation>
+                        <h2 className="text-3xl md:text-4xl font-headline">Explore Other Destinations</h2>
+                    </ScrollAnimation>
+                </div>
                 
-                <Carousel 
-                    opts={{
-                        align: "start",
-                        loop: otherDestinations.length > 3,
-                    }}
-                    className="w-full relative"
-                >
-                    <div className="hidden md:flex gap-2 absolute -top-12 right-0">
-                        <div className="button-wrapper-for-border">
-                            <CarouselPrevious variant="outline" size="icon" />
-                        </div>
-                        <div className="button-wrapper-for-border">
-                            <CarouselNext variant="outline" size="icon" />
-                        </div>
-                    </div>
-                    <CarouselContent className="-ml-4">
-                        {otherDestinations.map((dest) => (
-                        <CarouselItem key={dest.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                            <ScrollAnimation>
-                                <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                                    <div className="destination-card group">
-                                        <Image 
-                                            src={dest.image || "https://placehold.co/600x800.png"} 
-                                            alt={dest.title} 
-                                            fill 
-                                            style={{ objectFit: 'cover' }} 
-                                            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                                            className="card-image"
-                                        />
-                                        <div className="card-overlay"></div>
-                                        <div className="destination-card-title-box">
-                                            <h3 className="destination-card-title">{dest.title}</h3>
-                                        </div>
-                                        <div className="destination-card-description-box">
-                                            <p className="destination-card-description">{dest.description}</p>
-                                        </div>
-                                    </div>
-                                </Link>
-                            </ScrollAnimation>
-                        </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                   <div className="absolute -bottom-4 right-0 md:hidden">
-                        <div className="flex gap-2">
-                             <div className="button-wrapper-for-border">
+                <div className="relative">
+                    <Carousel 
+                        opts={{
+                            align: "start",
+                            loop: otherDestinations.length > 3,
+                        }}
+                        className="w-full"
+                    >
+                        <div className="hidden md:flex gap-2 absolute -top-12 right-0">
+                            <div className="button-wrapper-for-border">
                                 <CarouselPrevious variant="outline" size="icon" />
                             </div>
                             <div className="button-wrapper-for-border">
                                 <CarouselNext variant="outline" size="icon" />
                             </div>
                         </div>
-                   </div>
-                </Carousel>
+                        <CarouselContent className="-ml-4">
+                            {otherDestinations.map((dest) => (
+                            <CarouselItem key={dest.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                                <ScrollAnimation>
+                                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
+                                        <div className="destination-card group">
+                                            <Image 
+                                                src={dest.image || "https://placehold.co/600x800.png"} 
+                                                alt={dest.title} 
+                                                fill 
+                                                style={{ objectFit: 'cover' }} 
+                                                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                                                className="card-image"
+                                            />
+                                            <div className="card-overlay"></div>
+                                            <div className="destination-card-title-box">
+                                                <h3 className="destination-card-title">{dest.title}</h3>
+                                            </div>
+                                            <div className="destination-card-description-box">
+                                                <p className="destination-card-description">{dest.description}</p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </ScrollAnimation>
+                            </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                       <div className="absolute -bottom-4 right-0 md:hidden">
+                            <div className="flex gap-2">
+                                 <div className="button-wrapper-for-border">
+                                    <CarouselPrevious variant="outline" size="icon" />
+                                </div>
+                                <div className="button-wrapper-for-border">
+                                    <CarouselNext variant="outline" size="icon" />
+                                </div>
+                            </div>
+                       </div>
+                    </Carousel>
+                </div>
             </div>
           </section>
       )}
