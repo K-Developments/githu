@@ -1,13 +1,14 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import type { Destination } from '@/lib/data';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface DestinationDetailClientProps {
@@ -16,11 +17,16 @@ interface DestinationDetailClientProps {
 }
 
 export function DestinationDetailClient({ destination, otherDestinations }: DestinationDetailClientProps) {
+  const [api, setApi] = useState<CarouselApi>()
   const sliderImages = [destination.image, ...(destination.galleryImages || [])].filter(Boolean);
+
+  const scrollPrev = () => api?.scrollPrev();
+  const scrollNext = () => api?.scrollNext();
 
   return (
     <div className="bg-white">
         <Carousel
+            setApi={setApi}
             opts={{
             align: "start",
             loop: true,
@@ -43,12 +49,6 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                 </CarouselItem>
             ))}
             </CarouselContent>
-             {sliderImages.length > 1 && (
-                <>
-                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-white/50 hover:border-white" />
-                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-white/50 hover:border-white" />
-                </>
-             )}
         </Carousel>
 
 
@@ -68,9 +68,25 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
         <div className="max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2">
-                    <ScrollAnimation>
-                        <h1 className="text-4xl md:text-6xl font-headline text-foreground mb-4">{destination.title}</h1>
-                    </ScrollAnimation>
+                    <div className="flex justify-between items-start mb-4">
+                        <ScrollAnimation>
+                            <h1 className="text-4xl md:text-6xl font-headline text-foreground">{destination.title}</h1>
+                        </ScrollAnimation>
+                        {sliderImages.length > 1 && (
+                            <div className="hidden md:flex items-center gap-2 flex-shrink-0 ml-4">
+                                <div className="button-wrapper-for-border">
+                                    <Button variant="outline" size="icon" onClick={scrollPrev}>
+                                        <ChevronLeft />
+                                    </Button>
+                                </div>
+                                <div className="button-wrapper-for-border">
+                                    <Button variant="outline" size="icon" onClick={scrollNext}>
+                                        <ChevronRight />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                     <ScrollAnimation>
                         <p className="text-lg text-muted-foreground mb-8">{destination.location}</p>
                     </ScrollAnimation>
