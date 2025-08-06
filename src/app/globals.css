@@ -100,7 +100,7 @@ header {
 	align-items: center;
 	z-index: 100;
 	background: white;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #000;
 	transition: all 0.3s ease;
 }
 .header-left {
@@ -208,7 +208,7 @@ header {
 
 /* Hero Section */
 .hero {
-	height: 110vh;
+	height: 120vh;
 	display: flex;
 	overflow: hidden;
 	position: relative;
@@ -257,6 +257,9 @@ header {
     flex-wrap: nowrap;
     animation: scroll 60s linear infinite;
     width: 200%; /* Two grids */
+	gap:1rem;
+	height:100%;
+	
 }
 
 .scrolling-grid {
@@ -264,6 +267,7 @@ header {
     grid-template-columns: repeat(3, 1fr);
     width: 100%;
     flex-shrink: 0;
+	gap:1rem;
 }
 
 .scrolling-grid .image-wrapper {
@@ -1153,7 +1157,7 @@ h2{
 	}
 	.hero-image {
 		width: 100%;
-		height: 60vh;
+		height: 100vh;
 		order: 2;
 		position: relative;
 	}
@@ -1453,3 +1457,4 @@ h2{
     overflow: visible !important;
 	padding:1rem;
 }
+
