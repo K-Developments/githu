@@ -209,7 +209,7 @@ function HeroSection({ data }: { data: HeroData }) {
   return (
     <section className="hero" ref={containerRef}>
         <div 
-            className="hero-content flex relative"
+            className="hero-content flex relative overflow-hidden"
         >
             {data.contentBackgroundImage && (
                 <motion.div className="absolute inset-0 z-0" style={{ y: parallaxY }}>
