@@ -133,7 +133,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                 <Carousel 
                     opts={{
                         align: "start",
-                        loop: true,
+                        loop: otherDestinations.length > 3,
                     }}
                     className="w-full"
                 >
@@ -164,8 +164,16 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                         </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-white/50 hover:border-white" />
-                    <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 text-white bg-black/30 hover:bg-black/50 border-white/50 hover:border-white" />
+                   <div className="absolute -bottom-4 right-0">
+                        <div className="flex gap-2">
+                             <div className="button-wrapper-for-border">
+                                <CarouselPrevious variant="outline" size="icon" />
+                            </div>
+                            <div className="button-wrapper-for-border">
+                                <CarouselNext variant="outline" size="icon" />
+                            </div>
+                        </div>
+                   </div>
                 </Carousel>
             </div>
           </section>
