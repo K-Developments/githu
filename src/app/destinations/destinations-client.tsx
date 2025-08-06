@@ -57,8 +57,16 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
                 {destinations.map((dest, i) => (
                 <ScrollAnimation key={dest.id} delay={i * 0.1}>
                     <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                        <div className="destination-card">
-                            <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw" />
+                        <div className="destination-card group">
+                            <Image 
+                                src={dest.image || "https://placehold.co/600x800.png"} 
+                                alt={dest.title} 
+                                fill 
+                                style={{ objectFit: 'cover' }} 
+                                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                                className="card-image"
+                            />
+                            <div className="card-overlay"></div>
                             <div className="destination-card-title-box">
                                 <h3 className="destination-card-title">{dest.title}</h3>
                             </div>
