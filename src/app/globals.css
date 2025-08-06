@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -81,7 +80,7 @@ main img {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
+	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
 	pointer-events: none;
 	mix-blend-mode: overlay;
 	opacity: 0.15;
@@ -129,23 +128,6 @@ header {
 	text-decoration: none;
 	letter-spacing: 2px;
 	position: relative;
-}
-.logo::after {
-	content: '✈';
-	position: absolute;
-	right: -25px;
-	top: -5px;
-	font-size: 0.8rem;
-	color: hsl(188 55% 45%);
-	animation: float 3s ease-in-out infinite;
-}
-@keyframes float {
-	0%, 100% {
-		transform: translateY(0px) rotate(0deg);
-	}
-	50% {
-		transform: translateY(-5px) rotate(5deg);
-	}
 }
 .logo span {
 	color: hsl(188 55% 45%);
@@ -1442,5 +1424,3 @@ h2{
     overflow: visible !important;
 	padding:1rem;
 }
-
-    
