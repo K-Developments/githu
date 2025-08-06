@@ -140,61 +140,49 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                     </ScrollAnimation>
                 </div>
                 
-                <div className="relative">
-                    <Carousel 
-                        opts={{
-                            align: "start",
-                            loop: otherDestinations.length > 3,
-                        }}
-                        className="w-full"
-                    >
-                        <div className="hidden md:flex gap-2 absolute -top-12 right-0">
-                            <div className="button-wrapper-for-border">
-                                <CarouselPrevious variant="outline" size="icon" />
-                            </div>
-                            <div className="button-wrapper-for-border">
-                                <CarouselNext variant="outline" size="icon" />
-                            </div>
-                        </div>
-                        <CarouselContent className="-ml-4">
-                            {otherDestinations.map((dest) => (
-                            <CarouselItem key={dest.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                                <ScrollAnimation>
-                                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                                        <div className="destination-card group">
-                                            <Image 
-                                                src={dest.image || "https://placehold.co/600x800.png"} 
-                                                alt={dest.title} 
-                                                fill 
-                                                style={{ objectFit: 'cover' }} 
-                                                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                                                className="card-image"
-                                            />
-                                            <div className="card-overlay"></div>
-                                            <div className="destination-card-title-box">
-                                                <h3 className="destination-card-title">{dest.title}</h3>
-                                            </div>
-                                            <div className="destination-card-description-box">
-                                                <p className="destination-card-description">{dest.description}</p>
-                                            </div>
+                <Carousel 
+                    opts={{
+                        align: "start",
+                        loop: otherDestinations.length > 3,
+                    }}
+                    className="w-full"
+                >
+                    <CarouselContent className="-ml-4">
+                        {otherDestinations.map((dest) => (
+                        <CarouselItem key={dest.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                            <ScrollAnimation>
+                                <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
+                                    <div className="destination-card group">
+                                        <Image 
+                                            src={dest.image || "https://placehold.co/600x800.png"} 
+                                            alt={dest.title} 
+                                            fill 
+                                            style={{ objectFit: 'cover' }} 
+                                            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                                            className="card-image"
+                                        />
+                                        <div className="card-overlay"></div>
+                                        <div className="destination-card-title-box">
+                                            <h3 className="destination-card-title">{dest.title}</h3>
                                         </div>
-                                    </Link>
-                                </ScrollAnimation>
-                            </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                       <div className="absolute -bottom-4 right-0 md:hidden">
-                            <div className="flex gap-2">
-                                 <div className="button-wrapper-for-border">
-                                    <CarouselPrevious variant="outline" size="icon" />
-                                </div>
-                                <div className="button-wrapper-for-border">
-                                    <CarouselNext variant="outline" size="icon" />
-                                </div>
-                            </div>
-                       </div>
-                    </Carousel>
-                </div>
+                                        <div className="destination-card-description-box">
+                                            <p className="destination-card-description">{dest.description}</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </ScrollAnimation>
+                        </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <div className="flex justify-center items-center gap-2 mt-8">
+                        <div className="button-wrapper-for-border">
+                            <CarouselPrevious variant="outline" size="icon" />
+                        </div>
+                        <div className="button-wrapper-for-border">
+                            <CarouselNext variant="outline" size="icon" />
+                        </div>
+                    </div>
+                </Carousel>
             </div>
           </section>
       )}
