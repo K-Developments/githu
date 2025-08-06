@@ -44,6 +44,10 @@ interface FeaturedPackagesData {
     packageIds: string[];
 }
 
+interface FeaturedDestinationsData {
+    destinationIds: string[];
+}
+
 export default function AdminHomePage() {
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
@@ -78,13 +82,13 @@ export default function AdminHomePage() {
         { title: "Blog & News", description: "Latest stories", linkUrl: "#", backgroundImage: "" },
     ]
   });
-  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [allDestinations, setAllDestinations] = useState<Destination[]>([]);
+  const [featuredDestinationsData, setFeaturedDestinationsData] = useState<FeaturedDestinationsData>({ destinationIds: [] });
   const [allPackages, setAllPackages] = useState<Package[]>([]);
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [featuredPackagesData, setFeaturedPackagesData] = useState<FeaturedPackagesData>({ packageIds: [] });
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   
-  const [deletedDestinationIds, setDeletedDestinationIds] = useState<string[]>([]);
   const [deletedTestimonialIds, setDeletedTestimonialIds] = useState<string[]>([]);
 
 
@@ -155,12 +159,17 @@ export default function AdminHomePage() {
             packageIds: featuredPackages.packageIds || []
           });
 
+          const featuredDestinations = (data.featuredDestinations || {}) as FeaturedDestinationsData;
+          setFeaturedDestinationsData({
+            destinationIds: featuredDestinations.destinationIds || []
+          });
+
         }
         
         const destinationsCollectionRef = collection(db, "destinations");
         const destinationsSnap = await getDocs(destinationsCollectionRef);
         const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
-        setDestinations(destinationsData);
+        setAllDestinations(destinationsData);
 
         const categoriesCollectionRef = collection(db, "categories");
         const categoriesSnap = await getDocs(categoriesCollectionRef);
@@ -229,27 +238,16 @@ export default function AdminHomePage() {
     setCtaData(prevData => ({ ...prevData, interactiveItems: newItems }));
   };
 
-  const handleDestinationChange = (id: string, field: keyof Omit<Destination, 'id'>, value: any) => {
-    setDestinations(prevDestinations => prevDestinations.map(d => d.id === id ? { ...d, [field]: value } : d));
-  };
-
-  const handleAddNewDestination = () => {
-    const newDestination: Destination = {
-      id: `new-dest-${Date.now()}`,
-      title: "New Destination",
-      location: "",
-      description: "",
-      image: "https://placehold.co/600x400.png",
-      linkUrl: "",
-    };
-    setDestinations([...destinations, newDestination]);
-  };
-
-  const handleDeleteDestination = (id: string) => {
-    if (!id.startsWith('new-')) {
-      setDeletedDestinationIds(prev => [...prev, id]);
-    }
-    setDestinations(destinations.filter(d => d.id !== id));
+  const handleFeaturedDestinationChange = (destinationId: string, checked: boolean | 'indeterminate') => {
+    setFeaturedDestinationsData(prev => {
+        const newDestinationIds = new Set(prev.destinationIds);
+        if (checked) {
+            newDestinationIds.add(destinationId);
+        } else {
+            newDestinationIds.delete(destinationId);
+        }
+        return { destinationIds: Array.from(newDestinationIds) };
+    });
   };
 
   const handleFeaturedPackageChange = (packageId: string, checked: boolean | 'indeterminate') => {
@@ -297,17 +295,11 @@ export default function AdminHomePage() {
             quote: quoteData, 
             destinations: destinationsData, 
             cta: ctaData,
-            featuredPackages: featuredPackagesData
+            featuredPackages: featuredPackagesData,
+            featuredDestinations: featuredDestinationsData,
         }, { merge: true });
 
-        deletedDestinationIds.forEach(id => batch.delete(doc(db, "destinations", id)));
         deletedTestimonialIds.forEach(id => batch.delete(doc(db, "testimonials", id)));
-
-        destinations.forEach(dest => {
-            const { id, ...destData } = dest;
-            const docRef = id.startsWith('new-') ? doc(collection(db, 'destinations')) : doc(db, "destinations", id);
-            batch.set(docRef, destData);
-        });
 
         testimonials.forEach(t => {
             const { id, ...testimonialData } = t;
@@ -317,7 +309,6 @@ export default function AdminHomePage() {
 
         await batch.commit();
         
-        setDeletedDestinationIds([]);
         setDeletedTestimonialIds([]);
 
         toast({
@@ -435,7 +426,7 @@ export default function AdminHomePage() {
       <Card>
         <CardHeader>
             <CardTitle>Destinations Section</CardTitle>
-            <CardDescription>Update the title, subtitle, and button URL for the destinations section.</CardDescription>
+            <CardDescription>Update the title, subtitle, and button URL for the destinations section on the homepage.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
@@ -455,43 +446,23 @@ export default function AdminHomePage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Manage Destinations</CardTitle>
-          <CardDescription>Manage the destination cards for the grid section.</CardDescription>
+            <CardTitle>Manage Featured Destinations</CardTitle>
+            <CardDescription>Select which destinations to display on the homepage. Manage all destinations on the "Destinations" admin page.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-4">
-            {destinations.map((dest) => (
-              <div key={dest.id} className="p-4 border rounded-md space-y-3 bg-slate-50">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <Label htmlFor={`dest-title-${dest.id}`} className="text-xs">Title</Label>
-                    <Input id={`dest-title-${dest.id}`} value={dest.title} onChange={(e) => handleDestinationChange(dest.id, 'title', e.target.value)} />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor={`dest-location-${dest.id}`} className="text-xs">Location</Label>
-                    <Input id={`dest-location-${dest.id}`} value={dest.location} onChange={(e) => handleDestinationChange(dest.id, 'location', e.target.value)} />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor={`dest-desc-${dest.id}`} className="text-xs">Short Description</Label>
-                  <Textarea id={`dest-desc-${dest.id}`} value={dest.description} onChange={(e) => handleDestinationChange(dest.id, 'description', e.target.value)} rows={2} />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor={`dest-img-${dest.id}`} className="text-xs">Image URL</Label>
-                  <Input id={`dest-img-${dest.id}`} value={dest.image} onChange={(e) => handleDestinationChange(dest.id, 'image', e.target.value)} />
-                </div>
-                 <div className="space-y-1">
-                  <Label htmlFor={`dest-link-${dest.id}`} className="text-xs">Link URL (optional)</Label>
-                  <Input id={`dest-link-${dest.id}`} placeholder={`/destinations/${dest.id}`} value={dest.linkUrl || ''} onChange={(e) => handleDestinationChange(dest.id, 'linkUrl', e.target.value)} />
-                </div>
-                <Button variant="destructive" size="sm" onClick={() => handleDeleteDestination(dest.id)}>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete Destination
-                </Button>
-              </div>
-            ))}
-          </div>
-          <Button onClick={handleAddNewDestination}>Add New Destination</Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {allDestinations.map(dest => (
+                    <div key={dest.id} className="flex items-center space-x-2 p-2 border rounded-md">
+                        <Checkbox
+                            id={`featured-dest-${dest.id}`}
+                            checked={featuredDestinationsData.destinationIds.includes(dest.id)}
+                            onCheckedChange={(checked) => handleFeaturedDestinationChange(dest.id, checked)}
+                        />
+                        <Label htmlFor={`featured-dest-${dest.id}`} className="cursor-pointer">{dest.title}</Label>
+                    </div>
+                ))}
+            </div>
+            {allDestinations.length === 0 && <p className="text-muted-foreground">No destinations found. Add destinations in the 'Destinations' admin page first.</p>}
         </CardContent>
       </Card>
       
@@ -615,5 +586,3 @@ export default function AdminHomePage() {
     </div>
   );
 }
-
-    

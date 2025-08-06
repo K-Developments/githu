@@ -35,6 +35,11 @@ interface FeaturedPackagesData {
     packageIds: string[];
 }
 
+interface FeaturedDestinationsData {
+    destinationIds: string[];
+}
+
+
 async function getHomePageData() {
     try {
         // Fetch content from the 'home' document
@@ -47,6 +52,7 @@ async function getHomePageData() {
         let destinationsData: DestinationsData | null = null;
         let ctaData: CtaData | null = null;
         let featuredPackageIds: string[] = [];
+        let featuredDestinationIds: string[] = [];
 
         if (contentDocSnap.exists()) {
           const data = contentDocSnap.data();
@@ -63,11 +69,18 @@ async function getHomePageData() {
           if (featuredPackages && featuredPackages.packageIds) {
             featuredPackageIds = featuredPackages.packageIds;
           }
+          const featuredDestinations = data.featuredDestinations as FeaturedDestinationsData;
+          if (featuredDestinations && featuredDestinations.destinationIds) {
+            featuredDestinationIds = featuredDestinations.destinationIds;
+          }
         }
 
-        // Fetch collections
-        const destinationsSnap = await getDocs(collection(db, "destinations"));
-        const destinations = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+        let destinations: Destination[] = [];
+        if (featuredDestinationIds.length > 0) {
+            const destinationsQuery = query(collection(db, "destinations"), where('__name__', 'in', featuredDestinationIds));
+            const destinationsSnap = await getDocs(destinationsQuery);
+            destinations = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+        }
 
         const categoriesSnap = await getDocs(collection(db, "categories"));
         const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));

@@ -7,8 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import { Trash2 } from "lucide-react";
+import type { Destination } from "@/lib/data";
 
 interface DestinationsHeroData {
   headline: string;
@@ -20,6 +23,8 @@ export default function AdminDestinationsPage() {
     headline: "",
     heroImage: "",
   });
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [deletedDestinationIds, setDeletedDestinationIds] = useState<string[]>([]);
   
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -45,6 +50,11 @@ export default function AdminDestinationsPage() {
             });
         }
 
+        const destinationsCollectionRef = collection(db, "destinations");
+        const destinationsSnap = await getDocs(destinationsCollectionRef);
+        const destinationsData = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+        setDestinations(destinationsData);
+
       } catch (error) {
         console.error("Error fetching destinations page data:", error);
         toast({
@@ -65,11 +75,48 @@ export default function AdminDestinationsPage() {
     setHeroData(prevData => ({ ...prevData, [id]: value }));
   };
 
+  const handleDestinationChange = (id: string, field: keyof Omit<Destination, 'id'>, value: any) => {
+    setDestinations(prevDestinations => prevDestinations.map(d => d.id === id ? { ...d, [field]: value } : d));
+  };
+
+  const handleAddNewDestination = () => {
+    const newDestination: Destination = {
+      id: `new-dest-${Date.now()}`,
+      title: "New Destination",
+      location: "",
+      description: "",
+      image: "https://placehold.co/600x400.png",
+      linkUrl: "",
+    };
+    setDestinations([...destinations, newDestination]);
+  };
+
+  const handleDeleteDestination = (id: string) => {
+    if (!id.startsWith('new-')) {
+      setDeletedDestinationIds(prev => [...prev, id]);
+    }
+    setDestinations(destinations.filter(d => d.id !== id));
+  };
+
   const handleSave = async () => {
     setLoading(true);
     try {
+        const batch = writeBatch(db);
+
         const contentDocRef = doc(db, "content", "destinations");
-        await setDoc(contentDocRef, { hero: heroData }, { merge: true });
+        batch.set(contentDocRef, { hero: heroData }, { merge: true });
+
+        deletedDestinationIds.forEach(id => batch.delete(doc(db, "destinations", id)));
+
+        destinations.forEach(dest => {
+            const { id, ...destData } = dest;
+            const docRef = id.startsWith('new-') ? doc(collection(db, 'destinations')) : doc(db, "destinations", id);
+            batch.set(docRef, destData);
+        });
+
+        await batch.commit();
+        
+        setDeletedDestinationIds([]);
 
         toast({
             title: "Success",
@@ -96,8 +143,7 @@ export default function AdminDestinationsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold">Admin Panel - Destinations Page</h1>
-        <p className="text-muted-foreground">Manage your destinations page hero section.</p>
-        <p className="text-muted-foreground mt-2">Note: The destinations themselves are managed on the <a href="/admin" className="text-primary underline">Home Page admin section</a>.</p>
+        <p className="text-muted-foreground">Manage your destinations page hero section and all destinations.</p>
       </div>
 
       <Card>
@@ -117,7 +163,49 @@ export default function AdminDestinationsPage() {
         </CardContent>
       </Card>
       
-      <Button onClick={handleSave} disabled={loading}>{loading ? "Saving..." : "Save Changes"}</Button>
+      <Card>
+        <CardHeader>
+          <CardTitle>Manage All Destinations</CardTitle>
+          <CardDescription>Destinations created here will appear on the public destinations page and can be featured on the homepage.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-4">
+            {destinations.map((dest) => (
+              <div key={dest.id} className="p-4 border rounded-md space-y-3 bg-slate-50">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <Label htmlFor={`dest-title-${dest.id}`} className="text-xs">Title</Label>
+                    <Input id={`dest-title-${dest.id}`} value={dest.title} onChange={(e) => handleDestinationChange(dest.id, 'title', e.target.value)} />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor={`dest-location-${dest.id}`} className="text-xs">Location</Label>
+                    <Input id={`dest-location-${dest.id}`} value={dest.location} onChange={(e) => handleDestinationChange(dest.id, 'location', e.target.value)} />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`dest-desc-${dest.id}`} className="text-xs">Short Description</Label>
+                  <Textarea id={`dest-desc-${dest.id}`} value={dest.description} onChange={(e) => handleDestinationChange(dest.id, 'description', e.target.value)} rows={2} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor={`dest-img-${dest.id}`} className="text-xs">Image URL</Label>
+                  <Input id={`dest-img-${dest.id}`} value={dest.image} onChange={(e) => handleDestinationChange(dest.id, 'image', e.target.value)} />
+                </div>
+                 <div className="space-y-1">
+                  <Label htmlFor={`dest-link-${dest.id}`} className="text-xs">Link URL (optional)</Label>
+                  <Input id={`dest-link-${dest.id}`} placeholder={`/destinations/${dest.id}`} value={dest.linkUrl || ''} onChange={(e) => handleDestinationChange(dest.id, 'linkUrl', e.target.value)} />
+                </div>
+                <Button variant="destructive" size="sm" onClick={() => handleDeleteDestination(dest.id)}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete Destination
+                </Button>
+              </div>
+            ))}
+          </div>
+          <Button onClick={handleAddNewDestination}>Add New Destination</Button>
+        </CardContent>
+      </Card>
+
+      <Button onClick={handleSave} disabled={loading}>{loading ? "Saving..." : "Save All Changes"}</Button>
     </div>
   );
 }
