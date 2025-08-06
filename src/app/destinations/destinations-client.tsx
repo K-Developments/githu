@@ -29,9 +29,8 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
                 backgroundPosition: 'center',
             }}
           >
-              {hero.contentBackgroundImage && <div className="absolute inset-0 bg-black/20"></div>}
               <ScrollAnimation>
-                  <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-white break-words relative" style={{ lineBreak: 'anywhere'}}>
+                  <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground break-words relative" style={{ lineBreak: 'anywhere'}}>
                   {hero.headline}
                   </h1>
               </ScrollAnimation>

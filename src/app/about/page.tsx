@@ -116,9 +116,8 @@ export default async function AboutPage() {
                     backgroundPosition: 'center',
                 }}
             >
-                {hero.contentBackgroundImage && <div className="absolute inset-0 bg-black/20"></div>}
                 <ScrollAnimation>
-                    <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-white relative">
+                    <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground relative">
                     {hero.headline}
                     </h1>
                 </ScrollAnimation>
