@@ -1219,8 +1219,8 @@ h2{
 		position: absolute;
 		top: 0;
 		left: 0;
-		background-color: white;
-		color: #222;
+		background-color: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
 		padding: 0.5rem 1rem;
 		z-index: 2;
 		transition: opacity 0.3s ease;
@@ -1383,5 +1383,3 @@ h2{
     overflow: visible !important;
 	padding:1rem;
 }
-
-    
