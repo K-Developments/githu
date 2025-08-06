@@ -126,16 +126,24 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
 
       {otherDestinations.length > 0 && (
           <section className="py-12 md:py-24 px-4 md:px-12 bg-accent/50">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto relative">
                 <ScrollAnimation>
                     <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">Explore Other Destinations</h2>
                 </ScrollAnimation>
+                <div className="absolute top-0 right-0 hidden md:flex gap-2">
+                    <div className="button-wrapper-for-border">
+                        <CarouselPrevious variant="outline" size="icon" />
+                    </div>
+                    <div className="button-wrapper-for-border">
+                        <CarouselNext variant="outline" size="icon" />
+                    </div>
+                </div>
                 <Carousel 
                     opts={{
                         align: "start",
                         loop: otherDestinations.length > 3,
                     }}
-                    className="w-full"
+                    className="w-full mt-8"
                 >
                     <CarouselContent className="-ml-4">
                         {otherDestinations.map((dest) => (
@@ -164,7 +172,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                         </CarouselItem>
                         ))}
                     </CarouselContent>
-                   <div className="absolute -bottom-4 right-0">
+                   <div className="absolute -bottom-4 right-0 md:hidden">
                         <div className="flex gap-2">
                              <div className="button-wrapper-for-border">
                                 <CarouselPrevious variant="outline" size="icon" />
