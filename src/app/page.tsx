@@ -188,97 +188,41 @@ export default function HomePage() {
 // --- Sub-components for each section ---
 
 function HeroSection({ data }: { data: HeroData }) {
-    const [currentImage, setCurrentImage] = useState(0);
-
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"]
     });
-    const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-
-    useEffect(() => {
-        if (data.sliderImages.length > 1) {
-            const timer = setTimeout(() => {
-                setCurrentImage((prevIndex) => (prevIndex + 1) % data.sliderImages.length);
-            }, 5000); // Change image every 5 seconds
-            return () => clearTimeout(timer);
-        }
-    }, [currentImage, data.sliderImages.length]);
     
-  return (
-    <section className="hero" ref={containerRef}>
-        <div 
-            className="hero-content flex relative overflow-hidden"
-        >
-            {data.contentBackgroundImage && (
-                <motion.div className="absolute inset-0 z-0" style={{ y: parallaxY }}>
-                    <Image
-                        src={data.contentBackgroundImage}
-                        alt="Hero content background"
-                        fill
-                        className="object-cover"
-                        priority
-                    />
-                </motion.div>
-            )}
-            <h1 
-                dangerouslySetInnerHTML={{ __html: data.headline }} 
-                className="relative z-10"
-            />
-        </div>
+    // More pronounced parallax values
+    const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
-        {/* Mobile Hero Image */}
-        <div className="hero-image md:hidden">
-            {data.sliderImages.map((src, index) => (
-            <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
-                <Image 
-                    src={src || "https://placehold.co/1920x1080.png"} 
-                    alt="Luxury travel destination" 
+    return (
+        <section 
+            ref={containerRef}
+            className="relative h-screen overflow-hidden"
+        >
+            <motion.div 
+                className="absolute inset-0"
+                style={{ y: backgroundY }}
+            >
+                <Image
+                    src={data.sliderImages[0] || "https://placehold.co/1920x1080.png"}
+                    alt="Luxury travel destination"
                     fill
-                    priority={index === 0}
-                    style={{ objectFit: 'cover' }}
-                    sizes="100vw" 
+                    className="object-cover"
+                    priority
+                />
+            </motion.div>
+            
+            <div className="absolute inset-0 flex items-center justify-center">
+                <h1 
+                    dangerouslySetInnerHTML={{ __html: data.headline }} 
+                    className="text-white text-4xl md:text-6xl font-bold relative z-10"
                 />
             </div>
-            ))}
-            <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white to-transparent" />
-        </div>
-        
-        {/* Desktop Scrolling Grid */}
-        <div className="hero-image hidden md:block">
-            <div className="scrolling-grid-container">
-                <div className="scrolling-grid">
-                    {data.sliderImages.map((src, index) => (
-                        <div key={`grid-1-${index}`} className="image-wrapper">
-                            <Image 
-                                src={src || "https://placehold.co/800x600.png"} 
-                                alt={`Luxury travel destination ${index + 1}`}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                sizes="33.3vw"
-                            />
-                        </div>
-                    ))}
-                </div>
-                 <div className="scrolling-grid">
-                    {data.sliderImages.map((src, index) => (
-                        <div key={`grid-2-${index}`} className="image-wrapper">
-                            <Image 
-                                src={src || "https://placehold.co/800x600.png"} 
-                                alt={`Luxury travel destination ${index + 1}`}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                sizes="33.3vw"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-
-    </section>
-  );
+        </section>
+    );
 }
 
 
