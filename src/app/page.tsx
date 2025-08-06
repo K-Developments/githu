@@ -235,20 +235,32 @@ function HeroSection({ data }: { data: HeroData }) {
         {/* Desktop Scrolling Grid */}
         <div className="hero-image hidden md:block">
             <div className="scrolling-grid-container">
-                {/* We render the grid twice for a seamless loop */}
-                {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
-                    <div key={`grid-1-${index}`} className="scrolling-grid">
-                        <div className="image-wrapper">
+                <div className="scrolling-grid">
+                    {data.sliderImages.map((src, index) => (
+                        <div key={`grid-1-${index}`} className="image-wrapper">
                             <Image 
-                                src={src || "https://placehold.co/1920x1080.png"} 
+                                src={src || "https://placehold.co/800x600.png"} 
                                 alt={`Luxury travel destination ${index + 1}`}
                                 fill
                                 style={{ objectFit: 'cover' }}
                                 sizes="33.3vw"
                             />
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+                 <div className="scrolling-grid">
+                    {data.sliderImages.map((src, index) => (
+                        <div key={`grid-2-${index}`} className="image-wrapper">
+                            <Image 
+                                src={src || "https://placehold.co/800x600.png"} 
+                                alt={`Luxury travel destination ${index + 1}`}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                sizes="33.3vw"
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
 
