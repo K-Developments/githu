@@ -190,6 +190,13 @@ export default function HomePage() {
 function HeroSection({ data }: { data: HeroData }) {
     const [currentImage, setCurrentImage] = useState(0);
 
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end start"]
+    });
+    const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
     useEffect(() => {
         if (data.sliderImages.length > 1) {
             const timer = setTimeout(() => {
@@ -200,16 +207,21 @@ function HeroSection({ data }: { data: HeroData }) {
     }, [currentImage, data.sliderImages.length]);
     
   return (
-    <section className="hero">
+    <section className="hero" ref={containerRef}>
         <div 
-            className="hero-content flex"
-            style={{
-                backgroundImage: data.contentBackgroundImage ? `url(${data.contentBackgroundImage})` : 'none',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-            }}
+            className="hero-content flex relative"
         >
-          
+            {data.contentBackgroundImage && (
+                <motion.div className="absolute inset-0 z-0" style={{ y: parallaxY }}>
+                    <Image
+                        src={data.contentBackgroundImage}
+                        alt="Hero content background"
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                </motion.div>
+            )}
             <h1 
                 dangerouslySetInnerHTML={{ __html: data.headline }} 
                 className="relative z-10"
