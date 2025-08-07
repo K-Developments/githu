@@ -9,6 +9,7 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import type { SiteSettings } from "@/lib/data";
 import { SiteSettingsProvider } from "@/context/site-settings-context";
+import { useLenis } from "@/hooks/use-lenis";
 
 
 export const metadata: Metadata = {
@@ -57,6 +58,26 @@ async function getSiteSettings(): Promise<SiteSettings | null> {
     }
 }
 
+function RootLayoutContent({
+  children,
+  siteSettings,
+}: {
+  children: React.ReactNode;
+  siteSettings: SiteSettings | null;
+}) {
+  useLenis();
+  return (
+    <SiteSettingsProvider settings={siteSettings}>
+      <ScrollRestoration />
+      <div className="noise-overlay"></div>
+      <Header logoUrl={siteSettings?.logoUrl} />
+      <main>{children}</main>
+      <Footer logoUrl={siteSettings?.logoUrl} />
+      <Toaster />
+    </SiteSettingsProvider>
+  );
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -72,16 +93,9 @@ export default async function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <SiteSettingsProvider settings={siteSettings}>
-            <ScrollRestoration />
-            <div className="noise-overlay"></div>
-            <Header logoUrl={siteSettings?.logoUrl} />
-            <main>
-                {children}
-            </main>
-            <Footer logoUrl={siteSettings?.logoUrl} />
-            <Toaster />
-        </SiteSettingsProvider>
+          <RootLayoutContent siteSettings={siteSettings}>
+            {children}
+          </RootLayoutContent>
       </body>
     </html>
   );
