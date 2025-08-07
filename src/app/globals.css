@@ -412,6 +412,7 @@ header {
 }
 .intro-image-cluster {
 	order: 2;
+    padding-left: 2rem;
 }
 
 .image-landscape-wrapper {
