@@ -9,7 +9,7 @@
 		--card-foreground: 30 3% 10%;
 		--popover: 30 33% 98%;
 		--popover-foreground: 30 3% 10%;
-		--primary: 169 35% 42%;
+		--primary: 215 25% 45%;
 		--primary-foreground: 30 33% 98%;
 		--secondary: 30 5% 90%;
 		--secondary-foreground: 30 3% 10%;
@@ -21,7 +21,7 @@
 		--destructive-foreground: 0 0% 98%;
 		--border: 30 5% 80%;
 		--input: 30 5% 70%;
-		--ring: 169 35% 42%;
+		--ring: 215 25% 45%;
 		--header-height: 3rem;
 	}
 	.dark {
@@ -130,7 +130,7 @@ header {
 	position: relative;
 }
 .logo span {
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 	font-weight: 400;
 }
 .desktop-nav ul {
@@ -150,7 +150,7 @@ header {
 	padding: 8px 0;
 }
 .desktop-nav a:hover {
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 	transform: translateY(-1px);
 }
 .desktop-nav a::after {
@@ -161,7 +161,7 @@ header {
 	transform: translateX(-50%);
 	width: 0;
 	height: 2px;
-	background: linear-gradient(90deg, hsl(188 55% 45%), hsl(188 75% 35%));
+	background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary)));
 	transition: width 0.3s ease;
 	border-radius: 1px;
 }
@@ -176,7 +176,7 @@ header {
 	transition: color 0.3s ease;
 }
 .search-button:hover {
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 }
 .hamburger-button {
 	display: none;
@@ -337,7 +337,7 @@ header {
 	text-transform:uppercase;
 }
 .hero-content h1 .highlight {
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 	position: relative;
 }
 .hero-content p {
@@ -441,7 +441,7 @@ header {
 	white-space: pre-wrap;
 }
 .link-to {
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 	text-decoration: none;
 	font-weight: 600;
 	position: relative;
@@ -456,7 +456,7 @@ header {
 	left: 0;
 	width: 100%;
 	height: 2px;
-	background-color: hsl(188 55% 45%);
+	background-color: hsl(var(--primary));
 	transform: scaleX(0);
 	transform-origin: left;
 	transition: transform 0.3s ease;
@@ -716,7 +716,7 @@ header {
 .testimonial-quote-icon {
 	width: 3rem;
 	height: 3rem;
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 }
 .testimonial-text {
 	font-family: 'Marcellus', serif;
@@ -934,7 +934,7 @@ header {
 	transition: color 0.3s ease, transform 0.3s ease;
 }
 .social-links a:hover {
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 	transform: translateY(-2px);
 }
 .footer-column h4 {
@@ -958,7 +958,7 @@ header {
 	transition: color 0.3s ease, padding-left 0.3s ease;
 }
 .footer-links a:hover {
-	color: hsl(188 55% 45%);
+	color: hsl(var(--primary));
 	padding-left: 5px;
 }
 .footer-bottom {
@@ -1097,7 +1097,7 @@ header {
 		transition: background-color 0.3s ease;
 	}
 	.testimonial-bullet.active {
-		background-color: hsl(188 55% 45%);
+		background-color: hsl(var(--primary));
 	}
     .home-page-call-to-action-section {
         justify-content: center;
@@ -1462,5 +1462,6 @@ h2{
     overflow: visible !important;
 	padding:1rem;
 }
+
 
 

@@ -482,7 +482,7 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
                             <p className="card-description flex-grow text-muted-foreground mb-4">{pkg.location}</p>
                             <div className="flex justify-center">
                               <div className="button-wrapper-for-border">
-                                <Button asChild variant="outline" size="sm" className="w-auto"><Link href={`/packages?open=${pkg.id}`}>View Details</Link></Button>
+                                <Button asChild variant="outline" size="sm" className="w-auto"><Link href={`/packages?package=${pkg.id}`}>View Details</Link></Button>
                               </div>
                             </div>
                         </div>

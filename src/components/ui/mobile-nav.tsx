@@ -84,7 +84,7 @@ export const MobileNav = ({ isOpen, setIsOpen, logoUrl }: { isOpen: boolean; set
                             <Image src={logoUrl} alt="Island Hopes Logo" fill style={{ objectFit: 'contain' }} />
                             </div>
                         ) : (
-                            <span style={{ color: '#222', fontFamily: "'Marcellus', serif" }}>ISLAND<span style={{color: 'hsl(188 55% 45%)'}}>HOPES</span></span>
+                            <span style={{ color: '#222', fontFamily: "'Marcellus', serif" }}>ISLAND<span style={{color: 'hsl(var(--primary))'}}>HOPES</span></span>
                         )}
                     </Link>
                 </div>
