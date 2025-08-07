@@ -26,6 +26,7 @@ interface IntroData {
 interface JourneyData {
     title: string;
     image: string;
+    secondaryImage: string;
     missionTitle: string;
     missionText: string;
     visionTitle: string;
@@ -44,6 +45,7 @@ export default function AdminAboutPage() {
   const [journeyData, setJourneyData] = useState<JourneyData>({
     title: "",
     image: "",
+    secondaryImage: "",
     missionTitle: "",
     missionText: "",
     visionTitle: "",
@@ -79,6 +81,7 @@ export default function AdminAboutPage() {
           setJourneyData({
             title: journey.title || "Our Journey",
             image: journey.image || "https://placehold.co/1200x800.png",
+            secondaryImage: journey.secondaryImage || "https://placehold.co/600x800.png",
             missionTitle: journey.missionTitle || "Our Mission",
             missionText: journey.missionText || "",
             visionTitle: journey.visionTitle || "Our Vision",
@@ -104,6 +107,7 @@ export default function AdminAboutPage() {
             setJourneyData({
                 title: "Our Journey",
                 image: "https://placehold.co/1200x800.png",
+                secondaryImage: "https://placehold.co/600x800.png",
                 missionTitle: "Our Mission",
                 missionText: "",
                 visionTitle: "Our Vision",
@@ -295,6 +299,10 @@ export default function AdminAboutPage() {
           <div className="space-y-2">
             <Label htmlFor="image">Main Image URL</Label>
             <Input id="image" value={journeyData.image} onChange={handleJourneyChange} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="secondaryImage">Secondary Image URL</Label>
+            <Input id="secondaryImage" value={journeyData.secondaryImage} onChange={handleJourneyChange} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">

@@ -112,3 +112,12 @@ export type HeroData = {
   contentBackgroundImage?: string;
 };
     
+export type JourneyData = {
+    title: string;
+    image: string;
+    secondaryImage: string;
+    missionTitle: string;
+    missionText: string;
+    visionTitle: string;
+    visionText: string;
+};

@@ -28,6 +28,7 @@ interface AboutPageData {
   journey: {
     title: string;
     image: string;
+    secondaryImage: string;
     missionTitle: string;
     missionText: string;
     visionTitle: string;
@@ -74,6 +75,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 journey: {
                   title: data.journey?.title || 'Our Journey',
                   image: data.journey?.image || 'https://placehold.co/1200x800.png',
+                  secondaryImage: data.journey?.secondaryImage || 'https://placehold.co/600x800.png',
                   missionTitle: data.journey?.missionTitle || 'Our Mission',
                   missionText: data.journey?.missionText || 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
                   visionTitle: data.journey?.visionTitle || 'Our Vision',
@@ -96,6 +98,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 journey: {
                     title: 'Our Journey',
                     image: 'https://placehold.co/1200x800.png',
+                    secondaryImage: 'https://placehold.co/600x800.png',
                     missionTitle: 'Our Mission',
                     missionText: 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
                     visionTitle: 'Our Vision',
@@ -163,20 +166,22 @@ export default function AboutPage() {
                    <AnimatedText text={intro.paragraph} />
                 </section>
             )}
-
-            <section className="py-16 md:py-32 px-4 md:px-12 bg-white overflow-hidden">
-                <ScrollAnimation>
-                    <h2 className="text-4xl md:text-5xl font-headline text-center mb-16 md:mb-24">{journey.title}</h2>
-                </ScrollAnimation>
-                
-                <div className="relative max-w-7xl mx-auto">
-                    <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
-                        <div className="md:col-span-7">
+            
+            <section className="py-16 md:py-32 bg-background overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 md:px-12">
+                    <ScrollAnimation>
+                        <Separator />
+                        <h2 className="text-4xl md:text-5xl font-headline text-center my-8 md:my-12">{journey.title}</h2>
+                        <Separator />
+                    </ScrollAnimation>
+                    
+                    <div className="mt-16 md:mt-24 grid grid-cols-12 gap-x-8">
+                        <div className="col-span-12 md:col-start-2 md:col-span-8 mb-8 md:mb-0">
                             <ScrollAnimation>
-                                <div className="w-full aspect-[4/3] relative">
-                                    <Image 
+                                <div className="relative aspect-[16/11]">
+                                    <Image
                                         src={journey.image}
-                                        alt="Landscape of a journey"
+                                        alt="Primary journey image"
                                         fill
                                         className="object-cover rounded-md shadow-xl"
                                         data-ai-hint="mountain landscape"
@@ -184,32 +189,43 @@ export default function AboutPage() {
                                 </div>
                             </ScrollAnimation>
                         </div>
-                        <div className="md:col-span-5 flex flex-col gap-8 md:gap-12">
-                             <ScrollAnimation>
-                                <div className="bg-card p-6 md:p-8 rounded-md shadow-lg border">
-                                    <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
-                                    <p className="text-muted-foreground leading-relaxed">
-                                        {journey.missionText}
-                                    </p>
-                                </div>
-                            </ScrollAnimation>
+                        <div className="col-span-8 col-start-3 md:col-start-1 md:col-span-3 self-end">
                             <ScrollAnimation delay={0.2}>
-                                <div className="bg-card p-6 md:p-8 rounded-md shadow-lg border">
-                                    <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
-                                    <p className="text-muted-foreground leading-relaxed">
-                                        {journey.visionText}
-                                    </p>
+                                <div className="relative aspect-[3/4] -mt-16 md:mt-0">
+                                     <Image
+                                        src={journey.secondaryImage}
+                                        alt="Secondary journey image"
+                                        fill
+                                        className="object-cover rounded-md shadow-xl"
+                                        data-ai-hint="travel detail person"
+                                    />
                                 </div>
                             </ScrollAnimation>
                         </div>
                     </div>
-                     <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-full h-[1px] bg-border -z-0"></div>
-                     <div className="hidden md:block absolute top-0 right-1/3 w-[1px] h-full bg-border -z-0"></div>
+                </div>
+                <div className="bg-white py-16 md:py-24 -mt-24 md:-mt-32">
+                    <div className="max-w-4xl mx-auto px-4 md:px-12 pt-16 md:pt-24">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <ScrollAnimation>
+                                <div>
+                                    <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
+                                    <p className="text-muted-foreground leading-relaxed">{journey.missionText}</p>
+                                </div>
+                            </ScrollAnimation>
+                            <ScrollAnimation delay={0.2}>
+                                <div>
+                                    <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
+                                    <p className="text-muted-foreground leading-relaxed">{journey.visionText}</p>
+                                </div>
+                            </ScrollAnimation>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             {coreValues.length > 0 && (
-                <section className="bg-[#f8f5f2] py-16 md:py-32">
+                <section className="bg-background py-16 md:py-32">
                     <div className="max-w-7xl mx-auto px-4 md:px-12">
                         <ScrollAnimation>
                             <h2 className="text-4xl md:text-5xl font-headline text-center mb-16 md:mb-24">Our Core Values</h2>
