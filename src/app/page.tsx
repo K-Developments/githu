@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useRef } from "react";
@@ -323,14 +324,14 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
 
   return (
     <section 
-        className="destinations-section py-12 md:py-24 px-4 md:px-12"
+        className="destinations-section py-12 md:py-24"
         style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         }}
     >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4 md:px-12">
             <Separator />
             <ScrollAnimation>
                 <h2 className="section-title text-center my-8 md:my-16">{sectionData.title}</h2>
@@ -568,6 +569,11 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
     return (
         <section 
             className="homepage-testimonials-section relative min-h-[70vh] md:min-h-[80vh] flex items-end justify-start p-8 md:p-16 text-white overflow-hidden"
+            style={{
+                backgroundImage: !currentTestimonial.image && backgroundImage ? `url(${backgroundImage})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
         >
              <AnimatePresence initial={false}>
                 <motion.div
@@ -576,7 +582,7 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 1, ease: 'easeInOut' }}
-                    className="absolute inset-0 "
+                    className="absolute inset-0 z-0"
                 >
                     <Image
                         src={currentTestimonial.image || 'https://placehold.co/1920x1080.png'}
@@ -587,9 +593,9 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
                     />
                 </motion.div>
             </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-1"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
             
-            <div className="w-[85%] md:w-4/5 relative">
+            <div className="relative z-20 w-[85%] md:w-4/5">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentIndex}
@@ -610,7 +616,7 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
             </div>
             
             {testimonials.length > 1 && (
-                <div className="absolute bottom-8 right-8 md:bottom-16 md:right-16 flex gap-3">
+                <div className="absolute bottom-8 right-8 md:bottom-16 md:right-16 flex gap-3 z-20">
                     <Button variant="outline" size="icon" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={handlePrev}>
                         <ArrowLeft />
                     </Button>
