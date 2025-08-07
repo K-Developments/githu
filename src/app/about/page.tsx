@@ -14,6 +14,7 @@ import { CtaSection } from '@/components/ui/cta-section';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ArrowDown } from 'lucide-react';
+import { AnimatedText } from '@/components/ui/animated-text';
 
 interface AboutPageData {
   hero: {
@@ -159,11 +160,7 @@ export default function AboutPage() {
 
             {intro.paragraph && (
                 <section className="py-16 md:py-24 px-4 md:px-12 bg-white">
-                    <ScrollAnimation>
-                        <p className="max-w-4xl mx-auto text-center text-2xl md:text-3xl leading-relaxed text-foreground">
-                            {intro.paragraph}
-                        </p>
-                    </ScrollAnimation>
+                   <AnimatedText text={intro.paragraph} />
                 </section>
             )}
 
