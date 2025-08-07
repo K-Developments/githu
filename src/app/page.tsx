@@ -594,23 +594,38 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
                 backgroundPosition: 'center'
             }}
         >
-            <div className="newsletter-container">
-                <ScrollAnimation>
-                  <h2 className="section-title">Join Our Journey</h2>
-                </ScrollAnimation>
-                <ScrollAnimation>
-                  <p className="newsletter-subtitle">
-                      Sign up for our newsletter to receive the latest travel inspiration, exclusive offers, and updates from the world of luxury travel.
-                  </p>
-                </ScrollAnimation>
-                <ScrollAnimation>
-                  <form className="newsletter-form">
-                      <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
-                      <div className="button-wrapper-for-border">
-                          <Button type="submit" size="lg" className="w-full">Subscribe</Button>
-                      </div>
-                  </form>
-                </ScrollAnimation>
+            <div className="newsletter-container-wrapper">
+                <div className="newsletter-container">
+                    <div className="newsletter-content">
+                        <ScrollAnimation>
+                        <div className="section-title-wrapper">
+                            <h2 className="section-title">Join Our Journey</h2>
+                        </div>
+                        </ScrollAnimation>
+                        <ScrollAnimation>
+                        <p className="newsletter-subtitle">
+                            Sign up for our newsletter to receive the latest travel inspiration, exclusive offers, and updates from the world of luxury travel.
+                        </p>
+                        </ScrollAnimation>
+                        <ScrollAnimation>
+                        <form className="newsletter-form">
+                            <Input type="email" placeholder="Enter your email address" className="newsletter-input" />
+                            <div className="button-wrapper-for-border">
+                                <Button type="submit" size="lg" className="w-full">Subscribe</Button>
+                            </div>
+                        </form>
+                        </ScrollAnimation>
+                    </div>
+                    <div className="newsletter-image">
+                        <Image 
+                            src="https://placehold.co/600x400.png"
+                            alt="Decorative image for newsletter"
+                            fill
+                            className="object-cover"
+                            data-ai-hint="vintage map compass"
+                        />
+                    </div>
+                </div>
             </div>
         </section>
     );

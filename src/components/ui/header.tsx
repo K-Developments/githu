@@ -23,7 +23,7 @@ export function Header({ logoUrl }: { logoUrl?: string }) {
   const Logo = () => (
     <Link href="/" className="logo">
       {logoUrl ? (
-        <div style={{ position: 'relative', width: '150px', height: '40px' }}>
+        <div style={{ position: 'relative',  height: '40px', width: '40px', border: '1px solid #ccc',  }}>
           <Image src={logoUrl} alt="Island Hopes Logo" fill style={{ objectFit: 'contain' }} />
         </div>
       ) : (
