@@ -78,6 +78,9 @@ p {
 	text-align: justify;
     hyphens: auto;
 }
+h1{
+	font-weight: normal !important;
+}
 .noise-overlay::after {
 	content: '';
 	position: absolute;
@@ -389,7 +392,7 @@ header {
 .intro-home {
 	background-color: white;
 	overflow:hidden;
-    padding: 4rem 0;
+    padding: 6.25rem 0;
 }
 .intro-content-wrapper {
     max-width: 1400px;
@@ -406,7 +409,7 @@ header {
 }
 .intro-image-cluster {
 	order: 2;
-	padding-left: 2rem;
+	padding-left: 0;
 }
 .intro-image-wrapper {
 	width:100%;
@@ -928,7 +931,7 @@ header {
 	color: #222;
     letter-spacing: 0.1rem;
     text-align: center;
-    flex-shrink: 0;
+   
 }
 .newsletter-subtitle {
 	color: #666;
@@ -1038,6 +1041,14 @@ header {
 }
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
+	body {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+	.intro-home, .destinations-section-header {
+		margin-left: -1rem;
+		margin-right: -1rem;
+	}
 	header {
 		padding: 8px 5%;
 	}
