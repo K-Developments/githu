@@ -616,15 +616,6 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
                         </form>
                         </ScrollAnimation>
                     </div>
-                    <div className="newsletter-image">
-                        <Image 
-                            src="https://placehold.co/600x400.png"
-                            alt="Decorative image for newsletter"
-                            fill
-                            className="object-cover"
-                            data-ai-hint="vintage map compass"
-                        />
-                    </div>
                 </div>
             </div>
         </section>
