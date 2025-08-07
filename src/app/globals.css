@@ -11,7 +11,7 @@
 		--popover-foreground: 30 3% 10%;
 		--primary: 220 13% 18%; /* Deep, dark navy */
 		--primary-foreground: 40 33% 97%;
-		--secondary: 30 5% 90%;
+		--secondary: 210 20% 66%;
 		--secondary-foreground: 30 3% 10%;
 		--muted: 170 12% 60%;
 		--muted-foreground: 30 3% 40%;
@@ -33,7 +33,7 @@
 		--popover-foreground: 30 33% 98%;
 		--primary: 220 13% 80%;
 		--primary-foreground: 40 33% 97%;
-		--secondary: 30 5% 20%;
+		--secondary: 210 20% 30%;
 		--secondary-foreground: 30 33% 98%;
 		--muted: 30 5% 40%;
 		--muted-foreground: 30 3% 60%;
@@ -1463,4 +1463,5 @@ h2{
 	white-space: inherit !important;
     overflow: visible !important;
 }
+
 
