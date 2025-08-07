@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -10,12 +10,13 @@ import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { PackagesCtaSection } from '@/components/ui/packages-cta-section';
 import type { Package, Category, PackagesCtaData, ItineraryDay } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star, X } from 'lucide-react';
+import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TourItinerary } from '@/components/ui/tour-itinerary';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 
 
 interface PackagesClientProps {
@@ -101,14 +102,18 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
       const pkg = packages.find(p => p.id === packageIdFromUrl);
       if (pkg) {
         setSelectedPackage(pkg);
+      } else {
+        // If package not found, remove the query param
+        router.push('/packages', { scroll: false });
+        setSelectedPackage(null);
       }
     } else {
       setSelectedPackage(null);
     }
-  }, [packageIdFromUrl, packages]);
+  }, [packageIdFromUrl, packages, router]);
 
   useEffect(() => {
-    if (selectedPackage && detailViewRef.current) {
+    if (packageIdFromUrl && detailViewRef.current) {
         const timer = setTimeout(() => {
             const yOffset = -80; // Account for sticky header
             const y = detailViewRef.current!.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -116,7 +121,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
         }, 100);
         return () => clearTimeout(timer);
     }
-  }, [selectedPackage]);
+  }, [packageIdFromUrl]);
 
   const handleSelectPackage = (pkg: Package) => {
     const newUrl = `/packages?package=${pkg.id}`;
@@ -130,6 +135,8 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
   const filteredPackages = packages.filter(pkg => 
     selectedCategory === 'all' || pkg.categoryId === selectedCategory
   );
+
+  const otherPackages = packages.filter(pkg => pkg.id !== selectedPackage?.id);
   
   const getCategoryName = (categoryId: string) => {
     return categories.find(c => c.id === categoryId)?.name || '';
@@ -164,7 +171,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
               <span className="mx-2">||</span>
               {selectedPackage ? (
                 <>
-                  <Link href="/packages" className="hover:text-primary">Packages</Link>
+                  <Link href="/packages" className="hover:text-primary" onClick={(e) => { e.preventDefault(); handleClosePackage();}}>Packages</Link>
                   <span className="mx-2">||</span>
                   <span>{selectedPackage.title}</span>
                 </>
@@ -175,79 +182,90 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
           <Separator />
       </div>
 
-       <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-end mb-8">
-            <Select onValueChange={setSelectedCategory} defaultValue="all">
-              <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Filter by Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.map(category => (
-                  <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-            
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPackages.map((pkg, index) => (
-                <ScrollAnimation key={pkg.id} delay={index * 0.05}>
-                    <div 
-                        onClick={() => handleSelectPackage(pkg)}
-                        className="cursor-pointer group"
-                    >
-                         <div className="package-display-card">
-                            <div className="card-image">
-                                <Image
-                                    src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x400.png"}
-                                    alt={`Image of ${pkg.title} package in ${pkg.location}`}
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-                                />
-                            </div>
-                            <div className="card-details">
-                                <h3 className="card-title">{pkg.title}</h3>
-                                <p className="card-description flex-grow text-muted-foreground mb-4">{pkg.location}</p>
-                                <div className="flex justify-center">
-                                  <div className="button-wrapper-for-border">
-                                    <Button asChild variant="outline" size="sm" className="w-auto">
-                                        <div className="w-full h-full flex items-center justify-center">View Details</div>
-                                    </Button>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ScrollAnimation>
-            ))}
-          </div>
-
-          {filteredPackages.length === 0 && (
-            <div className="text-center py-16 text-muted-foreground">
-              <p>No packages found for the selected category.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <AnimatePresence>
-        {selectedPackage && (
+       
+      <AnimatePresence mode="wait">
+        {selectedPackage ? (
             <motion.div
+                key="detail"
                 ref={detailViewRef}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: 'easeOut' }}
             >
                 <PackageDetailView 
                     pkg={selectedPackage} 
                     onClose={handleClosePackage}
                     categoryName={getCategoryName(selectedPackage.categoryId)}
+                    otherPackages={otherPackages}
+                    onSelectPackage={handleSelectPackage}
                 />
             </motion.div>
+        ) : (
+            <motion.section
+                key="grid"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="py-12 md:py-24 px-4 md:px-12 bg-white"
+            >
+                <div className="max-w-7xl mx-auto">
+                <div className="flex justify-end mb-8">
+                    <Select onValueChange={setSelectedCategory} defaultValue="all">
+                    <SelectTrigger className="w-[200px]">
+                        <SelectValue placeholder="Filter by Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        {categories.map(category => (
+                        <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                    </Select>
+                </div>
+                    
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredPackages.map((pkg, index) => (
+                        <ScrollAnimation key={pkg.id} delay={index * 0.05}>
+                            <div 
+                                onClick={() => handleSelectPackage(pkg)}
+                                className="cursor-pointer group"
+                            >
+                                <div className="package-display-card">
+                                    <div className="card-image">
+                                        <Image
+                                            src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x400.png"}
+                                            alt={`Image of ${pkg.title} package in ${pkg.location}`}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+                                        />
+                                    </div>
+                                    <div className="card-details">
+                                        <h3 className="card-title">{pkg.title}</h3>
+                                        <p className="card-description flex-grow text-muted-foreground mb-4">{pkg.location}</p>
+                                        <div className="flex justify-center">
+                                        <div className="button-wrapper-for-border">
+                                            <Button asChild variant="outline" size="sm" className="w-auto">
+                                                <div className="w-full h-full flex items-center justify-center">View Details</div>
+                                            </Button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ScrollAnimation>
+                    ))}
+                </div>
+
+                {filteredPackages.length === 0 && (
+                    <div className="text-center py-16 text-muted-foreground">
+                    <p>No packages found for the selected category.</p>
+                    </div>
+                )}
+                </div>
+            </motion.section>
         )}
       </AnimatePresence>
       
@@ -260,8 +278,10 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
   );
 }
 
-function PackageDetailView({ pkg, onClose, categoryName }: { pkg: Package, onClose: () => void, categoryName: string }) {
-     const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
+function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelectPackage }: { pkg: Package, onClose: () => void, categoryName: string, otherPackages: Package[], onSelectPackage: (pkg: Package) => void }) {
+    const [otherApi, setOtherApi] = useState<CarouselApi>()
+    
+    const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
         <ul className="space-y-2">
             {(items || []).filter(item => item.trim() !== '').map((item, index) => (
                 <li key={index} className="flex items-start">
@@ -273,6 +293,7 @@ function PackageDetailView({ pkg, onClose, categoryName }: { pkg: Package, onClo
       );
       
   return (
+    <>
     <section className="bg-background py-16 md:py-24 px-4 md:px-12 relative">
       <div className="max-w-7xl mx-auto p-6 md:p-10 bg-card rounded-lg shadow-2xl relative">
         <Button
@@ -359,5 +380,76 @@ function PackageDetailView({ pkg, onClose, categoryName }: { pkg: Package, onClo
         </div>
       </div>
     </section>
+
+    {otherPackages.length > 0 && (
+          <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
+            <div className="max-w-7xl mx-auto">
+                <div className="flex justify-between items-center mb-12">
+                    <ScrollAnimation>
+                        <h2 className="text-3xl md:text-4xl font-headline">Explore Other Packages</h2>
+                    </ScrollAnimation>
+                </div>
+                
+                <Carousel 
+                    setApi={setOtherApi}
+                    opts={{
+                        align: "start",
+                        loop: otherPackages.length > 3,
+                    }}
+                    className="w-full"
+                >
+                    <CarouselContent className="-ml-4">
+                        {otherPackages.map((otherPkg) => (
+                        <CarouselItem key={otherPkg.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                            <ScrollAnimation>
+                               <div 
+                                    onClick={() => onSelectPackage(otherPkg)}
+                                    className="cursor-pointer group"
+                                >
+                                    <div className="package-display-card">
+                                        <div className="card-image">
+                                            <Image
+                                                src={(otherPkg.images && otherPkg.images[0]) || "https://placehold.co/600x400.png"}
+                                                alt={`Image of ${otherPkg.title} package in ${otherPkg.location}`}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+                                            />
+                                        </div>
+                                        <div className="card-details">
+                                            <h3 className="card-title">{otherPkg.title}</h3>
+                                            <p className="card-description flex-grow text-muted-foreground mb-4">{otherPkg.location}</p>
+                                            <div className="flex justify-center">
+                                            <div className="button-wrapper-for-border">
+                                                <Button asChild variant="outline" size="sm" className="w-auto">
+                                                    <div className="w-full h-full flex items-center justify-center">View Details</div>
+                                                </Button>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ScrollAnimation>
+                        </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                </Carousel>
+                <div className="flex justify-center items-center gap-2 mt-8">
+                    <div className="button-wrapper-for-border">
+                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollPrev()}>
+                           <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                    </div>
+                    <div className="button-wrapper-for-border">
+                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollNext()}>
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
+            </div>
+          </section>
+      )}
+
+    </>
   );
 }
