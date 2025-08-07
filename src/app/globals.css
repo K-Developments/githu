@@ -392,15 +392,16 @@ header {
 	overflow:hidden;
 }
 .intro-container {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: 1fr;
 	gap: 2rem;
 	max-width: 1400px;
 	margin: 0 auto;
+    padding: 2rem;
 }
 .intro-text-content {
 	order: 2;
-	text-align: center;
+	text-align: left;
 }
 .intro-image-cluster {
 	order: 1;
@@ -1158,6 +1159,9 @@ header {
     .cta-interactive-panel {
         display: none;
     }
+    .newsletter-section .section-title {
+        letter-spacing: 0.1rem;
+    }
 }
 /* Small mobile adjustments */
 @media (max-width: 480px) {
@@ -1256,7 +1260,7 @@ h2{
 		z-index: 3;
 	}
 	.intro-container {
-		flex-direction: row;
+		grid-template-columns: repeat(2, 1fr);
 		align-items: center;
 		gap: 5%;
 	}
