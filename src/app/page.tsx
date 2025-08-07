@@ -9,7 +9,7 @@ import { doc, getDoc, collection, getDocs, query, where } from "firebase/firesto
 import type { Package, Category, Destination, Testimonial, CtaData, SiteSettings } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ArrowRight, ArrowDown, Quote } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowDown, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { CtaSection } from "@/components/ui/cta-section";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 
 
 // Define interfaces for the fetched data
@@ -318,51 +319,81 @@ function QuoteSection({ data, backgroundImage }: { data: QuoteData, backgroundIm
 }
 
 function DestinationsSection({ sectionData, destinations, backgroundImage }: { sectionData: DestinationsData, destinations: Destination[], backgroundImage?: string }) {
+  const [api, setApi] = React.useState<CarouselApi>()
+
   return (
     <section 
-        className="destinations-section"
+        className="destinations-section py-12 md:py-24 px-4 md:px-12"
         style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         }}
     >
-      <div className="destinations-section-header">
+        <div className="max-w-7xl mx-auto">
             <Separator />
             <ScrollAnimation>
-                <h2 className="section-title">{sectionData.title}</h2>
-            </ScrollAnimation>
-            <ScrollAnimation>
-                <p className="section-subtitle">{sectionData.subtitle}</p>
+                <h2 className="section-title text-center my-8 md:my-16">{sectionData.title}</h2>
             </ScrollAnimation>
             <Separator />
-      </div>
-      <div className="destinations-grid">
-        {destinations.map((dest, i) => (
-          <ScrollAnimation key={dest.id} delay={i * 0.1}>
-            <div className="destination-card">
-              <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                <>
-                  <h3 className="card-title-absolute">{dest.title}</h3>
-                  <Image src={dest.image || "https://placehold.co/600x800.png"} alt={dest.title} fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 20vw, (min-width: 768px) 45vw, 45vw" />
-                  <div className="card-content">
-                      <span className="card-location">{dest.location}</span>
-                      <h3 className="card-title card-title-decorated">{dest.title}</h3>
-                      <p className="card-description">{dest.description}</p>
-                  </div>
-                </>
-              </Link>
+
+            <div className="grid grid-cols-1 md:grid-cols-10 gap-8 mt-8 md:mt-16">
+                <div className="md:col-span-3">
+                    <ScrollAnimation>
+                        <p className="text-muted-foreground leading-relaxed mb-8">{sectionData.subtitle}</p>
+                    </ScrollAnimation>
+                    <ScrollAnimation>
+                         <div className="button-wrapper-for-border">
+                            <Button asChild variant="outline">
+                                <Link href={sectionData.buttonUrl || '#'}>View All Destinations</Link>
+                            </Button>
+                        </div>
+                    </ScrollAnimation>
+                </div>
+                <div className="md:col-span-7">
+                    <Carousel setApi={setApi} opts={{ align: "start", loop: true }}>
+                        <CarouselContent className="-ml-4">
+                            {destinations.map((dest, i) => (
+                                <CarouselItem key={dest.id} className="pl-4 md:basis-1/2">
+                                     <ScrollAnimation delay={i * 0.1}>
+                                        <div className="destination-card group">
+                                            <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
+                                                <div className="relative overflow-hidden aspect-[4/5]">
+                                                    <Image 
+                                                        src={dest.image || "https://placehold.co/600x800.png"} 
+                                                        alt={dest.title} 
+                                                        fill 
+                                                        style={{ objectFit: 'cover' }} 
+                                                        sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                                                        className="card-image"
+                                                    />
+                                                    <div className="card-overlay"></div>
+                                                    <div className="destination-card-title-box">
+                                                        <h3 className="destination-card-title">{dest.title}</h3>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    </ScrollAnimation>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                    </Carousel>
+                    <div className="flex justify-start items-center gap-2 mt-8">
+                        <div className="button-wrapper-for-border">
+                            <Button variant="outline" size="icon" onClick={() => api?.scrollPrev()}>
+                               <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <div className="button-wrapper-for-border">
+                            <Button variant="outline" size="icon" onClick={() => api?.scrollNext()}>
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </ScrollAnimation>
-        ))}
-      </div>
-      <ScrollAnimation>
-        <div className="rotated-view-all-wrapper">
-          <Button asChild variant="outline" size="lg">
-            <Link href={sectionData.buttonUrl || '#'}>View All</Link>
-          </Button>
         </div>
-      </ScrollAnimation>
     </section>
   );
 }
@@ -545,7 +576,7 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 1, ease: 'easeInOut' }}
-                    className="absolute inset-0 -z-10"
+                    className="absolute inset-0 "
                 >
                     <Image
                         src={currentTestimonial.image || 'https://placehold.co/1920x1080.png'}
@@ -556,9 +587,9 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
                     />
                 </motion.div>
             </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent -z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-1"></div>
             
-            <div className="w-full md:w-4/5 relative">
+            <div className="w-[85%] md:w-4/5 relative">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentIndex}
@@ -568,7 +599,7 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
                         exit="exit"
                     >
                         <Quote className="w-12 h-12 md:w-16 md:h-16 mb-4 opacity-50" />
-                        <p className="text-2xl md:text-4xl font-light leading-snug md:leading-tight mb-6">
+                        <p className="text-[1.2rem] md:text-4xl font-light leading-snug md:leading-tight mb-6">
                             {currentTestimonial.text}
                         </p>
                         <p className="text-lg font-semibold uppercase tracking-wider">
