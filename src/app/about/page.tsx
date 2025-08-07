@@ -162,7 +162,7 @@ export default function AboutPage() {
                     <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
                         <div className="md:col-span-7">
                             <ScrollAnimation>
-                                <div className="w-full aspect-w-4 aspect-h-3 relative">
+                                <div className="w-full aspect-[4/3] relative">
                                     <Image 
                                         src={journey.image}
                                         alt="Landscape of a journey"
@@ -212,7 +212,7 @@ export default function AboutPage() {
                                     index % 2 !== 0 && "md:mt-16"
                                 )}
                                 >
-                                    <div className="relative aspect-w-4 aspect-h-3">
+                                    <div className="relative aspect-[4/3]">
                                         <Image
                                             src={value.image}
                                             alt={value.title}
