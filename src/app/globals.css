@@ -12,7 +12,7 @@
 		--popover-foreground: 30 3% 10%;
 		--primary: 155 21% 67%; /* #99bda8 */
 		--primary-foreground: 30 3% 10%; /* Dark charcoal for contrast */
-		--secondary: 220 13% 18%; /* Deep, dark navy */
+		--secondary: 155 21% 67%; /*#99bda8*/
 		--secondary-foreground: 40 33% 97%;
 		--muted: 170 12% 60%;
 		--muted-foreground: 30 3% 40%;
@@ -401,17 +401,42 @@ header {
 
 .intro-container {
 	display: grid;
-	grid-template-columns: 1fr;
+    grid-template-columns: repeat(4, 1fr);
 	gap: 2rem;
-    padding-top: 2rem;
+    border: 1px solid #ccc;
+    position: relative;
 }
+
+.intro-container .secondary-heading {
+    position: relative;
+}
+
+.intro-container .secondary-heading::before,
+.intro-container .secondary-heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+}
+.intro-container .secondary-heading::before {
+    top: -2rem;
+}
+.intro-container .secondary-heading::after {
+    bottom: -2rem;
+}
+
+
 .intro-text-content {
-	order: 2;
+	order: 1;
 	text-align: left;
+    border-right: 1px solid #ccc;
+    padding: 2rem;
 }
 .intro-image-cluster {
-	order: 1;
-	position: relative;
+	order: 2;
+    padding: 2rem;
 }
 
 .image-landscape-wrapper {
@@ -922,7 +947,7 @@ header {
 	font-family: 'Marcellus', serif;
 	font-size: clamp(1.5rem, 4vw, 2rem);
 	color: #222;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.1rem;
     flex-shrink: 0;
     text-align: center;
 }
@@ -941,7 +966,7 @@ header {
     margin: 0 auto;
 }
 .newsletter-input {
-	text-align: left;
+	text-align: center;
     border: 1px solid hsl(var(--foreground));
     background-color: transparent;
 }
@@ -1271,20 +1296,6 @@ h2{
 		gap: 15px;
 		z-index: 3;
 	}
-	.intro-container {
-		grid-template-columns: repeat(2, 1fr);
-		align-items: start;
-        gap: 4rem;
-        padding-left: 2rem;
-        border-left: 1px solid #ccc;
-	}
-	.intro-text-content {
-		order: 1;
-		text-align: left;
-	}
-	.intro-image-cluster {
-		order: 2;
-	}
 	/* Homepage Destination Card */
 	.destinations-grid {
 		grid-template-columns: repeat(4, 1fr);
@@ -1497,10 +1508,6 @@ h2{
         text-align: center;
         max-width: 100%;
 	}
-	.intro-container {
-		gap: 2rem;
-		align-items: flex-start;
-	}
 	.destinations-grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
@@ -1517,4 +1524,3 @@ h2{
 		font-size: 1.2rem;
 	}
 }
-

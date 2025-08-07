@@ -274,38 +274,37 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
       }}
     >
       <div className="intro-content-wrapper">
-        <ScrollAnimation>
-            <Separator />
-            <h2
-              className="secondary-heading"
-              dangerouslySetInnerHTML={{ __html: data.headline }}
-            />
-            <Separator />
-        </ScrollAnimation>
         <div className="intro-container">
-          <div className="intro-text-content">
-            <ScrollAnimation>
-              <p className="paragraph-style">{data.paragraph}</p>
-            </ScrollAnimation>
-            <ScrollAnimation>
-              <Button asChild variant="outline">
-                  <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-              </Button>
-            </ScrollAnimation>
-          </div>
-          <div className="intro-image-cluster">
-            <ScrollAnimation>
-              <div className="image-landscape-wrapper">
-                <Image
-                  src={data.landscapeImage || 'https://placehold.co/1000x662.png'}
-                  alt="Scenic landscape"
-                  width={1000}
-                  height={662}
-                  sizes="(min-width: 768px) 45vw, 90vw"
+            <ScrollAnimation className="col-start-2 col-span-2">
+                <h2
+                className="secondary-heading"
+                dangerouslySetInnerHTML={{ __html: data.headline }}
                 />
-              </div>
             </ScrollAnimation>
-          </div>
+
+            <div className="intro-text-content col-span-2">
+                <ScrollAnimation>
+                <p className="paragraph-style">{data.paragraph}</p>
+                </ScrollAnimation>
+                <ScrollAnimation>
+                <Button asChild variant="outline">
+                    <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+                </Button>
+                </ScrollAnimation>
+            </div>
+            <div className="intro-image-cluster col-span-2">
+                <ScrollAnimation>
+                <div className="image-landscape-wrapper">
+                    <Image
+                    src={data.landscapeImage || 'https://placehold.co/1000x662.png'}
+                    alt="Scenic landscape"
+                    width={1000}
+                    height={662}
+                    sizes="(min-width: 768px) 45vw, 90vw"
+                    />
+                </div>
+                </ScrollAnimation>
+            </div>
         </div>
       </div>
     </section>
