@@ -218,36 +218,38 @@ export default function AboutPage() {
                     <h2 className="text-4xl md:text-5xl font-headline text-left mb-12">{journey.title}</h2>
                 </ScrollAnimation>
                 
-                <div className="mb-16 md:mb-24">
-                    <ScrollAnimation>
-                        <div className="w-full h-[40vh] md:h-[60vh] relative">
-                            <Image 
-                            src={journey.image}
-                            alt="Landscape of a journey"
-                            fill
-                            className="object-cover rounded-md shadow-xl"
-                            />
-                        </div>
-                    </ScrollAnimation>
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="mb-16 md:mb-24">
+                        <ScrollAnimation>
+                            <div className="w-full h-[40vh] md:h-[60vh] relative">
+                                <Image 
+                                src={journey.image}
+                                alt="Landscape of a journey"
+                                fill
+                                className="object-cover rounded-md shadow-xl"
+                                />
+                            </div>
+                        </ScrollAnimation>
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-                <ScrollAnimation>
-                    <div>
-                    <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                        {journey.missionText}
-                    </p>
+                    <div className="flex flex-col gap-12 md:gap-24">
+                        <ScrollAnimation>
+                            <div>
+                                <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
+                                <p className="text-muted-foreground leading-relaxed">
+                                    {journey.missionText}
+                                </p>
+                            </div>
+                        </ScrollAnimation>
+                        <ScrollAnimation delay={0.2}>
+                            <div>
+                                <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
+                                <p className="text-muted-foreground leading-relaxed">
+                                    {journey.visionText}
+                                </p>
+                            </div>
+                        </ScrollAnimation>
                     </div>
-                </ScrollAnimation>
-                <ScrollAnimation delay={0.2}>
-                    <div>
-                    <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                        {journey.visionText}
-                    </p>
-                    </div>
-                </ScrollAnimation>
                 </div>
             </section>
 

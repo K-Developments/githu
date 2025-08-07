@@ -274,8 +274,8 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
             backgroundAttachment: 'fixed'
         }}
     >
-        <div className="intro-container">
-            <div className="intro-text-content">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-7xl mx-auto">
+            <div className="intro-text-content order-2 md:order-1">
               <ScrollAnimation>
                 <h2 className="secondary-heading" dangerouslySetInnerHTML={{ __html: data.headline }} />
               </ScrollAnimation>
@@ -286,7 +286,7 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
                 <Link href={data.linkUrl || '#'} className="link-to">{data.linkText}</Link>
               </ScrollAnimation>
             </div>
-            <div className="intro-image-cluster">
+            <div className="intro-image-cluster order-1 md:order-2">
               <ScrollAnimation>
                 <div className="image-landscape-wrapper">
                     <Image src={data.landscapeImage || "https://placehold.co/1000x662.png"} alt="Scenic landscape" width={1000} height={662} sizes="(min-width: 768px) 45vw, 90vw"/>

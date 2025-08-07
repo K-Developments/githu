@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Marcellus', 'serif'],
+        body: ['EB Garamond', 'serif'],
         headline: ['Marcellus', 'serif'],
       },
       colors: {

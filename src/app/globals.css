@@ -3,14 +3,14 @@
 @tailwind utilities;
 @layer base {
 	:root {
-		--background: 170 50% 95%; /* Very light grayish-teal */
-		--foreground: 30 3% 10%;
+		--background: 40 33% 97%; /* Off-white (newsprint) */
+		--foreground: 30 3% 10%; /* Dark charcoal */
 		--card: 30 33% 98%;
 		--card-foreground: 30 3% 10%;
 		--popover: 30 33% 98%;
 		--popover-foreground: 30 3% 10%;
-		--primary: 158 28% 40%;
-		--primary-foreground: 158 20% 95%;
+		--primary: 220 13% 18%; /* Deep, dark navy */
+		--primary-foreground: 40 33% 97%;
 		--secondary: 30 5% 90%;
 		--secondary-foreground: 30 3% 10%;
 		--muted: 170 12% 60%;
@@ -21,7 +21,7 @@
 		--destructive-foreground: 0 0% 98%;
 		--border: 30 5% 80%;
 		--input: 30 5% 70%;
-		--ring: 158 28% 40%;
+		--ring: 220 13% 18%;
 		--header-height: 3rem;
 	}
 	.dark {
@@ -31,8 +31,8 @@
 		--card-foreground: 30 33% 98%;
 		--popover: 30 3% 10%;
 		--popover-foreground: 30 33% 98%;
-		--primary: 158 38% 60%;
-		--primary-foreground: 158 20% 95%;
+		--primary: 220 13% 80%;
+		--primary-foreground: 40 33% 97%;
 		--secondary: 30 5% 20%;
 		--secondary-foreground: 30 33% 98%;
 		--muted: 30 5% 40%;
@@ -43,7 +43,7 @@
 		--destructive-foreground: 0 0% 98%;
 		--border: 30 5% 30%;
 		--input: 30 5% 40%;
-		--ring: 158 38% 60%;
+		--ring: 220 13% 80%;
 	}
 }
 @layer base {
@@ -52,6 +52,7 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		border: 10px solid hsl(var(--foreground));
 	}
 }
 blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
@@ -67,11 +68,15 @@ body {
 	background-color: white;
 	/* Off-white */
 	color: #333;
-	font-family: 'Marcellus', serif;
+	font-family: 'EB Garamond', serif;
 	overflow-x: hidden;
 }
 main img {
 	filter: saturate(0.9) brightness(1.05) contrast(1.05);
+}
+p {
+	text-align: justify;
+    hyphens: auto;
 }
 .noise-overlay::after {
 	content: '';
@@ -1347,9 +1352,6 @@ h2{
 	.newsletter-form {
 		flex-direction: row;
 	}
-	.newsletter-input {
-		flex-grow: 1;
-	}
 	.rotated-view-all-wrapper {
 		display: block;
 		position: absolute;
@@ -1460,10 +1462,5 @@ h2{
 .truncate {
 	white-space: inherit !important;
     overflow: visible !important;
-	padding:1rem;
 }
-
-
-
-
 
