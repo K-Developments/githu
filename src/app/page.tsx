@@ -273,16 +273,15 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
         backgroundPosition: 'center',
       }}
     >
-      <div className="intro-content-wrapper">
+      <div className="max-w-7xl mx-auto">
+        <Separator />
+        <h2
+        className="secondary-heading"
+        dangerouslySetInnerHTML={{ __html: data.headline }}
+        />
+        <Separator />
         <div className="intro-container">
-            <ScrollAnimation className="col-start-2 col-span-2">
-                <h2
-                className="secondary-heading"
-                dangerouslySetInnerHTML={{ __html: data.headline }}
-                />
-            </ScrollAnimation>
-
-            <div className="intro-text-content col-span-2">
+            <div className="intro-text-content">
                 <ScrollAnimation>
                 <p className="paragraph-style">{data.paragraph}</p>
                 </ScrollAnimation>
@@ -292,7 +291,7 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
                 </Button>
                 </ScrollAnimation>
             </div>
-            <div className="intro-image-cluster col-span-2">
+            <div className="intro-image-cluster">
                 <ScrollAnimation>
                 <div className="image-landscape-wrapper">
                     <Image
