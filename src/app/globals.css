@@ -1351,6 +1351,10 @@
 		.social-links {
 			justify-content: center;
 		}
+		.intro-home{
+			padding-top:3rem;
+			padding-bottom: 3rem;
+		}
 	}
 	h2{
 		text-transform: uppercase;
