@@ -77,7 +77,7 @@ export function Header({ logoUrl }: { logoUrl?: string }) {
               <div className="desktop-only ml-[1rem] flex items-center justify-center">
                  <DropdownMenu open={isDesktopMenuOpen} onOpenChange={setIsDesktopMenuOpen}>
                     <DropdownMenuTrigger asChild>
-                       <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} width={20} height={20} />
+                       <AnimatedHamburgerButton isOpen={isDesktopMenuOpen} width={28} height={20} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" sideOffset={16} alignOffset={-104}>
                         <DropdownMenuItem><Link href="#">FAQs</Link></DropdownMenuItem>
@@ -96,7 +96,7 @@ export function Header({ logoUrl }: { logoUrl?: string }) {
                  <AnimatedHamburgerButton
                     isOpen={isMenuOpen}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    width={20} 
+                    width={28} 
                     height={20}
                   />
               </div>
