@@ -23,7 +23,7 @@
 		--border: 30 5% 80%;
 		--input: 30 5% 70%;
 		--ring: 155 21% 67%;
-		--header-height: 3rem;
+		--header-height: 4rem;
 	}
 	.dark {
 		--background: 30 3% 10%;
@@ -1041,6 +1041,20 @@ header {
 }
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
+    .hero-content {
+        background-image: none !important;
+        background-color: hsl(var(--primary));
+        align-items: flex-start;
+        text-align: left;
+    }
+    .hero-content h1, .hero-content p {
+        color: white;
+        text-shadow: none;
+        text-align: left;
+    }
+    .hero-image::after {
+        background: none;
+    }
 	header {
 		padding: 8px 5%;
 	}
