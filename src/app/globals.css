@@ -388,30 +388,30 @@ header {
 }
 /* Intro Section */
 .intro-home {
-	padding: 4rem 5%;
+	padding: 4rem 0;
 	background-color: white;
 	overflow:hidden;
+}
+
+.intro-content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 5%;
 }
 
 .intro-container {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 2rem;
-	max-width: 1400px;
-	margin: 0 auto;
     padding-top: 2rem;
-    border-top: 1px solid #ccc;
 }
 .intro-text-content {
 	order: 2;
 	text-align: left;
-    padding-right: 2rem;
-    border-right: 1px solid #ccc;
 }
 .intro-image-cluster {
 	order: 1;
 	position: relative;
-    padding-left: 2rem;
 }
 
 .image-landscape-wrapper {
@@ -434,10 +434,9 @@ header {
 	font-family: 'Marcellus', serif;
 	font-size: clamp(2rem, 4vw, 3rem);
 	line-height: 1.2;
-	margin-bottom: 2rem;
 	color: #222;
     text-align: center;
-    padding-bottom: 2rem;
+    padding: 2rem 0;
 }
 .paragraph-style {
 	font-size: 1rem;
@@ -1275,7 +1274,9 @@ h2{
 	.intro-container {
 		grid-template-columns: repeat(2, 1fr);
 		align-items: start;
-		gap: 0;
+        gap: 4rem;
+        padding-left: 2rem;
+        border-left: 1px solid #ccc;
 	}
 	.intro-text-content {
 		order: 1;
