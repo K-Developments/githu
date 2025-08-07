@@ -31,64 +31,6 @@ interface PackagesClientProps {
   cta: PackagesCtaData;
 }
 
-function HeroImageSlider({ images }: { images: string[] }) {
-    const isMobile = useIsMobile();
-    const [currentImage, setCurrentImage] = useState(0);
-
-    useEffect(() => {
-        if (isMobile) {
-            const timer = setInterval(() => {
-                setCurrentImage((prev) => (prev + 1) % (images?.length || 1));
-            }, 5000);
-            return () => clearInterval(timer);
-        }
-    }, [images, isMobile]);
-
-    if (!images || images.length === 0) {
-        return (
-             <Image
-                src={'https://placehold.co/1920x600.png'}
-                alt="Scenic view of a travel package destination"
-                fill
-                className="object-cover"
-            />
-        )
-    }
-
-    const duplicatedImages = [...images, ...images];
-
-    return (
-        <>
-            {isMobile ? (
-                <>
-                    {(images || []).map((src, index) => (
-                        <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
-                            <Image src={src} alt="" fill className="object-cover" priority={index === 0} />
-                        </div>
-                    ))}
-                </>
-            ) : (
-                <div className="scrolling-zigzag-container">
-                    <div className="scrolling-zigzag-grid">
-                        {duplicatedImages.map((src, index) => (
-                            <div key={`grid1-${index}`} className="image-wrapper">
-                                <Image src={src} alt="" fill className="object-cover" priority />
-                            </div>
-                        ))}
-                    </div>
-                     <div className="scrolling-zigzag-grid">
-                        {duplicatedImages.map((src, index) => (
-                            <div key={`grid2-${index}`} className="image-wrapper">
-                                <Image src={src} alt="" fill className="object-cover" priority />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </>
-    );
-}
-
 export function PackagesPageClient({ hero, packages, categories, cta }: PackagesClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
@@ -144,9 +86,9 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
 
   return (
     <div>
-      <section className="h-[70vh] flex flex-col bg-white">
+      <section className="h-[40vh] flex flex-col bg-white">
           <div 
-            className="flex-[0.7] flex items-center justify-center p-4 relative"
+            className="flex-1 flex items-center justify-center p-4 relative"
             style={{
                 backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : 'none',
                 backgroundSize: 'cover',
@@ -159,10 +101,8 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                   </h1>
               </ScrollAnimation>
           </div>
-          <div className="flex-1 relative w-full left-0 overflow-hidden">
-             <HeroImageSlider images={hero.sliderImages || []} />
-          </div>
       </section>
+      <Separator />
       <Separator />
 
       <div className="bg-white px-4 md:px-12">
