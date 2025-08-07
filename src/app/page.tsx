@@ -331,17 +331,17 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
             backgroundPosition: 'center',
         }}
     >
-        <div className="max-w-7xl mx-auto px-4 md:px-12">
+        <div className=" mx-auto px-4 md:px-12">
             <Separator />
             <ScrollAnimation>
                 <h2 className="section-title text-right my-8 ">{sectionData.title}</h2>
             </ScrollAnimation>
             <Separator />
 
-            <div className="grid grid-cols-1 md:grid-cols-10 gap-8 mt-8 md:mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-10 gap-8 ">
                 <div className="md:col-span-3">
                     <ScrollAnimation>
-                        <p className="text-muted-foreground leading-relaxed mb-8 w-[90%]">{sectionData.subtitle}</p>
+                        <p className="text-muted-foreground leading-relaxed mb-8 w-[90%] mt-[2rem]">{sectionData.subtitle}</p>
                     </ScrollAnimation>
                     <ScrollAnimation>
                          <div className="button-wrapper-for-border">
@@ -357,7 +357,7 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
                             {destinations.map((dest, i) => (
                                 <CarouselItem key={dest.id} className="pl-4 md:basis-1/2">
                                      <ScrollAnimation delay={i * 0.1}>
-                                        <div className="destination-card group h-[60vh]">
+                                        <div className="destination-card group h-[70vh]">
                                             <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
                                                 <div className="relative overflow-hidden h-full">
                                                     <Image 
@@ -401,24 +401,15 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
 
 
 function PackagesSection({ categories, packages, backgroundImage }: { categories: Category[], packages: Package[], backgroundImage?: string }) {
-    const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+    const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
 
     const displayCategories = React.useMemo(() => {
-        return [{ id: 'all', name: 'Our Packages' }, ...categories];
+        return [{ id: 'all', name: 'All' }, ...categories];
     }, [categories]);
 
-    const handleNextCategory = () => {
-        setActiveCategoryIndex((prev) => (prev + 1) % displayCategories.length);
-    };
-
-    const handlePrevCategory = () => {
-        setActiveCategoryIndex((prev) => (prev - 1 + displayCategories.length) % displayCategories.length);
-    };
-
-    const activeCategory = displayCategories[activeCategoryIndex];
-    const filteredPackages = activeCategory.id === 'all'
+    const filteredPackages = activeCategoryId === 'all'
         ? packages
-        : packages.filter(p => p.categoryId === activeCategory.id);
+        : packages.filter(p => p.categoryId === activeCategoryId);
 
   return (
     <section 
@@ -429,70 +420,31 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
             backgroundPosition: 'center',
         }}
     >
-      <div className="packages-container">
-        <ScrollAnimation>
-            <div className="packages-header-desktop">
-                <div className="button-wrapper-for-border">
-                    <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={displayCategories.length <= 1}>
-                        <ArrowLeft />
-                    </Button>
-                </div>
-                <h2 className="packages-category-title">
-                    <AnimatePresence mode="wait">
-                        <motion.span
-                            key={activeCategory ? activeCategory.id : 'empty'}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                        {activeCategory ? activeCategory.name : "Packages"}
-                        </motion.span>
-                    </AnimatePresence>
-                </h2>
-                <div className="button-wrapper-for-border">
-                    <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={displayCategories.length <= 1}>
-                        <ArrowRight />
-                    </Button>
-                </div>
-            </div>
+      <div className="packages-container max-w-7xl mx-auto px-4 md:px-12">
+        <ScrollAnimation className="text-center">
+            <Separator />
+            <h2 className="section-title text-center my-8">Our Tours</h2>
+            <Separator />
         </ScrollAnimation>
-
-        <ScrollAnimation>
-            <div className="packages-header-mobile">
-                <h2 className="packages-category-title">
-                    <AnimatePresence mode="wait">
-                        <motion.span
-                            key={activeCategory ? activeCategory.id : 'empty'}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                        {activeCategory ? activeCategory.name : "Packages"}
-                        </motion.span>
-                    </AnimatePresence>
-                </h2>
-                <div className="packages-nav-buttons">
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={handlePrevCategory} disabled={displayCategories.length <= 1}>
-                            <ArrowLeft />
-                        </Button>
-                    </div>
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={handleNextCategory} disabled={displayCategories.length <= 1}>
-                            <ArrowRight />
-                        </Button>
-                    </div>
-                </div>
-            </div>
+        
+        <ScrollAnimation className="flex justify-center flex-wrap gap-2 my-8">
+            {displayCategories.map(category => (
+                <Button 
+                    key={category.id}
+                    variant={activeCategoryId === category.id ? 'default' : 'outline'}
+                    onClick={() => setActiveCategoryId(category.id)}
+                >
+                    {category.name}
+                </Button>
+            ))}
         </ScrollAnimation>
 
 
         <motion.div 
             className={cn(
                 "packages-grid",
-                 filteredPackages.length === 1 && "md:grid-cols-1"
+                 filteredPackages.length === 1 && "md:grid-cols-1",
+                 "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
             )}
             layout
         >
@@ -526,9 +478,6 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
                             </div>
                         </div>
                     </motion.div>
-                    {index < filteredPackages.length - 1 && (
-                        <Separator className="packages-divider" />
-                     )}
                 </React.Fragment>
                 ))}
             </AnimatePresence>
@@ -666,3 +615,4 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
+

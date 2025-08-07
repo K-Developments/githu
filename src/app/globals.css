@@ -1,4 +1,5 @@
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -209,7 +210,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
+		background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
 		pointer-events: none;
 		mix-blend-mode: overlay;
 		opacity: 0.15;
@@ -503,7 +504,6 @@
 	.intro-home {
 		background-color: white;
 		overflow:hidden;
-		padding: 6.25rem 0;
 	}
 	
 	.intro-container {
@@ -625,7 +625,6 @@
 		background-color: #fefcfb;
 		position: relative;
 		overflow: hidden;
-		padding: 0;
 	}
 	.destinations-section-header {
 			padding-top: 4rem;
@@ -727,7 +726,6 @@
 		background-color: #f8f5f2;
 	}
 	.packages-container {
-		max-width: 1400px;
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
@@ -1376,7 +1374,6 @@
 			height: 100%;
 		}
 		.destinations-section {
-			padding: 0;
 		}
 		.homepage-packages-section, .quote-section, .homepage-testimonials-section {
 			padding-top: 6.25rem;
@@ -1447,7 +1444,6 @@
 			position: relative;
 		}
 		.destinations-grid .destination-card {
-			height: 60vh;
 		}
 		.destinations-grid .destination-card .card-content {
 			position: absolute;
@@ -1543,7 +1539,6 @@
 			align-items: center;
 		}
 		.packages-grid {
-			grid-template-columns: repeat(3, 1fr);
 		}
 			.newsletter-section .section-title {
 					letter-spacing: 0.2rem;
@@ -1668,5 +1663,3 @@
 		}
 	}
 }
-
-    
