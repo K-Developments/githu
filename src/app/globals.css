@@ -1533,9 +1533,6 @@
 		.packages-grid {
 			grid-template-columns: repeat(3, 1fr);
 		}
-		.package-display-card {
-			flex-direction: column;
-		}
 			.newsletter-section .section-title {
 					letter-spacing: 0.2rem;
 			}
