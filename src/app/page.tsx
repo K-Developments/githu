@@ -292,7 +292,7 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
                 </ScrollAnimation>
             </div>
             <div className="intro-image-cluster">
-                <ScrollAnimation>
+                <ScrollAnimation className="h-full">
                 <div className="image-landscape-wrapper">
                     <Image
                     src={data.landscapeImage || 'https://placehold.co/1000x662.png'}
@@ -331,8 +331,7 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
             backgroundPosition: 'center',
         }}
     >
-      <div className="intro-content-wrapper">
-        <div className="destinations-section-header">
+      <div className="destinations-section-header">
             <Separator />
             <ScrollAnimation>
                 <h2 className="section-title">{sectionData.title}</h2>
@@ -341,7 +340,6 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
                 <p className="section-subtitle">{sectionData.subtitle}</p>
             </ScrollAnimation>
             <Separator />
-        </div>
       </div>
       <div className="destinations-grid">
         {destinations.map((dest, i) => (
