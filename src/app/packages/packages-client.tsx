@@ -300,9 +300,9 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 bg-background/50 hover:bg-background/80 rounded-full"
+            className="absolute top-4 right-4 z-10 rounded-full"
         >
-          <X className="h-6 w-6" />
+          <ChevronLeft className="h-6 w-6" />
         </Button>
       
         <div className="mb-8">
