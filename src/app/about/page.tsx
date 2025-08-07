@@ -19,6 +19,7 @@ interface AboutPageData {
   hero: {
     headline: string;
     heroImage: string;
+    contentBackgroundImage?: string;
   };
   journey: {
     title: string;
@@ -42,7 +43,6 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
         const homeContentDocSnap = await getDoc(homeContentDocRef);
         
         let ctaData: CtaData | null = null;
-        let sliderImages: string[] = [];
 
         if (homeContentDocSnap.exists()) {
             const homeData = homeContentDocSnap.data();
@@ -62,6 +62,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 hero: {
                   headline: data.hero?.headline || 'About Us',
                   heroImage: data.hero?.heroImage || 'https://placehold.co/1920x1080.png',
+                  contentBackgroundImage: data.hero?.contentBackgroundImage || '',
                 },
                 journey: {
                   title: data.journey?.title || 'Our Journey',
@@ -80,6 +81,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 hero: {
                     headline: 'About Us',
                     heroImage: 'https://placehold.co/1920x1080.png',
+                    contentBackgroundImage: '',
                 },
                 journey: {
                     title: 'Our Journey',
@@ -115,36 +117,29 @@ export default function AboutPage() {
 
     return (
         <div>
-            <section className="relative h-screen flex items-center justify-center text-center text-white">
-                <Image 
-                    src={hero.heroImage} 
-                    alt="About us hero" 
-                    fill 
-                    className="object-cover" 
-                    priority 
-                    data-ai-hint="company team"
-                />
-                <div className="absolute inset-0 bg-black/40"></div>
-                <ScrollAnimation>
-                    <h1 className="relative text-5xl md:text-8xl font-bold font-headline uppercase tracking-widest">
-                    {hero.headline}
-                    </h1>
-                </ScrollAnimation>
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
-                    <button 
-                        onClick={() => {
-                            const nextSection = document.getElementById('journey-section');
-                            nextSection?.scrollIntoView({ behavior: 'smooth' });
-                        }}
-                        className="p-2 border-2 border-white rounded-full hover:bg-white/10 transition-colors"
-                        aria-label="Scroll down"
-                    >
-                        <ArrowDown className="h-6 w-6" />
-                    </button>
+            <section
+                className="h-[40vh] flex flex-col bg-white"
+                id="journey-section"
+            >
+                <div 
+                    className="flex-1 flex items-center justify-center p-4 relative"
+                    style={{
+                        backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : `url(${hero.heroImage})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                    }}
+                >
+                    <div className="absolute inset-0 bg-black/20"></div>
+                    <ScrollAnimation>
+                        <h1 className="relative text-5xl md:text-8xl font-bold font-headline uppercase tracking-widest text-white">
+                        {hero.headline}
+                        </h1>
+                    </ScrollAnimation>
                 </div>
             </section>
             
-            <div id="journey-section" className="bg-white px-4 md:px-12">
+            <div className="bg-white px-4 md:px-12">
+                <Separator />
                 <div className="text-sm text-muted-foreground py-4">
                     <Link href="/" className="hover:text-primary">Home</Link>
                     <span className="mx-2">||</span>
@@ -258,4 +253,3 @@ export default function AboutPage() {
         </div>
     );
 }
-
