@@ -525,67 +525,68 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
     if (testimonials.length === 0) {
       return null;
     }
+    
+    const currentTestimonial = testimonials[currentIndex];
 
     const testimonialVariants = {
-        hidden: { opacity: 0, y: 15 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-        exit: { opacity: 0, y: -15, transition: { duration: 0.4 } },
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+        exit: { opacity: 0, y: -20, transition: { duration: 0.5, ease: 'easeIn' } },
     };
 
     return (
         <section 
-            className="homepage-testimonials-section"
-            style={{
-                backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
+            className="homepage-testimonials-section relative min-h-[70vh] md:min-h-[80vh] flex items-end justify-start p-8 md:p-16 text-white overflow-hidden"
         >
-            <ScrollAnimation>
-                <div className="testimonial-container">
-                    {testimonials.length > 1 && (
-                        <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handlePrev}>
-                            <ArrowLeft />
-                        </Button>
-                    )}
-
-                    <div className="testimonial-content-wrapper">
-                         <AnimatePresence mode="wait">
-                            <motion.div
-                                key={currentIndex}
-                                variants={testimonialVariants}
-                                initial="hidden"
-                                animate="visible"
-                                exit="exit"
-                                className="testimonial-content"
-                            >
-                                <Quote className="testimonial-quote-icon" />
-                                <p className="testimonial-text">{testimonials[currentIndex].text}</p>
-                                <p className="testimonial-author">{testimonials[currentIndex].author}, {testimonials[currentIndex].location}</p>
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-
-                    {testimonials.length > 1 && (
-                        <Button variant="ghost" size="icon" className="testimonial-arrow" onClick={handleNext}>
-                            <ArrowRight />
-                        </Button>
-                    )}
-                </div>
-            </ScrollAnimation>
+             <AnimatePresence initial={false}>
+                <motion.div
+                    key={currentIndex}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1, ease: 'easeInOut' }}
+                    className="absolute inset-0 -z-10"
+                >
+                    <Image
+                        src={currentTestimonial.image || 'https://placehold.co/1920x1080.png'}
+                        alt={`Background for testimonial by ${currentTestimonial.author}`}
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                </motion.div>
+            </AnimatePresence>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent -z-10"></div>
+            
+            <div className="w-full md:w-4/5 relative">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentIndex}
+                        variants={testimonialVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                    >
+                        <Quote className="w-12 h-12 md:w-16 md:h-16 mb-4 opacity-50" />
+                        <p className="text-2xl md:text-4xl font-light leading-snug md:leading-tight mb-6">
+                            {currentTestimonial.text}
+                        </p>
+                        <p className="text-lg font-semibold uppercase tracking-wider">
+                            {currentTestimonial.author}, <span className="font-light normal-case opacity-80">{currentTestimonial.location}</span>
+                        </p>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+            
             {testimonials.length > 1 && (
-                <ScrollAnimation>
-                    <div className="testimonial-pagination">
-                        {testimonials.map((_, index) => (
-                            <button
-                                key={index}
-                                className={`testimonial-bullet ${index === currentIndex ? 'active' : ''}`}
-                                onClick={() => setCurrentIndex(index)}
-                                aria-label={`Go to testimonial ${index + 1}`}
-                            />
-                        ))}
-                    </div>
-                </ScrollAnimation>
+                <div className="absolute bottom-8 right-8 md:bottom-16 md:right-16 flex gap-3">
+                    <Button variant="outline" size="icon" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={handlePrev}>
+                        <ArrowLeft />
+                    </Button>
+                    <Button variant="outline" size="icon" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={handleNext}>
+                        <ArrowRight />
+                    </Button>
+                </div>
             )}
         </section>
     );

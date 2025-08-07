@@ -55,6 +55,7 @@ export type Testimonial = {
   text: string;
   author: string;
   location: string;
+  image: string;
 };
 
 export type CtaInteractiveItem = {

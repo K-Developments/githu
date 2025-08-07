@@ -284,6 +284,7 @@ export default function AdminHomePage() {
       text: "New testimonial text...",
       author: "New Author",
       location: "Author's Location",
+      image: "https://placehold.co/1920x1080.png"
     };
     setTestimonials([...testimonials, newTestimonial]);
   };
@@ -572,6 +573,10 @@ https://example.com/image3.png"
                         <Input id={`testimonial-location-${t.id}`} value={t.location} onChange={(e) => handleTestimonialChange(t.id, 'location', e.target.value)} />
                     </div>
                  </div>
+                 <div className="space-y-1">
+                    <Label htmlFor={`testimonial-image-${t.id}`} className="text-xs">Background Image URL</Label>
+                    <Input id={`testimonial-image-${t.id}`} value={t.image} onChange={(e) => handleTestimonialChange(t.id, 'image', e.target.value)} />
+                </div>
                 <Button variant="destructive" size="sm" onClick={() => handleDeleteTestimonial(t.id)}>
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete Testimonial
