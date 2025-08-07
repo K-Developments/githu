@@ -21,7 +21,7 @@ export function AnimatedText({ text }: AnimatedTextProps) {
   return (
     <p
       ref={container}
-      className="max-w-4xl mx-auto text-center text-2xl md:text-3xl leading-relaxed text-muted-foreground flex flex-wrap"
+      className="max-w-4xl mx-auto text-center text-2xl md:text-3xl leading-relaxed text-muted-foreground flex flex-wrap justify-center"
     >
       {words.map((word, i) => {
         const start = i / words.length;
