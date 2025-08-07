@@ -21,6 +21,9 @@ interface AboutPageData {
     heroImage: string;
     contentBackgroundImage?: string;
   };
+  intro: {
+    paragraph: string;
+  };
   journey: {
     title: string;
     image: string;
@@ -64,6 +67,9 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                   heroImage: data.hero?.heroImage || 'https://placehold.co/1920x1080.png',
                   contentBackgroundImage: data.hero?.contentBackgroundImage || '',
                 },
+                intro: {
+                  paragraph: data.intro?.paragraph || '',
+                },
                 journey: {
                   title: data.journey?.title || 'Our Journey',
                   image: data.journey?.image || 'https://placehold.co/1200x800.png',
@@ -82,6 +88,9 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                     headline: 'About Us',
                     heroImage: 'https://placehold.co/1920x1080.png',
                     contentBackgroundImage: '',
+                },
+                intro: {
+                  paragraph: '',
                 },
                 journey: {
                     title: 'Our Journey',
@@ -113,7 +122,7 @@ export default function AboutPage() {
         return <div className="flex items-center justify-center h-screen">Loading...</div>; 
     }
 
-    const { hero, journey, coreValues, workflow, ctaData } = pageData;
+    const { hero, intro, journey, coreValues, workflow, ctaData } = pageData;
 
     return (
         <div>
@@ -147,6 +156,16 @@ export default function AboutPage() {
                 </div>
                 <Separator />
             </div>
+
+            {intro.paragraph && (
+                <section className="py-16 md:py-24 px-4 md:px-12 bg-white">
+                    <ScrollAnimation>
+                        <p className="max-w-4xl mx-auto text-center text-2xl md:text-3xl leading-relaxed text-foreground">
+                            {intro.paragraph}
+                        </p>
+                    </ScrollAnimation>
+                </section>
+            )}
 
             <section className="py-16 md:py-32 px-4 md:px-12 bg-white overflow-hidden">
                 <ScrollAnimation>

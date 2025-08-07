@@ -19,6 +19,10 @@ interface AboutHeroData {
   contentBackgroundImage?: string;
 }
 
+interface IntroData {
+  paragraph: string;
+}
+
 interface JourneyData {
     title: string;
     image: string;
@@ -33,6 +37,9 @@ export default function AdminAboutPage() {
     headline: "",
     heroImage: "",
     contentBackgroundImage: "",
+  });
+  const [introData, setIntroData] = useState<IntroData>({
+    paragraph: "",
   });
   const [journeyData, setJourneyData] = useState<JourneyData>({
     title: "",
@@ -63,6 +70,11 @@ export default function AdminAboutPage() {
             contentBackgroundImage: hero.contentBackgroundImage || "",
           });
 
+          const intro = (data.intro || {}) as IntroData;
+          setIntroData({
+            paragraph: intro.paragraph || "",
+          });
+
           const journey = (data.journey || {}) as JourneyData;
           setJourneyData({
             title: journey.title || "Our Journey",
@@ -85,6 +97,9 @@ export default function AdminAboutPage() {
                 headline: "About Us",
                 heroImage: "https://placehold.co/1920x600.png",
                 contentBackgroundImage: "",
+            });
+            setIntroData({
+                paragraph: "",
             });
             setJourneyData({
                 title: "Our Journey",
@@ -117,6 +132,11 @@ export default function AdminAboutPage() {
     setHeroData(prevData => ({ ...prevData, [id]: value }));
   };
   
+  const handleIntroChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setIntroData(prevData => ({ ...prevData, [id]: value }));
+  };
+
   const handleJourneyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setJourneyData(prevData => ({ ...prevData, [id]: value }));
@@ -190,6 +210,7 @@ export default function AdminAboutPage() {
       
       const dataToSave = { 
         hero: heroData, 
+        intro: introData,
         journey: journeyData,
         coreValues: valuesToSave,
         workflow: workflowToSave,
@@ -248,6 +269,19 @@ export default function AdminAboutPage() {
         </CardContent>
       </Card>
       
+       <Card>
+        <CardHeader>
+          <CardTitle>Intro Section</CardTitle>
+          <CardDescription>Update the introductory paragraph for the about page.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="paragraph">Intro Paragraph</Label>
+            <Textarea id="paragraph" value={introData.paragraph} onChange={handleIntroChange} rows={5} />
+          </div>
+        </CardContent>
+      </Card>
+
        <Card>
         <CardHeader>
           <CardTitle>Our Journey Section</CardTitle>
@@ -354,5 +388,3 @@ export default function AdminAboutPage() {
     </div>
   );
 }
-
-    
