@@ -921,7 +921,7 @@ header {
 	font-family: 'Marcellus', serif;
 	font-size: clamp(1.5rem, 4vw, 2rem);
 	color: #222;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.1rem;
     flex-shrink: 0;
     text-align: center;
 }
@@ -930,6 +930,7 @@ header {
 	margin: 0 auto 2rem auto;
 	line-height: 1.7;
     max-width: 60ch;
+    text-align: center;
 }
 .newsletter-form {
 	display: flex;
@@ -1173,6 +1174,9 @@ header {
 	.newsletter-form {
 		flex-direction: column;
 	}
+    .newsletter-section .section-title {
+        letter-spacing: 0.1rem;
+    }
 	.footer-content {
 		grid-template-columns: 1fr;
 		text-align: center;
@@ -1394,6 +1398,9 @@ h2{
 	.package-display-card {
 		flex-direction: column;
 	}
+    .newsletter-section .section-title {
+        letter-spacing: 0.2rem;
+    }
 	.newsletter-form {
 		flex-direction: row;
         gap: 0.5rem;
