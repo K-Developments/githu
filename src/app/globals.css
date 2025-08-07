@@ -227,7 +227,7 @@
 		justify-content: space-between;
 		align-items: center;
 		z-index: 100;
-		background: white;
+		background: hsl(var(--primary));
 		border-bottom: 1px solid hsl(var(--border));
 		transition: all 0.3s ease;
 	}
@@ -635,8 +635,8 @@
 		font-family: 'Archivo', sans-serif;
 		font-size: clamp(2rem, 4vw, 3rem);
 		color: #222;
-		text-align: center;
-			padding: 2rem 0;
+		text-align: right;
+			
 	}
 	.destinations-section .section-subtitle {
 		font-size: 1rem;

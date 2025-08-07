@@ -179,7 +179,7 @@ export default function HomePage() {
       {introData && <IntroSection data={introData} backgroundImage={siteSettings?.introBackgroundImage} />}
       {quoteData && <QuoteSection data={quoteData} backgroundImage={siteSettings?.quoteBackgroundImage} />}
       {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} backgroundImage={siteSettings?.destinationsBackgroundImage} />}
-      {categories.length > 0 && <PackagesSection categories={categories} packages={packages} backgroundImage={siteSettings?.packagesBackgroundImage} />}
+      {packages.length > 0 && categories.length > 0 && <PackagesSection categories={categories} packages={packages} backgroundImage={siteSettings?.packagesBackgroundImage} />}
       {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} backgroundImage={siteSettings?.testimonialsBackgroundImage} />}
       {ctaData && <CtaSection data={ctaData} />}
       <NewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage}/>
@@ -334,14 +334,14 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
         <div className="max-w-7xl mx-auto px-4 md:px-12">
             <Separator />
             <ScrollAnimation>
-                <h2 className="section-title text-center my-8 md:my-16">{sectionData.title}</h2>
+                <h2 className="section-title text-right my-8 ">{sectionData.title}</h2>
             </ScrollAnimation>
             <Separator />
 
             <div className="grid grid-cols-1 md:grid-cols-10 gap-8 mt-8 md:mt-16">
                 <div className="md:col-span-3">
                     <ScrollAnimation>
-                        <p className="text-muted-foreground leading-relaxed mb-8">{sectionData.subtitle}</p>
+                        <p className="text-muted-foreground leading-relaxed mb-8 w-[90%]">{sectionData.subtitle}</p>
                     </ScrollAnimation>
                     <ScrollAnimation>
                          <div className="button-wrapper-for-border">
@@ -357,9 +357,9 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
                             {destinations.map((dest, i) => (
                                 <CarouselItem key={dest.id} className="pl-4 md:basis-1/2">
                                      <ScrollAnimation delay={i * 0.1}>
-                                        <div className="destination-card group">
+                                        <div className="destination-card group h-[60vh]">
                                             <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                                                <div className="relative overflow-hidden aspect-[4/5]">
+                                                <div className="relative overflow-hidden h-full">
                                                     <Image 
                                                         src={dest.image || "https://placehold.co/600x800.png"} 
                                                         alt={dest.title} 
