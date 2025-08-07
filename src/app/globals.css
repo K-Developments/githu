@@ -392,23 +392,32 @@ header {
 	background-color: white;
 	overflow:hidden;
 }
+
 .intro-container {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 2rem;
 	max-width: 1400px;
 	margin: 0 auto;
-    padding: 0;
+    padding-top: 2rem;
+    border-top: 1px solid #ccc;
 }
 .intro-text-content {
 	order: 2;
 	text-align: left;
+    padding-right: 2rem;
+    border-right: 1px solid #ccc;
 }
 .intro-image-cluster {
 	order: 1;
 	position: relative;
-	margin-bottom: 2rem;
-	min-height: 50vh;
+    padding-left: 2rem;
+}
+
+.image-landscape-wrapper {
+	position: relative;
+	width: 100%;
+	z-index: 1;
 }
 .image-portrait-wrapper, .image-landscape-wrapper {
 	overflow: hidden;
@@ -420,25 +429,15 @@ header {
 	display: block;
 	object-fit: cover;
 }
-.image-landscape-wrapper {
-	position: relative;
-	width: 100%;
-	z-index: 1;
-}
-.image-portrait-wrapper {
-	position: relative;
-	width: 50%;
-	bottom: -10%;
-	right: -10%;
-	z-index: 2;
-	box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
+
 .secondary-heading {
 	font-family: 'Marcellus', serif;
 	font-size: clamp(2rem, 4vw, 3rem);
 	line-height: 1.2;
 	margin-bottom: 2rem;
 	color: #222;
+    text-align: center;
+    padding-bottom: 2rem;
 }
 .paragraph-style {
 	font-size: 1rem;
@@ -447,6 +446,7 @@ header {
 	margin-bottom: 2rem;
 	white-space: pre-wrap;
 }
+
 .link-to {
 	color: hsl(var(--primary));
 	text-decoration: none;
@@ -1047,6 +1047,18 @@ header {
 	.hamburger-button {
 		display: block;
 	}
+    .intro-container {
+        grid-template-columns: 1fr;
+    }
+    .intro-text-content {
+        order: 2;
+        border-right: none;
+        padding-right: 0;
+    }
+    .intro-image-cluster {
+        order: 1;
+        padding-left: 0;
+    }
 	.packages-category-title {
 		min-width: 0;
 		font-size: 1.2rem;
@@ -1262,39 +1274,15 @@ h2{
 	}
 	.intro-container {
 		grid-template-columns: repeat(2, 1fr);
-		align-items: center;
-		gap: 5%;
+		align-items: start;
+		gap: 0;
 	}
 	.intro-text-content {
-		flex: 1 1 50%;
-		padding-right: 5%;
 		order: 1;
 		text-align: left;
 	}
 	.intro-image-cluster {
-		flex: 1 1 50%;
 		order: 2;
-		position: relative;
-		min-height: 600px;
-	}
-	.image-landscape-wrapper {
-		position: absolute;
-		width: 85%;
-		top: 0;
-		left: 0;
-		z-index: 1;
-	}
-	.image-portrait-wrapper {
-		position: absolute;
-		width: 45%;
-		bottom: -15%;
-		right: 0;
-		z-index: 2;
-		box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-	}
-	.image-portrait-wrapper img, .image-landscape-wrapper img {
-		height: auto;
-		width: 100%;
 	}
 	/* Homepage Destination Card */
 	.destinations-grid {
@@ -1511,9 +1499,6 @@ h2{
 	.intro-container {
 		gap: 2rem;
 		align-items: flex-start;
-	}
-	.intro-image-cluster {
-		height: 60vh;
 	}
 	.destinations-grid {
 		grid-template-columns: repeat(2, 1fr);

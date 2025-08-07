@@ -273,24 +273,21 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
         backgroundPosition: 'center',
       }}
     >
-      <div className="intro-container">
-        <div className="intro-text-content">
-          <ScrollAnimation>
+        <ScrollAnimation>
             <h2
               className="secondary-heading"
               dangerouslySetInnerHTML={{ __html: data.headline }}
             />
-          </ScrollAnimation>
-          <ScrollAnimation>
-            <Separator className="mb-8" />
-          </ScrollAnimation>
+        </ScrollAnimation>
+      <div className="intro-container">
+        <div className="intro-text-content">
           <ScrollAnimation>
             <p className="paragraph-style">{data.paragraph}</p>
           </ScrollAnimation>
           <ScrollAnimation>
-            <Link href={data.linkUrl || '#'} className="link-to">
-              {data.linkText}
-            </Link>
+            <Button asChild variant="outline">
+                <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+            </Button>
           </ScrollAnimation>
         </div>
         <div className="intro-image-cluster">
@@ -302,17 +299,6 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
                 width={1000}
                 height={662}
                 sizes="(min-width: 768px) 45vw, 90vw"
-              />
-            </div>
-          </ScrollAnimation>
-          <ScrollAnimation>
-            <div className="image-portrait-wrapper">
-              <Image
-                src={data.portraitImage || 'https://placehold.co/800x1000.png'}
-                alt="Scenic portrait"
-                width={800}
-                height={1000}
-                sizes="(min-width: 768px) 25vw, 40vw"
               />
             </div>
           </ScrollAnimation>
