@@ -1152,20 +1152,20 @@
 	/* Mobile Responsive Adjustments */
 	@media (max-width: 768px) {
 		.hero-content {
-				background-image: none !important;
-				background-color: hsl(var(--primary));
-				align-items: flex-start;
-				text-align: left;
+			background-image: none !important;
+			background-color: hsl(var(--primary));
+			align-items: flex-start;
+			text-align: left;
 		}
 		.hero-content h1, .hero-content p {
-				color: white;
-				text-shadow: none;
+			color: white;
+			text-shadow: none;
 		}
 		.hero-content h1 {
-				text-align: left;
+			text-align: left;
 		}
 		.hero-image::after {
-				background: none;
+			background: none;
 		}
 		header {
 			padding: 8px 5%;
