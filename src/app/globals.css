@@ -53,7 +53,6 @@
 	}
 	body {
 		@apply bg-background text-foreground;
-		border: 10px solid hsl(var(--foreground));
 	}
 }
 blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
@@ -86,7 +85,7 @@ p {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
+	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVuZ2Zjc3N5eXl9fX1+fn5aWlpwcHBEREQvLy9GRkZNTU1JR0dIFx8ICAgLCwv5+fg4ODg6Ojo3NDQ2NTU4Nzc5Ozs7Ozs7OztAQEBAQEBzXJ4AAAAAAAB5fxd0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9BJREFUeNpi/P//PwMxgImBQkCxASMgBQAlwHj95x8dYAAA/v//P4iJiWJjY2BjyMjIyDAwMDDw//8/gIyMjIyMjIz8//8/gIyMjIwsLCysrKycnJyioqKCAgKDAwIDs7KycnJyaWlpSUlJ+fn5lZWVlZWVsbGx+fn5ubm5xcXF+fn5+vr63t7e4uLi4+Pj6+vr3d3d1dXV5eXl5eXl3d3d1dXV3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dpgYosefBukhari/lwAAsgAAAABJRU5ErkJggg==");
 	pointer-events: none;
 	mix-blend-mode: overlay;
 	opacity: 0.15;
@@ -390,7 +389,7 @@ header {
 .intro-home {
 	background-color: white;
 	overflow:hidden;
-	padding: 4rem 0;
+    padding: 4rem 0;
 }
 .intro-content-wrapper {
     max-width: 1400px;
@@ -1227,10 +1226,10 @@ h2{
 /* DESKTOP & TABLET Overrides */
 @media (min-width: 769px) {
 	.intro-home {
-		padding: 6.25rem 0;
+        padding: 6.25rem 0;
 	}
 	.intro-container {
-		grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 0;
 	}
     .intro-text-content {
@@ -1240,6 +1239,10 @@ h2{
 	.intro-image-cluster {
 		padding: 0;
 	}
+    .intro-image-wrapper {
+        width: 100%;
+        height: 100%;
+    }
 	.destinations-section {
 		padding: 0;
 	}
