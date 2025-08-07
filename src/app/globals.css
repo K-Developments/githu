@@ -9,7 +9,7 @@
 		--card-foreground: 30 3% 10%;
 		--popover: 30 33% 98%;
 		--popover-foreground: 30 3% 10%;
-		--primary: 204 20% 66%; /* #99abba */
+		--primary: 155 21% 67%; /* #99bda8 */
 		--primary-foreground: 30 3% 10%; /* Dark charcoal for contrast */
 		--secondary: 220 13% 18%; /* Deep, dark navy */
 		--secondary-foreground: 40 33% 97%;
@@ -21,7 +21,7 @@
 		--destructive-foreground: 0 0% 98%;
 		--border: 30 5% 80%;
 		--input: 30 5% 70%;
-		--ring: 204 20% 66%;
+		--ring: 155 21% 67%;
 		--header-height: 3rem;
 	}
 	.dark {
@@ -1463,6 +1463,7 @@ h2{
 	white-space: inherit !important;
     overflow: visible !important;
 }
+
 
 
 
