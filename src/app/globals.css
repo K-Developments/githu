@@ -1179,20 +1179,20 @@
 		.hamburger-button {
 			display: block;
 		}
-			.intro-container {
-					grid-template-columns: 1fr;
-					padding-left: 1rem;
-					padding-right: 1rem;
-			}
-			.intro-text-content {
-					order: 2;
-					border-right: none;
-					padding-right: 0;
-					padding-left:1rem;
-			}
-			.intro-image-cluster {
-					order: 1;
-			}
+		.intro-container {
+			grid-template-columns: 1fr;
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+		.intro-text-content {
+			order: 2;
+			border-right: none;
+			padding-right: 0;
+			padding-left:1rem;
+		}
+		.intro-image-cluster {
+			order: 1;
+		}
 		.packages-category-title {
 			min-width: 0;
 			font-size: 1.2rem;
@@ -1201,12 +1201,12 @@
 		.pagination-bullets {
 			display: none;
 		}
-			.destinations-grid {
-					grid-template-columns: repeat(2, 1fr);
-					gap: 0.2rem;
-							padding-left: 1rem;
-							padding-right: 1rem;
-			}
+		.destinations-grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 0.2rem;
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
 		/* Mobile Destination Card Styles */
 		.destination-card {
 			height: auto;
@@ -1297,31 +1297,20 @@
 		.testimonial-bullet.active {
 			background-color: hsl(var(--primary));
 		}
-			.home-page-call-to-action-section {
-					justify-content: center;
-					text-align: center;
-			}
-			.cta-content {
-					padding: 2rem;
-					max-width: 100%;
-			}
-			.cta-interactive-panel {
-					display: none;
-			}
-			.newsletter-section .section-title {
-					letter-spacing: 0.1rem;
-			}
-			.intro-container {
-					grid-template-columns: 1fr;
-			}
-			.intro-text-content {
-					order: 2;
-					border-right: none;
-					padding: 0 1rem;
-			}
-			.intro-image-cluster {
-					order: 1;
-			}
+		.home-page-call-to-action-section {
+			justify-content: center;
+			text-align: center;
+		}
+		.cta-content {
+			padding: 2rem;
+			max-width: 100%;
+		}
+		.cta-interactive-panel {
+			display: none;
+		}
+		.newsletter-section .section-title {
+			letter-spacing: 0.1rem;
+		}
 	}
 	/* Small mobile adjustments */
 	@media (max-width: 480px) {
@@ -1338,9 +1327,9 @@
 		.newsletter-form {
 			flex-direction: column;
 		}
-			.newsletter-section .section-title {
-					letter-spacing: 0.05rem;
-			}
+		.newsletter-section .section-title {
+			letter-spacing: 0.05rem;
+		}
 		.footer-content {
 			grid-template-columns: 1fr;
 			text-align: center;
@@ -1364,16 +1353,16 @@
 		.intro-container {
 			gap: 0;
 		}
-			.intro-text-content {
-				padding: 2rem;
+		.intro-text-content {
+			padding: 2rem;
 		}
 		.intro-image-cluster {
 			padding: 0;
 		}
-			.intro-image-wrapper {
-					width: 100%;
-					height: 100%;
-			}
+		.intro-image-wrapper {
+			width: 100%;
+			height: 100%;
+		}
 		.destinations-section {
 			padding: 0;
 		}
@@ -1408,8 +1397,11 @@
 			flex-direction: row;
 			text-align: left;
 		}
+		.hero-content h1,
+		.hero-content p {
+			color:white;
+		}
 		.hero-content h1 {
-			color: white;
 			font-size: clamp(3rem, 9vw, 8rem);
 			text-shadow: none;
 					text-align: left;
@@ -1419,7 +1411,6 @@
 					opacity: 1;
 		}
 		.hero-content p {
-			color: white;
 			opacity: 1;
 			max-width: 700px;
 			font-size: 1.1rem;
