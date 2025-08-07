@@ -24,7 +24,6 @@ interface HeroData {
   headline: string;
   subtitle: string;
   sliderImages: string[];
-  contentBackgroundImage?: string;
 }
 
 interface IntroData {
@@ -206,11 +205,6 @@ function HeroSection({ data }: { data: HeroData }) {
         <section ref={containerRef} className="hero">
             <div 
                 className="hero-content"
-                style={{
-                    backgroundImage: data.contentBackgroundImage ? `url(${data.contentBackgroundImage})` : 'none',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}
             >
                  <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
                  <div className="flex flex-row-reverse  items-end gap-4">

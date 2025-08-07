@@ -18,7 +18,6 @@ interface HeroData {
   headline: string;
   subtitle: string;
   sliderImages: string[];
-  contentBackgroundImage?: string;
 }
 
 interface IntroData {
@@ -63,7 +62,6 @@ export default function AdminHomePage() {
     headline: "",
     subtitle: "",
     sliderImages: [],
-    contentBackgroundImage: "",
   });
   const [introData, setIntroData] = useState<IntroData>({
     headline: "",
@@ -406,10 +404,6 @@ export default function AdminHomePage() {
           <div className="space-y-2">
             <Label htmlFor="subtitle">Subtitle</Label>
             <Textarea id="subtitle" value={heroData.subtitle} onChange={handleHeroChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="contentBackgroundImage">Content Background Image URL</Label>
-            <Input id="contentBackgroundImage" value={heroData.contentBackgroundImage} onChange={handleHeroChange} />
           </div>
           
            <div className="space-y-4">

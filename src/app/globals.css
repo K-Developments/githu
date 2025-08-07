@@ -106,7 +106,7 @@ header {
 	justify-content: space-between;
 	align-items: center;
 	z-index: 100;
-	background: white;
+	background: hsl(var(--primary));
 	border-bottom: 1px solid hsl(var(--border));
 	transition: all 0.3s ease;
 }
@@ -1050,6 +1050,8 @@ header {
     .hero-content h1, .hero-content p {
         color: white;
         text-shadow: none;
+    }
+    .hero-content h1 {
         text-align: left;
     }
     .hero-image::after {
@@ -1217,8 +1219,8 @@ header {
 		padding: 2%;
 	}
 	.hero-content h1{
-		font-size:3.5rem;
-		text-align:center;
+		font-size:3rem;
+		text-align:left;
 	}
 	h2 {
 		font-size: 2rem !important;
@@ -1290,7 +1292,7 @@ h2{
 		width: 100%;
 		height: auto;
 		order: 1;
-		background: white;
+		background: hsl(var(--primary));
 		justify-content: space-between;
 		align-items: flex-end;
 		padding: 2% 8% 2%;
@@ -1299,7 +1301,7 @@ h2{
         text-align: left;
 	}
 	.hero-content h1 {
-		color: #222;
+		color: white;
 		font-size: clamp(3rem, 9vw, 8rem);
 		text-shadow: none;
         text-align: left;
@@ -1309,7 +1311,7 @@ h2{
         opacity: 1;
 	}
 	.hero-content p {
-		color: #666;
+		color: white;
 		opacity: 1;
 		max-width: 700px;
 		font-size: 1.1rem;
@@ -1551,6 +1553,7 @@ h2{
 @media (min-width: 1400px) {
 	.hero-content h1 {
 		font-size: 7rem;
+		
 	}
 	.hero-content p {
 		font-size: 1.2rem;
