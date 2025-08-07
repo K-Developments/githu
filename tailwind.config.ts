@@ -17,8 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['EB Garamond', 'serif'],
-        headline: ['Marcellus', 'serif'],
+        body: ['Archivo', 'sans-serif'],
+        headline: ['Archivo', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
