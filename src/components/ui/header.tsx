@@ -88,7 +88,7 @@ export function Header({ logoUrl }: { logoUrl?: string }) {
               </div>
           </div>
           <div className="header-right">
-              <Button asChild><Link href="#">Plan Trip</Link></Button>
+              <Button asChild className="hidden md:inline-flex"><Link href="#">Plan Trip</Link></Button>
               <button className="search-button desktop-only" aria-label="Search">
                   <Search size={20} />
               </button>
