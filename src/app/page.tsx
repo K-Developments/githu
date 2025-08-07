@@ -280,9 +280,11 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
                 <p className="paragraph-style">{data.paragraph}</p>
                 </ScrollAnimation>
                 <ScrollAnimation>
-                <Button asChild variant="outline">
-                    <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-                </Button>
+                <div className="button-wrapper-for-border">
+                    <Button asChild variant="outline">
+                        <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+                    </Button>
+                </div>
                 </ScrollAnimation>
             </div>
             <div className="intro-image-cluster">

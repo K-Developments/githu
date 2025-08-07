@@ -23,7 +23,7 @@
 		--border: 30 5% 80%;
 		--input: 30 5% 70%;
 		--ring: 155 21% 67%;
-		--header-height: 4rem;
+		--header-height: 5rem;
 
 		/* FONT SIZES */
 		--h1-fs: clamp(2.875rem, 4.5vw, 6rem);
@@ -184,9 +184,7 @@
 }
 
 @layer components {
-	blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
 	
-	}
 	/* Reset & Base Styles */
 	* {
 		margin: 0;
@@ -542,18 +540,27 @@
 		display: block;
 		object-fit: cover;
 	}
+	p{
+		font-size: 1.2rem;
+		letter-spacing: normal !important;
+		font-weight: normal !important;
+		
+	}
 
 	.secondary-heading {
 		font-family: 'Archivo', sans-serif;
 		font-size: clamp(2rem, 4vw, 3rem);
 		line-height: 1.2;
+		padding-left: 2%;
+		padding-right: 2%;
 		color: #222;
-			text-align: center;
-			padding: 2rem 0;
+			text-align: left;
+			padding-top: 2rem ;
+			padding-bottom: 2rem;
 	}
 	.paragraph-style {
-		font-size: 1rem;
-		line-height: 1.8;
+		font-size: 1.2rem;
+		line-height: 1.3;
 		color: #555;
 		margin-bottom: 2rem;
 		white-space: pre-wrap;
@@ -1145,17 +1152,17 @@
 	}
 
 	.accordion-trigger-sticky {
-			@apply fixed bg-primary text-primary-foreground shadow-lg rounded-t-lg transition-all duration-300 ease-in-out;
-			top: var(--header-height);
-			z-index: 20;
-	}
+		@apply fixed bg-primary text-primary-foreground shadow-lg rounded-t-lg transition-all duration-300 ease-in-out;
+		top: var(--header-height);
+		z-index: 20;
+}
 	/* Mobile Responsive Adjustments */
 	@media (max-width: 768px) {
 		.hero-content {
-				background-image: none;
-				background-color: hsl(var(--primary));
-				align-items: flex-start;
-				text-align: left;
+			background-image: none;
+			background-color: hsl(var(--primary));
+			align-items: flex-start;
+			text-align: left;
 		}
 		.hero-content h1, .hero-content p {
 			color: white;
@@ -1190,6 +1197,7 @@
 			padding-right: 0;
 			padding-left:1rem;
 		}
+			
 		.intro-image-cluster {
 			order: 1;
 		}
@@ -1232,6 +1240,7 @@
 			-webkit-box-orient: vertical;
 			overflow: hidden;
 		}
+		
 		.destination-card:hover .destination-card-title-box {
 			transform: translateY(0);
 			opacity: 1;
@@ -1242,6 +1251,7 @@
 		.packages-header-desktop {
 			display: none;
 		}
+		
 		.packages-header-mobile {
 			display: flex;
 			flex-direction: column;
@@ -1257,6 +1267,7 @@
 			display: block;
 			background-color: #ddd;
 		}
+		
 		.package-display-card .card-details {
 			background-color: white;
 			padding: 1rem;
@@ -1270,6 +1281,7 @@
 		.testimonial-container {
 			gap: 0.5rem;
 		}
+			
 		.testimonial-content-wrapper {
 			padding: 1.5rem;
 		}
@@ -1285,18 +1297,6 @@
 			gap: 0.75rem;
 			margin-top: 1.5rem;
 		}
-		.testimonial-bullet {
-			width: 10px;
-			height: 10px;
-			border-radius: 50%;
-			background-color: #ddd;
-			border: none;
-			cursor: pointer;
-			transition: background-color 0.3s ease;
-		}
-		.testimonial-bullet.active {
-			background-color: hsl(var(--primary));
-		}
 		.home-page-call-to-action-section {
 			justify-content: center;
 			text-align: center;
@@ -1311,6 +1311,18 @@
 		.newsletter-section .section-title {
 			letter-spacing: 0.1rem;
 		}
+		.testimonial-bullet {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background-color: #ddd;
+			border: none;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+	
+
+		
 	}
 	/* Small mobile adjustments */
 	@media (max-width: 480px) {
