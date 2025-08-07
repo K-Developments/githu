@@ -271,51 +271,51 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
       }}
     >
-      <div className="newsletter-container-wrapper">
-        <div className="intro-container">
-          <div className="intro-text-content">
-            <ScrollAnimation>
-              <h2
-                className="secondary-heading"
-                dangerouslySetInnerHTML={{ __html: data.headline }}
+      <div className="intro-container">
+        <div className="intro-text-content">
+          <ScrollAnimation>
+            <h2
+              className="secondary-heading"
+              dangerouslySetInnerHTML={{ __html: data.headline }}
+            />
+          </ScrollAnimation>
+          <ScrollAnimation>
+            <Separator className="mb-8" />
+          </ScrollAnimation>
+          <ScrollAnimation>
+            <p className="paragraph-style">{data.paragraph}</p>
+          </ScrollAnimation>
+          <ScrollAnimation>
+            <Link href={data.linkUrl || '#'} className="link-to">
+              {data.linkText}
+            </Link>
+          </ScrollAnimation>
+        </div>
+        <div className="intro-image-cluster">
+          <ScrollAnimation>
+            <div className="image-landscape-wrapper">
+              <Image
+                src={data.landscapeImage || 'https://placehold.co/1000x662.png'}
+                alt="Scenic landscape"
+                width={1000}
+                height={662}
+                sizes="(min-width: 768px) 45vw, 90vw"
               />
-            </ScrollAnimation>
-            <ScrollAnimation>
-              <p className="paragraph-style">{data.paragraph}</p>
-            </ScrollAnimation>
-            <ScrollAnimation>
-              <Link href={data.linkUrl || '#'} className="link-to">
-                {data.linkText}
-              </Link>
-            </ScrollAnimation>
-          </div>
-          <div className="intro-image-cluster">
-            <ScrollAnimation>
-              <div className="image-landscape-wrapper">
-                <Image
-                  src={data.landscapeImage || 'https://placehold.co/1000x662.png'}
-                  alt="Scenic landscape"
-                  width={1000}
-                  height={662}
-                  sizes="(min-width: 768px) 45vw, 90vw"
-                />
-              </div>
-            </ScrollAnimation>
-            <ScrollAnimation>
-              <div className="image-portrait-wrapper">
-                <Image
-                  src={data.portraitImage || 'https://placehold.co/800x1000.png'}
-                  alt="Scenic portrait"
-                  width={800}
-                  height={1000}
-                  sizes="(min-width: 768px) 25vw, 40vw"
-                />
-              </div>
-            </ScrollAnimation>
-          </div>
+            </div>
+          </ScrollAnimation>
+          <ScrollAnimation>
+            <div className="image-portrait-wrapper">
+              <Image
+                src={data.portraitImage || 'https://placehold.co/800x1000.png'}
+                alt="Scenic portrait"
+                width={800}
+                height={1000}
+                sizes="(min-width: 768px) 25vw, 40vw"
+              />
+            </div>
+          </ScrollAnimation>
         </div>
       </div>
     </section>
