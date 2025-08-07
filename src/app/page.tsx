@@ -273,11 +273,11 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
         backgroundPosition: 'center',
       }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="intro-content-wrapper">
         <Separator />
         <h2
-        className="secondary-heading"
-        dangerouslySetInnerHTML={{ __html: data.headline }}
+          className="secondary-heading"
+          dangerouslySetInnerHTML={{ __html: data.headline }}
         />
         <Separator />
         <div className="intro-container">
@@ -331,12 +331,18 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
             backgroundPosition: 'center',
         }}
     >
-      <ScrollAnimation>
-        <h2 className="section-title">{sectionData.title}</h2>
-      </ScrollAnimation>
-      <ScrollAnimation>
-        <p className="section-subtitle">{sectionData.subtitle}</p>
-      </ScrollAnimation>
+      <div className="intro-content-wrapper">
+        <div className="destinations-section-header">
+            <Separator />
+            <ScrollAnimation>
+                <h2 className="section-title">{sectionData.title}</h2>
+            </ScrollAnimation>
+            <ScrollAnimation>
+                <p className="section-subtitle">{sectionData.subtitle}</p>
+            </ScrollAnimation>
+            <Separator />
+        </div>
+      </div>
       <div className="destinations-grid">
         {destinations.map((dest, i) => (
           <ScrollAnimation key={dest.id} delay={i * 0.1}>
