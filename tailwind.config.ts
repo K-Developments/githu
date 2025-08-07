@@ -16,6 +16,17 @@ export default {
       },
     },
     extend: {
+      fontSize: {
+        'h1': 'var(--h1-fs)',
+        'h2': 'var(--h2-fs)',
+        'h3': 'var(--h3-fs)',
+        'h4': 'var(--h4-fs)',
+        'h5': 'var(--h5-fs)',
+        'p-large': 'var(--p-large-fs)',
+        'p-medium': 'var(--p-medium-fs)',
+        'p-small': 'var(--p-small-fs)',
+        'p-xsmall': 'var(--p-xsmall-fs)',
+      },
       fontFamily: {
         body: ['Archivo', 'sans-serif'],
         headline: ['Archivo', 'sans-serif'],
