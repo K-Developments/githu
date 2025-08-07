@@ -1041,14 +1041,6 @@ header {
 }
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
-	body {
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-	.intro-home, .destinations-section-header {
-		margin-left: -1rem;
-		margin-right: -1rem;
-	}
 	header {
 		padding: 8px 5%;
 	}
@@ -1063,6 +1055,8 @@ header {
 	}
     .intro-container {
         grid-template-columns: 1fr;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
     .intro-text-content {
         order: 2;
@@ -1084,6 +1078,8 @@ header {
 	.destinations-grid {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 0.2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
 	}
 	/* Mobile Destination Card Styles */
 	.destination-card {
