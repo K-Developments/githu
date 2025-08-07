@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Syne', 'sans-serif'],
+        body: ['Marcellus', 'serif'],
         headline: ['Marcellus', 'serif'],
       },
       colors: {
