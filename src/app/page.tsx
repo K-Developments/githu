@@ -348,7 +348,7 @@
 
 
         return (
-            <CarouselItem ref={ref} key={dest.id} className="pl-4 basis-full md:basis-[40%] lg:basis-[30%]">
+            <CarouselItem ref={ref} key={dest.id} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
                 <div className={cn(
                     "h-[70vh] relative flex items-center justify-center transition-all duration-500 ease-in-out",
                     isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
@@ -703,3 +703,4 @@
             </section>
         );
     }
+
