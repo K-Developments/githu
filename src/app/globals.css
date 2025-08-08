@@ -600,43 +600,8 @@
 	.packages-divider {
 		display: none;
 	}
-	/* Testimonials Section */
 	.homepage-testimonials-section {
-		padding: 4rem 5%;
-		position: relative;
-	}
-	.testimonial-container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 1rem;
-		max-width: 900px;
-		margin: 0 auto;
-	}
-	
-	.testimonial-quote-icon {
-		width: 3rem;
-		height: 3rem;
-		color: hsl(var(--primary));
-	}
-	.testimonial-text {
-		@apply font-headline;
-		font-size: clamp(1.1rem, 2vw, 1.4rem);
-		line-height: 1.6;
-		color: #444;
-		max-width: 90%;
-	}
-	.testimonial-author {
-		margin-top: 1rem;
-		font-size: 0.9rem;
-		color: #666;
-		font-style: italic;
-	}
-	.testimonial-arrow {
-		flex-shrink: 0;
-	}
-	.testimonial-pagination {
-		display: none;
+		@apply py-28;
 	}
 	
 	/* Home Page Call to Action Section - New Architectural Layout */
@@ -828,7 +793,38 @@
 		@apply fixed bg-primary text-primary-foreground shadow-lg rounded-t-lg transition-all duration-300 ease-in-out;
 		top: var(--header-height);
 		z-index: 20;
-}
+	}
+
+	/* Contact Form Styles */
+	.form-item-border {
+		position: relative;
+		padding-bottom: 8px; /* Space for message */
+	}
+
+	.form-input-border {
+		background-color: transparent;
+		border: none;
+		border-bottom: 1px solid hsl(var(--border));
+		border-radius: 0;
+		padding-left: 0;
+		padding-right: 0;
+		transition: border-color 0.3s ease;
+	}
+
+	.form-input-border:focus,
+	.form-input-border:focus-visible {
+		box-shadow: none;
+		outline: none;
+		border-bottom-color: hsl(var(--primary));
+	}
+
+	/* Remove default ring for form elements */
+	.form-input-border:focus-visible {
+		--ring: 0 0 #0000;
+		ring-width: 0px;
+	}
+
+
 	/* Mobile Responsive Adjustments */
 	@media (max-width: 768px) {
 		.hero-content {

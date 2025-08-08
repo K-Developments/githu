@@ -13,7 +13,7 @@ const navLinks = [
   { title: "Destinations", href: "/destinations" },
   { title: "Packages", href: "/packages" },
   { title: "About", href: "/about" },
-  { title: "Contact", href: "#" },
+  { title: "Contact", href: "/contact" },
 ];
 
 const sidebarVariants = {
