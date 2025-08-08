@@ -1,20 +1,22 @@
 
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React, { useState, useTransition } from 'react';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -25,8 +27,36 @@ const formSchema = z.object({
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
+async function submitContactForm(data: FormValues) {
+    'use server';
+    try {
+        // Server-side validation
+        const validatedData = formSchema.parse(data);
+
+        await addDoc(collection(db, "contactSubmissions"), {
+            ...validatedData,
+            submittedAt: serverTimestamp(),
+        });
+        
+        return { success: true, message: "Your message has been sent successfully!" };
+
+    } catch (error) {
+        console.error("Error submitting form:", error);
+        if (error instanceof z.ZodError) {
+             return { success: false, message: "Validation failed. Please check your input." };
+        }
+        return { success: false, message: "An unexpected error occurred. Please try again." };
+    }
+}
+
+
 export default function ContactPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -38,11 +68,24 @@ export default function ContactPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Handle form submission logic here
-    console.log(values);
-    // You would typically send this data to a server or email service
-  }
+  const onSubmit = (values: FormValues) => {
+    startTransition(async () => {
+      const result = await submitContactForm(values);
+      if (result.success) {
+        toast({
+          title: "Success!",
+          description: result.message,
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Error",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
+    });
+  };
 
   const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -163,7 +206,7 @@ export default function ContactPage() {
                   name="inquiryType"
                   render={({ field }) => (
                     <FormItem className="form-item-border">
-                       <Select onValueChange={field.onChange} defaultValue={field.value}>
+                       <Select onValueChange={field.onChange} value={field.value} >
                         <FormControl>
                           <SelectTrigger className="form-input-border">
                             <SelectValue placeholder="Please select an inquiry type *" />
@@ -194,7 +237,9 @@ export default function ContactPage() {
                 />
                 <div className="text-center pt-8">
                     <div className="button-wrapper-for-border inline-block">
-                        <Button type="submit" size="lg">Send Message</Button>
+                        <Button type="submit" size="lg" disabled={isPending}>
+                          {isPending ? 'Submitting...' : 'Send Message'}
+                        </Button>
                     </div>
                 </div>
               </form>
