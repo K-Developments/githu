@@ -262,7 +262,7 @@ function HeroSection({ data }: { data: HeroData }) {
 function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
   return (
     <section
-      className="intro-home"
+      className="intro-home py-28"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
@@ -324,7 +324,7 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
 
   return (
     <section 
-        className="destinations-section py-14"
+        className="destinations-section py-28"
         style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
             backgroundSize: 'cover',
@@ -413,7 +413,7 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
 
   return (
     <section 
-        className="homepage-packages-section"
+        className="homepage-packages-section py-28"
         style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
             backgroundSize: 'cover',
@@ -517,7 +517,7 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
 
     return (
         <section 
-            className="homepage-testimonials-section relative min-h-[70vh] md:min-h-[80vh] flex items-end justify-start p-8 md:p-16 text-white overflow-hidden"
+            className="homepage-testimonials-section py-28 relative min-h-[70vh] md:min-h-[80vh] flex items-end justify-start p-8 md:p-16 text-white overflow-hidden"
             style={{
                 backgroundImage: !currentTestimonial.image && backgroundImage ? `url(${backgroundImage})` : 'none',
                 backgroundSize: 'cover',
@@ -581,7 +581,7 @@ function TestimonialsSection({ testimonials, backgroundImage }: { testimonials: 
 function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
     return (
         <section 
-            className="newsletter-section"
+            className="newsletter-section py-28"
             style={{
                 backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
                 backgroundSize: 'cover',
