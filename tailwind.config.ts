@@ -29,7 +29,7 @@ export default {
       },
       fontFamily: {
         body: ['Archivo', 'sans-serif'],
-        headline: ['Archivo', 'sans-serif'],
+        headline: ['Cormorant Upright', 'serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
