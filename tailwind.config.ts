@@ -1,4 +1,5 @@
 
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -28,7 +29,7 @@ export default {
         'p-xsmall': 'var(--p-xsmall-fs)',
       },
       fontFamily: {
-        body: ['Archivo', 'sans-serif'],
+        body: ['Raleway', 'sans-serif'],
         headline: ['Cormorant Upright', 'serif'],
       },
       colors: {

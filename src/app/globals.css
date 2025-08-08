@@ -106,25 +106,25 @@
 		letter-spacing: -0.01em;
 	}
 	.p-large {
-		font-family: 'Archivo';
+		font-family: 'Raleway';
 		font-size: var(--p-large-fs);
 		font-weight: 300;
 		line-height: 1.2;
 	}
 	.p-medium {
-		font-family: 'Archivo';
+		font-family: 'Raleway';
 		font-size: var(--p-medium-fs);
 		font-weight: 300;
 		line-height: 1.2;
 	}
 	.p-small {
-		font-family: 'Archivo';
+		font-family: 'Raleway';
 		font-size: var(--p-small-fs);
 		font-weight: 300;
 		line-height: 1.2;
 	}
 	.p-xsmall {
-		font-family: 'Archivo';
+		font-family: 'Raleway';
 		font-size: var(--p-xsmall-fs);
 		font-weight: 300;
 		line-height: 1.2;
@@ -143,7 +143,7 @@
 		display: inline-flex;
 		align-items: center;
 		width: fit-content;
-		font-family: 'Archivo';
+		font-family: 'Raleway';
 		font-size: clamp(0.8125rem, 1vw, 1.125rem);
 		font-weight: 400;
 		color: hsl(var(--foreground));
@@ -1001,7 +1001,6 @@
 		font-size: 0.9rem;
 		line-height: 1.7;
 		max-width: 250px;
-		margin-bottom: 1.5rem;
 	}
 	.social-links {
 		display: flex;
