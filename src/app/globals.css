@@ -408,6 +408,17 @@
 		background-color: white;
 	}
 	
+	.secondary-heading {
+		@apply font-headline;
+		font-size: clamp(2rem, 4vw, 3rem);
+		line-height: 1.2;
+		padding-left: 2%;
+		padding-right: 2%;
+		color: #222;
+			text-align: left;
+			padding-top: 2rem ;
+			padding-bottom: 2rem;
+	}
 	.paragraph-style {
 		font-size: 1.2rem;
 		line-height: 1.3;
@@ -476,13 +487,20 @@
 		position: relative;
 		overflow: hidden;
 	}
-	
 	.destinations-section .section-title {
 		@apply font-headline;
 		font-size: clamp(2rem, 4vw, 3rem);
 		color: #222;
 	}
-	
+	.destinations-section .section-subtitle {
+		font-size: 1rem;
+		color: #000000;
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.7;
+		text-align: center;
+	}
+
 	.destination-card-parallax {
 		overflow: hidden;
 	}
@@ -550,28 +568,29 @@
 		line-height: 1.6;
 	}
 	
-	.package-card {
+	.homepage-packages-section {
+		padding: 4rem 5%;
+		background-color: hsl(var(--background));
+	}
+	.packages-container {
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.package-display-card {
 		position: relative;
 		overflow: hidden;
 		display: block;
 		cursor: pointer;
-		aspect-ratio: 1 / 1.2;
+		aspect-ratio: 1 / 1;
 	}
-	.package-card-image-container {
+	.package-display-card .card-image {
 		position: absolute;
 		inset: 0;
-		overflow: hidden;
 	}
-	.package-card-overlay {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%);
-		transition: background-color 0.3s ease;
-	}
-	.package-card:hover .package-card-overlay {
-		background-color: rgba(0,0,0,0.1);
-	}
-	.package-card-content {
+	.package-display-card .card-details {
 		position: absolute;
 		bottom: 0;
 		left: 0;
@@ -579,115 +598,126 @@
 		color: white;
 		width: 100%;
 		z-index: 10;
+		background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);
 	}
-	.package-card-title {
+	.package-display-card .card-title {
 		@apply font-headline;
 		font-size: 2rem;
 		line-height: 1.2;
 		text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 	}
-	.package-card-location {
+	.package-display-card .card-description {
 		font-size: 0.9rem;
 		opacity: 0.9;
 		text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 	}
-	
+
+	.packages-header-mobile {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+	.packages-header-desktop {
+		display: none;
+	}
+	.packages-nav-buttons {
+		display: flex;
+		gap: 1rem;
+	}
+	.packages-category-title {
+		@apply font-headline;
+		font-size: clamp(1.5rem, 4vw, 2.5rem);
+		text-align: center;
+		min-width: 250px;
+		flex-shrink: 0;
+	}
+	.packages-grid {
+		display: grid;
+		gap:2rem;
+		width:100%;
+	}
 	.no-packages-message {
 		text-align: center;
 		padding: 2rem;
 		color: #000000;
 	}
-
+	.packages-divider {
+		display: none;
+	}
 	/* Testimonials Section */
 	.homepage-testimonials-section {
-		background-color: hsl(var(--background));
+		padding: 4rem 5%;
+		position: relative;
+	}
+	.testimonial-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		max-width: 900px;
+		margin: 0 auto;
 	}
 	
-	/* Home Page Call to Action Section */
-	.home-page-call-to-action-section {
-		padding: 6rem 5%;
-		background-color: hsl(var(--background));
+	.testimonial-quote-icon {
+		width: 3rem;
+		height: 3rem;
+		color: hsl(var(--primary));
 	}
-
-	.cta-content-panel {
-		@apply flex flex-col;
+	.testimonial-text {
+		@apply font-headline;
+		font-size: clamp(1.1rem, 2vw, 1.4rem);
+		line-height: 1.6;
+		color: #444;
+		max-width: 90%;
 	}
-
-	.cta-title {
-		@apply font-headline text-5xl leading-tight mb-8;
+	.testimonial-author {
+		margin-top: 1rem;
+		font-size: 0.9rem;
+		color: #666;
+		font-style: italic;
 	}
-
-	.cta-interactive-list {
-		@apply mt-16 border-t border-border;
+	.testimonial-arrow {
+		flex-shrink: 0;
 	}
-	
-	.cta-interactive-list-item {
-		@apply flex items-center gap-4 py-6 border-b border-border cursor-pointer;
-		text-decoration: none;
-	}
-	
-	.cta-interactive-list-item .cta-item-title {
-		@apply font-headline text-2xl text-foreground mb-1 transition-colors duration-300;
+	.testimonial-pagination {
+		display: none;
 	}
 	
-	.cta-interactive-list-item .cta-item-description {
-		@apply text-muted-foreground transition-colors duration-300;
+	/* Home Page Call to Action Section - New Architectural Layout */
+	.cta-item-row {
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+		flex-direction: column;
 	}
 
-	.cta-interactive-list-item:hover .cta-item-title,
-	.cta-interactive-list-item.is-hovered .cta-item-title {
-		@apply text-primary;
+	.cta-item-content {
+		width: 100%;
+		text-align: center;
 	}
 
-	.cta-interactive-list-item:hover .cta-item-description,
-	.cta-interactive-list-item.is-hovered .cta-item-description {
-		@apply text-foreground;
+	.cta-item-image-wrapper {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		position: relative;
+		order: -1; /* Image first on mobile */
 	}
 
-	.cta-image-panel {
-		@apply relative aspect-[4/5] h-full w-full self-center;
+	.cta-item-image {
+		width: 100%;
+		height: 70vh;
+		position: relative;
+		overflow: hidden;
+		border-radius: 0.5rem;
 	}
 
-	.cta-mobile-panel {
-			display: flex;
-			flex-direction: column;
-			gap: 1.5rem;
-			width: 100%;
+	.cta-item-line {
+		display: none; /* Hide line on mobile */
 	}
 
-	.cta-mobile-card {
-			position: relative;
-			padding: 2rem;
-			overflow: hidden;
-			color: white;
-			text-decoration: none;
-			min-height: 250px;
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-end;
-	}
-	.cta-mobile-card-overlay {
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
-			z-index: 0;
-			@apply rounded-lg;
-	}
-	.cta-mobile-card .cta-item-title-mobile,
-	.cta-mobile-card .cta-item-description-mobile {
-			position: relative;
-			z-index: 1;
-	}
-	.cta-mobile-card .cta-item-title-mobile {
-			 @apply font-headline;
-			font-size: 1.8rem;
-			margin-bottom: 0.5rem;
-		
-	}
-	.cta-mobile-card .cta-item-description-mobile {
-			font-size: 0.9rem;
-			opacity: 0.9;
-	}
 
 	/* Newsletter Section */
 	.newsletter-section {
@@ -864,10 +894,14 @@
 			font-size: 1.2rem;
 		}
 		
+		.packages-category-title {
+			min-width: 0;
+			font-size: 1.2rem;
+			white-space: normal;
+		}
 		.pagination-bullets {
 			display: none;
 		}
-		
 		/* Mobile Destination Card Styles */
 		.destination-card {
 			height: auto;
@@ -901,6 +935,21 @@
 		.packages-grid {
 			grid-template-columns:1fr;
 		}
+		.packages-header-desktop {
+			display: none;
+		}
+		
+		.packages-header-mobile {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+			margin-bottom: 2rem;
+		}
+		.packages-nav-buttons {
+			display: flex;
+			gap: 1rem;
+		}
 		.packages-divider {
 			display: block;
 			background-color: #ddd;
@@ -909,7 +958,22 @@
 		.packages-grid > *:last-child .packages-divider {
 			display: none;
 		}
-		
+		.testimonial-container {
+			gap: 0.5rem;
+		}
+			
+		.testimonial-text {
+			font-size: 1rem;
+		}
+		.testimonial-arrow {
+			display: none;
+		}
+		.testimonial-pagination {
+			display: flex;
+			justify-content: center;
+			gap: 0.75rem;
+			margin-top: 1.5rem;
+		}
 		.newsletter-section .section-title {
 			letter-spacing: 0.1rem;
 		}
@@ -922,6 +986,9 @@
 			cursor: pointer;
 			transition: background-color 0.3s ease;
 		}
+	
+
+		
 	}
 	/* Small mobile adjustments */
 	@media (max-width: 480px) {
@@ -958,8 +1025,10 @@
 	}
 	/* DESKTOP & TABLET Overrides */
 	@media (min-width: 769px) {
-		.destinations-section,
-		.homepage-packages-section, .quote-section, .homepage-testimonials-section {
+		
+		.destinations-section {
+		}
+		.homepage-packages-section, .quote-section {
 			padding-top: 6.25rem;
 			padding-bottom: 6.25rem;
 		}
@@ -1024,20 +1093,23 @@
 			z-index: 3;
 		}
 		
+		.packages-header-mobile {
+			display: none;
+		}
+		.packages-header-desktop {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 1.5rem;
+			margin-bottom: 2rem;
+		}
+		.packages-container {
+			align-items: center;
+		}
 		.packages-grid {
 			grid-template-columns: repeat(2, 1fr);
-			gap: 2rem;
 		}
-		.package-card {
-			aspect-ratio: 1/1;
-		}
-		.package-card-content {
-			background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 40%);
-			padding: 2rem;
-		}
-		.package-card-title {
-			font-size: 1.5rem;
-		}
+		
 			.newsletter-section .section-title {
 					letter-spacing: 0.2rem;
 			}
@@ -1060,6 +1132,47 @@
 			.newsletter-image {
 					display: none;
 			}
+		
+		/* New Architectural CTA Section - Desktop */
+		.cta-item-row {
+			flex-direction: row;
+			gap: 4rem;
+		}
+		.cta-item-content {
+			width: 35%;
+			text-align: left;
+		}
+		.cta-item-row:nth-child(even) .cta-item-content {
+			order: 2;
+			text-align: right;
+		}
+		.cta-item-row:nth-child(even) .cta-item-content .standard-link {
+			margin-left: auto;
+			margin-right: 0.125rem;
+		}
+
+		.cta-item-image-wrapper {
+			width: 65%;
+			order: 1;
+		}
+		.cta-item-row:nth-child(even) .cta-item-image-wrapper {
+			order: 1;
+		}
+
+		.cta-item-line {
+			display: block;
+			height: 1px;
+			background-color: hsl(var(--border));
+			flex-grow: 1;
+			margin: 0 2rem;
+		}
+
+		.cta-item-image {
+			width: 40vw; /* Fixed width for the image */
+			max-width: 500px;
+			height: 70vh;
+			flex-shrink: 0;
+		}
 	}
 	/* Tablet adjustments */
 	@media (min-width: 769px) and (max-width: 1024px) {
@@ -1076,9 +1189,15 @@
 					text-align: center;
 					max-width: 100%;
 		}
-		
 		.packages-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.cta-item-content {
+			width: 45%;
+		}
+		.cta-item-image-wrapper {
+			width: 55%;
 		}
 	}
 	/* Large screen enhancements */
