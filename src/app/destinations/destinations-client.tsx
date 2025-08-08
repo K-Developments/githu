@@ -44,9 +44,17 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
                 backgroundPosition: 'center',
             }}
           >
+             <Image
+                  src={hero.heroImage}
+                  alt={`${hero.headline} hero background`}
+                  fill
+                  className="object-cover"
+                  priority
+              />
+              <div className="absolute inset-0 bg-black/40" />
               <div className="relative text-center">
                   <ScrollAnimation>
-                      <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground break-words relative" style={{ lineBreak: 'anywhere'}}>
+                      <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-white break-words relative" style={{ lineBreak: 'anywhere'}}>
                       {hero.headline}
                       </h1>
                   </ScrollAnimation>
@@ -55,18 +63,15 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
                           initial={{ height: '0%' }}
                           animate={{ height: '100%' }}
                           transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
-                          className="w-full bg-black"
+                          className="w-full bg-white"
                       />
                   </button>
               </div>
           </div>
       </section>
       
-      <Separator/>
-      <Separator/>
-
-
       <div className="px-4 md:px-12">
+          <Separator />
           <div className="text-sm text-muted-foreground py-4">
               <Link href="/" className="hover:text-primary">Home</Link>
               <span className="mx-2">||</span>
@@ -80,24 +85,22 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {destinations.map((dest, i) => (
                 <ScrollAnimation key={dest.id} delay={i * 0.1}>
-                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                        <div className="destination-card group">
-                            <Image 
-                                src={dest.image || "https://placehold.co/600x800.png"} 
-                                alt={dest.title} 
-                                fill 
-                                style={{ objectFit: 'cover' }} 
-                                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                                className="card-image"
-                            />
-                            <div className="card-overlay"></div>
-                            <div className="destination-card-title-box">
-                                <h3 className="destination-card-title">{dest.title}</h3>
-                            </div>
-                            <div className="destination-card-description-box">
-                                <p className="destination-card-description">{dest.description}</p>
-                            </div>
+                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} className="group block">
+                      <div className="destination-card-v2">
+                        <div className="destination-card-v2-image">
+                          <Image 
+                              src={dest.image || "https://placehold.co/600x600.png"} 
+                              alt={dest.title} 
+                              fill
+                              className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                              sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                          />
                         </div>
+                        <div className="destination-card-v2-content">
+                          <h3 className="font-headline text-xl text-foreground">{dest.title}</h3>
+                          <p className="text-sm text-muted-foreground">{dest.location}</p>
+                        </div>
+                      </div>
                     </Link>
                 </ScrollAnimation>
                 ))}
