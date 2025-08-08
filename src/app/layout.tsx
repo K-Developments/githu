@@ -1,7 +1,6 @@
 
 'use client';
 
-import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/ui/header";
@@ -13,14 +12,7 @@ import type { SiteSettings } from "@/lib/data";
 import { SiteSettingsProvider } from "@/context/site-settings-context";
 import { useLenis } from "@/hooks/use-lenis";
 import { useEffect, useState } from "react";
-
-
-// Since metadata can't be exported from a client component, 
-// we can define it in a separate async function and export it from the page.
-// This is a common pattern for pages that need both client-side interactivity and server-generated metadata.
-// However, for a layout, we must lift the metadata export. 
-// The following metadata is not applied because this is a client component.
-// We'll move the data fetching and metadata to a new RootLayoutWrapper server component.
+import { usePathname } from 'next/navigation';
 
 async function getSiteSettings(): Promise<SiteSettings | null> {
     try {
@@ -45,6 +37,9 @@ function RootLayoutContent({
   siteSettings: SiteSettings | null;
 }) {
   useLenis();
+  const pathname = usePathname();
+  const isAdminPage = pathname.startsWith('/admin');
+
   return (
     <html lang="en" className="scroll-smooth">
        <head>
@@ -58,9 +53,9 @@ function RootLayoutContent({
         <SiteSettingsProvider settings={siteSettings}>
           <ScrollRestoration />
           <div className="noise-overlay"></div>
-          <Header logoUrl={siteSettings?.logoUrl} />
+          {!isAdminPage && <Header logoUrl={siteSettings?.logoUrl} />}
           <main>{children}</main>
-          <Footer logoUrl={siteSettings?.logoUrl} />
+          {!isAdminPage && <Footer logoUrl={siteSettings?.logoUrl} />}
           <Toaster />
         </SiteSettingsProvider>
       </body>

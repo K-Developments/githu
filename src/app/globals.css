@@ -13,16 +13,16 @@
 		--popover-foreground: 30 3% 10%;
 		--primary: 155 21% 67%; /* #99bda8 */
 		--primary-foreground: 30 3% 10%; /* Dark charcoal for contrast */
-		--secondary: 155 21% 90%; 
+		--secondary: 0 0% 98%; 
 		--secondary-foreground: 30 3% 10%;
-		--muted: 30 5% 90%;
+		--muted: 0 0% 96.1%;
 		--muted-foreground: 30 3% 40%;
-		--accent: 155 21% 95%;
+		--accent: 0 0% 96.1%;
 		--accent-foreground: 30 3% 10%;
 		--destructive: 0 84.2% 60.2%;
 		--destructive-foreground: 0 0% 98%;
-		--border: 30 5% 90%;
-		--input: 30 5% 90%;
+		--border: 0 0% 93%;
+		--input: 0 0% 93%;
 		--ring: 155 21% 67%;
 		--header-height: 5rem;
 
@@ -186,6 +186,13 @@
 
 @layer components {
 	
+	.admin-layout .bg-background {
+		background-color: hsl(var(--background)) !important;
+	}
+	.admin-layout main.bg-secondary\/30 {
+    background-color: hsl(var(--secondary)) !important;
+	}
+
 	/* Reset & Base Styles */
 	* {
 		margin: 0;
@@ -216,108 +223,6 @@
 		opacity: 0.15;
 		z-index: 1;
 	}
-	/* Header Styles */
-	header {
-		position: sticky;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: var(--header-height);
-		padding: 8px 5%;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		z-index: 100;
-		background: hsl(var(--primary));
-		border-bottom: 1px solid hsl(var(--border));
-		transition: all 0.3s ease;
-	}
-	.header-left {
-		flex: 1;
-		display: flex;
-		justify-content: flex-start;
-	}
-	.header-center {
-		flex: 2;
-		display: flex;
-		justify-content: center;
-		align-items:center;
-	}
-	.header-right {
-		flex: 1;
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		gap: 1rem;
-	}
-	.logo {
-		font-family: 'Archivo', sans-serif;
-		font-size: 1.4rem;
-		font-weight: 700;
-		color: #222;
-		text-decoration: none;
-		letter-spacing: 2px;
-		position: relative;
-	}
-	.logo span {
-		color: hsl(var(--primary));
-		font-weight: 400;
-	}
-	.desktop-nav ul {
-		display: flex;
-		list-style: none;
-		gap: 40px;
-		align-items: center;
-	}
-	.desktop-nav a {
-		text-decoration: none;
-		color: #444;
-		font-size: 0.7rem;
-		font-weight: 500;
-		letter-spacing: 0.009rem;
-		transition: all 0.3s ease;
-		position: relative;
-		padding: 8px 0;
-	}
-	.desktop-nav a:hover {
-		color: hsl(var(--primary));
-		transform: translateY(-1px);
-	}
-	.desktop-nav a::after {
-		content: '';
-		position: absolute;
-		bottom: 2px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 0;
-		height: 2px;
-		background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary)));
-		transition: width 0.3s ease;
-		border-radius: 1px;
-	}
-	.desktop-nav a:hover::after {
-		width: 100%;
-	}
-	.search-button {
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		color: #444;
-		transition: color 0.3s ease;
-	}
-	.search-button:hover {
-		color: hsl(var(--primary));
-	}
-	.hamburger-button {
-		display: none;
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		color: #444;
-		z-index: 1001;
-		/* Ensure it's above other header content */
-	}
-
 	/* Hero Section */
 	.hero {
 		
@@ -622,7 +527,7 @@
 	}
 	/* Destinations Section */
 	.destinations-section {
-		background-color: #fefcfb;
+		background-color: hsl(var(--background));
 		position: relative;
 		overflow: hidden;
 	}
@@ -723,7 +628,7 @@
 	/* Homepage Packages Section */
 	.homepage-packages-section {
 		padding: 4rem 5%;
-		background-color: #f8f5f2;
+		background-color: hsl(var(--background));
 	}
 	.packages-container {
 		margin: 0 auto;
@@ -805,7 +710,7 @@
 	/* Testimonials Section */
 	.homepage-testimonials-section {
 		padding: 4rem 5%;
-		background-color: #fefcfb;
+		background-color: hsl(var(--background));
 	}
 	.testimonial-container {
 		display: flex;
@@ -1072,7 +977,7 @@
 	}
 	/* Footer Styles */
 	.site-footer {
-		background-color: #fefcfb;
+		background-color: hsl(var(--background));
 		color: #555;
 		padding: 4rem 5% 2rem;
 		border-top: 1px solid #eee;
@@ -1172,18 +1077,11 @@
 		.hero-image::after {
 			background: none;
 		}
-		header {
-			padding: 8px 5%;
-		}
+		
 		.logo {
 			font-size: 1.2rem;
 		}
-		header .desktop-nav, header .desktop-only {
-			display: none;
-		}
-		.hamburger-button {
-			display: block;
-		}
+		
 		.intro-container {
 			grid-template-columns: 1fr;
 			padding-left: 1rem;
@@ -1402,7 +1300,7 @@
 			width: 100%;
 			height: auto;
 			order: 1;
-			background: hsl(var(--primary));
+			background-color: hsl(var(--background));
 			justify-content: space-between;
 			align-items: flex-end;
 			padding: 2% 8% 2%;
@@ -1412,7 +1310,7 @@
 		}
 		.hero-content h1,
 		.hero-content p {
-			color:white;
+			color:hsl(var(--foreground));
 		}
 		.hero-content h1 {
 			font-size: clamp(3rem, 9vw, 8rem);
@@ -1627,16 +1525,7 @@
 	}
 	/* Tablet adjustments */
 	@media (min-width: 769px) and (max-width: 1024px) {
-		.header-center {
-			display: none;
-			/* Hide nav on tablet for now */
-		}
-		.header-right .desktop-only {
-			display: none;
-		}
-		.hamburger-button {
-			display: block;
-		}
+		
 		.hero-content {
 			padding: 5% 5%;
 					flex-direction: column;

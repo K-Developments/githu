@@ -72,23 +72,32 @@ const TwoLineXIcon = ({ width, height, color }: { width: number, height: number,
 
 export const AnimatedHamburgerButton = React.forwardRef<HTMLButtonElement, AnimatedHamburgerButtonProps>(({
   isOpen,
-  color = "#333",
+  color,
   width = 24,
   height = 24,
   ...props
 }, ref) => {
 
   const [isClient, setIsClient] = useState(false);
+  const [currentColor, setCurrentColor] = useState(color);
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    // Fallback for SSR and initial hydration
+    if (!color) {
+      const computedStyle = getComputedStyle(document.documentElement);
+      const fgColor = computedStyle.getPropertyValue('--foreground').trim();
+      setCurrentColor(`hsl(${fgColor})`);
+    } else {
+        setCurrentColor(color);
+    }
+  }, [color]);
 
-  if (!isClient) {
+  if (!isClient || !currentColor) {
     return (
         <button ref={ref} className="relative" style={{ width, height }} {...props}>
             <div className="absolute inset-0 flex items-center justify-center">
-                 <TwoLineMenuIcon width={width} height={height} color={color} />
+                 <TwoLineMenuIcon width={width} height={height} color={"#000"} />
             </div>
         </button>
     );
@@ -107,7 +116,7 @@ export const AnimatedHamburgerButton = React.forwardRef<HTMLButtonElement, Anima
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <TwoLineMenuIcon width={width} height={height} color={color} />
+            <TwoLineMenuIcon width={width} height={height} color={currentColor} />
           </motion.div>
         ) : (
           <motion.div
@@ -119,7 +128,7 @@ export const AnimatedHamburgerButton = React.forwardRef<HTMLButtonElement, Anima
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <TwoLineXIcon width={width} height={height} color={color} />
+            <TwoLineXIcon width={width} height={height} color={currentColor} />
           </motion.div>
         )}
       </AnimatePresence>
