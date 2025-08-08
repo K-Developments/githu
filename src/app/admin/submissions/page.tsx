@@ -3,11 +3,14 @@
 
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query, Timestamp } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, Timestamp, doc, deleteDoc } from "firebase/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Submission {
   id: string;
@@ -23,6 +26,7 @@ interface Submission {
 export default function AdminSubmissionsPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchSubmissions = async () => {
@@ -38,13 +42,36 @@ export default function AdminSubmissionsPage() {
         setSubmissions(fetchedSubmissions);
       } catch (error) {
         console.error("Error fetching submissions:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch submissions.",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchSubmissions();
-  }, []);
+  }, [toast]);
+
+  const handleDeleteSubmission = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, "contactSubmissions", id));
+      setSubmissions(prevSubmissions => prevSubmissions.filter(s => s.id !== id));
+      toast({
+        title: "Success",
+        description: "Submission has been deleted.",
+      });
+    } catch (error) {
+      console.error("Error deleting submission:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete submission.",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (loading) {
     return <div>Loading submissions...</div>;
@@ -88,6 +115,30 @@ export default function AdminSubmissionsPage() {
                                 <strong className="font-medium block mb-2">Message:</strong> 
                                 {submission.message}
                                 </p>
+                                <div className="mt-6 border-t pt-4">
+                                   <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button variant="destructive" size="sm">
+                                          <Trash2 className="h-4 w-4 mr-2" />
+                                          Delete Submission
+                                        </Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete this submission from your database.
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                          <AlertDialogAction onClick={() => handleDeleteSubmission(submission.id)}>
+                                            Continue
+                                          </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
                     ))}
