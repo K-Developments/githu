@@ -82,10 +82,21 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
   const getCategoryName = (categoryId: string) => {
     return categories.find(c => c.id === categoryId)?.name || '';
   };
+  
+  const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      const heroSection = document.getElementById('hero-section-packages');
+      if (heroSection) {
+          const nextSection = heroSection.nextElementSibling;
+          if (nextSection) {
+              nextSection.scrollIntoView({ behavior: 'smooth' });
+          }
+      }
+  };
 
   return (
     <div>
-      <section className="h-[40vh] flex flex-col">
+      <section id="hero-section-packages" className="h-[65vh] flex flex-col">
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
             style={{
@@ -94,11 +105,21 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                 backgroundPosition: 'center',
             }}
           >
-              <ScrollAnimation>
-                  <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground relative">
-                  {hero.headline}
-                  </h1>
-              </ScrollAnimation>
+              <div className="relative text-center">
+                  <ScrollAnimation>
+                      <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground relative">
+                      {hero.headline}
+                      </h1>
+                  </ScrollAnimation>
+                  <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
+                      <motion.div
+                          initial={{ height: '0%' }}
+                          animate={{ height: '100%' }}
+                          transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+                          className="w-full bg-black"
+                      />
+                  </button>
+              </div>
           </div>
       </section>
       <Separator />

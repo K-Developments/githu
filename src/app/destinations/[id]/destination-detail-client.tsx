@@ -10,6 +10,7 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/com
 import type { Destination } from '@/lib/data';
 import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 interface DestinationDetailClientProps {
   destination: Destination;
@@ -21,10 +22,21 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
   const [otherApi, setOtherApi] = useState<CarouselApi>()
   
   const sliderImages = [destination.image, ...(destination.galleryImages || [])].filter(Boolean);
+  
+  const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      const heroSection = document.getElementById('hero-section-destination-detail');
+      if (heroSection) {
+          const nextSection = heroSection.nextElementSibling;
+          if (nextSection) {
+              nextSection.scrollIntoView({ behavior: 'smooth' });
+          }
+      }
+  };
 
   return (
     <div>
-        <section className="h-[50vh] flex flex-col">
+        <section id="hero-section-destination-detail" className="h-[65vh] flex flex-col">
             <div className="flex-1 flex items-center justify-center p-4 relative">
                  <Image
                     src={sliderImages[0]}
@@ -34,11 +46,21 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                     priority
                 />
                 <div className="absolute inset-0 bg-black/40" />
-                <ScrollAnimation>
-                    <h1 className="text-5xl md:text-7xl font-bold font-headline text-center uppercase tracking-widest text-white z-10 relative">
-                    {destination.title}
-                    </h1>
-                </ScrollAnimation>
+                <div className="relative text-center">
+                    <ScrollAnimation>
+                        <h1 className="text-5xl md:text-7xl font-bold font-headline text-center uppercase tracking-widest text-white z-10 relative">
+                        {destination.title}
+                        </h1>
+                    </ScrollAnimation>
+                    <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
+                      <motion.div
+                          initial={{ height: '0%' }}
+                          animate={{ height: '100%' }}
+                          transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+                          className="w-full bg-white"
+                      />
+                  </button>
+                </div>
             </div>
         </section>
 

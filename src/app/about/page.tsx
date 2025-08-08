@@ -13,7 +13,7 @@ import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 import { CtaSection } from '@/components/ui/cta-section';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { ArrowDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { AnimatedText } from '@/components/ui/animated-text';
 
 interface AboutPageData {
@@ -127,12 +127,23 @@ export default function AboutPage() {
     }
 
     const { hero, intro, journey, coreValues, workflow, ctaData } = pageData;
+    
+    const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const heroSection = document.getElementById('hero-section-about');
+        if (heroSection) {
+            const nextSection = heroSection.nextElementSibling;
+            if (nextSection) {
+                nextSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    };
 
     return (
         <div>
             <section
-                className="h-[40vh] flex flex-col"
-                id="journey-section"
+                className="h-[65vh] flex flex-col"
+                id="hero-section-about"
             >
                 <div 
                     className="flex-1 flex items-center justify-center p-4 relative"
@@ -143,11 +154,21 @@ export default function AboutPage() {
                     }}
                 >
                     <div className="absolute inset-0 bg-black/20"></div>
-                    <ScrollAnimation>
-                        <h1 className="relative text-5xl md:text-8xl font-bold font-headline uppercase tracking-widest text-white">
-                        {hero.headline}
-                        </h1>
-                    </ScrollAnimation>
+                    <div className="relative text-center">
+                        <ScrollAnimation>
+                            <h1 className="text-5xl md:text-8xl font-bold font-headline uppercase tracking-widest text-white">
+                            {hero.headline}
+                            </h1>
+                        </ScrollAnimation>
+                        <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
+                            <motion.div
+                                initial={{ height: '0%' }}
+                                animate={{ height: '100%' }}
+                                transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+                                className="w-full bg-black"
+                            />
+                        </button>
+                    </div>
                 </div>
             </section>
             

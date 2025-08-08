@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import type { Destination } from '@/lib/data';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { motion } from 'framer-motion';
 
 interface DestinationsClientProps {
   hero: {
@@ -21,9 +22,20 @@ interface DestinationsClientProps {
 
 export function DestinationsPageClient({ hero, destinations }: DestinationsClientProps) {
 
+  const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      const heroSection = document.getElementById('hero-section-destinations');
+      if (heroSection) {
+          const nextSection = heroSection.nextElementSibling;
+          if (nextSection) {
+              nextSection.scrollIntoView({ behavior: 'smooth' });
+          }
+      }
+  };
+
   return (
     <div>
-      <section className="h-[40vh] flex flex-col">
+      <section id="hero-section-destinations" className="h-[65vh] flex flex-col">
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
             style={{
@@ -32,11 +44,21 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
                 backgroundPosition: 'center',
             }}
           >
-              <ScrollAnimation>
-                  <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground break-words relative" style={{ lineBreak: 'anywhere'}}>
-                  {hero.headline}
-                  </h1>
-              </ScrollAnimation>
+              <div className="relative text-center">
+                  <ScrollAnimation>
+                      <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground break-words relative" style={{ lineBreak: 'anywhere'}}>
+                      {hero.headline}
+                      </h1>
+                  </ScrollAnimation>
+                  <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
+                      <motion.div
+                          initial={{ height: '0%' }}
+                          animate={{ height: '100%' }}
+                          transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+                          className="w-full bg-black"
+                      />
+                  </button>
+              </div>
           </div>
       </section>
       
