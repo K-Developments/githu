@@ -131,7 +131,7 @@ export default function AboutPage() {
     return (
         <div>
             <section
-                className="h-[40vh] flex flex-col bg-white"
+                className="h-[40vh] flex flex-col bg-background"
                 id="journey-section"
             >
                 <div 
@@ -151,7 +151,7 @@ export default function AboutPage() {
                 </div>
             </section>
             
-            <div className="bg-white px-4 md:px-12">
+            <div className="bg-background px-4 md:px-12">
                 <Separator />
                 <div className="text-sm text-muted-foreground py-4">
                     <Link href="/" className="hover:text-primary">Home</Link>
@@ -162,7 +162,7 @@ export default function AboutPage() {
             </div>
 
             {intro.paragraph && (
-                <section className="py-16 md:py-24 px-4 md:px-12 bg-white">
+                <section className="py-16 md:py-24 px-4 md:px-12 bg-background">
                    <AnimatedText text={intro.paragraph} />
                 </section>
             )}
@@ -270,7 +270,7 @@ export default function AboutPage() {
             )}
 
             {workflow.length > 0 && (
-                <section className="py-16 md:py-32 bg-white">
+                <section className="py-16 md:py-32 bg-background">
                     <div className="max-w-5xl mx-auto px-4 md:px-12">
                         <ScrollAnimation>
                             <h2 className="text-4xl md:text-5xl font-headline text-center mb-16 md:mb-20">Our Workflow</h2>

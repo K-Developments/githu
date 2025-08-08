@@ -86,7 +86,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
 
   return (
     <div>
-      <section className="h-[40vh] flex flex-col bg-white">
+      <section className="h-[40vh] flex flex-col bg-background">
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
             style={{
@@ -105,7 +105,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
       <Separator />
       <Separator />
 
-      <div className="bg-white px-4 md:px-12">
+      <div className="bg-background px-4 md:px-12">
           <div className="text-sm text-muted-foreground py-4">
               <Link href="/" className="hover:text-primary">Home</Link>
               <span className="mx-2">||</span>
@@ -148,7 +148,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="py-12 md:py-24 px-4 md:px-12 bg-white"
+                className="py-12 md:py-24 px-4 md:px-12 bg-background"
             >
                 <div className="max-w-7xl mx-auto">
                 <div className="flex justify-end mb-8">
@@ -322,7 +322,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
     </section>
 
     {otherPackages.length > 0 && (
-          <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
+          <section className="py-12 md:py-24 px-4 md:px-12 bg-background">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-12">
                     <ScrollAnimation>

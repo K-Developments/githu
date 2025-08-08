@@ -502,7 +502,7 @@
 	}
 	/* Intro Section */
 	.intro-home {
-		background-color: white;
+		background-color: hsl(var(--background));
 		overflow:hidden;
 	}
 	

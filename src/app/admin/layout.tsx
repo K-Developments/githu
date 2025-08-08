@@ -65,7 +65,7 @@ export default function AdminLayout({
             </SidebarContent>
         </Sidebar>
         <SidebarInset>
-            <main className="p-4 md:p-6 bg-white">
+            <main className="p-4 md:p-6 bg-background">
                 {children}
             </main>
         </SidebarInset>

@@ -23,8 +23,8 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
   const sliderImages = [destination.image, ...(destination.galleryImages || [])].filter(Boolean);
 
   return (
-    <div className="bg-white">
-        <section className="h-[50vh] flex flex-col bg-white">
+    <div className="bg-background">
+        <section className="h-[50vh] flex flex-col bg-background">
             <div className="flex-1 flex items-center justify-center p-4 relative">
                  <Image
                     src={sliderImages[0]}
@@ -42,7 +42,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
             </div>
         </section>
 
-        <div className="bg-white px-4 md:px-12">
+        <div className="bg-background px-4 md:px-12">
             <Separator />
             <div className="text-sm text-muted-foreground py-4">
                 <Link href="/" className="hover:text-primary">Home</Link>
@@ -54,7 +54,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
             <Separator />
         </div>
 
-       <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
+       <section className="py-12 md:py-24 px-4 md:px-12 bg-background">
         <div className="max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="relative">

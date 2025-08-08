@@ -14,7 +14,7 @@ interface PackagesCtaProps {
 
 export function PackagesCtaSection({ title, description, image }: PackagesCtaProps) {
   return (
-    <section className="bg-white py-12 md:py-24">
+    <section className="bg-background py-12 md:py-24">
       <div className="max-w-7xl mx-auto px-4 md:px-12">
         <div className="bg-card rounded-lg shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
           <div className="p-8 md:p-16 flex flex-col justify-center">
@@ -50,5 +50,3 @@ export function PackagesCtaSection({ title, description, image }: PackagesCtaPro
     </section>
   );
 }
-
-    

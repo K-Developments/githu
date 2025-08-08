@@ -23,7 +23,7 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
 
   return (
     <div>
-      <section className="h-[40vh] flex flex-col bg-white">
+      <section className="h-[40vh] flex flex-col bg-background">
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
             style={{
@@ -44,7 +44,7 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
       <Separator/>
 
 
-      <div className="bg-white px-4 md:px-12">
+      <div className="bg-background px-4 md:px-12">
           <div className="text-sm text-muted-foreground py-4">
               <Link href="/" className="hover:text-primary">Home</Link>
               <span className="mx-2">||</span>
@@ -53,7 +53,7 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
           <Separator />
       </div>
 
-       <section className="py-12 md:py-24 px-4 md:px-12 bg-white">
+       <section className="py-12 md:py-24 px-4 md:px-12 bg-background">
         <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {destinations.map((dest, i) => (
