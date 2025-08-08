@@ -204,7 +204,7 @@ export default function AboutPage() {
                         </div>
                     </div>
                 </div>
-                <div className="bg-white py-16 md:py-24 -mt-24 md:-mt-32">
+                <div className="bg-background py-16 md:py-24 -mt-24 md:-mt-32">
                     <div className="max-w-4xl mx-auto px-4 md:px-12 pt-16 md:pt-24">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             <ScrollAnimation>
