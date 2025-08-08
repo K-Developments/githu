@@ -2,12 +2,11 @@
 'use client';
 
 import React, { useState, useTransition } from 'react';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import type { FormValues } from './actions';
+import { formSchema, submitContactForm } from './actions';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
@@ -15,42 +14,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-
-const formSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z.string().optional(),
-  country: z.string().min(2, { message: "Please select your country." }),
-  inquiryType: z.string().min(1, { message: "Please select an inquiry type." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-async function submitContactForm(data: FormValues) {
-    'use server';
-    try {
-        // Server-side validation
-        const validatedData = formSchema.parse(data);
-
-        await addDoc(collection(db, "contactSubmissions"), {
-            ...validatedData,
-            submittedAt: serverTimestamp(),
-        });
-        
-        return { success: true, message: "Your message has been sent successfully!" };
-
-    } catch (error) {
-        console.error("Error submitting form:", error);
-        if (error instanceof z.ZodError) {
-             return { success: false, message: "Validation failed. Please check your input." };
-        }
-        return { success: false, message: "An unexpected error occurred. Please try again." };
-    }
-}
-
 
 export default function ContactPage() {
   const [isPending, startTransition] = useTransition();
