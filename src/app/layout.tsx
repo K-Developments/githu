@@ -44,6 +44,7 @@ function RootLayoutContent({
   return (
     <html lang="en" className="scroll-smooth">
        <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Island Hopes - Bespoke Luxury Travel</title>
         <meta name="description" content="Discover the world's most exclusive island destinations with Island Hopes. We craft bespoke, luxury travel experiences and unforgettable journeys tailored to you." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

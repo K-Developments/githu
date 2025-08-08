@@ -258,69 +258,68 @@ function HeroSection({ data }: { data: HeroData }) {
 
 
 function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
-    const imageContainerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: imageContainerRef,
-        offset: ['start end', 'end start']
-    });
+const imageContainerRef = useRef<HTMLDivElement>(null);
+const { scrollYProgress } = useScroll({
+    target: imageContainerRef,
+    offset: ['start end', 'end start']
+});
 
-    const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
-    const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
-    const textOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 1, 0]);
+const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.15, 1]);
+const textOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 1, 0]);
 
-    return (
-        <section
-        className="py-28"
-        style={{
-            backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-        }}
-        >
-        <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
-            <ScrollAnimation>
-            <h2
-                className="secondary-heading text-center"
-                dangerouslySetInnerHTML={{ __html: data.headline }}
-            />
-            </ScrollAnimation>
+return (
+    <section
+    className="py-28"
+    style={{
+        backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+    }}
+    >
+    <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
+        <ScrollAnimation>
+        <h2
+            className="secondary-heading text-center"
+            dangerouslySetInnerHTML={{ __html: data.headline }}
+        />
+        </ScrollAnimation>
 
-            <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
-                <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]  overflow-hidden rounded-md">
-                    <motion.div style={{ scale, y }} className="w-full h-full">
-                        <Image
-                            src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
-                            alt="Scenic introduction landscape"
-                            fill
-                            sizes="(min-width: 768px) 75vw, 90vw"
-                            className="object-cover"
-                            data-ai-hint="elegant architecture interior"
-                        />
-                    </motion.div>
-                    <div className="absolute inset-0 bg-black/20"></div>
-                    <motion.div 
-                        className="absolute inset-0 flex items-center justify-center"
-                        style={{ opacity: textOpacity }}
-                    >
-                        <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">Welcome to Sri Lanka</h3>
-                    </motion.div>
-                </div>
+        <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
+            <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]  overflow-hidden rounded-md">
+                <motion.div style={{ scale }} className="w-full h-full">
+                    <Image
+                        src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+                        alt="Scenic introduction landscape"
+                        fill
+                        sizes="(min-width: 768px) 75vw, 90vw"
+                        className="object-cover"
+                        data-ai-hint="elegant architecture interior"
+                    />
+                </motion.div>
+                <div className="absolute inset-0 bg-black/20"></div>
+                <motion.div 
+                    className="absolute inset-0 flex items-center justify-center"
+                    style={{ opacity: textOpacity }}
+                >
+                    <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">Welcome to Sri Lanka</h3>
+                </motion.div>
             </div>
-            
-            <ScrollAnimation className="max-w-3xl" delay={0.2}>
-                <p className="paragraph-style text-lg text-center">{data.paragraph}</p>
-            </ScrollAnimation>
-
-            <ScrollAnimation delay={0.3}>
-                <div className="button-wrapper-for-border mt-4">
-                    <Button asChild variant="outline">
-                        <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-                    </Button>
-                </div>
-            </ScrollAnimation>
         </div>
-        </section>
-    );
+        
+        <ScrollAnimation className="max-w-3xl" delay={0.2}>
+            <p className="paragraph-style text-lg text-center">{data.paragraph}</p>
+        </ScrollAnimation>
+
+        <ScrollAnimation delay={0.3}>
+            <div className="button-wrapper-for-border mt-4">
+                <Button asChild variant="outline">
+                    <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+                </Button>
+            </div>
+        </ScrollAnimation>
+    </div>
+    </section>
+);
 }
 
 
@@ -702,3 +701,4 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
+
