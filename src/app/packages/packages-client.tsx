@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -10,12 +10,11 @@ import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { PackagesCtaSection } from '@/components/ui/packages-cta-section';
 import type { Package, Category, PackagesCtaData, ItineraryDay } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronDown, CheckCircle, XCircle, Calendar, Users, MapPin, Star, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Users, MapPin, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TourItinerary } from '@/components/ui/tour-itinerary';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 
 
@@ -219,101 +218,140 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
 }
 
 function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelectPackage }: { pkg: Package, onClose: () => void, categoryName: string, otherPackages: Package[], onSelectPackage: (pkg: Package) => void }) {
+    const [mainApi, setMainApi] = useState<CarouselApi>()
     const [otherApi, setOtherApi] = useState<CarouselApi>()
+    const [currentSlide, setCurrentSlide] = useState(0)
+
+    useEffect(() => {
+        if (!mainApi) return
+        setCurrentSlide(mainApi.selectedScrollSnap())
+        mainApi.on("select", () => setCurrentSlide(mainApi.selectedScrollSnap()))
+        mainApi.on("reInit", () => setCurrentSlide(mainApi.selectedScrollSnap()))
+    }, [mainApi])
     
-    const renderList = (items: string[] | undefined, icon: React.ReactNode, itemClassName: string) => (
-        <ul className="space-y-2">
+    const scrollTo = useCallback(
+        (index: number) => mainApi && mainApi.scrollTo(index),
+        [mainApi]
+    )
+
+    const renderList = (items: string[] | undefined, listClassName?: string, itemClassName?: string) => (
+        <ul className={cn("space-y-2", listClassName)}>
             {(items || []).filter(item => item.trim() !== '').map((item, index) => (
                 <li key={index} className="flex items-start">
-                    <span className="mr-3 mt-1 flex-shrink-0 ">{icon}</span>
-                    <span className={itemClassName}>{item}</span>
+                    <span className="text-primary mr-3 mt-1.5">&#9679;</span>
+                    <span className={cn("text-muted-foreground", itemClassName)}>{item}</span>
                 </li>
             ))}
         </ul>
-      );
+    );
       
+    const sliderImages = (pkg.images || []).filter(img => img);
+
   return (
     <>
-    <section className="py-28 px-4 md:px-12 relative bg-[url(https://cdn.jsdelivr.net/gh/K-Developments/media@main/island%20hopes/art.jpg)]">
-      <div className="max-w-7xl mx-auto p-6 md:p-10 bg-card rounded-lg shadow-2xl relative">
+    <section className="py-28 px-4 md:px-12">
+      <div className="max-w-7xl mx-auto">
         <Button
             variant="ghost"
-            size="icon"
+            size="sm"
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 rounded-full"
+            className="mb-8"
         >
-          <ChevronLeft className="h-6 w-6" />
+          <ChevronLeft className="h-4 w-4 mr-2" />
+          Back to Packages
         </Button>
-      
-        <div className="mb-8">
+
+        <div className="mb-12 text-center">
             <p className="text-primary font-semibold uppercase tracking-wider mb-2">{categoryName}</p>
             <h2 className="font-headline text-4xl md:text-6xl text-foreground">{pkg.title}</h2>
-            <p className="text-lg text-muted-foreground mt-2">{pkg.location}</p>
+            <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">{pkg.location}</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 pb-8 border-b">
-            <div className="flex items-center gap-3">
-                <Calendar className="h-8 w-8 text-primary" />
-                <div>
-                    <h4 className="font-semibold">Duration</h4>
-                    <p className="text-muted-foreground">{pkg.duration}</p>
-                </div>
-            </div>
-            <div className="flex items-center gap-3">
-                <Users className="h-8 w-8 text-primary" />
-                <div>
-                    <h4 className="font-semibold">Group Size</h4>
-                    <p className="text-muted-foreground">{pkg.groupSize}</p>
-                </div>
-            </div>
-            <div className="flex items-center gap-3">
-                <MapPin className="h-8 w-8 text-primary" />
-                <div>
-                    <h4 className="font-semibold">Destinations</h4>
-                    <p className="text-muted-foreground">{pkg.destinationsCount}</p>
-                </div>
-            </div>
-            <div className="flex items-center gap-3">
-                <Star className="h-8 w-8 text-primary" />
-                <div>
-                    <h4 className="font-semibold">Rating</h4>
-                    <p className="text-muted-foreground">{pkg.rating}/5 ({pkg.reviewsCount} reviews)</p>
-                </div>
-            </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
-            <div className="md:col-span-3">
-                <TourItinerary overview={pkg.overview} itinerary={pkg.itinerary} />
-            </div>
-            <div className="md:col-span-2">
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                    {(pkg.images || []).slice(0, 4).filter(img => img).map((image, index) => (
-                        <div key={index} className="relative aspect-square">
-                            <Image
-                                src={image}
-                                alt={`${pkg.title} - image ${index + 1}`}
-                                fill
-                                className="object-cover rounded-md"
-                            />
-                        </div>
+        {sliderImages.length > 0 && (
+            <div className='mb-12'>
+                <Carousel setApi={setMainApi} opts={{ loop: true }}>
+                    <CarouselContent>
+                        {sliderImages.map((image, index) => (
+                            <CarouselItem key={index}>
+                                <div className="relative aspect-video w-full">
+                                    <Image
+                                        src={image}
+                                        alt={`${pkg.title} - view ${index + 1}`}
+                                        fill
+                                        className="object-cover rounded-lg"
+                                        priority={index === 0}
+                                    />
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                </Carousel>
+                 <div className="flex justify-center gap-2 mt-4">
+                    {sliderImages.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => scrollTo(index)}
+                        className={cn(
+                        "h-2 w-2 rounded-full transition-all",
+                        index === currentSlide ? "w-4 bg-primary" : "bg-muted"
+                        )}
+                        aria-label={`Go to slide ${index + 1}`}
+                    />
                     ))}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-1 gap-8 p-6 bg-secondary rounded-lg">
+            </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12">
+            <div className="lg:col-span-3">
+                <TourItinerary overview={pkg.overview} itinerary={pkg.itinerary} />
+            </div>
+            <div className="lg:col-span-2">
+                <div className="bg-secondary/50 p-6 md:p-8 rounded-lg space-y-8 sticky top-24">
+                     <div className="grid grid-cols-2 gap-6 pb-6 border-b">
+                        <div className="flex items-center gap-3">
+                            <Calendar className="h-6 w-6 text-primary" />
+                            <div>
+                                <h4 className="font-semibold text-sm">Duration</h4>
+                                <p className="text-muted-foreground text-sm">{pkg.duration}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <Users className="h-6 w-6 text-primary" />
+                            <div>
+                                <h4 className="font-semibold text-sm">Group Size</h4>
+                                <p className="text-muted-foreground text-sm">{pkg.groupSize}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <MapPin className="h-6 w-6 text-primary" />
+                            <div>
+                                <h4 className="font-semibold text-sm">Destinations</h4>
+                                <p className="text-muted-foreground text-sm">{pkg.destinationsCount}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <Star className="h-6 w-6 text-primary" />
+                            <div>
+                                <h4 className="font-semibold text-sm">Rating</h4>
+                                <p className="text-muted-foreground text-sm">{pkg.rating}/5 ({pkg.reviewsCount} reviews)</p>
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <h4 className="font-headline text-2xl mb-4">Inclusions</h4>
-                        {renderList(pkg.inclusions, <CheckCircle className="h-5 w-5 text-green-500" />, 'text-muted-foreground')}
+                        {renderList(pkg.inclusions)}
                     </div>
                     <div>
                         <h4 className="font-headline text-2xl mb-4">Exclusions</h4>
-                        {renderList(pkg.exclusions, <XCircle className="h-5 w-5 text-red-500" />, 'text-muted-foreground')}
+                        {renderList(pkg.exclusions)}
                     </div>
-                </div>
-                <div className="mt-8 flex justify-center">
-                    <div className="button-wrapper-for-border">
-                        <Button asChild size="lg">
-                            <Link href={pkg.linkUrl || '#'}>Book This Tour</Link>
-                        </Button>
+                    <div className="pt-6 border-t">
+                        <div className="button-wrapper-for-border">
+                            <Button asChild size="lg" className="w-full">
+                                <Link href={pkg.linkUrl || '#'}>Book This Tour</Link>
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -322,7 +360,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
     </section>
 
     {otherPackages.length > 0 && (
-          <section className="py-28 px-4 md:px-12">
+          <section className="py-28 px-4 md:px-12 bg-secondary/30">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-12">
                     <ScrollAnimation>
@@ -334,13 +372,13 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
                     setApi={setOtherApi}
                     opts={{
                         align: "start",
-                        loop: otherPackages.length > 3,
+                        loop: otherPackages.length > 2,
                     }}
                     className="w-full"
                 >
-                    <CarouselContent className="-ml-4">
+                    <CarouselContent className="-ml-8">
                         {otherPackages.map((otherPkg) => (
-                        <CarouselItem key={otherPkg.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                        <CarouselItem key={otherPkg.id} className="pl-8 md:basis-1/2">
                             <ScrollAnimation>
                                <div 
                                     onClick={() => onSelectPackage(otherPkg)}
