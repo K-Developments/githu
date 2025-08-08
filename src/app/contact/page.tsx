@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,10 +16,47 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+
+interface ContactHeroData {
+  headline: string;
+  heroImage: string;
+}
+
+async function getContactPageData(): Promise<ContactHeroData | null> {
+    try {
+        const contentDocRef = doc(db, 'content', 'contact');
+        const contentDocSnap = await getDoc(contentDocRef);
+
+        if (contentDocSnap.exists()) {
+            const data = contentDocSnap.data();
+            return data.hero as ContactHeroData;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching contact page data:', error);
+        return null;
+    }
+}
 
 export default function ContactPage() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const [heroData, setHeroData] = useState<ContactHeroData>({
+    headline: "Contact Us",
+    heroImage: "https://placehold.co/1920x1080.png"
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getContactPageData().then(data => {
+      if (data) {
+        setHeroData(data);
+      }
+      setLoading(false);
+    });
+  }, []);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -63,13 +100,17 @@ export default function ContactPage() {
     }
   };
 
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
   return (
     <div>
       <section id="hero-section-contact" className="h-[65vh] flex flex-col">
         <div 
           className="flex-1 flex items-center justify-center p-4 relative"
           style={{
-              backgroundImage: 'url(https://placehold.co/1920x1080.png)',
+              backgroundImage: `url(${heroData.heroImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
           }}
@@ -79,7 +120,7 @@ export default function ContactPage() {
           <div className="relative text-center">
             <ScrollAnimation>
               <h1 className="text-5xl md:text-8xl font-bold font-headline uppercase tracking-widest text-white">
-                Contact Us
+                {heroData.headline}
               </h1>
             </ScrollAnimation>
             <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
