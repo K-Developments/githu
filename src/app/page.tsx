@@ -615,4 +615,3 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
-

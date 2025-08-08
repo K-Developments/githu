@@ -86,7 +86,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
 
   return (
     <div>
-      <section className="h-[40vh] flex flex-col bg-background">
+      <section className="h-[40vh] flex flex-col">
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
             style={{
@@ -105,7 +105,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
       <Separator />
       <Separator />
 
-      <div className="bg-background px-4 md:px-12">
+      <div className="px-4 md:px-12">
           <div className="text-sm text-muted-foreground py-4">
               <Link href="/" className="hover:text-primary">Home</Link>
               <span className="mx-2">||</span>
@@ -148,7 +148,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="py-12 md:py-24 px-4 md:px-12 bg-background"
+                className="py-12 md:py-24 px-4 md:px-12"
             >
                 <div className="max-w-7xl mx-auto">
                 <div className="flex justify-end mb-8">
@@ -234,7 +234,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
       
   return (
     <>
-    <section className="bg-background py-16 md:py-24 px-4 md:px-12 relative bg-[url(https://cdn.jsdelivr.net/gh/K-Developments/media@main/island%20hopes/art.jpg)]">
+    <section className="py-16 md:py-24 px-4 md:px-12 relative bg-[url(https://cdn.jsdelivr.net/gh/K-Developments/media@main/island%20hopes/art.jpg)]">
       <div className="max-w-7xl mx-auto p-6 md:p-10 bg-card rounded-lg shadow-2xl relative">
         <Button
             variant="ghost"
@@ -299,7 +299,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
                         </div>
                     ))}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-1 gap-8 p-6 bg-background rounded-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-1 gap-8 p-6 bg-secondary rounded-lg">
                     <div>
                         <h4 className="font-headline text-2xl mb-4">Inclusions</h4>
                         {renderList(pkg.inclusions, <CheckCircle className="h-5 w-5 text-green-500" />, 'text-muted-foreground')}
@@ -322,7 +322,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
     </section>
 
     {otherPackages.length > 0 && (
-          <section className="py-12 md:py-24 px-4 md:px-12 bg-background">
+          <section className="py-12 md:py-24 px-4 md:px-12">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-12">
                     <ScrollAnimation>
