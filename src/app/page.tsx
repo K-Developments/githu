@@ -349,11 +349,11 @@
 
         return (
             <CarouselItem ref={ref} key={dest.id} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
-                <div className={cn(
-                    "h-[70vh] relative flex items-center justify-center transition-all duration-500 ease-in-out",
-                    isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
-                )}>
-                    <div className="destination-card-parallax w-full h-full">
+                <div className="h-[75vh] relative flex items-center justify-center">
+                    <div className={cn(
+                        "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
+                        isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
+                    )}>
                         <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref className="block w-full h-full">
                             <motion.div className="relative w-full h-[130%]" style={{ y }}>
                                 <Image
@@ -491,14 +491,14 @@
             <Link href={`/packages?package=${pkg.id}`} passHref>
                 <motion.div 
                     ref={ref}
-                    className="package-card group"
+                    className="package-display-card group"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     layout
                 >
-                    <div className="package-card-image-container">
+                    <div className="card-image">
                         <motion.div className="relative w-full h-full" style={{ y }}>
                             <Image
                                 src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x600.png"}
@@ -509,10 +509,9 @@
                             />
                         </motion.div>
                     </div>
-                    <div className="package-card-overlay" />
-                    <div className="package-card-content">
-                        <h3 className="package-card-title">{pkg.title}</h3>
-                        <p className="package-card-location">{pkg.location}</p>
+                    <div className="card-details">
+                        <h3 className="card-title">{pkg.title}</h3>
+                        <p className="card-description">{pkg.location}</p>
                     </div>
                 </motion.div>
             </Link>
