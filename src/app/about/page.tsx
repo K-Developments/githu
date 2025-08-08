@@ -162,12 +162,12 @@ export default function AboutPage() {
             </div>
 
             {intro.paragraph && (
-                <section className="py-16 md:py-24 px-4 md:px-12">
+                <section className="py-14 px-4 md:px-12">
                    <AnimatedText text={intro.paragraph} />
                 </section>
             )}
             
-            <section className="py-16 md:py-32 overflow-hidden">
+            <section className="py-14 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 md:px-12">
                     <ScrollAnimation>
                         <Separator />
@@ -204,8 +204,8 @@ export default function AboutPage() {
                         </div>
                     </div>
                 </div>
-                <div className="py-16 md:py-24 -mt-24 md:-mt-32">
-                    <div className="max-w-4xl mx-auto px-4 md:px-12 pt-16 md:pt-24">
+                <div className="py-14 -mt-24 md:-mt-32">
+                    <div className="max-w-4xl mx-auto px-4 md:px-12 pt-16 md:pt-24 bg-background">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             <ScrollAnimation>
                                 <div>
@@ -225,7 +225,7 @@ export default function AboutPage() {
             </section>
 
             {coreValues.length > 0 && (
-                <section className="py-16 md:py-32">
+                <section className="py-14">
                     <div className="max-w-7xl mx-auto px-4 md:px-12">
                         <ScrollAnimation>
                             <h2 className="text-4xl md:text-5xl font-headline text-center mb-16 md:mb-24">Our Core Values</h2>
@@ -239,7 +239,7 @@ export default function AboutPage() {
                                     index % 2 !== 0 && "md:mt-16"
                                 )}
                                 >
-                                    <div className="relative aspect-[4/3]">
+                                    <div className="relative aspect-square">
                                         <Image
                                             src={value.image}
                                             alt={value.title}
@@ -270,7 +270,7 @@ export default function AboutPage() {
             )}
 
             {workflow.length > 0 && (
-                <section className="py-16 md:py-32">
+                <section className="py-14">
                     <div className="max-w-5xl mx-auto px-4 md:px-12">
                         <ScrollAnimation>
                             <h2 className="text-4xl md:text-5xl font-headline text-center mb-16 md:mb-20">Our Workflow</h2>

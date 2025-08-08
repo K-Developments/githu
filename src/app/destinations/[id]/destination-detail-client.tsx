@@ -54,7 +54,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
             <Separator />
         </div>
 
-       <section className="py-12 md:py-24 px-4 md:px-12">
+       <section className="py-14 px-4 md:px-12">
         <div className="max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="relative">
@@ -134,7 +134,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
       </section>
 
       {otherDestinations.length > 0 && (
-          <section className="py-12 md:py-24 px-4 md:px-12 bg-secondary/50">
+          <section className="py-14 px-4 md:px-12 bg-secondary/50">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-12">
                     <ScrollAnimation>

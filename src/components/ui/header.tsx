@@ -16,7 +16,7 @@ export function Header({ logoUrl }: { logoUrl?: string }) {
   }, []);
 
   const Logo = () => (
-    <Link href="/" className="logo block relative w-20 h-16" onClick={() => setIsMenuOpen(false)}>
+    <Link href="/" className="logo block relative w-[38px] h-[38px]" onClick={() => setIsMenuOpen(false)}>
       {logoUrl ? (
         <Image 
           src={logoUrl} 
@@ -37,7 +37,7 @@ export function Header({ logoUrl }: { logoUrl?: string }) {
   return (
     <>
       <MobileNav isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} logoUrl={logoUrl} />
-      <div className="fixed top-4 right-4 z-[101] flex flex-col items-center gap-4 p-2 bg-background/80 backdrop-blur-sm rounded-lg border">
+      <div className="fixed top-4 right-4 z-[101] flex flex-row items-center  rounded-lg " >
          <Logo />
          <AnimatedHamburgerButton
             isOpen={isMenuOpen}

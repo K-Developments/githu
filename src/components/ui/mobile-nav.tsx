@@ -119,7 +119,7 @@ export const MobileNav = ({ isOpen, setIsOpen, logoUrl }: { isOpen: boolean; set
                                     pathname === link.href && "text-foreground font-medium"
                                 )}
                                 onClick={() => setIsOpen(false)}
-                            >
+                                >
                                 {link.title}
                             </Link>
                         </motion.div>

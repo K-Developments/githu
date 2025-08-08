@@ -148,7 +148,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="py-12 md:py-24 px-4 md:px-12"
+                className="py-14 px-4 md:px-12"
             >
                 <div className="max-w-7xl mx-auto">
                 <div className="flex justify-end mb-8">
@@ -234,7 +234,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
       
   return (
     <>
-    <section className="py-16 md:py-24 px-4 md:px-12 relative bg-[url(https://cdn.jsdelivr.net/gh/K-Developments/media@main/island%20hopes/art.jpg)]">
+    <section className="py-14 px-4 md:px-12 relative bg-[url(https://cdn.jsdelivr.net/gh/K-Developments/media@main/island%20hopes/art.jpg)]">
       <div className="max-w-7xl mx-auto p-6 md:p-10 bg-card rounded-lg shadow-2xl relative">
         <Button
             variant="ghost"
@@ -322,7 +322,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
     </section>
 
     {otherPackages.length > 0 && (
-          <section className="py-12 md:py-24 px-4 md:px-12">
+          <section className="py-14 px-4 md:px-12">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-12">
                     <ScrollAnimation>

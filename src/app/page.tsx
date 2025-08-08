@@ -324,7 +324,7 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
 
   return (
     <section 
-        className="destinations-section py-12 md:py-24"
+        className="destinations-section py-14"
         style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
             backgroundSize: 'cover',
