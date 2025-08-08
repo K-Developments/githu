@@ -260,6 +260,15 @@ function HeroSection({ data }: { data: HeroData }) {
 
 
 function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: imageContainerRef,
+    offset: ['start end', 'end start']
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.15, 1]);
+  const textOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 1, 0]);
+
   return (
     <section
       className="py-28"
@@ -277,18 +286,27 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
           />
         </ScrollAnimation>
 
-        <ScrollAnimation className="w-full my-12" delay={0.1}>
-            <div className="relative aspect-[16/9] w-3/4 mx-auto">
-                <Image
-                    src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
-                    alt="Scenic introduction landscape"
-                    fill
-                    sizes="(min-width: 768px) 75vw, 90vw"
-                    className="object-cover rounded-md shadow-lg"
-                    data-ai-hint="elegant architecture interior"
-                />
+        <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
+            <div className="relative aspect-[16/9] w-3/4 overflow-hidden rounded-md">
+                <motion.div style={{ scale }} className="w-full h-full">
+                    <Image
+                        src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+                        alt="Scenic introduction landscape"
+                        fill
+                        sizes="(min-width: 768px) 75vw, 90vw"
+                        className="object-cover"
+                        data-ai-hint="elegant architecture interior"
+                    />
+                </motion.div>
+                <div className="absolute inset-0 bg-black/20"></div>
+                <motion.div 
+                    className="absolute inset-0 flex items-center justify-center"
+                    style={{ opacity: textOpacity }}
+                >
+                    <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">Welcome to Sri Lanka</h3>
+                </motion.div>
             </div>
-        </ScrollAnimation>
+        </div>
         
         <ScrollAnimation className="max-w-3xl" delay={0.2}>
             <p className="paragraph-style text-lg">{data.paragraph}</p>
