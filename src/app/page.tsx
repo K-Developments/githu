@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useRef } from "react";
@@ -559,7 +560,7 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
 
 
         <motion.div 
-            className="packages-grid grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="packages-grid"
             layout
         >
             <AnimatePresence>
