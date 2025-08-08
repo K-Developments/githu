@@ -262,55 +262,54 @@ function HeroSection({ data }: { data: HeroData }) {
 function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
   return (
     <section
-      className="intro-home py-28"
+      className="py-28"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <div className="intro-content-wrapper">
-        <Separator />
-        <h2
-          className="secondary-heading"
-          dangerouslySetInnerHTML={{ __html: data.headline }}
-        />
-        <Separator />
-        <div className="intro-container">
-            <div className="intro-text-content">
-                <ScrollAnimation>
-                <p className="paragraph-style">{data.paragraph}</p>
-                </ScrollAnimation>
-                <ScrollAnimation>
-                <div className="button-wrapper-for-border">
-                    <Button asChild variant="outline">
-                        <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-                    </Button>
-                </div>
-                </ScrollAnimation>
+      <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
+        <ScrollAnimation>
+          <h2
+            className="secondary-heading text-center"
+            dangerouslySetInnerHTML={{ __html: data.headline }}
+          />
+        </ScrollAnimation>
+
+        <ScrollAnimation className="w-full my-12" delay={0.1}>
+            <div className="relative aspect-[16/9] w-3/4 mx-auto">
+                <Image
+                    src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+                    alt="Scenic introduction landscape"
+                    fill
+                    sizes="(min-width: 768px) 75vw, 90vw"
+                    className="object-cover rounded-md shadow-lg"
+                    data-ai-hint="elegant architecture interior"
+                />
             </div>
-            <div className="intro-image-cluster">
-                <ScrollAnimation className="h-full">
-                <div className="image-landscape-wrapper">
-                    <Image
-                    src={data.landscapeImage || 'https://placehold.co/1000x662.png'}
-                    alt="Scenic landscape"
-                    width={1000}
-                    height={662}
-                    sizes="(min-width: 768px) 45vw, 90vw"
-                    />
-                </div>
-                </ScrollAnimation>
+        </ScrollAnimation>
+        
+        <ScrollAnimation className="max-w-3xl" delay={0.2}>
+            <p className="paragraph-style text-lg">{data.paragraph}</p>
+        </ScrollAnimation>
+
+        <ScrollAnimation delay={0.3}>
+            <div className="button-wrapper-for-border mt-4">
+                <Button asChild variant="outline">
+                    <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+                </Button>
             </div>
-        </div>
+        </ScrollAnimation>
       </div>
     </section>
   );
 }
 
+
 function QuoteSection({ data, backgroundImage }: { data: QuoteData, backgroundImage?: string }) {
   return (
-    <section className="quote-section" style={{ backgroundImage: `url(${backgroundImage || data.image})` }}>
+    <section className="quote-section py-28" style={{ backgroundImage: `url(${backgroundImage || data.image})` }}>
         <div className="overlay"></div>
         <ScrollAnimation>
           <p className="quote-text">{data.text}</p>
