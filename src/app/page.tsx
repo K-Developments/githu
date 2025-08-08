@@ -308,7 +308,7 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
         </div>
         
         <ScrollAnimation className="max-w-3xl" delay={0.2}>
-            <p className="paragraph-style text-lg">{data.paragraph}</p>
+            <p className="paragraph-style text-lg text-center">{data.paragraph}</p>
         </ScrollAnimation>
 
         <ScrollAnimation delay={0.3}>
@@ -335,64 +335,64 @@ function QuoteSection({ data, backgroundImage }: { data: QuoteData, backgroundIm
   );
 }
 
+function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destination, index: number, current: number, api: CarouselApi | undefined }) {
+    const { scrollYProgress } = useScroll({
+        target: api?.containerNode(),
+        offset: ["start end", "end start"],
+    });
+
+    const isCenter = index === current;
+    const progress = useTransform(scrollYProgress, [0, 1], [-1, 1]);
+    const x = useTransform(progress, (value) => isCenter ? value * -100 : value * 200);
+
+    return (
+        <CarouselItem key={dest.id} className="pl-4 basis-full md:basis-[40%] lg:basis-[30%]">
+            <div className="h-[70vh] relative flex items-center justify-center">
+                <div className={cn(
+                    "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
+                    isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
+                )}>
+                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref className="block w-full h-full">
+                        <motion.div className="relative w-full h-full" style={{ x }}>
+                            <Image
+                                src={dest.image || "https://placehold.co/600x800.png"}
+                                alt={dest.title}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                                className="card-image scale-125"
+                            />
+                        </motion.div>
+                        <div className="absolute bottom-0 left-0 p-6 text-left z-10">
+                            <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
+                            <p className="text-white/80">{dest.location}</p>
+                        </div>
+                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    </Link>
+                </div>
+            </div>
+        </CarouselItem>
+    )
+}
+
 function DestinationsSection({ sectionData, destinations, backgroundImage }: { sectionData: DestinationsData, destinations: Destination[], backgroundImage?: string }) {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
-  const [scaleTransforms, setScaleTransforms] = React.useState<number[]>([]);
-  const [opacityTransforms, setOpacityTransforms] = React.useState<number[]>([]);
-
+  
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return;
     setCurrent(api.selectedScrollSnap());
   }, []);
 
-  const TWEEN_FACTOR = 4.2;
-
-  const tweenOpacity = React.useCallback((index: number, emblaApi: CarouselApi) => {
-    const engine = emblaApi.internalEngine();
-    const scrollProgress = emblaApi.scrollProgress();
-    const slidesInView = emblaApi.slidesInView();
-    if (!slidesInView.includes(index)) return 0;
-    
-    const diffToTarget = emblaApi.scrollSnapList()[index] - scrollProgress;
-    const tween = 1 - Math.abs(diffToTarget) * TWEEN_FACTOR;
-    return Number(Math.max(0.4, Math.min(1, tween)).toFixed(3));
-  }, []);
-
-  const tweenScale = React.useCallback((index: number, emblaApi: CarouselApi) => {
-    const engine = emblaApi.internalEngine();
-    const scrollProgress = emblaApi.scrollProgress();
-    const slidesInView = emblaApi.slidesInView();
-    if (!slidesInView.includes(index)) return 0;
-    
-    const diffToTarget = emblaApi.scrollSnapList()[index] - scrollProgress;
-    const tween = 1 - Math.abs(diffToTarget) * (TWEEN_FACTOR / 10);
-    return Number(Math.max(0.85, Math.min(1, tween)).toFixed(3));
-  }, []);
-
   React.useEffect(() => {
     if (!api) return;
-
     onSelect(api);
     api.on('select', onSelect);
     api.on('reInit', onSelect);
-
-    const onScroll = () => {
-      const newOpacities = api.scrollSnapList().map((_, index) => tweenOpacity(index, api));
-      setOpacityTransforms(newOpacities);
-      const newScales = api.scrollSnapList().map((_, index) => tweenScale(index, api));
-      setScaleTransforms(newScales);
-    };
-
-    api.on('scroll', onScroll);
-    // Initial set
-    onScroll();
-
     return () => {
       api.off('select', onSelect);
-      api.off('scroll', onScroll);
     };
-  }, [api, onSelect, tweenOpacity, tweenScale]);
+  }, [api, onSelect]);
   
   const descriptionVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -414,7 +414,7 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
                 <h2 className="section-title text-center mb-4">{sectionData.title}</h2>
             </ScrollAnimation>
             <ScrollAnimation delay={0.1}>
-                 <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">{sectionData.subtitle}</p>
+                 <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto text-center">{sectionData.subtitle}</p>
             </ScrollAnimation>
         </div>
 
@@ -424,46 +424,18 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
                 opts={{ 
                     align: "center", 
                     loop: true,
-                    containScroll: 'keepSnaps',
+                    containScroll: 'trimSnaps',
                 }}
             >
                 <CarouselContent className="-ml-4">
                     {destinations.map((dest, i) => (
-                        <CarouselItem key={dest.id} className="pl-4 basis-full md:basis-1/2 lg:basis-1/3">
-                            <motion.div 
-                                className="h-[70vh] relative"
-                                style={{
-                                    scale: scaleTransforms[i] || 0.85,
-                                    opacity: opacityTransforms[i] || 0.4,
-                                }}
-                            >
-                                <div className="destination-card group h-full">
-                                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                                        <div className="relative overflow-hidden h-full rounded-md">
-                                            <Image 
-                                                src={dest.image || "https://placehold.co/600x800.png"} 
-                                                alt={dest.title} 
-                                                fill 
-                                                style={{ objectFit: 'cover' }} 
-                                                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                                                className="card-image"
-                                            />
-                                            <div className="card-overlay !opacity-100 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                            <div className="absolute bottom-0 left-0 p-6 text-left">
-                                                <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
-                                                <p className="text-white/80">{dest.location}</p>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </div>
-                            </motion.div>
-                        </CarouselItem>
+                       <DestinationsCarouselItem key={dest.id} dest={dest} index={i} current={current} api={api} />
                     ))}
                 </CarouselContent>
             </Carousel>
         </div>
         
-        <div className="max-w-xl mx-auto mt-8 text-center min-h-[6rem] px-4">
+        <div className="max-w-xl mx-auto mt-8 text-center min-h-[6rem] px-4 ">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={current}
@@ -471,8 +443,9 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
                     initial="hidden"
                     animate="visible"
                     exit="hidden"
-                >
-                    <p className="text-muted-foreground leading-relaxed">
+                    className="flex items-center justify-center"
+                 >
+                    <p className="text-muted-foreground leading-relaxed text-center w-[80%]">
                         {destinations[current]?.description}
                     </p>
                 </motion.div>
