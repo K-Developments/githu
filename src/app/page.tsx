@@ -336,34 +336,38 @@ function QuoteSection({ data, backgroundImage }: { data: QuoteData, backgroundIm
 }
 
 function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destination, index: number, current: number, api: CarouselApi | undefined }) {
+    const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
-        target: api?.containerNode(),
+        target: ref,
         offset: ["start end", "end start"],
     });
 
     const isCenter = index === current;
-    const progress = useTransform(scrollYProgress, [0, 1], [-1, 1]);
-    const x = useTransform(progress, (value) => isCenter ? value * -100 : value * 200);
+    const y = useTransform(scrollYProgress, [0, 1], [-150, 150]);
+
 
     return (
-        <CarouselItem key={dest.id} className="pl-4 basis-full md:basis-[40%] lg:basis-[30%]">
-            <div className="h-[70vh] relative flex items-center justify-center">
-                <div className={cn(
-                    "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
-                    isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
-                )}>
+        <CarouselItem ref={ref} key={dest.id} className="pl-4 basis-full md:basis-[40%] lg:basis-[30%]">
+            <div className={cn(
+                "h-[70vh] relative flex items-center justify-center transition-all duration-500 ease-in-out",
+                isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
+            )}>
+                 <div className="destination-card-parallax w-full h-full">
                     <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref className="block w-full h-full">
-                        <motion.div className="relative w-full h-full" style={{ x }}>
+                        <motion.div className="relative w-full h-[130%]" style={{ y }}>
                             <Image
                                 src={dest.image || "https://placehold.co/600x800.png"}
                                 alt={dest.title}
                                 fill
                                 style={{ objectFit: 'cover' }}
                                 sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                                className="card-image scale-125"
+                                className="card-image"
                             />
                         </motion.div>
-                        <div className="absolute bottom-0 left-0 p-6 text-left z-10">
+                         <div className={cn(
+                            "absolute bottom-0 left-0 p-6 text-left z-10 transition-opacity duration-500",
+                             isCenter ? "opacity-100" : "opacity-0"
+                         )}>
                             <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
                             <p className="text-white/80">{dest.location}</p>
                         </div>
@@ -474,6 +478,45 @@ function DestinationsSection({ sectionData, destinations, backgroundImage }: { s
   );
 }
 
+function PackageCard({ pkg }: { pkg: Package }) {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"]
+    });
+    const y = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+
+    return (
+        <Link href={`/packages?package=${pkg.id}`} passHref>
+            <motion.div 
+                ref={ref}
+                className="package-card group"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                layout
+            >
+                <div className="package-card-image-container">
+                    <motion.div className="relative w-full h-full" style={{ y }}>
+                        <Image
+                            src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x600.png"}
+                            alt={`Image of ${pkg.title} package in ${pkg.location}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover"
+                        />
+                    </motion.div>
+                </div>
+                <div className="package-card-overlay" />
+                <div className="package-card-content">
+                    <h3 className="package-card-title">{pkg.title}</h3>
+                    <p className="package-card-location">{pkg.location}</p>
+                </div>
+            </motion.div>
+        </Link>
+    );
+}
 
 function PackagesSection({ categories, packages, backgroundImage }: { categories: Category[], packages: Package[], backgroundImage?: string }) {
     const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
@@ -486,7 +529,7 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
         ? packages
         : packages.filter(p => p.categoryId === activeCategoryId);
 
-  return (
+    return (
     <section 
         className="homepage-packages-section py-28"
         style={{
@@ -516,54 +559,23 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
 
 
         <motion.div 
-            className={cn(
-                "packages-grid",
-                 filteredPackages.length === 1 && "md:grid-cols-1",
-                 "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-            )}
+            className="packages-grid grid grid-cols-1 md:grid-cols-2 gap-8"
             layout
         >
             <AnimatePresence>
-                {filteredPackages.map((pkg, index) => (
-                <React.Fragment key={pkg.id}>
-                    <motion.div 
-                        className={cn("package-display-card")}
-                        layout
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.4, ease: "easeInOut" }}
-                        >
-                        <div className="card-image">
-                            <Image
-                                src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x400.png"}
-                                alt={`Image of ${pkg.title} package in ${pkg.location}`}
-                                fill
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                className="object-cover"
-                            />
-                        </div>
-                        <div className="card-details">
-                            <h3 className="card-title">{pkg.title}</h3>
-                            <p className="card-description flex-grow text-muted-foreground mb-4">{pkg.location}</p>
-                            <div className="flex justify-center">
-                              <div className="button-wrapper-for-border">
-                                <Button asChild variant="outline" size="sm" className="w-auto"><Link href={`/packages?package=${pkg.id}`}>View Details</Link></Button>
-                              </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                </React.Fragment>
+                {filteredPackages.map((pkg) => (
+                    <PackageCard key={pkg.id} pkg={pkg} />
                 ))}
             </AnimatePresence>
         </motion.div>
+
         {filteredPackages.length === 0 && (
             <div className="no-packages-message">
                 <p>There are currently no packages available for this category.</p>
             </div>
         )}
-    </div>
-</section>
+      </div>
+    </section>
   );
 }
 
