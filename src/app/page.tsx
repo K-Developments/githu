@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useEffect, useRef } from "react";
@@ -338,80 +337,166 @@ function QuoteSection({ data, backgroundImage }: { data: QuoteData, backgroundIm
 
 function DestinationsSection({ sectionData, destinations, backgroundImage }: { sectionData: DestinationsData, destinations: Destination[], backgroundImage?: string }) {
   const [api, setApi] = React.useState<CarouselApi>()
+  const [current, setCurrent] = React.useState(0)
+  const [scaleTransforms, setScaleTransforms] = React.useState<number[]>([]);
+  const [opacityTransforms, setOpacityTransforms] = React.useState<number[]>([]);
+
+  const onSelect = React.useCallback((api: CarouselApi) => {
+    if (!api) return;
+    setCurrent(api.selectedScrollSnap());
+  }, []);
+
+  const TWEEN_FACTOR = 4.2;
+
+  const tweenOpacity = React.useCallback((index: number, emblaApi: CarouselApi) => {
+    const engine = emblaApi.internalEngine();
+    const scrollProgress = emblaApi.scrollProgress();
+    const slidesInView = emblaApi.slidesInView();
+    if (!slidesInView.includes(index)) return 0;
+    
+    const diffToTarget = emblaApi.scrollSnapList()[index] - scrollProgress;
+    const tween = 1 - Math.abs(diffToTarget) * TWEEN_FACTOR;
+    return Number(Math.max(0.4, Math.min(1, tween)).toFixed(3));
+  }, []);
+
+  const tweenScale = React.useCallback((index: number, emblaApi: CarouselApi) => {
+    const engine = emblaApi.internalEngine();
+    const scrollProgress = emblaApi.scrollProgress();
+    const slidesInView = emblaApi.slidesInView();
+    if (!slidesInView.includes(index)) return 0;
+    
+    const diffToTarget = emblaApi.scrollSnapList()[index] - scrollProgress;
+    const tween = 1 - Math.abs(diffToTarget) * (TWEEN_FACTOR / 10);
+    return Number(Math.max(0.85, Math.min(1, tween)).toFixed(3));
+  }, []);
+
+  React.useEffect(() => {
+    if (!api) return;
+
+    onSelect(api);
+    api.on('select', onSelect);
+    api.on('reInit', onSelect);
+
+    const onScroll = () => {
+      const newOpacities = api.scrollSnapList().map((_, index) => tweenOpacity(index, api));
+      setOpacityTransforms(newOpacities);
+      const newScales = api.scrollSnapList().map((_, index) => tweenScale(index, api));
+      setScaleTransforms(newScales);
+    };
+
+    api.on('scroll', onScroll);
+    // Initial set
+    onScroll();
+
+    return () => {
+      api.off('select', onSelect);
+      api.off('scroll', onScroll);
+    };
+  }, [api, onSelect, tweenOpacity, tweenScale]);
+  
+  const descriptionVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
+  };
+
 
   return (
     <section 
-        className="destinations-section py-28"
+        className="destinations-section py-28 overflow-hidden"
         style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         }}
     >
-        <div className=" mx-auto px-4 md:px-12">
-            <Separator />
+        <div className="max-w-7xl mx-auto px-4 md:px-12 text-center">
             <ScrollAnimation>
-                <h2 className="section-title text-right my-8 ">{sectionData.title}</h2>
+                <h2 className="section-title text-center mb-4">{sectionData.title}</h2>
             </ScrollAnimation>
-            <Separator />
+            <ScrollAnimation delay={0.1}>
+                 <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">{sectionData.subtitle}</p>
+            </ScrollAnimation>
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-10 gap-8 ">
-                <div className="md:col-span-3">
-                    <ScrollAnimation>
-                        <p className="text-muted-foreground leading-relaxed mb-8 w-[90%] mt-[2rem]">{sectionData.subtitle}</p>
-                    </ScrollAnimation>
-                    <ScrollAnimation>
-                         <div className="button-wrapper-for-border">
-                            <Button asChild variant="outline">
-                                <Link href={sectionData.buttonUrl || '#'}>View All Destinations</Link>
-                            </Button>
-                        </div>
-                    </ScrollAnimation>
-                </div>
-                <div className="md:col-span-7">
-                    <Carousel setApi={setApi} opts={{ align: "start", loop: true }}>
-                        <CarouselContent className="-ml-4">
-                            {destinations.map((dest, i) => (
-                                <CarouselItem key={dest.id} className="pl-4 md:basis-1/2">
-                                     <ScrollAnimation delay={i * 0.1}>
-                                        <div className="destination-card group h-[70vh]">
-                                            <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                                                <div className="relative overflow-hidden h-full">
-                                                    <Image 
-                                                        src={dest.image || "https://placehold.co/600x800.png"} 
-                                                        alt={dest.title} 
-                                                        fill 
-                                                        style={{ objectFit: 'cover' }} 
-                                                        sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                                                        className="card-image"
-                                                    />
-                                                    <div className="card-overlay"></div>
-                                                    <div className="destination-card-title-box">
-                                                        <h3 className="destination-card-title">{dest.title}</h3>
-                                                    </div>
-                                                </div>
-                                            </Link>
+        <div className="mt-16">
+            <Carousel 
+                setApi={setApi} 
+                opts={{ 
+                    align: "center", 
+                    loop: true,
+                    containScroll: 'keepSnaps',
+                }}
+            >
+                <CarouselContent className="-ml-4">
+                    {destinations.map((dest, i) => (
+                        <CarouselItem key={dest.id} className="pl-4 basis-full md:basis-1/2 lg:basis-1/3">
+                            <motion.div 
+                                className="h-[70vh] relative"
+                                style={{
+                                    scale: scaleTransforms[i] || 0.85,
+                                    opacity: opacityTransforms[i] || 0.4,
+                                }}
+                            >
+                                <div className="destination-card group h-full">
+                                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
+                                        <div className="relative overflow-hidden h-full rounded-md">
+                                            <Image 
+                                                src={dest.image || "https://placehold.co/600x800.png"} 
+                                                alt={dest.title} 
+                                                fill 
+                                                style={{ objectFit: 'cover' }} 
+                                                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                                                className="card-image"
+                                            />
+                                            <div className="card-overlay !opacity-100 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                            <div className="absolute bottom-0 left-0 p-6 text-left">
+                                                <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
+                                                <p className="text-white/80">{dest.location}</p>
+                                            </div>
                                         </div>
-                                    </ScrollAnimation>
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                    </Carousel>
-                    <div className="flex justify-start items-center gap-2 mt-8">
-                        <div className="button-wrapper-for-border">
-                            <Button variant="outline" size="icon" onClick={() => api?.scrollPrev()}>
-                               <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                        </div>
-                        <div className="button-wrapper-for-border">
-                            <Button variant="outline" size="icon" onClick={() => api?.scrollNext()}>
-                              <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                                    </Link>
+                                </div>
+                            </motion.div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+            </Carousel>
+        </div>
+        
+        <div className="max-w-xl mx-auto mt-8 text-center min-h-[6rem] px-4">
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={current}
+                    variants={descriptionVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                >
+                    <p className="text-muted-foreground leading-relaxed">
+                        {destinations[current]?.description}
+                    </p>
+                </motion.div>
+            </AnimatePresence>
+        </div>
+
+        <div className="flex justify-center items-center gap-4 mt-8">
+            <div className="button-wrapper-for-border">
+                <Button variant="outline" size="icon" onClick={() => api?.scrollPrev()}>
+                   <ChevronLeft className="h-4 w-4" />
+                </Button>
+            </div>
+            <div className="button-wrapper-for-border">
+                <Button asChild variant="default">
+                    <Link href={sectionData.buttonUrl || '#'}>View All Destinations</Link>
+                </Button>
+            </div>
+            <div className="button-wrapper-for-border">
+                <Button variant="outline" size="icon" onClick={() => api?.scrollNext()}>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
             </div>
         </div>
+
     </section>
   );
 }
