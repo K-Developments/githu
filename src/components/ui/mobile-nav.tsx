@@ -14,6 +14,7 @@ const navLinks = [
   { title: "Packages", href: "/packages" },
   { title: "About", href: "/about" },
   { title: "Contact", href: "/contact" },
+  { title: "FAQ", href: "/faq" },
 ];
 
 const sidebarVariants = {
