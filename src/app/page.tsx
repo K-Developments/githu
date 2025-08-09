@@ -546,15 +546,18 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
             <Separator />
         </ScrollAnimation>
         
-        <ScrollAnimation className="flex justify-center flex-wrap gap-2 my-8">
+        <ScrollAnimation className="flex justify-center flex-wrap gap-8 md:gap-12 my-8">
             {displayCategories.map(category => (
-                <Button 
+                <button
                     key={category.id}
-                    variant={activeCategoryId === category.id ? 'default' : 'outline'}
                     onClick={() => setActiveCategoryId(category.id)}
+                    className={cn(
+                        'package-filter',
+                        activeCategoryId === category.id && 'active'
+                    )}
                 >
                     {category.name}
-                </Button>
+                </button>
             ))}
         </ScrollAnimation>
 
