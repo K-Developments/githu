@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
@@ -18,7 +19,6 @@ import { cn } from "@/lib/utils";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-import { PackageCard } from "@/components/ui/package-card";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 const DynamicCtaSection = dynamic(() => import('@/components/ui/cta-section').then(mod => mod.CtaSection));
@@ -50,14 +50,6 @@ interface DestinationsData {
   title: string;
   subtitle: string;
   buttonUrl: string;
-}
-
-interface FeaturedPackagesData {
-  packageIds: string[];
-}
-
-interface FeaturedDestinationsData {
-  destinationIds: string[];
 }
 
 // Memoized data fetching function with better error handling
@@ -146,40 +138,11 @@ export default function HomePage() {
     };
   }, []);
 
-  // Memoize computed values
-  const sections = useMemo(() => {
-    if (!pageData) return null;
-    
-    const {
-      heroData,
-      introData,
-      quoteData,
-      destinationsData,
-      ctaData,
-      destinations,
-      packages,
-      categories,
-      testimonials
-    } = pageData;
-
-    return {
-      heroData,
-      introData,
-      quoteData,
-      destinationsData,
-      ctaData,
-      destinations,
-      packages,
-      categories,
-      testimonials
-    };
-  }, [pageData]);
-
   if (isLoading) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
-  if (error || !sections) {
+  if (error || !pageData) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p>Could not load page content. Please try again later.</p>
@@ -197,7 +160,7 @@ export default function HomePage() {
       packages,
       categories,
       testimonials
-    } = sections;
+    } = pageData;
 
   return (
     <>
@@ -266,25 +229,21 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   
   const gridElements = useMemo(() => {
     if (!data.sliderImages) return null;
-    
+
     const repeatedImages = [...data.sliderImages, ...data.sliderImages];
 
     return (
-      <div className="scrolling-grid-container">
-        {[...Array(2)].map((_, i) => (
-          <div key={i} className="scrolling-grid">
-            {repeatedImages.map((src, index) => (
-              <div key={`grid${i}-${index}`} className="image-wrapper">
-                <Image 
-                  src={src} 
-                  alt="" 
-                  fill 
-                  className="object-cover" 
-                  priority={index < 3}
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                />
-              </div>
-            ))}
+      <div className="scrolling-grid">
+        {repeatedImages.map((src, index) => (
+          <div key={`grid-${index}`} className="image-wrapper">
+            <Image
+              src={src}
+              alt=""
+              fill
+              className="object-cover"
+              priority={index < 3}
+              sizes="(min-width: 1024px) 25vw, 50vw"
+            />
           </div>
         ))}
       </div>
@@ -307,7 +266,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
       </div>
 
       <div className="hero-image">
-        {isMobile ? imageElements : <div className="w-full h-full">{gridElements}</div>}
+        {isMobile ? imageElements : <div className="scrolling-grid-container">{gridElements}</div>}
       </div>
     </section>
   );
@@ -329,16 +288,9 @@ const IntroSection = memo(function IntroSection({
     offset: ['start end', 'end start']
   });
 
-  const transforms = useMemo(() => {
-    if (reducedMotion) {
-      return { scale: 1, textOpacity: 1, y: 0 };
-    }
-    return {
-      scale: useTransform(scrollYProgress, [0.3, 1], [1, 1.15]),
-      textOpacity: useTransform(scrollYProgress, [0.45, 0.6], [0, 1]),
-      y: useTransform(scrollYProgress, [0.3, 1], [0, -50])
-    };
-  }, [reducedMotion, scrollYProgress]);
+  const scale = reducedMotion ? 1 : useTransform(scrollYProgress, [0.3, 1], [1, 1.15]);
+  const textOpacity = reducedMotion ? 1 : useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+  const y = reducedMotion ? 0 : useTransform(scrollYProgress, [0.3, 1], [0, -50]);
   
   if (!data) return null;
 
@@ -361,7 +313,7 @@ const IntroSection = memo(function IntroSection({
 
         <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
           <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%] overflow-hidden rounded-md">
-            <motion.div style={{...transforms, transform: `translateY(${transforms.y}px) scale(${transforms.scale})`}} className="w-full h-full parallax-element">
+            <motion.div style={{ y, scale }} className="w-full h-full parallax-element">
               <Image
                 src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
                 alt="Scenic introduction landscape"
@@ -374,7 +326,7 @@ const IntroSection = memo(function IntroSection({
             <div className="absolute inset-0 bg-black/20"></div>
             <motion.div 
               className="absolute inset-0 flex items-center justify-center"
-              style={{ opacity: transforms.textOpacity }}
+              style={{ opacity: textOpacity }}
             >
               <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
                 Welcome to Sri Lanka
@@ -443,10 +395,7 @@ const DestinationsCarouselItem = memo(function DestinationsCarouselItem({
     offset: ["start end", "end start"],
   });
 
-  const y = useMemo(() => 
-    reducedMotion ? 0 : useTransform(scrollYProgress, [0, 1], [-80, 80]),
-    [reducedMotion, scrollYProgress]
-  );
+  const y = reducedMotion ? 0 : useTransform(scrollYProgress, [0, 1], [-80, 80]);
 
   return (
     <CarouselItem ref={ref} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
