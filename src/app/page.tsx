@@ -57,17 +57,6 @@ interface FeaturedDestinationsData {
     destinationIds: string[];
 }
 
-function ParallaxImage({ src, scrollYProgress }: { src: string, scrollYProgress: any }) {
-    const y = useTransform(scrollYProgress, [0, 1], [0, Math.random() * 200 - 100]);
-    return (
-        <div className="image-wrapper overflow-hidden">
-            <motion.div className="relative w-full h-full" style={{ y, transform: "translateZ(0)" }}>
-                <Image src={src} alt="" fill className="object-cover" priority />
-            </motion.div>
-        </div>
-    )
-}
-
 async function getHomePageData() {
     try {
         // Fetch content from the 'home' document
@@ -195,10 +184,6 @@ return (
 function HeroSection({ data }: { data: HeroData }) {
     const isMobile = useIsMobile();
     const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start start', 'end start']
-    });
     const [currentImage, setCurrentImage] = useState(0);
 
     useEffect(() => {
@@ -244,12 +229,20 @@ function HeroSection({ data }: { data: HeroData }) {
                     <div className="scrolling-grid-container">
                         <div className="scrolling-grid">
                             {(data.sliderImages || []).map((src, index) => (
-                                <ParallaxImage key={`grid1-${index}`} src={src} scrollYProgress={scrollYProgress} />
+                                <div key={`grid1-${index}`} className="image-wrapper overflow-hidden">
+                                    <div className="relative w-full h-full">
+                                        <Image src={src} alt="" fill className="object-cover" priority />
+                                    </div>
+                                </div>
                             ))}
                         </div>
                         <div className="scrolling-grid">
                             {(data.sliderImages || []).map((src, index) => (
-                                <ParallaxImage key={`grid2-${index}`} src={src} scrollYProgress={scrollYProgress} />
+                                <div key={`grid2-${index}`} className="image-wrapper overflow-hidden">
+                                    <div className="relative w-full h-full">
+                                        <Image src={src} alt="" fill className="object-cover" priority />
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -269,8 +262,6 @@ const { scrollYProgress } = useScroll({
 
 const scale = useTransform(scrollYProgress, [0.3, 1], [1, 1.15]);
 const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
-const y = useTransform(scrollYProgress, [0.3, 1], [0, -50]);
-
 
 return (
     <section
@@ -291,7 +282,7 @@ return (
 
         <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
             <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]  overflow-hidden rounded-md">
-                <motion.div style={{ scale, y }} className="w-full h-full">
+                <motion.div style={{ scale }} className="w-full h-full">
                     <Image
                         src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
                         alt="Scenic introduction landscape"
@@ -347,7 +338,7 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
     });
 
     const isCenter = index === current;
-    const y = useTransform(scrollYProgress, [0, 1], [-150, 150]);
+    const y = useTransform(scrollYProgress, [0, 1], [-100, 100]);
 
 
     return (
@@ -651,5 +642,7 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
+
+    
 
     
