@@ -22,7 +22,6 @@ import { doc, getDoc } from 'firebase/firestore';
 
 interface ContactHeroData {
   headline: string;
-  heroImage: string;
 }
 
 async function getContactPageData(): Promise<ContactHeroData | null> {
@@ -46,7 +45,6 @@ export default function ContactPage() {
   const { toast } = useToast();
   const [heroData, setHeroData] = useState<ContactHeroData>({
     headline: "Contact Us",
-    heroImage: "https://placehold.co/1920x1080.png"
   });
   const [loading, setLoading] = useState(true);
 
@@ -110,11 +108,6 @@ export default function ContactPage() {
       <section id="hero-section-contact" className="h-[65vh] flex flex-col">
         <div 
           className="flex-1 flex items-center justify-center p-4 relative"
-          style={{
-              backgroundImage: `url(${heroData.heroImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-          }}
           data-ai-hint="serene beach"
         >
           <div className="relative text-center">

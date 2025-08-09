@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils';
 interface FAQPageData {
   hero: {
     headline: string;
-    heroImage: string;
   };
   faqItems: FAQItem[];
 }
@@ -32,7 +31,6 @@ async function getFaqPageData(): Promise<FAQPageData | null> {
             return {
                 hero: {
                   headline: data.hero?.headline || 'FAQs',
-                  heroImage: data.hero?.heroImage || 'https://placehold.co/1920x1080.png',
                 },
                 faqItems,
             };
@@ -40,7 +38,6 @@ async function getFaqPageData(): Promise<FAQPageData | null> {
         return {
             hero: {
                 headline: 'FAQs',
-                heroImage: 'https://placehold.co/1920x1080.png',
             },
             faqItems: []
         };
@@ -83,11 +80,6 @@ export default function FaqPage() {
             >
                 <div 
                     className="flex-1 flex items-center justify-center p-4 relative"
-                    style={{
-                        backgroundImage: `url(${hero.heroImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
                     data-ai-hint="library books"
                 >
                     <div className="relative text-center">

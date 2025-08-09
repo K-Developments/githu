@@ -8,7 +8,6 @@ import { PackagesPageClient } from './packages-client';
 interface PackagesPageData {
   hero: {
     headline: string;
-    heroImage: string;
     contentBackgroundImage?: string;
     sliderImages?: string[];
   };
@@ -39,7 +38,6 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
             const data = contentDocSnap.data();
             heroData = {
                 headline: data.hero?.headline || 'Our Packages',
-                heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: data.hero?.contentBackgroundImage || '',
                 sliderImages,
             };
@@ -51,7 +49,6 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
         } else {
              heroData = {
                 headline: 'Our Packages',
-                heroImage: 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: '',
                 sliderImages,
             };

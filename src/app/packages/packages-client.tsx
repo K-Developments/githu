@@ -21,7 +21,6 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/com
 interface PackagesClientProps {
   hero: {
     headline: string;
-    heroImage: string;
     contentBackgroundImage?: string;
     sliderImages?: string[];
   };
@@ -99,11 +98,6 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
       <section id="hero-section-packages" className="h-[65vh] flex flex-col">
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
-            style={{
-                backgroundImage: `url(${hero.heroImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
           >
               <div className="relative text-center">
                   <ScrollAnimation>

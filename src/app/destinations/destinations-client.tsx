@@ -13,7 +13,6 @@ import { motion } from 'framer-motion';
 interface DestinationsClientProps {
   hero: {
     headline: string;
-    heroImage: string;
     contentBackgroundImage?: string;
     sliderImages?: string[];
   };
@@ -38,11 +37,6 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
       <section id="hero-section-destinations" className="h-[65vh] flex flex-col">
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
-            style={{
-                backgroundImage: `url(${hero.heroImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
           >
               <div className="relative text-center">
                   <ScrollAnimation>

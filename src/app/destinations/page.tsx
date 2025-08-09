@@ -8,7 +8,6 @@ import { DestinationsPageClient } from './destinations-client';
 interface DestinationsPageData {
   hero: {
     headline: string;
-    heroImage: string;
     contentBackgroundImage?: string;
     sliderImages?: string[];
   };
@@ -36,14 +35,12 @@ async function getDestinationsPageData(): Promise<DestinationsPageData | null> {
             const data = contentDocSnap.data();
             heroData = {
                 headline: data.hero?.headline || 'Our Destinations',
-                heroImage: data.hero?.heroImage || 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: data.hero?.contentBackgroundImage || '',
                 sliderImages,
             };
         } else {
              heroData = {
                 headline: 'Our Destinations',
-                heroImage: 'https://placehold.co/1920x600.png',
                 contentBackgroundImage: '',
                 sliderImages,
             };
@@ -80,5 +77,3 @@ export default async function DestinationsPage() {
     </Suspense>
   );
 }
-
-    

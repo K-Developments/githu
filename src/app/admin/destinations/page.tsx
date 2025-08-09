@@ -15,14 +15,12 @@ import type { Destination } from "@/lib/data";
 
 interface DestinationsHeroData {
   headline: string;
-  heroImage: string;
   contentBackgroundImage?: string;
 }
 
 export default function AdminDestinationsPage() {
   const [heroData, setHeroData] = useState<DestinationsHeroData>({
     headline: "",
-    heroImage: "",
     contentBackgroundImage: "",
   });
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -43,13 +41,11 @@ export default function AdminDestinationsPage() {
           const hero = (data.hero || {}) as DestinationsHeroData;
           setHeroData({
             headline: hero.headline || "Our Destinations",
-            heroImage: hero.heroImage || "https://placehold.co/1920x600.png",
             contentBackgroundImage: hero.contentBackgroundImage || "",
           });
         } else {
             setHeroData({
                 headline: "Our Destinations",
-                heroImage: "https://placehold.co/1920x600.png",
                 contentBackgroundImage: "",
             });
         }
@@ -180,10 +176,6 @@ export default function AdminDestinationsPage() {
             <Label htmlFor="headline">Headline</Label>
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="heroImage">Hero Image URL</Label>
-            <Input id="heroImage" value={heroData.heroImage} onChange={handleHeroChange} />
-          </div>
            <div className="space-y-2">
             <Label htmlFor="contentBackgroundImage">Content Background Image URL</Label>
             <Input id="contentBackgroundImage" value={heroData.contentBackgroundImage} onChange={handleHeroChange} />
@@ -249,5 +241,3 @@ export default function AdminDestinationsPage() {
     </div>
   );
 }
-
-    

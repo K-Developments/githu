@@ -14,13 +14,11 @@ import { Trash2 } from "lucide-react";
 
 interface GalleryHeroData {
   headline: string;
-  heroImage: string;
 }
 
 export default function AdminGalleryPage() {
   const [heroData, setHeroData] = useState<GalleryHeroData>({
     headline: "Gallery",
-    heroImage: "https://placehold.co/1920x1080.png",
   });
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [categories, setCategories] = useState<GalleryCategory[]>([]);
@@ -41,7 +39,6 @@ export default function AdminGalleryPage() {
           const data = contentDocSnap.data();
           setHeroData({
             headline: data.hero?.headline || "Gallery",
-            heroImage: data.hero?.heroImage || "https://placehold.co/1920x1080.png",
           });
         }
 
@@ -180,10 +177,6 @@ export default function AdminGalleryPage() {
             <Label htmlFor="headline">Headline</Label>
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="heroImage">Hero Image URL</Label>
-            <Input id="heroImage" value={heroData.heroImage} onChange={handleHeroChange} />
-          </div>
         </CardContent>
       </Card>
       
@@ -253,5 +246,3 @@ export default function AdminGalleryPage() {
     </div>
   );
 }
-
-    

@@ -66,7 +66,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
             return {
                 hero: {
                   headline: data.hero?.headline || 'About Us',
-                  heroImage: data.hero?.heroImage || 'https://placehold.co/1920x1080.png',
+                  heroImage: data.hero?.heroImage || '',
                   contentBackgroundImage: data.hero?.contentBackgroundImage || '',
                 },
                 intro: {
@@ -89,7 +89,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
              return {
                 hero: {
                     headline: 'About Us',
-                    heroImage: 'https://placehold.co/1920x1080.png',
+                    heroImage: '',
                     contentBackgroundImage: '',
                 },
                 intro: {
@@ -147,11 +147,6 @@ export default function AboutPage() {
             >
                 <div 
                     className="flex-1 flex items-center justify-center p-4 relative"
-                    style={{
-                        backgroundImage: `url(${hero.heroImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
                 >
                     <div className="relative text-center">
                         <ScrollAnimation>

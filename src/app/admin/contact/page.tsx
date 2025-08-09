@@ -12,13 +12,11 @@ import { useToast } from "@/hooks/use-toast";
 
 interface ContactHeroData {
   headline: string;
-  heroImage: string;
 }
 
 export default function AdminContactPage() {
   const [heroData, setHeroData] = useState<ContactHeroData>({
     headline: "",
-    heroImage: "",
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -35,12 +33,10 @@ export default function AdminContactPage() {
           const hero = (data.hero || {}) as ContactHeroData;
           setHeroData({
             headline: hero.headline || "Contact Us",
-            heroImage: hero.heroImage || "https://placehold.co/1920x1080.png",
           });
         } else {
             setHeroData({
                 headline: "Contact Us",
-                heroImage: "https://placehold.co/1920x1080.png",
             });
         }
       } catch (error) {
@@ -104,10 +100,6 @@ export default function AdminContactPage() {
           <div className="space-y-2">
             <Label htmlFor="headline">Headline</Label>
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="heroImage">Hero Image URL</Label>
-            <Input id="heroImage" value={heroData.heroImage} onChange={handleHeroChange} />
           </div>
         </CardContent>
       </Card>

@@ -15,13 +15,11 @@ import { Trash2 } from "lucide-react";
 
 interface FAQHeroData {
   headline: string;
-  heroImage: string;
 }
 
 export default function AdminFAQPage() {
   const [heroData, setHeroData] = useState<FAQHeroData>({
     headline: "FAQs",
-    heroImage: "https://placehold.co/1920x1080.png",
   });
   const [faqItems, setFaqItems] = useState<FAQItem[]>([]);
   const [deletedItemIds, setDeletedItemIds] = useState<string[]>([]);
@@ -41,14 +39,12 @@ export default function AdminFAQPage() {
           const hero = (data.hero || {}) as FAQHeroData;
           setHeroData({
             headline: hero.headline || "FAQs",
-            heroImage: hero.heroImage || "https://placehold.co/1920x1080.png",
           });
            const fetchedFaqs = Array.isArray(data.faqItems) ? data.faqItems : [];
            setFaqItems(fetchedFaqs);
         } else {
              setHeroData({
                 headline: "FAQs",
-                heroImage: "https://placehold.co/1920x1080.png",
             });
             setFaqItems([]);
         }
@@ -153,10 +149,6 @@ export default function AdminFAQPage() {
           <div className="space-y-2">
             <Label htmlFor="headline">Headline</Label>
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="heroImage">Hero Image URL</Label>
-            <Input id="heroImage" value={heroData.heroImage} onChange={handleHeroChange} />
           </div>
         </CardContent>
       </Card>

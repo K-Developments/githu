@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils';
 interface GalleryPageData {
   hero: {
     headline: string;
-    heroImage: string;
   };
   images: GalleryImage[];
   categories: GalleryCategory[];
@@ -29,7 +28,6 @@ async function getGalleryPageData(): Promise<GalleryPageData | null> {
         
         const heroData = contentDocSnap.exists() ? contentDocSnap.data().hero : {
             headline: 'Gallery',
-            heroImage: 'https://placehold.co/1920x1080.png',
         };
 
         const imagesSnap = await getDocs(collection(db, "galleryImages"));
@@ -86,11 +84,6 @@ export default function GalleryPage() {
             >
                 <div 
                     className="flex-1 flex items-center justify-center p-4 relative"
-                    style={{
-                        backgroundImage: `url(${hero.heroImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
                     data-ai-hint="art gallery museum"
                 >
                     <div className="relative text-center">

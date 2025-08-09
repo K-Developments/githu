@@ -16,7 +16,6 @@ import type { Package, Category, ItineraryDay } from "@/lib/data";
 
 interface PackagesHeroData {
   headline: string;
-  heroImage: string;
   contentBackgroundImage?: string;
 }
 
@@ -29,7 +28,6 @@ interface PackagesCtaData {
 export default function AdminPackagesPage() {
   const [heroData, setHeroData] = useState<PackagesHeroData>({
     headline: "",
-    heroImage: "",
     contentBackgroundImage: "",
   });
   const [ctaData, setCtaData] = useState<PackagesCtaData>({
@@ -57,7 +55,6 @@ export default function AdminPackagesPage() {
           const hero = (data.hero || {}) as PackagesHeroData;
           setHeroData({
             headline: hero.headline || "Our Packages",
-            heroImage: hero.heroImage || "https://placehold.co/1920x600.png",
             contentBackgroundImage: hero.contentBackgroundImage || "",
           });
           const cta = (data.cta || {}) as PackagesCtaData;
@@ -69,7 +66,6 @@ export default function AdminPackagesPage() {
         } else {
             setHeroData({
                 headline: "Our Packages",
-                heroImage: "https://placehold.co/1920x600.png",
                 contentBackgroundImage: "",
             });
         }
@@ -309,10 +305,6 @@ export default function AdminPackagesPage() {
             <Input id="headline" value={heroData.headline} onChange={handleHeroChange} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="heroImage">Hero Image URL</Label>
-            <Input id="heroImage" value={heroData.heroImage} onChange={handleHeroChange} />
-          </div>
-          <div className="space-y-2">
             <Label htmlFor="contentBackgroundImage">Content Background Image URL</Label>
             <Input id="contentBackgroundImage" value={heroData.contentBackgroundImage} onChange={handleHeroChange} />
           </div>
@@ -475,5 +467,3 @@ export default function AdminPackagesPage() {
     </div>
   );
 }
-
-    
