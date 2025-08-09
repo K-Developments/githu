@@ -194,6 +194,12 @@ function HeroSection({ data }: { data: HeroData }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [currentImage, setCurrentImage] = useState(0);
 
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start start', 'end start']
+    });
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+
     useEffect(() => {
         if (isMobile) {
             const timer = setInterval(() => {
@@ -234,22 +240,24 @@ function HeroSection({ data }: { data: HeroData }) {
                         ))}
                     </>
                 ) : (
-                    <div className="scrolling-grid-container">
-                        <div className="scrolling-grid">
-                            {(data.sliderImages || []).map((src, index) => (
-                                <div key={`grid1-${index}`} className="image-wrapper">
-                                    <Image src={src} alt="" fill className="object-cover" priority />
-                                </div>
-                            ))}
+                    <motion.div style={{ y }} className="relative h-[150%] w-full">
+                        <div className="scrolling-grid-container">
+                            <div className="scrolling-grid">
+                                {(data.sliderImages || []).map((src, index) => (
+                                    <div key={`grid1-${index}`} className="image-wrapper">
+                                        <Image src={src} alt="" fill className="object-cover" priority />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="scrolling-grid">
+                                {(data.sliderImages || []).map((src, index) => (
+                                    <div key={`grid2-${index}`} className="image-wrapper">
+                                        <Image src={src} alt="" fill className="object-cover" priority />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div className="scrolling-grid">
-                            {(data.sliderImages || []).map((src, index) => (
-                                <div key={`grid2-${index}`} className="image-wrapper">
-                                    <Image src={src} alt="" fill className="object-cover" priority />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    </motion.div>
                 )}
             </div>
         </section>
