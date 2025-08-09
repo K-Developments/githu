@@ -12,26 +12,23 @@ import { cn } from '@/lib/utils';
 export function PackageCard({ pkg, isMobile }: { pkg: Package, isMobile: boolean }) {
     const ref = useRef<HTMLDivElement>(null);
     
-    // CRITICAL: Always call ALL hooks unconditionally
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start end", "end start"]
     });
     
-    // CRITICAL: Always call useTransform - don't conditionally skip it
     const y = useTransform(
         scrollYProgress, 
         [0, 1], 
         isMobile ? [0, 0] : [-100, 100]
     );
 
-    // Early return AFTER all hooks have been called
     if (!pkg) {
         return null;
     }
 
     return (
-        <Link href={`/packages?package=${pkg.id}`} passHref>
+        <Link href={pkg.linkUrl || `/packages/${pkg.id}`} passHref>
              <motion.div 
                 ref={ref}
                 className={cn(isMobile ? "package-card-v2-style" : "package-card group")}

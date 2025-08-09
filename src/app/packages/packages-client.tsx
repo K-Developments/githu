@@ -1,24 +1,17 @@
 
+
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { usePackages } from '@/context/packages-context';
 import type { Package, Category, PackagesCtaData } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { PackageCard } from '@/components/ui/package-card';
-import { TourItinerary } from '@/components/ui/tour-itinerary';
 import { PackagesCtaSection } from '@/components/ui/packages-cta-section';
-import { Badge } from '@/components/ui/badge';
-import { Check, X, Star, Users, MapPin, Clock } from 'lucide-react';
 
 interface PackagesClientProps {
   hero: {
@@ -29,100 +22,9 @@ interface PackagesClientProps {
   cta: PackagesCtaData;
 }
 
-function PackageDetailView({ pkg }: { pkg: Package }) {
-    if (!pkg) return null;
-    const [mainImage, setMainImage] = useState(pkg.images[0]);
-
-    useEffect(() => {
-        setMainImage(pkg.images[0]);
-    }, [pkg]);
-
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div>
-                <div className="relative aspect-[4/3] w-full mb-4 overflow-hidden rounded-lg">
-                    <AnimatePresence>
-                        <motion.div
-                            key={mainImage}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="absolute inset-0"
-                        >
-                            <Image
-                                src={mainImage}
-                                alt={pkg.title}
-                                fill
-                                className="object-cover"
-                            />
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
-                <div className="grid grid-cols-4 gap-2">
-                    {pkg.images.map((img, index) => (
-                        img && <div
-                            key={index}
-                            className="relative aspect-square w-full cursor-pointer rounded-md overflow-hidden"
-                            onClick={() => setMainImage(img)}
-                        >
-                            <Image src={img} alt={`${pkg.title} thumbnail ${index+1}`} fill className="object-cover" />
-                             {mainImage === img && <div className="absolute inset-0 border-2 border-primary rounded-md" />}
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div>
-                 <div className="flex flex-wrap gap-2 mb-4">
-                    {pkg.duration && <Badge variant="outline" className="flex items-center gap-1.5"><Clock size={14} /> {pkg.duration}</Badge>}
-                    {pkg.groupSize && <Badge variant="outline" className="flex items-center gap-1.5"><Users size={14} /> {pkg.groupSize}</Badge>}
-                    {pkg.destinationsCount && <Badge variant="outline" className="flex items-center gap-1.5"><MapPin size={14} /> {pkg.destinationsCount} Destinations</Badge>}
-                </div>
-                {pkg.rating && <div className="flex items-center gap-1 text-sm text-muted-foreground mb-4">
-                    <Star size={16} className="text-amber-400 fill-amber-400" /> 
-                    <span>{pkg.rating} ({pkg.reviewsCount} reviews)</span>
-                </div>}
-                
-                <TourItinerary overview={pkg.overview} itinerary={pkg.itinerary} />
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                    {pkg.inclusions && pkg.inclusions.length > 0 && <div>
-                        <h4 className="font-headline text-xl mb-3">What's Included</h4>
-                        <ul className="space-y-2">
-                            {pkg.inclusions.map((item, i) => <li key={i} className="flex items-start text-muted-foreground"><Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 shrink-0" />{item}</li>)}
-                        </ul>
-                    </div>}
-                    {pkg.exclusions && pkg.exclusions.length > 0 && <div>
-                        <h4 className="font-headline text-xl mb-3">What's Not Included</h4>
-                         <ul className="space-y-2">
-                            {pkg.exclusions.map((item, i) => <li key={i} className="flex items-start text-muted-foreground"><X className="h-5 w-5 text-red-500 mr-2 mt-0.5 shrink-0" />{item}</li>)}
-                        </ul>
-                    </div>}
-                </div>
-            </div>
-        </div>
-    );
-}
-
 export function PackagesPageClient({ hero, packages, categories, cta }: PackagesClientProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const isMobile = useIsMobile();
-  
-  const { setPackages, setSelectedPackage } = usePackages();
-
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
-
-  const selectedPackageId = searchParams.get('package');
-
-  useEffect(() => {
-    setPackages(packages);
-  }, [packages, setPackages]);
-
-  useEffect(() => {
-    const pkg = packages.find(p => p.id === selectedPackageId) || null;
-    setSelectedPackage(pkg);
-  }, [selectedPackageId, packages, setSelectedPackage]);
 
   const filteredPackages = useMemo(() => {
     if (activeCategoryId === 'all') return packages;
@@ -132,10 +34,6 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
   const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategoryId(categoryId);
   }, []);
-  
-  const handleCloseDialog = () => {
-    router.push('/packages', { scroll: false });
-  };
   
   const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -217,28 +115,6 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
       </section>
       
       <PackagesCtaSection {...cta} />
-
-      <Dialog open={!!selectedPackageId} onOpenChange={(open) => !open && handleCloseDialog()}>
-        <AnimatePresence>
-          {selectedPackageId && (
-            <DialogContent className="max-w-4xl w-[90vw] h-[90vh] flex flex-col">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="flex-grow overflow-y-auto p-2"
-              >
-                  {packages.find(p => p.id === selectedPackageId) ? (
-                    <PackageDetailView pkg={packages.find(p => p.id === selectedPackageId)!} />
-                  ) : (
-                    <div>Loading package...</div>
-                  )}
-              </motion.div>
-            </DialogContent>
-          )}
-        </AnimatePresence>
-      </Dialog>
     </>
   );
 }

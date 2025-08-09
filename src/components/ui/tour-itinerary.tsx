@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React from 'react';
@@ -15,7 +16,7 @@ export function TourItinerary({ overview, itinerary }: TourItineraryProps) {
   return (
     <div>
         <h3 className="font-headline text-3xl mb-4">Tour Overview</h3>
-        <p className="text-muted-foreground mb-8 whitespace-pre-line">{overview}</p>
+        <p className="text-muted-foreground mb-8 whitespace-pre-line text-body">{overview}</p>
         
         {hasItinerary && (
           <>
@@ -30,7 +31,7 @@ export function TourItinerary({ overview, itinerary }: TourItineraryProps) {
                       {day.activities.map((activity, actIndex) => (
                         <li key={actIndex} className="flex items-start">
                           <span className="text-primary mr-3 mt-1.5">&#9679;</span>
-                          <span className="text-muted-foreground">{activity}</span>
+                          <span className="text-muted-foreground text-body">{activity}</span>
                         </li>
                       ))}
                     </ul>
