@@ -57,6 +57,17 @@ interface FeaturedDestinationsData {
     destinationIds: string[];
 }
 
+function ParallaxImage({ src, scrollYProgress }: { src: string, scrollYProgress: any }) {
+    const y = useTransform(scrollYProgress, [0, 1], [0, Math.random() * 200 - 100]);
+    return (
+        <div className="image-wrapper overflow-hidden">
+            <motion.div className="relative w-full h-full" style={{ y }}>
+                <Image src={src} alt="" fill className="object-cover" priority />
+            </motion.div>
+        </div>
+    )
+}
+
 async function getHomePageData() {
     try {
         // Fetch content from the 'home' document
@@ -68,7 +79,6 @@ async function getHomePageData() {
         let quoteData: QuoteData | null = null;
         let destinationsData: DestinationsData | null = null;
         let ctaData: CtaData | null = null;
-        let featuredPackageIds: string[] = [];
         let featuredDestinationIds: string[] = [];
 
         if (contentDocSnap.exists()) {
@@ -82,10 +92,6 @@ async function getHomePageData() {
             cta.interactiveItems = [];
         }
         ctaData = cta;
-        const featuredPackages = data.featuredPackages as FeaturedPackagesData;
-        if (featuredPackages && featuredPackages.packageIds) {
-            featuredPackageIds = featuredPackages.packageIds;
-        }
         const featuredDestinations = data.featuredDestinations as FeaturedDestinationsData;
         if (featuredDestinations && featuredDestinations.destinationIds) {
             featuredDestinationIds = featuredDestinations.destinationIds;
@@ -102,12 +108,8 @@ async function getHomePageData() {
         const categoriesSnap = await getDocs(collection(db, "categories"));
         const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
 
-        let packages: Package[] = [];
-        if (featuredPackageIds.length > 0) {
-            const packagesQuery = query(collection(db, "packages"), where('__name__', 'in', featuredPackageIds));
-            const packagesSnap = await getDocs(packagesQuery);
-            packages = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
-        }
+        const packagesSnap = await getDocs(collection(db, "packages"));
+        const packages = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
 
         const testimonialsSnap = await getDocs(collection(db, "testimonials"));
         const testimonials = testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
@@ -189,16 +191,6 @@ return (
 }
 
 // --- Sub-components for each section ---
-function ParallaxImage({ src, scrollYProgress }: { src: string, scrollYProgress: any }) {
-    const y = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
-    return (
-        <div className="image-wrapper">
-             <motion.div style={{ y }} className="relative w-full h-full">
-                <Image src={src} alt="" fill className="object-cover" priority />
-            </motion.div>
-        </div>
-    )
-}
 
 function HeroSection({ data }: { data: HeroData }) {
     const isMobile = useIsMobile();
@@ -207,7 +199,6 @@ function HeroSection({ data }: { data: HeroData }) {
         target: containerRef,
         offset: ['start start', 'end start']
     });
-
     const [currentImage, setCurrentImage] = useState(0);
 
     useEffect(() => {
@@ -250,20 +241,18 @@ function HeroSection({ data }: { data: HeroData }) {
                         ))}
                     </>
                 ) : (
-                    <motion.div>
-                        <div className="scrolling-grid-container">
-                            <div className="scrolling-grid">
-                                {(data.sliderImages || []).map((src, index) => (
-                                    <ParallaxImage key={`grid1-${index}`} src={src} scrollYProgress={scrollYProgress} />
-                                ))}
-                            </div>
-                            <div className="scrolling-grid">
-                                {(data.sliderImages || []).map((src, index) => (
-                                    <ParallaxImage key={`grid2-${index}`} src={src} scrollYProgress={scrollYProgress} />
-                                ))}
-                            </div>
+                    <div className="scrolling-grid-container">
+                        <div className="scrolling-grid">
+                            {(data.sliderImages || []).map((src, index) => (
+                                <ParallaxImage key={`grid1-${index}`} src={src} scrollYProgress={scrollYProgress} />
+                            ))}
                         </div>
-                    </motion.div>
+                        <div className="scrolling-grid">
+                            {(data.sliderImages || []).map((src, index) => (
+                                <ParallaxImage key={`grid2-${index}`} src={src} scrollYProgress={scrollYProgress} />
+                            ))}
+                        </div>
+                    </div>
                 )}
             </div>
         </section>
@@ -363,7 +352,7 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
 
     return (
         <CarouselItem ref={ref} key={dest.id} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
-            <div className="h-[75vh] relative flex items-center justify-center bg-[#f5f5f5]">
+            <div className="h-[75vh] relative flex items-center justify-center">
                 <div className={cn(
                     "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
                     isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
@@ -386,7 +375,7 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
                             <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
                             <p className="text-white/80">{dest.location}</p>
                         </div>
-                      
+                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                     </Link>
                 </div>
             </div>
@@ -492,7 +481,6 @@ return (
     </section>
 );
 }
-
 
 function PackagesSection({ categories, packages, backgroundImage }: { categories: Category[], packages: Package[], backgroundImage?: string }) {
     const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
@@ -663,3 +651,5 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
+
+    
