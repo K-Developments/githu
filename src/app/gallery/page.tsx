@@ -123,21 +123,21 @@ export default function GalleryPage() {
 
             <section className="py-28 px-4 md:px-12">
                 <div className="max-w-7xl mx-auto">
-                    <ScrollAnimation className="flex justify-center flex-wrap gap-2 my-8">
-                        <Button 
-                            variant={activeFilter === 'all' ? 'default' : 'outline'}
+                    <ScrollAnimation className="flex justify-center flex-wrap gap-8 md:gap-12 my-8">
+                        <button 
+                            className={cn('gallery-filter', activeFilter === 'all' && 'active')}
                             onClick={() => setActiveFilter('all')}
                         >
                             All
-                        </Button>
+                        </button>
                         {categories.map(cat => (
-                             <Button 
+                             <button 
                                 key={cat.id}
-                                variant={activeFilter === cat.id ? 'default' : 'outline'}
+                                className={cn('gallery-filter', activeFilter === cat.id && 'active')}
                                 onClick={() => setActiveFilter(cat.id)}
                             >
                                 {cat.name}
-                            </Button>
+                            </button>
                         ))}
                     </ScrollAnimation>
                     
@@ -173,5 +173,3 @@ export default function GalleryPage() {
         </div>
     );
 }
-
-    
