@@ -20,6 +20,7 @@ import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { PackageCard } from "@/components/ui/package-card";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 
 // Define interfaces for the fetched data
@@ -187,12 +188,6 @@ function HeroSection({ data }: { data: HeroData }) {
     const isMobile = useIsMobile();
     const containerRef = useRef<HTMLDivElement>(null);
     const [currentImage, setCurrentImage] = useState(0);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start start', 'end start']
-    });
-
-    const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
     useEffect(() => {
         if (isMobile) {
@@ -234,7 +229,7 @@ function HeroSection({ data }: { data: HeroData }) {
                         ))}
                     </>
                 ) : (
-                    <motion.div style={{ y }} className="w-full h-full">
+                    <div className="w-full h-full">
                         <div className="scrolling-grid-container">
                             <div className="scrolling-grid">
                                 {(data.sliderImages || []).map((src, index) => (
@@ -251,7 +246,7 @@ function HeroSection({ data }: { data: HeroData }) {
                                 ))}
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
             </div>
         </section>
@@ -259,70 +254,72 @@ function HeroSection({ data }: { data: HeroData }) {
 }
 
 function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
-const imageContainerRef = useRef<HTMLDivElement>(null);
-const { scrollYProgress } = useScroll({
-    target: imageContainerRef,
-    offset: ['start end', 'end start']
-});
+    const imageContainerRef = useRef<HTMLDivElement>(null);
+    const reducedMotion = useReducedMotion();
 
-const scale = useTransform(scrollYProgress, [0.3, 1], [1, 1.15]);
-const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
-const y = useTransform(scrollYProgress, [0.3, 1], [0, -50]);
+    const { scrollYProgress } = useScroll({
+        target: imageContainerRef,
+        offset: ['start end', 'end start']
+    });
+
+    const scale = reducedMotion ? 1 : useTransform(scrollYProgress, [0.3, 1], [1, 1.15]);
+    const textOpacity = reducedMotion ? 1 : useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+    const y = reducedMotion ? 0 : useTransform(scrollYProgress, [0.3, 1], [0, -50]);
 
 
-return (
-    <section
-    className="py-28"
-    style={{
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-    }}
-    >
-    <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
-        <ScrollAnimation>
-        <h2
-            className="secondary-heading text-center"
-            dangerouslySetInnerHTML={{ __html: data.headline }}
-        />
-        </ScrollAnimation>
+    return (
+        <section
+        className="py-28"
+        style={{
+            backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+        }}
+        >
+        <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
+            <ScrollAnimation>
+            <h2
+                className="secondary-heading text-center"
+                dangerouslySetInnerHTML={{ __html: data.headline }}
+            />
+            </ScrollAnimation>
 
-        <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
-            <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]  overflow-hidden rounded-md">
-                <motion.div style={{ scale, y }} className="w-full h-full parallax-element">
-                    <Image
-                        src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
-                        alt="Scenic introduction landscape"
-                        fill
-                        sizes="(min-width: 768px) 75vw, 90vw"
-                        className="object-cover"
-                        data-ai-hint="elegant architecture interior"
-                    />
-                </motion.div>
-                <div className="absolute inset-0 bg-black/20"></div>
-                <motion.div 
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{ opacity: textOpacity }}
-                >
-                    <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">Welcome to Sri Lanka</h3>
-                </motion.div>
+            <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
+                <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]  overflow-hidden rounded-md">
+                    <motion.div style={{ scale, y }} className="w-full h-full parallax-element">
+                        <Image
+                            src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+                            alt="Scenic introduction landscape"
+                            fill
+                            sizes="(min-width: 768px) 75vw, 90vw"
+                            className="object-cover"
+                            data-ai-hint="elegant architecture interior"
+                        />
+                    </motion.div>
+                    <div className="absolute inset-0 bg-black/20"></div>
+                    <motion.div 
+                        className="absolute inset-0 flex items-center justify-center"
+                        style={{ opacity: textOpacity }}
+                    >
+                        <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">Welcome to Sri Lanka</h3>
+                    </motion.div>
+                </div>
             </div>
+            
+            <ScrollAnimation className="max-w-3xl" delay={0.2}>
+                <p className="paragraph-style text-lg text-center">{data.paragraph}</p>
+            </ScrollAnimation>
+
+            <ScrollAnimation delay={0.3}>
+                <div className="button-wrapper-for-border mt-4">
+                    <Button asChild variant="outline">
+                        <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+                    </Button>
+                </div>
+            </ScrollAnimation>
         </div>
-        
-        <ScrollAnimation className="max-w-3xl" delay={0.2}>
-            <p className="paragraph-style text-lg text-center">{data.paragraph}</p>
-        </ScrollAnimation>
-
-        <ScrollAnimation delay={0.3}>
-            <div className="button-wrapper-for-border mt-4">
-                <Button asChild variant="outline">
-                    <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-                </Button>
-            </div>
-        </ScrollAnimation>
-    </div>
-    </section>
-);
+        </section>
+    );
 }
 
 
@@ -339,13 +336,14 @@ return (
 
 function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destination, index: number, current: number, api: CarouselApi | undefined }) {
     const ref = useRef<HTMLDivElement>(null);
+    const reducedMotion = useReducedMotion();
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start end", "end start"],
     });
 
     const isCenter = index === current;
-    const y = useTransform(scrollYProgress, [0, 1], [-80, 80]);
+    const y = reducedMotion ? 0 : useTransform(scrollYProgress, [0, 1], [-80, 80]);
 
 
     return (
