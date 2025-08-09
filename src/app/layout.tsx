@@ -12,6 +12,7 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import type { SiteSettings } from "@/lib/data";
 import { SiteSettingsProvider } from "@/context/site-settings-context";
+import { PackagesProvider } from "@/context/packages-context";
 import { useLenis } from "@/hooks/use-lenis";
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
@@ -55,13 +56,15 @@ function RootLayoutContent({
       </head>
       <body className="font-body antialiased">
         <SiteSettingsProvider settings={siteSettings}>
-          <ScrollRestoration />
-          <div className="noise-overlay"></div>
-          {!isAdminPage && <Header logoUrl={siteSettings?.logoUrl} />}
-          <main>{children}</main>
-          {!isAdminPage && <Footer logoUrl={siteSettings?.logoUrl} />}
-          {!isAdminPage && <BottomBar />}
-          <Toaster />
+          <PackagesProvider>
+            <ScrollRestoration />
+            <div className="noise-overlay"></div>
+            {!isAdminPage && <Header logoUrl={siteSettings?.logoUrl} />}
+            <main>{children}</main>
+            {!isAdminPage && <Footer logoUrl={siteSettings?.logoUrl} />}
+            {!isAdminPage && <BottomBar />}
+            <Toaster />
+          </PackagesProvider>
         </SiteSettingsProvider>
       </body>
     </html>

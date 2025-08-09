@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TourItinerary } from '@/components/ui/tour-itinerary';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { usePackages } from '@/context/packages-context';
 
 
 interface PackagesClientProps {
@@ -31,12 +32,16 @@ interface PackagesClientProps {
 
 export function PackagesPageClient({ hero, packages, categories, cta }: PackagesClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const detailViewRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const packageIdFromUrl = searchParams.get('package');
+  const { selectedPackage, setSelectedPackage, setPackages } = usePackages();
 
+   useEffect(() => {
+    setPackages(packages);
+  }, [packages, setPackages]);
+  
   useEffect(() => {
     if (packageIdFromUrl) {
       const pkg = packages.find(p => p.id === packageIdFromUrl);
@@ -50,7 +55,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
     } else {
       setSelectedPackage(null);
     }
-  }, [packageIdFromUrl, packages, router]);
+  }, [packageIdFromUrl, packages, router, setSelectedPackage]);
 
   useEffect(() => {
     if (packageIdFromUrl && detailViewRef.current) {
