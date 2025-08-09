@@ -9,6 +9,8 @@ export type SiteSettings = {
   destinationsBackgroundImage?: string;
   packagesBackgroundImage?: string;
   testimonialsBackgroundImage?: string;
+  phoneNumber?: string;
+  whatsappNumber?: string;
 };
 
 export type Destination = {

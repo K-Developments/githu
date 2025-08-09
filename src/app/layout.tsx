@@ -6,6 +6,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
+import { BottomBar } from "@/components/ui/bottom-bar";
 import { ScrollRestoration } from "@/components/ui/scroll-restoration";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -59,6 +60,7 @@ function RootLayoutContent({
           {!isAdminPage && <Header logoUrl={siteSettings?.logoUrl} />}
           <main>{children}</main>
           {!isAdminPage && <Footer logoUrl={siteSettings?.logoUrl} />}
+          {!isAdminPage && <BottomBar />}
           <Toaster />
         </SiteSettingsProvider>
       </body>
@@ -83,3 +85,5 @@ export default function RootLayout({
     </RootLayoutContent>
   );
 }
+
+    

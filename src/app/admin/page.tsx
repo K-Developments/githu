@@ -57,6 +57,8 @@ export default function AdminHomePage() {
     destinationsBackgroundImage: "",
     packagesBackgroundImage: "",
     testimonialsBackgroundImage: "",
+    phoneNumber: "",
+    whatsappNumber: "",
   });
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
@@ -115,7 +117,17 @@ export default function AdminHomePage() {
           const data = contentDocSnap.data();
           
           const settings = (data.siteSettings || {}) as SiteSettings;
-          setSiteSettings(settings);
+          setSiteSettings({
+            logoUrl: settings.logoUrl || "",
+            introBackgroundImage: settings.introBackgroundImage || "",
+            newsletterBackgroundImage: settings.newsletterBackgroundImage || "",
+            quoteBackgroundImage: settings.quoteBackgroundImage || "",
+            destinationsBackgroundImage: settings.destinationsBackgroundImage || "",
+            packagesBackgroundImage: settings.packagesBackgroundImage || "",
+            testimonialsBackgroundImage: settings.testimonialsBackgroundImage || "",
+            phoneNumber: settings.phoneNumber || "",
+            whatsappNumber: settings.whatsappNumber || "",
+          });
 
           const hero = (data.hero || {}) as HeroData;
           setHeroData({ ...hero, sliderImages: hero.sliderImages || [] });
@@ -363,6 +375,16 @@ export default function AdminHomePage() {
           <div className="space-y-2">
             <Label htmlFor="logoUrl">Logo Image URL</Label>
             <Input id="logoUrl" value={siteSettings.logoUrl} onChange={handleSettingsChange} placeholder="e.g., /logo.png" />
+          </div>
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+                <Label htmlFor="phoneNumber">Phone Number</Label>
+                <Input id="phoneNumber" value={siteSettings.phoneNumber} onChange={handleSettingsChange} placeholder="+1 234 567 890" />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="whatsappNumber">WhatsApp Number</Label>
+                <Input id="whatsappNumber" value={siteSettings.whatsappNumber} onChange={handleSettingsChange} placeholder="+1 234 567 890" />
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="introBackgroundImage">Intro Section Background Image URL</Label>
@@ -642,3 +664,5 @@ https://example.com/image3.png"
     </div>
   );
 }
+
+    
