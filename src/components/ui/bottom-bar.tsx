@@ -42,9 +42,9 @@ export function BottomBar() {
       variants={variants}
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="bottom-bar"
+      className="bottom-bar-container"
     >
-      <div className="bottom-bar-content">
+      <div className="bottom-bar">
         <nav className="bottom-bar-nav hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href}>
@@ -69,5 +69,3 @@ export function BottomBar() {
     </motion.div>
   );
 }
-
-    

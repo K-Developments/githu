@@ -875,11 +875,13 @@
 	}
 
 	/* Bottom Bar */
-	.bottom-bar {
-		@apply fixed bottom-4 left-1/2 -translate-x-1/2 w-[95%] max-w-4xl z-50;
+	.bottom-bar-container {
+		@apply fixed bottom-0 left-0 right-0 z-50 flex justify-center items-center pb-4;
+		pointer-events: none;
 	}
-	.bottom-bar-content {
-		@apply bg-background/80 backdrop-blur-lg border border-border rounded-full shadow-lg h-20 px-8 flex items-center justify-between;
+	.bottom-bar {
+		@apply bg-background/80 backdrop-blur-lg border border-border rounded-full shadow-lg h-20 px-8 flex items-center justify-between w-[95%] max-w-4xl;
+		pointer-events: auto;
 	}
 	.bottom-bar-nav a {
 		@apply font-headline text-xl text-foreground hover:text-primary transition-colors duration-300;
@@ -972,11 +974,11 @@
 			transition: background-color 0.3s ease;
 		}
 	
-		.bottom-bar {
-			@apply w-full bottom-0 left-0 -translate-x-0 rounded-none;
+		.bottom-bar-container {
+			@apply p-0;
 		}
-		.bottom-bar-content {
-			@apply rounded-none h-16;
+		.bottom-bar {
+			@apply w-full rounded-none h-16;
 		}
 		.bottom-bar-nav {
 			@apply hidden;
@@ -1204,5 +1206,3 @@
 		}
 	}
 }
-
-    
