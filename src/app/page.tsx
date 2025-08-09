@@ -19,7 +19,7 @@ import { CtaSection } from "@/components/ui/cta-section";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-import { PackageCard } from "@/components/ui/package-card";
+import { PackageCard } from '@/components/ui/package-card';
 
 
 // Define interfaces for the fetched data
@@ -61,7 +61,7 @@ function ParallaxImage({ src, scrollYProgress }: { src: string, scrollYProgress:
     const y = useTransform(scrollYProgress, [0, 1], [0, Math.random() * 200 - 100]);
     return (
         <div className="image-wrapper overflow-hidden">
-            <motion.div className="relative w-full h-full" style={{ y }}>
+            <motion.div className="relative w-full h-full" style={{ y, transform: "translateZ(0)" }}>
                 <Image src={src} alt="" fill className="object-cover" priority />
             </motion.div>
         </div>
