@@ -6,16 +6,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import type { Package } from '@/lib/data';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
-export function PackageCard({ pkg }: { pkg: Package }) {
+export function PackageCard({ pkg, isMobile }: { pkg: Package, isMobile: boolean }) {
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start end", "end start"]
     });
-    const isMobile = useIsMobile();
+    
     const y = isMobile ? 0 : useTransform(scrollYProgress, [0, 1], [-100, 100]);
 
     return (

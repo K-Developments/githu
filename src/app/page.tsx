@@ -557,6 +557,7 @@ const PackagesSection = memo(function PackagesSection({
   backgroundImage?: string 
 }) {
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
+  const isMobile = useIsMobile();
 
   const displayCategories = useMemo(() => [
     { id: 'all', name: 'All' }, 
@@ -608,7 +609,7 @@ const PackagesSection = memo(function PackagesSection({
         <motion.div className="packages-grid" layout>
           <AnimatePresence>
             {filteredPackages.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg} />
+              <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile} />
             ))}
           </AnimatePresence>
         </motion.div>
