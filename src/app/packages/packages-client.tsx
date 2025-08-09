@@ -1,411 +1,72 @@
+"use client";
 
-
-'use client';
-
-import { useState, useEffect, useRef, useCallback } from 'react';
-import Image from 'next/image';
+import { useRef } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { Separator } from '@/components/ui/separator';
-import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { PackagesCtaSection } from '@/components/ui/packages-cta-section';
-import type { Package, Category, PackagesCtaData, ItineraryDay } from '@/lib/data';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Users, MapPin, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import type { Package } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
-import { TourItinerary } from '@/components/ui/tour-itinerary';
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-import { usePackages } from '@/context/packages-context';
-import { PackageCard } from '@/components/ui/package-card';
 
-
-interface PackagesClientProps {
-  hero: {
-    headline: string;
-    contentBackgroundImage?: string;
-    sliderImages?: string[];
-  };
-  packages: Package[];
-  categories: Category[];
-  cta: PackagesCtaData;
-}
-
-export function PackagesPageClient({ hero, packages, categories, cta }: PackagesClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const detailViewRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const packageIdFromUrl = searchParams.get('package');
-  const { selectedPackage, setSelectedPackage, setPackages } = usePackages();
-
-   useEffect(() => {
-    setPackages(packages);
-  }, [packages, setPackages]);
-  
-  useEffect(() => {
-    if (packageIdFromUrl) {
-      const pkg = packages.find(p => p.id === packageIdFromUrl);
-      if (pkg) {
-        setSelectedPackage(pkg);
-      } else {
-        // If package not found, remove the query param
-        router.push('/packages', { scroll: false });
-        setSelectedPackage(null);
-      }
-    } else {
-      setSelectedPackage(null);
-    }
-  }, [packageIdFromUrl, packages, router, setSelectedPackage]);
-
-  useEffect(() => {
-    if (packageIdFromUrl && detailViewRef.current) {
-        const timer = setTimeout(() => {
-            const yOffset = -80; // Account for sticky header
-            const y = detailViewRef.current!.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({ top: y, behavior: 'smooth' });
-        }, 100);
-        return () => clearTimeout(timer);
-    }
-  }, [packageIdFromUrl]);
-
-  const handleSelectPackage = (pkg: Package) => {
-    const newUrl = `/packages?package=${pkg.id}`;
-    router.push(newUrl, { scroll: false });
-  };
-  
-  const handleClosePackage = () => {
-    router.push('/packages', { scroll: false });
-  };
-
-  const filteredPackages = packages.filter(pkg => 
-    selectedCategory === 'all' || pkg.categoryId === selectedCategory
-  );
-
-  const otherPackages = packages.filter(pkg => pkg.id !== selectedPackage?.id);
-  
-  const getCategoryName = (categoryId: string) => {
-    return categories.find(c => c.id === categoryId)?.name || '';
-  };
-  
-  const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      const heroSection = document.getElementById('hero-section-packages');
-      if (heroSection) {
-          const nextSection = heroSection.nextElementSibling;
-          if (nextSection) {
-              nextSection.scrollIntoView({ behavior: 'smooth' });
-          }
-      }
-  };
-
-  return (
-    <div>
-      <section id="hero-section-packages" className="h-[65vh] flex flex-col">
-          <div 
-            className="flex-1 flex items-center justify-center p-4 relative"
-          >
-              <div className="relative text-center">
-                  <ScrollAnimation>
-                      <h1 className="text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground relative">
-                      {hero.headline}
-                      </h1>
-                  </ScrollAnimation>
-                  <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center mt-12" aria-label="Scroll down">
-                      <motion.div
-                          initial={{ height: '0%' }}
-                          animate={{ height: '100%' }}
-                          transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
-                          className="w-full bg-black"
-                      />
-                  </button>
-              </div>
-          </div>
-      </section>
-
-      <div className="px-4 md:px-12">
-        <Separator />
-          <div className="text-sm text-muted-foreground py-4">
-              <Link href="/" className="hover:text-primary">Home</Link>
-              <span className="mx-2">||</span>
-              {selectedPackage ? (
-                <>
-                  <Link href="/packages" className="hover:text-primary" onClick={(e) => { e.preventDefault(); handleClosePackage();}}>Packages</Link>
-                  <span className="mx-2">||</span>
-                  <span>{selectedPackage.title}</span>
-                </>
-              ) : (
-                <span>Packages</span>
-              )}
-          </div>
-          <Separator />
-      </div>
-
-       
-      <AnimatePresence mode="wait">
-        {selectedPackage ? (
-            <motion.div
-                key="detail"
-                ref={detailViewRef}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-            >
-                <PackageDetailView 
-                    pkg={selectedPackage} 
-                    onClose={handleClosePackage}
-                    categoryName={getCategoryName(selectedPackage.categoryId)}
-                    otherPackages={otherPackages}
-                    onSelectPackage={handleSelectPackage}
-                />
-            </motion.div>
-        ) : (
-            <motion.section
-                key="grid"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="py-28 px-4 md:px-12"
-            >
-                <div className="max-w-7xl mx-auto">
-                <div className="flex justify-end mb-8">
-                    <Select onValueChange={setSelectedCategory} defaultValue="all">
-                    <SelectTrigger className="w-[200px]">
-                        <SelectValue placeholder="Filter by Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Categories</SelectItem>
-                        {categories.map(category => (
-                        <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
-                        ))}
-                    </SelectContent>
-                    </Select>
-                </div>
-                    
-                <motion.div 
-                    className="packages-grid"
-                    layout
-                >
-                    <AnimatePresence>
-                        {filteredPackages.map((pkg) => (
-                           <PackageCard key={pkg.id} pkg={pkg} />
-                        ))}
-                    </AnimatePresence>
-                </motion.div>
-
-
-                {filteredPackages.length === 0 && (
-                    <div className="text-center py-16 text-muted-foreground">
-                    <p>No packages found for the selected category.</p>
-                    </div>
-                )}
-                </div>
-            </motion.section>
-        )}
-      </AnimatePresence>
-      
-      <PackagesCtaSection 
-        title={cta.title}
-        description={cta.description}
-        image={cta.image}
-      />
-    </div>
-  );
-}
-
-function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelectPackage }: { pkg: Package, onClose: () => void, categoryName: string, otherPackages: Package[], onSelectPackage: (pkg: Package) => void }) {
-    const [mainApi, setMainApi] = useState<CarouselApi>()
-    const [otherApi, setOtherApi] = useState<CarouselApi>()
-    const [currentSlide, setCurrentSlide] = useState(0)
-
-    useEffect(() => {
-        if (!mainApi) return
-        setCurrentSlide(mainApi.selectedScrollSnap())
-        mainApi.on("select", () => setCurrentSlide(mainApi.selectedScrollSnap()))
-        mainApi.on("reInit", () => setCurrentSlide(mainApi.selectedScrollSnap()))
-    }, [mainApi])
+export function PackageCard({ pkg, isMobile }: { pkg: Package, isMobile: boolean }) {
+    const ref = useRef<HTMLDivElement>(null);
     
-    const scrollTo = useCallback(
-        (index: number) => mainApi && mainApi.scrollTo(index),
-        [mainApi]
-    )
-
-    const renderList = (items: string[] | undefined, listClassName?: string, itemClassName?: string) => (
-        <ul className={cn("space-y-2", listClassName)}>
-            {(items || []).filter(item => item.trim() !== '').map((item, index) => (
-                <li key={index} className="flex items-start">
-                    <span className="text-primary mr-3 mt-1.5">&#9679;</span>
-                    <span className={cn("text-muted-foreground", itemClassName)}>{item}</span>
-                </li>
-            ))}
-        </ul>
+    // CRITICAL: Always call ALL hooks unconditionally
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"]
+    });
+    
+    // CRITICAL: Always call useTransform - don't conditionally skip it
+    const y = useTransform(
+        scrollYProgress, 
+        [0, 1], 
+        isMobile ? [0, 0] : [-100, 100]
     );
-      
-    const sliderImages = (pkg.images || []).filter(img => img);
 
-  return (
-    <>
-    <section className="py-28 px-4 md:px-12">
-      <div className="max-w-7xl mx-auto">
-        <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="mb-8"
+    // Early return AFTER all hooks have been called
+    if (!pkg) {
+        return null;
+    }
+
+    return (
+        <motion.div
+            ref={ref}
+            className={cn(isMobile ? "package-card-v2-style" : "package-card group")}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            layout
         >
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Back to Packages
-        </Button>
-
-        <div className="mb-12 text-center">
-            <p className="text-primary font-semibold uppercase tracking-wider mb-2">{categoryName}</p>
-            <h2 className="font-headline text-4xl md:text-6xl text-foreground">{pkg.title}</h2>
-            <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">{pkg.location}</p>
-        </div>
-
-        {sliderImages.length > 0 && (
-            <div className='mb-12'>
-                <Carousel setApi={setMainApi} opts={{ loop: true }}>
-                    <CarouselContent>
-                        {sliderImages.map((image, index) => (
-                            <CarouselItem key={index}>
-                                <div className="relative aspect-video w-full">
-                                    <Image
-                                        src={image}
-                                        alt={`${pkg.title} - view ${index + 1}`}
-                                        fill
-                                        className="object-cover rounded-lg"
-                                        priority={index === 0}
-                                    />
-                                </div>
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                </Carousel>
-                 <div className="flex justify-center gap-2 mt-4">
-                    {sliderImages.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => scrollTo(index)}
-                        className={cn(
-                        "h-2 w-2 rounded-full transition-all",
-                        index === currentSlide ? "w-4 bg-primary" : "bg-muted"
-                        )}
-                        aria-label={`Go to slide ${index + 1}`}
-                    />
-                    ))}
-                </div>
-            </div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12">
-            <div className="lg:col-span-3">
-                <TourItinerary overview={pkg.overview} itinerary={pkg.itinerary} />
-            </div>
-            <div className="lg:col-span-2">
-                <div className="bg-secondary/50 p-6 md:p-8 rounded-lg space-y-8 sticky top-24">
-                     <div className="grid grid-cols-2 gap-6 pb-6 border-b">
-                        <div className="flex items-center gap-3">
-                            <Calendar className="h-6 w-6 text-primary" />
-                            <div>
-                                <h4 className="font-semibold text-sm">Duration</h4>
-                                <p className="text-muted-foreground text-sm">{pkg.duration}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <Users className="h-6 w-6 text-primary" />
-                            <div>
-                                <h4 className="font-semibold text-sm">Group Size</h4>
-                                <p className="text-muted-foreground text-sm">{pkg.groupSize}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <MapPin className="h-6 w-6 text-primary" />
-                            <div>
-                                <h4 className="font-semibold text-sm">Destinations</h4>
-                                <p className="text-muted-foreground text-sm">{pkg.destinationsCount}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <Star className="h-6 w-6 text-primary" />
-                            <div>
-                                <h4 className="font-semibold text-sm">Rating</h4>
-                                <p className="text-muted-foreground text-sm">{pkg.rating}/5 ({pkg.reviewsCount} reviews)</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 className="font-headline text-2xl mb-4">Inclusions</h4>
-                        {renderList(pkg.inclusions)}
-                    </div>
-                    <div>
-                        <h4 className="font-headline text-2xl mb-4">Exclusions</h4>
-                        {renderList(pkg.exclusions)}
-                    </div>
-                    <div className="pt-6 border-t">
-                        <div className="button-wrapper-for-border">
-                            <Button asChild size="lg" className="w-full">
-                                <Link href={pkg.linkUrl || '#'}>Book This Tour</Link>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-    </section>
-
-    {otherPackages.length > 0 && (
-          <section className="py-28 px-4 md:px-12 bg-secondary/30">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-12">
-                    <ScrollAnimation>
-                        <h2 className="text-3xl md:text-4xl font-headline">Explore Other Packages</h2>
-                    </ScrollAnimation>
+            <Link href={`/packages?package=${pkg.id}`} className="block w-full h-full">
+                <div className={cn(isMobile ? "package-card-v2-image" : "package-card-image-container")}>
+                    <motion.div className="relative w-full h-full" style={{ y }}>
+                        <Image
+                            src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x600.png"}
+                            alt={`Image of ${pkg.title} package in ${pkg.location}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover"
+                        />
+                    </motion.div>
                 </div>
                 
-                <Carousel 
-                    setApi={setOtherApi}
-                    opts={{
-                        align: "start",
-                        loop: otherPackages.length > 2,
-                    }}
-                    className="w-full"
-                >
-                    <CarouselContent className="-ml-8">
-                        {otherPackages.map((otherPkg) => (
-                        <CarouselItem key={otherPkg.id} className="pl-8 md:basis-1/2">
-                            <ScrollAnimation>
-                               <div 
-                                    onClick={() => onSelectPackage(otherPkg)}
-                                    className="cursor-pointer group"
-                                >
-                                    <PackageCard pkg={otherPkg} />
-                                </div>
-                            </ScrollAnimation>
-                        </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                </Carousel>
-                <div className="flex justify-center items-center gap-2 mt-8">
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollPrev()}>
-                           <ChevronLeft className="h-4 w-4" />
-                        </Button>
+                {isMobile ? (
+                    <div className="package-card-v2-content">
+                        <h3 className="package-card-title">{pkg.title}</h3>
+                        <p className="package-card-location">{pkg.location}</p>
                     </div>
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollNext()}>
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
-            </div>
-          </section>
-      )}
-
-    </>
-  );
+                ) : (
+                    <>
+                        <div className="package-card-overlay" />
+                        <div className="package-card-content">
+                            <h3 className="package-card-title">{pkg.title}</h3>
+                            <p className="package-card-location">{pkg.location}</p>
+                        </div>
+                    </>
+                )}
+            </Link>
+        </motion.div>
+    );
 }

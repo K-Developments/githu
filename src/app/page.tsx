@@ -229,19 +229,21 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   }, [data.sliderImages, currentImage]);
   
   const gridElements = (
-    <div className="scrolling-grid">
-      {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
-        <div key={`grid-${index}`} className="image-wrapper">
-          <Image
-            src={src}
-            alt=""
-            fill
-            className="object-cover"
-            priority={index < 6}
-            sizes="(min-width: 1024px) 25vw, 50vw"
-          />
-        </div>
-      ))}
+    <div className="scrolling-grid-container">
+      <div className="scrolling-grid">
+        {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
+          <div key={`grid-${index}`} className="image-wrapper">
+            <Image
+              src={src}
+              alt=""
+              fill
+              className="object-cover"
+              priority={index < 6}
+              sizes="(min-width: 1024px) 25vw, 50vw"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
   
@@ -262,7 +264,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
       </div>
 
       <div className="hero-image">
-        {isMobile ? imageElements : <div className="scrolling-grid-container">{gridElements}</div>}
+        {isMobile ? imageElements : gridElements}
       </div>
     </section>
   );
@@ -607,7 +609,7 @@ const PackagesSection = memo(function PackagesSection({
         </ScrollAnimation>
 
         <motion.div className="packages-grid" layout>
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             {filteredPackages.map((pkg) => (
               <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile} />
             ))}

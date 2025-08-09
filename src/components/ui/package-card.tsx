@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useRef } from 'react';
@@ -9,13 +10,25 @@ import type { Package } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
 export function PackageCard({ pkg, isMobile }: { pkg: Package, isMobile: boolean }) {
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement>(null);
+    
+    // CRITICAL: Always call ALL hooks unconditionally
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start end", "end start"]
     });
     
-    const y = isMobile ? 0 : useTransform(scrollYProgress, [0, 1], [-100, 100]);
+    // CRITICAL: Always call useTransform - don't conditionally skip it
+    const y = useTransform(
+        scrollYProgress, 
+        [0, 1], 
+        isMobile ? [0, 0] : [-100, 100]
+    );
+
+    // Early return AFTER all hooks have been called
+    if (!pkg) {
+        return null;
+    }
 
     return (
         <Link href={`/packages?package=${pkg.id}`} passHref>

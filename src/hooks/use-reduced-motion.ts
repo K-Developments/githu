@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from 'react';
 
 // Fixed useIsMobile hook
@@ -27,10 +28,12 @@ export function useIsMobile() {
   return isClient ? isMobile : false;
 }
 
-// Fixed useReducedMotion hook
+// Fixed useReducedMotion hook - CRITICAL FIX: Always call useIsMobile
 export function useReducedMotion() {
-  const [prefersReduced, setPrefersReduced] = useState(false);
+  const [prefersReduced, setPrefersReduced] = useState(true); // Default to true for SSR
   const [isClient, setIsClient] = useState(false);
+  
+  // IMPORTANT: Always call this hook, never conditionally
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -55,9 +58,9 @@ export function useReducedMotion() {
     }
   }, []);
 
-  // Return true during SSR to be safe, then actual value after hydration
+  // Always return the same logic path - never early return before all hooks are called
   if (!isClient) {
-    return true; // Conservative default
+    return true; // Conservative default during SSR
   }
 
   return prefersReduced || isMobile;
