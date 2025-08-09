@@ -270,15 +270,15 @@
 	.scrolling-grid-container {
 		display: flex;
 		flex-wrap: nowrap;
-		width: 200%; /* Make the container twice as wide */
+		width: 100%; 
 		height: 100%;
 		animation: scroll 60s linear infinite;
 	}
 	.scrolling-grid {
 		display: grid;
-		grid-template-columns: repeat(6, 1fr); /* 6 columns for two grids */
+		grid-template-columns: repeat(6, 1fr);
 		grid-template-rows: repeat(2, 1fr);
-		width: 100%;
+		width: 200%;
 		flex-shrink: 0;
 		gap:1rem;
 	}
@@ -499,6 +499,24 @@
 		cursor: pointer;
 		aspect-ratio: 1 / 1;
 	}
+
+	.package-card-v2-style {
+		@apply flex flex-col;
+	}
+	.package-card-v2-image {
+		@apply relative w-full aspect-square overflow-hidden rounded-md;
+	}
+	.package-card-v2-content {
+		@apply pt-4 text-left;
+	}
+	.package-card-v2-content .package-card-title {
+		@apply text-lg font-semibold text-foreground;
+	}
+	.package-card-v2-content .package-card-location {
+		@apply text-sm text-muted-foreground;
+	}
+
+
 	.package-card-image-container {
 		position: absolute;
 		inset: 0;

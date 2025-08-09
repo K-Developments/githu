@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import type { Package } from '@/lib/data';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 export function PackageCard({ pkg }: { pkg: Package }) {
     const ref = useRef(null);
@@ -13,13 +15,14 @@ export function PackageCard({ pkg }: { pkg: Package }) {
         target: ref,
         offset: ["start end", "end start"]
     });
-    const y = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+    const isMobile = useIsMobile();
+    const y = isMobile ? 0 : useTransform(scrollYProgress, [0, 1], [-100, 100]);
 
     return (
         <Link href={`/packages?package=${pkg.id}`} passHref>
-            <motion.div 
+             <motion.div 
                 ref={ref}
-                className="package-card group"
+                className={cn(isMobile ? "package-card-v2-style" : "package-card group")}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -27,7 +30,7 @@ export function PackageCard({ pkg }: { pkg: Package }) {
                 transition={{ duration: 0.4, ease: "easeInOut" }}
                 layout
             >
-                <div className="package-card-image-container">
+                <div className={cn(isMobile ? "package-card-v2-image" : "package-card-image-container")}>
                     <motion.div className="relative w-full h-full" style={{ y }}>
                         <Image
                             src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x600.png"}
@@ -38,11 +41,20 @@ export function PackageCard({ pkg }: { pkg: Package }) {
                         />
                     </motion.div>
                 </div>
-                <div className="package-card-overlay" />
-                <div className="package-card-content">
-                    <h3 className="package-card-title">{pkg.title}</h3>
-                    <p className="package-card-location">{pkg.location}</p>
-                </div>
+                 {isMobile ? (
+                    <div className="package-card-v2-content">
+                        <h3 className="package-card-title">{pkg.title}</h3>
+                        <p className="package-card-location">{pkg.location}</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className="package-card-overlay" />
+                        <div className="package-card-content">
+                            <h3 className="package-card-title">{pkg.title}</h3>
+                            <p className="package-card-location">{pkg.location}</p>
+                        </div>
+                    </>
+                )}
             </motion.div>
         </Link>
     );
