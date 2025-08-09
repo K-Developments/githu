@@ -225,13 +225,13 @@ export default function AboutPage() {
                             <ScrollAnimation>
                                 <div>
                                     <h3 className="text-3xl font-headline mb-4">{journey.missionTitle}</h3>
-                                    <p className="text-muted-foreground leading-relaxed">{journey.missionText}</p>
+                                    <p className="text-muted-foreground leading-relaxed text-body">{journey.missionText}</p>
                                 </div>
                             </ScrollAnimation>
                             <ScrollAnimation delay={0.2}>
                                 <div>
                                     <h3 className="text-3xl font-headline mb-4">{journey.visionTitle}</h3>
-                                    <p className="text-muted-foreground leading-relaxed">{journey.visionText}</p>
+                                    <p className="text-muted-foreground leading-relaxed text-body">{journey.visionText}</p>
                                 </div>
                             </ScrollAnimation>
                         </div>
@@ -272,7 +272,7 @@ export default function AboutPage() {
                                         "bg-card p-6 md:p-8 rounded-md shadow-xl border -mt-8 md:w-4/5 relative z-10",
                                          index % 2 === 0 ? "ml-auto" : "mr-auto md:-ml-8"
                                     )}>
-                                        <p className="text-muted-foreground leading-relaxed">
+                                        <p className="text-muted-foreground leading-relaxed text-body">
                                         {value.description}
                                         </p>
                                     </div>

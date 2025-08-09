@@ -24,7 +24,7 @@ export function PackagesCtaSection({ title, description, image }: PackagesCtaPro
               </h2>
             </ScrollAnimation>
             <ScrollAnimation delay={0.1}>
-              <p className="text-muted-foreground leading-relaxed mb-8">
+              <p className="text-muted-foreground leading-relaxed mb-8 text-body">
                 {description}
               </p>
             </ScrollAnimation>

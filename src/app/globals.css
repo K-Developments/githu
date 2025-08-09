@@ -187,6 +187,21 @@
 }
 
 @layer components {
+
+	.text-body {
+		@apply text-base md:text-lg;
+	}
+
+	.text-subtle {
+		@apply text-sm md:text-base;
+	}
+
+	@media (max-width: 768px) {
+    .text-body, .text-subtle {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+  }
 	
 	.admin-layout .bg-background {
 		background-color: hsl(var(--background)) !important;
@@ -299,7 +314,7 @@
 					transform: translateX(0);
 			}
 			100% {
-					transform: translateX(-50%);
+					transform: translateX(-100%);
 			}
 	}
 

@@ -89,7 +89,7 @@ export function WorkflowCarousel({ steps }: WorkflowCarouselProps) {
                         </div>
                         <div className="flex flex-col">
                             <h3 className="text-4xl font-headline uppercase mb-4">{currentStep.title}</h3>
-                            <p className="text-muted-foreground leading-relaxed mb-8">{currentStep.description}</p>
+                            <p className="text-muted-foreground leading-relaxed mb-8 text-body">{currentStep.description}</p>
                             <div className="flex items-center space-x-2">
                                 <Button
                                 variant="outline"
@@ -153,7 +153,7 @@ export function WorkflowCarousel({ steps }: WorkflowCarouselProps) {
                              </div>
                              <div className="flex flex-col justify-center items-center text-center p-6 flex-grow">
                                 <h3 className="text-2xl font-headline mb-2">{currentStep.title}</h3>
-                                <p className="text-muted-foreground text-sm">{currentStep.description}</p>
+                                <p className="text-muted-foreground text-sm text-body">{currentStep.description}</p>
                              </div>
                         </div>
                     </motion.div>
@@ -191,4 +191,3 @@ export function WorkflowCarousel({ steps }: WorkflowCarouselProps) {
     </>
   );
 }
-

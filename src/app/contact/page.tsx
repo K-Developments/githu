@@ -142,7 +142,7 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto">
           <ScrollAnimation className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-headline mb-4">Get In Touch</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-body">
               Have a question or ready to start planning your dream getaway? We're here to help. Fill out the form below, and one of our travel experts will be in touch shortly.
             </p>
           </ScrollAnimation>

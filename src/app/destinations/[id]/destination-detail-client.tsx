@@ -120,10 +120,10 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                 </div>
                 <div>
                     <ScrollAnimation>
-                        <p className="text-lg text-muted-foreground mb-4">{destination.location}</p>
+                        <p className="text-lg text-muted-foreground mb-4 text-body">{destination.location}</p>
                     </ScrollAnimation>
                     <ScrollAnimation>
-                        <p className="text-base leading-relaxed whitespace-pre-line mb-8">
+                        <p className="leading-relaxed whitespace-pre-line mb-8 text-body">
                             {destination.longDescription || destination.description}
                         </p>
                     </ScrollAnimation>
@@ -133,7 +133,7 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
                                 <h3 className="text-2xl font-headline mb-4">Highlights</h3>
                                 <ul className="space-y-3">
                                     {destination.highlights.map((highlight, index) => (
-                                        <li key={index} className="flex items-start">
+                                        <li key={index} className="flex items-start text-body">
                                             <CheckCircle className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                                             <span>{highlight}</span>
                                         </li>

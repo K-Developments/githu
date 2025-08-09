@@ -64,6 +64,9 @@ const getHomePageData = async () => {
     let quoteData: QuoteData | null = null;
     let destinationsData: DestinationsData | null = null;
     let ctaData: CtaData | null = null;
+    let featuredPackages: { packageIds: string[] } | null = null;
+    let featuredDestinations: { destinationIds: string[] } | null = null;
+
 
     if (contentDocSnap.exists()) {
       const data = contentDocSnap.data();
@@ -71,6 +74,8 @@ const getHomePageData = async () => {
       introData = data.intro as IntroData;
       quoteData = data.quote as QuoteData;
       destinationsData = data.destinations as DestinationsData;
+      featuredPackages = data.featuredPackages as { packageIds: string[] };
+      featuredDestinations = data.featuredDestinations as { destinationIds: string[] };
       const cta = data.cta as CtaData;
       if (cta && !cta.interactiveItems) {
         cta.interactiveItems = [];
@@ -86,9 +91,18 @@ const getHomePageData = async () => {
       getDocs(collection(db, "testimonials"))
     ]);
 
-    const destinations = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+    const allDestinations = destinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
+    const allPackages = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+
+    const finalDestinations = featuredDestinations 
+        ? allDestinations.filter(d => featuredDestinations.destinationIds.includes(d.id))
+        : allDestinations;
+
+    const finalPackages = featuredPackages
+        ? allPackages.filter(p => featuredPackages.packageIds.includes(p.id))
+        : allPackages;
+
     const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
-    const packages = packagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
     const testimonials = testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
 
     return {
@@ -97,8 +111,8 @@ const getHomePageData = async () => {
       quoteData,
       destinationsData,
       ctaData,
-      destinations,
-      packages,
+      destinations: finalDestinations,
+      packages: finalPackages,
       categories,
       testimonials,
     };
@@ -334,7 +348,7 @@ const IntroSection = memo(function IntroSection({
         </div>
         
         <ScrollAnimation className="max-w-3xl" delay={0.2}>
-          <p className="paragraph-style text-lg text-center">{data.paragraph}</p>
+          <p className="paragraph-style text-center text-body">{data.paragraph}</p>
         </ScrollAnimation>
 
         <ScrollAnimation delay={0.3}>
@@ -481,7 +495,7 @@ const DestinationsSection = memo(function DestinationsSection({
           <h2 className="section-title text-center mb-4">{sectionData.title}</h2>
         </ScrollAnimation>
         <ScrollAnimation delay={0.1}>
-          <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto text-center">
+          <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto text-center text-body">
             {sectionData.subtitle}
           </p>
         </ScrollAnimation>
@@ -520,7 +534,7 @@ const DestinationsSection = memo(function DestinationsSection({
             exit="hidden"
             className="flex items-center justify-center"
           >
-            <p className="text-muted-foreground leading-relaxed text-center w-[80%]">
+            <p className="text-muted-foreground leading-relaxed text-center w-[80%] text-body">
               {destinations[current]?.description}
             </p>
           </motion.div>
@@ -609,7 +623,7 @@ const PackagesSection = memo(function PackagesSection({
         </ScrollAnimation>
 
         <motion.div className="packages-grid" layout>
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {filteredPackages.map((pkg) => (
               <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile} />
             ))}
@@ -675,10 +689,10 @@ const TestimonialsSection = memo(function TestimonialsSection({
             exit="exit"
             className="min-h-[12rem]"
           >
-            <p className="text-2xl md:text-3xl font-light leading-snug md:leading-tight mb-8 text-foreground">
+            <p className="text-2xl md:text-3xl font-light leading-snug md:leading-tight mb-8 text-foreground text-body">
               "{currentTestimonial.text}"
             </p>
-            <p className="text-lg font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="text-lg font-semibold uppercase tracking-wider text-muted-foreground text-body">
               {currentTestimonial.author}, <span className="font-light normal-case opacity-80">{currentTestimonial.location}</span>
             </p>
           </motion.div>

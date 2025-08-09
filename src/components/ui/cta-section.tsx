@@ -53,7 +53,7 @@ export function CtaSection({ data }: { data: CtaData }) {
                             <div className="cta-item-content">
                                 <span className="text-sm text-primary font-semibold tracking-widest">0{index + 1}</span>
                                 <h3 className="text-3xl md:text-5xl font-headline my-4">{item.title}</h3>
-                                <p className="text-muted-foreground max-w-sm mb-6">{item.description}</p>
+                                <p className="text-muted-foreground max-w-sm mb-6 text-body">{item.description}</p>
                                 <Link href={item.linkUrl || '#'} className="standard-link">
                                     <span>Learn More</span>
                                 </Link>

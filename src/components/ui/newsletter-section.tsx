@@ -28,7 +28,7 @@ export function NewsletterSection({
               </div>
             </ScrollAnimation>
             <ScrollAnimation>
-              <p className="newsletter-subtitle">
+              <p className="newsletter-subtitle text-body">
                 Sign up for our newsletter to receive the latest travel inspiration, exclusive offers, and updates from the world of luxury travel.
               </p>
             </ScrollAnimation>
