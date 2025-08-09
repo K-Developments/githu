@@ -136,51 +136,52 @@ async function getHomePageData() {
 
 
 // Main component for the homepage
+// Main component for the homepage
 export default function HomePage() {
-const [pageData, setPageData] = useState<Awaited<ReturnType<typeof getHomePageData>> | null>(null);
-const siteSettings = useSiteSettings();
-
-useEffect(() => {
-    getHomePageData().then(data => setPageData(data));
-}, []);
-
-if (!pageData) {
-    return null; // Or a loading spinner
-}
-
-const {
-    heroData,
-    introData,
-    quoteData,
-    destinationsData,
-    ctaData,
-    destinations,
-    packages,
-    categories,
-    testimonials
-} = pageData;
-
-if (!heroData) {
-    return (
+    const [pageData, setPageData] = useState<Awaited<ReturnType<typeof getHomePageData>> | null>(null);
+    const siteSettings = useSiteSettings();
+  
+    useEffect(() => {
+      getHomePageData().then(data => setPageData(data));
+    }, []);
+  
+    if (!pageData) {
+      return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    }
+  
+    const {
+      heroData,
+      introData,
+      quoteData,
+      destinationsData,
+      ctaData,
+      destinations,
+      packages,
+      categories,
+      testimonials
+    } = pageData;
+  
+    if (!heroData) {
+      return (
         <div className="flex items-center justify-center h-screen">
-            <p>Could not load page content. Please try again later.</p>
+          <p>Could not load page content. Please try again later.</p>
         </div>
-    )
-}
-
-return (
-    <>
-    <HeroSection data={heroData} />
-    {introData && <IntroSection data={introData} backgroundImage={siteSettings?.introBackgroundImage} />}
-    {quoteData && <QuoteSection data={quoteData} backgroundImage={siteSettings?.quoteBackgroundImage} />}
-    {destinationsData && destinations.length > 0 && <DestinationsSection sectionData={destinationsData} destinations={destinations} backgroundImage={siteSettings?.destinationsBackgroundImage} />}
-    {packages.length > 0 && categories.length > 0 && <PackagesSection categories={categories} packages={packages} backgroundImage={siteSettings?.packagesBackgroundImage} />}
-    {testimonials.length > 0 && <TestimonialsSection testimonials={testimonials} backgroundImage={siteSettings?.testimonialsBackgroundImage} />}
-    {ctaData && <CtaSection data={ctaData} />}
-    <NewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage}/>
-    </>
-);
-}
+      );
+    }
+  
+    return (
+      <>
+        <HeroSection data={heroData} />
+        <IntroSection data={introData} backgroundImage={siteSettings?.introBackgroundImage} />
+        <QuoteSection data={quoteData} backgroundImage={siteSettings?.quoteBackgroundImage} />
+        <DestinationsSection sectionData={destinationsData} destinations={destinations} backgroundImage={siteSettings?.destinationsBackgroundImage} />
+        <PackagesSection categories={categories} packages={packages} backgroundImage={siteSettings?.packagesBackgroundImage} />
+        <TestimonialsSection testimonials={testimonials} backgroundImage={siteSettings?.testimonialsBackgroundImage} />
+        <CtaSection data={ctaData} />
+        <NewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage}/>
+      </>
+    );
+  }
 
 // --- Sub-components for each section ---
 
@@ -253,7 +254,7 @@ function HeroSection({ data }: { data: HeroData }) {
     );
 }
 
-function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
+function IntroSection({ data, backgroundImage }: { data: IntroData | null, backgroundImage?: string }) {
     const imageContainerRef = useRef<HTMLDivElement>(null);
     const reducedMotion = useReducedMotion();
 
@@ -265,6 +266,8 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
     const scale = reducedMotion ? 1 : useTransform(scrollYProgress, [0.3, 1], [1, 1.15]);
     const textOpacity = reducedMotion ? 1 : useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
     const y = reducedMotion ? 0 : useTransform(scrollYProgress, [0.3, 1], [0, -50]);
+    
+    if (!data) return null;
 
 
     return (
@@ -323,15 +326,16 @@ function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundIm
 }
 
 
-function QuoteSection({ data, backgroundImage }: { data: QuoteData, backgroundImage?: string }) {
-return (
-    <section className="quote-section py-28" style={{ backgroundImage: `url(${backgroundImage || data.image})` }}>
-        <div className="overlay"></div>
-        <ScrollAnimation>
-        <p className="quote-text">{data.text}</p>
-        </ScrollAnimation>
-    </section>
-);
+function QuoteSection({ data, backgroundImage }: { data: QuoteData | null, backgroundImage?: string }) {
+    if (!data) return null;
+    return (
+        <section className="quote-section py-28" style={{ backgroundImage: `url(${backgroundImage || data.image})` }}>
+            <div className="overlay"></div>
+            <ScrollAnimation>
+            <p className="quote-text">{data.text}</p>
+            </ScrollAnimation>
+        </section>
+    );
 }
 
 function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destination, index: number, current: number, api: CarouselApi | undefined }) {
@@ -379,103 +383,105 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
     )
 }
 
-function DestinationsSection({ sectionData, destinations, backgroundImage }: { sectionData: DestinationsData, destinations: Destination[], backgroundImage?: string }) {
-const [api, setApi] = React.useState<CarouselApi>()
-const [current, setCurrent] = React.useState(0)
+function DestinationsSection({ sectionData, destinations, backgroundImage }: { sectionData: DestinationsData | null, destinations: Destination[], backgroundImage?: string }) {
+    const [api, setApi] = React.useState<CarouselApi>()
+    const [current, setCurrent] = React.useState(0)
 
-const onSelect = React.useCallback((api: CarouselApi) => {
-    if (!api) return;
-    setCurrent(api.selectedScrollSnap());
-}, []);
+    const onSelect = React.useCallback((api: CarouselApi) => {
+        if (!api) return;
+        setCurrent(api.selectedScrollSnap());
+    }, []);
 
-React.useEffect(() => {
-    if (!api) return;
-    onSelect(api);
-    api.on('select', onSelect);
-    api.on('reInit', onSelect);
-    return () => {
-    api.off('select', onSelect);
+    React.useEffect(() => {
+        if (!api) return;
+        onSelect(api);
+        api.on('select', onSelect);
+        api.on('reInit', onSelect);
+        return () => {
+        api.off('select', onSelect);
+        };
+    }, [api, onSelect]);
+
+    const descriptionVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
     };
-}, [api, onSelect]);
-
-const descriptionVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
-};
+    
+    if (!sectionData || destinations.length === 0) return null;
 
 
-return (
-    <section 
-        className="destinations-section py-28 overflow-hidden"
-        style={{
-            backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-        }}
-    >
-        <div className="max-w-7xl mx-auto px-4 md:px-12 text-center">
-            <ScrollAnimation>
-                <h2 className="section-title text-center mb-4">{sectionData.title}</h2>
-            </ScrollAnimation>
-            <ScrollAnimation delay={0.1}>
-                <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto text-center">{sectionData.subtitle}</p>
-            </ScrollAnimation>
-        </div>
+    return (
+        <section 
+            className="destinations-section py-28 overflow-hidden"
+            style={{
+                backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
+        >
+            <div className="max-w-7xl mx-auto px-4 md:px-12 text-center">
+                <ScrollAnimation>
+                    <h2 className="section-title text-center mb-4">{sectionData.title}</h2>
+                </ScrollAnimation>
+                <ScrollAnimation delay={0.1}>
+                    <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto text-center">{sectionData.subtitle}</p>
+                </ScrollAnimation>
+            </div>
 
-        <div className="mt-16">
-            <Carousel 
-                setApi={setApi} 
-                opts={{ 
-                    align: "center", 
-                    loop: true,
-                    containScroll: 'trimSnaps',
-                }}
-            >
-                <CarouselContent className="-ml-4">
-                    {destinations.map((dest, i) => (
-                    <DestinationsCarouselItem key={dest.id} dest={dest} index={i} current={current} api={api} />
-                    ))}
-                </CarouselContent>
-            </Carousel>
-        </div>
-        
-        <div className="max-w-xl mx-auto mt-8 text-center min-h-[6rem] px-4 ">
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={current}
-                    variants={descriptionVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    className="flex items-center justify-center"
+            <div className="mt-16">
+                <Carousel 
+                    setApi={setApi} 
+                    opts={{ 
+                        align: "center", 
+                        loop: true,
+                        containScroll: 'trimSnaps',
+                    }}
                 >
-                    <p className="text-muted-foreground leading-relaxed text-center w-[80%]">
-                        {destinations[current]?.description}
-                    </p>
-                </motion.div>
-            </AnimatePresence>
-        </div>
+                    <CarouselContent className="-ml-4">
+                        {destinations.map((dest, i) => (
+                        <DestinationsCarouselItem key={dest.id} dest={dest} index={i} current={current} api={api} />
+                        ))}
+                    </CarouselContent>
+                </Carousel>
+            </div>
+            
+            <div className="max-w-xl mx-auto mt-8 text-center min-h-[6rem] px-4 ">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={current}
+                        variants={descriptionVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        className="flex items-center justify-center"
+                    >
+                        <p className="text-muted-foreground leading-relaxed text-center w-[80%]">
+                            {destinations[current]?.description}
+                        </p>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
 
-        <div className="flex justify-center items-center gap-4 mt-8">
-            <div className="button-wrapper-for-border">
-                <Button variant="outline" size="icon" onClick={() => api?.scrollPrev()}>
-                <ChevronLeft className="h-4 w-4" />
-                </Button>
+            <div className="flex justify-center items-center gap-4 mt-8">
+                <div className="button-wrapper-for-border">
+                    <Button variant="outline" size="icon" onClick={() => api?.scrollPrev()}>
+                    <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                </div>
+                <div className="button-wrapper-for-border">
+                    <Button asChild variant="default">
+                        <Link href={sectionData.buttonUrl || '#'}>View All Destinations</Link>
+                    </Button>
+                </div>
+                <div className="button-wrapper-for-border">
+                    <Button variant="outline" size="icon" onClick={() => api?.scrollNext()}>
+                    <ChevronRight className="h-4 w-4" />
+                    </Button>
+                </div>
             </div>
-            <div className="button-wrapper-for-border">
-                <Button asChild variant="default">
-                    <Link href={sectionData.buttonUrl || '#'}>View All Destinations</Link>
-                </Button>
-            </div>
-            <div className="button-wrapper-for-border">
-                <Button variant="outline" size="icon" onClick={() => api?.scrollNext()}>
-                <ChevronRight className="h-4 w-4" />
-                </Button>
-            </div>
-        </div>
 
-    </section>
-);
+        </section>
+    );
 }
 
 function PackagesSection({ categories, packages, backgroundImage }: { categories: Category[], packages: Package[], backgroundImage?: string }) {
@@ -488,6 +494,8 @@ function PackagesSection({ categories, packages, backgroundImage }: { categories
     const filteredPackages = activeCategoryId === 'all'
         ? packages
         : packages.filter(p => p.categoryId === activeCategoryId);
+        
+    if (packages.length === 0 || categories.length === 0) return null;
 
     return (
     <section 
