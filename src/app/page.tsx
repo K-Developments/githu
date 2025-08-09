@@ -15,7 +15,6 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
-import { CtaSection } from "@/components/ui/cta-section";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
@@ -180,41 +179,53 @@ export default function HomePage() {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
-  if (error || !sections?.heroData) {
+  if (error || !sections) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p>Could not load page content. Please try again later.</p>
       </div>
     );
   }
+  
+  const {
+      heroData,
+      introData,
+      quoteData,
+      destinationsData,
+      ctaData,
+      destinations,
+      packages,
+      categories,
+      testimonials
+    } = sections;
 
   return (
     <>
-      <HeroSection data={sections.heroData} />
-      <IntroSection data={sections.introData} backgroundImage={siteSettings?.introBackgroundImage} />
-      <QuoteSection data={sections.quoteData} backgroundImage={siteSettings?.quoteBackgroundImage} />
+      <HeroSection data={heroData} />
+      <IntroSection data={introData} backgroundImage={siteSettings?.introBackgroundImage} />
+      <QuoteSection data={quoteData} backgroundImage={siteSettings?.quoteBackgroundImage} />
       <DestinationsSection 
-        sectionData={sections.destinationsData} 
-        destinations={sections.destinations} 
+        sectionData={destinationsData} 
+        destinations={destinations} 
         backgroundImage={siteSettings?.destinationsBackgroundImage} 
       />
       <PackagesSection 
-        categories={sections.categories} 
-        packages={sections.packages} 
+        categories={categories} 
+        packages={packages} 
         backgroundImage={siteSettings?.packagesBackgroundImage} 
       />
       <TestimonialsSection 
-        testimonials={sections.testimonials} 
+        testimonials={testimonials} 
         backgroundImage={siteSettings?.testimonialsBackgroundImage} 
       />
-      {sections.ctaData && <DynamicCtaSection data={sections.ctaData} />}
+      <DynamicCtaSection data={ctaData} />
       <DynamicNewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage} />
     </>
   );
 }
 
 // Memoized HeroSection
-const HeroSection = memo(function HeroSection({ data }: { data: HeroData }) {
+const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null }) {
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentImage, setCurrentImage] = useState(0);
@@ -223,6 +234,8 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData }) {
     const nextSection = containerRef.current?.nextElementSibling;
     nextSection?.scrollIntoView({ behavior: 'smooth' });
   }, []);
+  
+  if (!data) return null;
 
   useEffect(() => {
     if (!isMobile || !data.sliderImages?.length) return;
@@ -250,40 +263,30 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData }) {
       </div>
     ));
   }, [data.sliderImages, currentImage]);
-
+  
   const gridElements = useMemo(() => {
     if (!data.sliderImages) return null;
     
+    const repeatedImages = [...data.sliderImages, ...data.sliderImages];
+
     return (
       <div className="scrolling-grid-container">
-        <div className="scrolling-grid">
-          {data.sliderImages.map((src, index) => (
-            <div key={`grid1-${index}`} className="image-wrapper">
-              <Image 
-                src={src} 
-                alt="" 
-                fill 
-                className="object-cover" 
-                priority={index < 3}
-                sizes="(min-width: 1024px) 25vw, 50vw"
-              />
-            </div>
-          ))}
-        </div>
-        <div className="scrolling-grid">
-          {data.sliderImages.map((src, index) => (
-            <div key={`grid2-${index}`} className="image-wrapper">
-              <Image 
-                src={src} 
-                alt="" 
-                fill 
-                className="object-cover" 
-                priority={false}
-                sizes="(min-width: 1024px) 25vw, 50vw"
-              />
-            </div>
-          ))}
-        </div>
+        {[...Array(2)].map((_, i) => (
+          <div key={i} className="scrolling-grid">
+            {repeatedImages.map((src, index) => (
+              <div key={`grid${i}-${index}`} className="image-wrapper">
+                <Image 
+                  src={src} 
+                  alt="" 
+                  fill 
+                  className="object-cover" 
+                  priority={index < 3}
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                />
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
     );
   }, [data.sliderImages]);
@@ -433,6 +436,7 @@ const DestinationsCarouselItem = memo(function DestinationsCarouselItem({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
+  const isCenter = index === current;
   
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -614,12 +618,10 @@ const PackagesSection = memo(function PackagesSection({
     ...categories
   ], [categories]);
 
-  const filteredPackages = useMemo(() => 
-    activeCategoryId === 'all'
-      ? packages
-      : packages.filter(p => p.categoryId === activeCategoryId),
-    [activeCategoryId, packages]
-  );
+  const filteredPackages = useMemo(() => {
+    if (activeCategoryId === 'all') return packages;
+    return packages.filter(p => p.categoryId === activeCategoryId);
+  }, [activeCategoryId, packages]);
 
   const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategoryId(categoryId);
