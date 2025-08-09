@@ -187,6 +187,16 @@ return (
 );
 }
 
+function ParallaxImage({ src, scrollYProgress, index }: { src: string; scrollYProgress: any; index: number }) {
+    const y = useTransform(scrollYProgress, [0, 1], [-150, 150 * (index % 2 === 0 ? -1 : 1) * 0.5]);
+    return (
+        <motion.div style={{ y }} className="relative h-full w-full">
+            <Image src={src} alt="" fill className="object-cover" priority />
+        </motion.div>
+    );
+}
+
+
 // --- Sub-components for each section ---
 
 function HeroSection({ data }: { data: HeroData }) {
@@ -198,7 +208,6 @@ function HeroSection({ data }: { data: HeroData }) {
         target: containerRef,
         offset: ['start start', 'end start']
     });
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
 
     useEffect(() => {
         if (isMobile) {
@@ -240,24 +249,24 @@ function HeroSection({ data }: { data: HeroData }) {
                         ))}
                     </>
                 ) : (
-                    <motion.div style={{ y }} className="relative h-[150%] w-full">
+                    <div className="relative h-full w-full">
                         <div className="scrolling-grid-container">
                             <div className="scrolling-grid">
                                 {(data.sliderImages || []).map((src, index) => (
                                     <div key={`grid1-${index}`} className="image-wrapper">
-                                        <Image src={src} alt="" fill className="object-cover" priority />
+                                        <ParallaxImage src={src} scrollYProgress={scrollYProgress} index={index} />
                                     </div>
                                 ))}
                             </div>
                             <div className="scrolling-grid">
                                 {(data.sliderImages || []).map((src, index) => (
                                     <div key={`grid2-${index}`} className="image-wrapper">
-                                        <Image src={src} alt="" fill className="object-cover" priority />
+                                        <ParallaxImage src={src} scrollYProgress={scrollYProgress} index={index} />
                                     </div>
                                 ))}
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
             </div>
         </section>
