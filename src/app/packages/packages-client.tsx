@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -17,6 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TourItinerary } from '@/components/ui/tour-itinerary';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { usePackages } from '@/context/packages-context';
+import { PackageCard } from '@/components/ui/package-card';
 
 
 interface PackagesClientProps {
@@ -183,39 +185,17 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                     </Select>
                 </div>
                     
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                    {filteredPackages.map((pkg, index) => (
-                        <ScrollAnimation key={pkg.id} delay={index * 0.05}>
-                            <div 
-                                onClick={() => handleSelectPackage(pkg)}
-                                className="cursor-pointer group"
-                            >
-                                <div className="package-display-card">
-                                    <div className="card-image">
-                                        <Image
-                                            src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x400.png"}
-                                            alt={`Image of ${pkg.title} package in ${pkg.location}`}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-                                        />
-                                    </div>
-                                    <div className="card-details">
-                                        <h3 className="card-title">{pkg.title}</h3>
-                                        <p className="card-description flex-grow text-muted-foreground mb-4">{pkg.location}</p>
-                                        <div className="flex justify-center">
-                                        <div className="button-wrapper-for-border">
-                                            <Button asChild variant="outline" size="sm" className="w-auto">
-                                                <div className="w-full h-full flex items-center justify-center">View Details</div>
-                                            </Button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </ScrollAnimation>
-                    ))}
-                </div>
+                <motion.div 
+                    className="packages-grid"
+                    layout
+                >
+                    <AnimatePresence>
+                        {filteredPackages.map((pkg) => (
+                           <PackageCard key={pkg.id} pkg={pkg} />
+                        ))}
+                    </AnimatePresence>
+                </motion.div>
+
 
                 {filteredPackages.length === 0 && (
                     <div className="text-center py-16 text-muted-foreground">
@@ -403,28 +383,7 @@ function PackageDetailView({ pkg, onClose, categoryName, otherPackages, onSelect
                                     onClick={() => onSelectPackage(otherPkg)}
                                     className="cursor-pointer group"
                                 >
-                                    <div className="package-display-card">
-                                        <div className="card-image">
-                                            <Image
-                                                src={(otherPkg.images && otherPkg.images[0]) || "https://placehold.co/600x400.png"}
-                                                alt={`Image of ${otherPkg.title} package in ${otherPkg.location}`}
-                                                fill
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-                                            />
-                                        </div>
-                                        <div className="card-details">
-                                            <h3 className="card-title">{otherPkg.title}</h3>
-                                            <p className="card-description flex-grow text-muted-foreground mb-4">{otherPkg.location}</p>
-                                            <div className="flex justify-center">
-                                            <div className="button-wrapper-for-border">
-                                                <Button asChild variant="outline" size="sm" className="w-auto">
-                                                    <div className="w-full h-full flex items-center justify-center">View Details</div>
-                                                </Button>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <PackageCard pkg={otherPkg} />
                                 </div>
                             </ScrollAnimation>
                         </CarouselItem>

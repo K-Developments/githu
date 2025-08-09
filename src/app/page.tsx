@@ -19,6 +19,7 @@ import { CtaSection } from "@/components/ui/cta-section";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { PackageCard } from "@/components/ui/package-card";
 
 
 // Define interfaces for the fetched data
@@ -187,27 +188,27 @@ return (
 );
 }
 
-function ParallaxImage({ src, scrollYProgress, index }: { src: string; scrollYProgress: any; index: number }) {
-    const y = useTransform(scrollYProgress, [0, 1], [-150, 150 * (index % 2 === 0 ? -1 : 1) * 0.5]);
-    return (
-        <motion.div style={{ y }} className="relative h-full w-full">
-            <Image src={src} alt="" fill className="object-cover" priority />
-        </motion.div>
-    );
-}
-
-
 // --- Sub-components for each section ---
+function ParallaxImage({ src, scrollYProgress }: { src: string, scrollYProgress: any }) {
+    const y = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
+    return (
+        <div className="image-wrapper">
+             <motion.div style={{ y }} className="relative w-full h-full">
+                <Image src={src} alt="" fill className="object-cover" priority />
+            </motion.div>
+        </div>
+    )
+}
 
 function HeroSection({ data }: { data: HeroData }) {
     const isMobile = useIsMobile();
     const containerRef = useRef<HTMLDivElement>(null);
-    const [currentImage, setCurrentImage] = useState(0);
-
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ['start start', 'end start']
     });
+
+    const [currentImage, setCurrentImage] = useState(0);
 
     useEffect(() => {
         if (isMobile) {
@@ -249,24 +250,20 @@ function HeroSection({ data }: { data: HeroData }) {
                         ))}
                     </>
                 ) : (
-                    <div className="relative h-full w-full">
+                    <motion.div>
                         <div className="scrolling-grid-container">
                             <div className="scrolling-grid">
                                 {(data.sliderImages || []).map((src, index) => (
-                                    <div key={`grid1-${index}`} className="image-wrapper">
-                                        <ParallaxImage src={src} scrollYProgress={scrollYProgress} index={index} />
-                                    </div>
+                                    <ParallaxImage key={`grid1-${index}`} src={src} scrollYProgress={scrollYProgress} />
                                 ))}
                             </div>
                             <div className="scrolling-grid">
                                 {(data.sliderImages || []).map((src, index) => (
-                                    <div key={`grid2-${index}`} className="image-wrapper">
-                                        <ParallaxImage src={src} scrollYProgress={scrollYProgress} index={index} />
-                                    </div>
+                                    <ParallaxImage key={`grid2-${index}`} src={src} scrollYProgress={scrollYProgress} />
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
             </div>
         </section>
@@ -366,7 +363,7 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
 
     return (
         <CarouselItem ref={ref} key={dest.id} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
-            <div className="h-[75vh] relative flex items-center justify-center">
+            <div className="h-[75vh] relative flex items-center justify-center bg-[#f5f5f5]">
                 <div className={cn(
                     "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
                     isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
@@ -389,7 +386,7 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
                             <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
                             <p className="text-white/80">{dest.location}</p>
                         </div>
-                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      
                     </Link>
                 </div>
             </div>
@@ -496,45 +493,6 @@ return (
 );
 }
 
-function PackageCard({ pkg }: { pkg: Package }) {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "end start"]
-    });
-    const y = useTransform(scrollYProgress, [0, 1], [-100, 100]);
-
-    return (
-        <Link href={`/packages?package=${pkg.id}`} passHref>
-            <motion.div 
-                ref={ref}
-                className="package-card group"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                layout
-            >
-                <div className="package-card-image-container">
-                    <motion.div className="relative w-full h-full" style={{ y }}>
-                        <Image
-                            src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x600.png"}
-                            alt={`Image of ${pkg.title} package in ${pkg.location}`}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            className="object-cover"
-                        />
-                    </motion.div>
-                </div>
-                <div className="package-card-overlay" />
-                <div className="package-card-content">
-                    <h3 className="package-card-title">{pkg.title}</h3>
-                    <p className="package-card-location">{pkg.location}</p>
-                </div>
-            </motion.div>
-        </Link>
-    );
-}
 
 function PackagesSection({ categories, packages, backgroundImage }: { categories: Category[], packages: Package[], backgroundImage?: string }) {
     const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
