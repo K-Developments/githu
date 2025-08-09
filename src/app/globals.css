@@ -824,6 +824,28 @@
 		ring-width: 0px;
 	}
 
+	/* Gallery Page Masonry */
+	.masonry-gallery {
+		column-count: 1;
+		column-gap: 1.5rem;
+	}
+	@media (min-width: 768px) {
+		.masonry-gallery {
+			column-count: 2;
+		}
+	}
+	@media (min-width: 1024px) {
+		.masonry-gallery {
+			column-count: 3;
+		}
+	}
+	.masonry-item {
+		break-inside: avoid;
+		margin-bottom: 1.5rem;
+		position: relative;
+		overflow: hidden;
+		border-radius: 0.5rem;
+	}
 
 	/* Mobile Responsive Adjustments */
 	@media (max-width: 768px) {
@@ -1132,3 +1154,5 @@
 		}
 	}
 }
+
+    
