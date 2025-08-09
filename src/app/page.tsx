@@ -182,7 +182,7 @@ export default function HomePage() {
         testimonials={testimonials} 
         backgroundImage={siteSettings?.testimonialsBackgroundImage} 
       />
-      <DynamicCtaSection data={ctaData} />
+      {ctaData && <DynamicCtaSection data={ctaData} />}
       <DynamicNewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage} />
     </>
   );
@@ -228,28 +228,23 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     ));
   }, [data.sliderImages, currentImage]);
   
-  const gridElements = useMemo(() => {
-    if (!data.sliderImages) return null;
-
-    const repeatedImages = [...data.sliderImages, ...data.sliderImages];
-
-    return (
-      <div className="scrolling-grid">
-        {repeatedImages.map((src, index) => (
-          <div key={`grid-${index}`} className="image-wrapper">
-            <Image
-              src={src}
-              alt=""
-              fill
-              className="object-cover"
-              priority={index < 3}
-              sizes="(min-width: 1024px) 25vw, 50vw"
-            />
-          </div>
-        ))}
-      </div>
-    );
-  }, [data.sliderImages]);
+  const gridElements = (
+    <div className="scrolling-grid">
+      {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
+        <div key={`grid-${index}`} className="image-wrapper">
+          <Image
+            src={src}
+            alt=""
+            fill
+            className="object-cover"
+            priority={index < 6}
+            sizes="(min-width: 1024px) 25vw, 50vw"
+          />
+        </div>
+      ))}
+    </div>
+  );
+  
 
   return (
     <section ref={containerRef} className="hero">
@@ -400,7 +395,7 @@ const DestinationsCarouselItem = memo(function DestinationsCarouselItem({
 
   return (
     <CarouselItem ref={ref} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
-      <div className="h-[75vh] relative flex items-center justify-center">
+      <div className="md:h-[75vh] h-[60vh] relative flex items-center justify-center bg-[#f5f5f5]">
         <div className={cn(
           "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
           isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
@@ -424,7 +419,7 @@ const DestinationsCarouselItem = memo(function DestinationsCarouselItem({
               <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
               <p className="text-white/80">{dest.location}</p>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+           
           </Link>
         </div>
       </div>
