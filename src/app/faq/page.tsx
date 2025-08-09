@@ -90,14 +90,13 @@ export default function FaqPage() {
                     }}
                     data-ai-hint="library books"
                 >
-                    <div className="absolute inset-0 bg-black/20"></div>
                     <div className="relative text-center">
                         <ScrollAnimation>
-                            <h1 className="text-5xl md:text-8xl font-bold font-headline uppercase tracking-widest text-white">
+                            <h1 className="text-5xl md:text-8xl font-bold font-headline uppercase tracking-widest text-foreground">
                             {hero.headline}
                             </h1>
                         </ScrollAnimation>
-                        <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
+                        <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center mt-12" aria-label="Scroll down">
                             <motion.div
                                 initial={{ height: '0%' }}
                                 animate={{ height: '100%' }}

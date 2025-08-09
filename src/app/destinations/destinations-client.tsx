@@ -39,31 +39,23 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
             style={{
-                backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : 'none',
+                backgroundImage: `url(${hero.heroImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
           >
-             <Image
-                  src={hero.heroImage}
-                  alt={`${hero.headline} hero background`}
-                  fill
-                  className="object-cover"
-                  priority
-              />
-              <div className="absolute inset-0 bg-black/40" />
               <div className="relative text-center">
                   <ScrollAnimation>
-                      <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-white break-words relative" style={{ lineBreak: 'anywhere'}}>
+                      <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground break-words relative" style={{ lineBreak: 'anywhere'}}>
                       {hero.headline}
                       </h1>
                   </ScrollAnimation>
-                  <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
+                  <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center mt-12" aria-label="Scroll down">
                       <motion.div
                           initial={{ height: '0%' }}
                           animate={{ height: '100%' }}
                           transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
-                          className="w-full bg-white"
+                          className="w-full bg-black"
                       />
                   </button>
               </div>

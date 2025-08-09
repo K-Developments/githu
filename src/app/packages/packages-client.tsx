@@ -100,7 +100,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
           <div 
             className="flex-1 flex items-center justify-center p-4 relative"
             style={{
-                backgroundImage: hero.contentBackgroundImage ? `url(${hero.contentBackgroundImage})` : 'none',
+                backgroundImage: `url(${hero.heroImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
@@ -111,7 +111,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                       {hero.headline}
                       </h1>
                   </ScrollAnimation>
-                  <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center" aria-label="Scroll down">
+                  <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center mt-12" aria-label="Scroll down">
                       <motion.div
                           initial={{ height: '0%' }}
                           animate={{ height: '100%' }}
@@ -122,10 +122,9 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
               </div>
           </div>
       </section>
-      <Separator />
-      <Separator />
 
       <div className="px-4 md:px-12">
+        <Separator />
           <div className="text-sm text-muted-foreground py-4">
               <Link href="/" className="hover:text-primary">Home</Link>
               <span className="mx-2">||</span>
