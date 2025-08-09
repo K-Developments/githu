@@ -20,6 +20,7 @@ import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { PackageCard } from '@/components/ui/package-card';
 
 const DynamicCtaSection = dynamic(() => import('@/components/ui/cta-section').then(mod => mod.CtaSection));
 const DynamicNewsletterSection = dynamic(() => import('@/components/ui/newsletter-section').then(mod => mod.NewsletterSection));
