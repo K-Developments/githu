@@ -19,7 +19,7 @@ import { CtaSection } from "@/components/ui/cta-section";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-import { PackageCard } from '@/components/ui/package-card';
+import { PackageCard } from "@/components/ui/package-card";
 
 
 // Define interfaces for the fetched data
@@ -56,6 +56,8 @@ interface FeaturedPackagesData {
 interface FeaturedDestinationsData {
     destinationIds: string[];
 }
+
+
 
 async function getHomePageData() {
     try {
@@ -185,6 +187,12 @@ function HeroSection({ data }: { data: HeroData }) {
     const isMobile = useIsMobile();
     const containerRef = useRef<HTMLDivElement>(null);
     const [currentImage, setCurrentImage] = useState(0);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start start', 'end start']
+    });
+
+    const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
     useEffect(() => {
         if (isMobile) {
@@ -226,32 +234,29 @@ function HeroSection({ data }: { data: HeroData }) {
                         ))}
                     </>
                 ) : (
-                    <div className="scrolling-grid-container">
-                        <div className="scrolling-grid">
-                            {(data.sliderImages || []).map((src, index) => (
-                                <div key={`grid1-${index}`} className="image-wrapper overflow-hidden">
-                                    <div className="relative w-full h-full">
+                    <motion.div style={{ y }} className="w-full h-full">
+                        <div className="scrolling-grid-container">
+                            <div className="scrolling-grid">
+                                {(data.sliderImages || []).map((src, index) => (
+                                    <div key={`grid1-${index}`} className="image-wrapper">
                                         <Image src={src} alt="" fill className="object-cover" priority />
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="scrolling-grid">
-                            {(data.sliderImages || []).map((src, index) => (
-                                <div key={`grid2-${index}`} className="image-wrapper overflow-hidden">
-                                    <div className="relative w-full h-full">
+                                ))}
+                            </div>
+                            <div className="scrolling-grid">
+                                {(data.sliderImages || []).map((src, index) => (
+                                    <div key={`grid2-${index}`} className="image-wrapper">
                                         <Image src={src} alt="" fill className="object-cover" priority />
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
             </div>
         </section>
     );
 }
-
 
 function IntroSection({ data, backgroundImage }: { data: IntroData, backgroundImage?: string }) {
 const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -262,6 +267,8 @@ const { scrollYProgress } = useScroll({
 
 const scale = useTransform(scrollYProgress, [0.3, 1], [1, 1.15]);
 const textOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+const y = useTransform(scrollYProgress, [0.3, 1], [0, -50]);
+
 
 return (
     <section
@@ -282,7 +289,7 @@ return (
 
         <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
             <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]  overflow-hidden rounded-md">
-                <motion.div style={{ scale }} className="w-full h-full">
+                <motion.div style={{ scale, y }} className="w-full h-full parallax-element">
                     <Image
                         src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
                         alt="Scenic introduction landscape"
@@ -338,7 +345,7 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
     });
 
     const isCenter = index === current;
-    const y = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+    const y = useTransform(scrollYProgress, [0, 1], [-80, 80]);
 
 
     return (
@@ -349,7 +356,7 @@ function DestinationsCarouselItem({ dest, index, current, api }: { dest: Destina
                     isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
                 )}>
                     <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref className="block w-full h-full">
-                        <motion.div className="relative w-full h-[130%]" style={{ y }}>
+                        <motion.div className="relative w-full h-[130%] parallax-element" style={{ y }}>
                             <Image
                                 src={dest.image || "https://placehold.co/600x800.png"}
                                 alt={dest.title}
@@ -642,7 +649,3 @@ function NewsletterSection({ backgroundImage }: { backgroundImage?: string }) {
         </section>
     );
 }
-
-    
-
-    
