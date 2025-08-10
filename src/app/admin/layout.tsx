@@ -1,7 +1,7 @@
 
 'use client';
 import {SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset} from "@/components/ui/sidebar";
-import { Home, User, Package, Map, Inbox, Mail, HelpCircle, ImageIcon } from "lucide-react";
+import { Home, User, Package, Map, Inbox, Mail, HelpCircle, ImageIcon, Briefcase } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -38,6 +38,16 @@ export default function AdminLayout({
                                     <a>
                                         <User />
                                         <span>About Page</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                         <SidebarMenuItem>
+                            <Link href="/admin/services" passHref legacyBehavior>
+                                <SidebarMenuButton asChild isActive={pathname === '/admin/services'} tooltip="Services Page">
+                                    <a>
+                                        <Briefcase />
+                                        <span>Services Page</span>
                                     </a>
                                 </SidebarMenuButton>
                             </Link>

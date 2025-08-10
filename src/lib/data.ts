@@ -145,6 +145,13 @@ export type GalleryCategory = {
   name: string;
 };
 
+export type Service = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+};
+
 
 export const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),

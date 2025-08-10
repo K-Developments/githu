@@ -12,6 +12,7 @@ const navLinks = [
   { title: "Home", href: "/" },
   { title: "Destinations", href: "/destinations" },
   { title: "Packages", href: "/packages" },
+  { title: "Services", href: "/services" },
   { title: "Gallery", href: "/gallery"},
   { title: "About", href: "/about" },
   { title: "Contact", href: "/contact" },
@@ -138,5 +139,3 @@ export const MobileNav = ({ isOpen, setIsOpen, logoUrl }: { isOpen: boolean; set
     </AnimatePresence>
   );
 };
-
-    
