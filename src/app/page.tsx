@@ -12,7 +12,7 @@ import type { Package, Category, Destination, Testimonial, CtaData, SiteSettings
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, ArrowDown, Quote, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useAnimationControls, useMotionValueEvent } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { cn } from "@/lib/utils";
@@ -34,7 +34,7 @@ interface HeroData {
 }
 
 interface IntroData {
-  headline: string;
+  headline:string;
   paragraph: string;
   linkText: string;
   linkUrl: string;
@@ -207,6 +207,8 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentImage, setCurrentImage] = useState(0);
+  const { scrollY } = useScroll();
+  const controls = useAnimationControls();
 
   const scrollToNext = useCallback(() => {
     const nextSection = containerRef.current?.nextElementSibling;
@@ -214,6 +216,51 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   }, []);
   
   if (!data) return null;
+
+  const headline = data.headline.replace(/<br\s*\/?>/gi, ' <br> ');
+  const words = headline.split(" ");
+  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.04, delayChildren: i * 0.04 },
+    }),
+  };
+
+  const childVariants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+  };
+  
+  useEffect(() => {
+    controls.start("visible");
+  }, [controls]);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest === 0) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  });
+
 
   useEffect(() => {
     if (!isMobile || !data.sliderImages?.length) return;
@@ -243,29 +290,45 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   }, [data.sliderImages, currentImage]);
   
   const gridElements = (
-    <div className="scrolling-grid-container">
-      <div className="scrolling-grid">
-        {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
-          <div key={`grid-${index}`} className="image-wrapper">
-            <Image
-              src={src}
-              alt=""
-              fill
-              className="object-cover"
-              priority={index < 6}
-              sizes="(min-width: 1024px) 25vw, 50vw"
-            />
+      <div className="scrolling-grid-container">
+          <div className="scrolling-grid">
+              {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
+                  <div key={`grid-${index}`} className="image-wrapper">
+                      <Image
+                          src={src}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          priority={index < 6}
+                          sizes="(min-width: 1024px) 25vw, 50vw"
+                      />
+                  </div>
+              ))}
           </div>
-        ))}
       </div>
-    </div>
   );
   
 
   return (
     <section ref={containerRef} className="hero">
       <div className="hero-content">
-        <h1 dangerouslySetInnerHTML={{ __html: data.headline }} />
+        <motion.h1 
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+        >
+          {words.map((word, index) =>
+            word === '<br>' ? <br key={index} /> : (
+              <motion.span
+                key={index}
+                variants={childVariants}
+                className="inline-block mr-[0.25em]"
+              >
+                {word}
+              </motion.span>
+            )
+          )}
+        </motion.h1>
         <div className="flex flex-row-reverse items-center justify-center">
           <button 
             onClick={scrollToNext}
@@ -574,7 +637,7 @@ const PackagesSection = memo(function PackagesSection({
 }) {
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
   const isMobile = useIsMobile();
-
+  
   const displayCategories = useMemo(() => [
     { id: 'all', name: 'All' }, 
     ...categories
@@ -589,8 +652,16 @@ const PackagesSection = memo(function PackagesSection({
     setActiveCategoryId(categoryId);
   }, []);
         
-  if (packages.length === 0 || categories.length === 0) return null;
-
+  if (packages.length === 0 || categories.length === 0) {
+    const areHooksCalled = true; 
+    if(!areHooksCalled) {
+      useIsMobile();
+      useMemo(() => {}, []);
+      useCallback(() => {}, []);
+    }
+     return null;
+  }
+  
   return (
     <section 
       className="homepage-packages-section py-28"
