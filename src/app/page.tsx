@@ -250,6 +250,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   useEffect(() => {
     controls.start("visible");
   }, [controls]);
+  
 
   const gridElements = (
       <div className="scrolling-grid-container">
@@ -332,7 +333,7 @@ const IntroSection = memo(function IntroSection({
     offset: ['start start', 'end end']
   });
 
-  const scaleX = useTransform(scrollYProgress, [0.1, 0.7], [1, 2]);
+  const clipPath = useTransform(scrollYProgress, [0.1, 0.7], ['circle(0% at 50% 50%)', 'circle(150% at 50% 50%)']);
   const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
   
   if (!data) return null;
@@ -357,7 +358,7 @@ const IntroSection = memo(function IntroSection({
 
         <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]">
           <motion.div 
-            style={{ scaleX }}
+            style={{ clipPath }}
             className="w-full h-full"
           >
             <Image
