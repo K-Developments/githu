@@ -206,9 +206,8 @@ export default function HomePage() {
 const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null }) {
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentImage, setCurrentImage] = useState(0);
   const controls = useAnimationControls();
-
+  
   const scrollToNext = useCallback(() => {
     const nextSection = containerRef.current?.nextElementSibling;
     nextSection?.scrollIntoView({ behavior: 'smooth' });
@@ -230,6 +229,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   const childVariants = {
     visible: {
       opacity: 1,
+      y: 0,
       transition: {
         type: "spring",
         damping: 12,
@@ -238,6 +238,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     },
     hidden: {
       opacity: 0,
+      y: 20,
       transition: {
         type: "spring",
         damping: 12,
@@ -250,33 +251,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     controls.start("visible");
   }, [controls]);
 
-  useEffect(() => {
-    if (!isMobile || !data.sliderImages?.length) return;
-    
-    const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % data.sliderImages.length);
-    }, 5000);
-    
-    return () => clearInterval(timer);
-  }, [data.sliderImages, isMobile]);
-
-  const imageElements = useMemo(() => {
-    if (!data.sliderImages) return [];
-    
-    return data.sliderImages.map((src, index) => (
-      <div key={index} className={`fade-image ${index === currentImage ? 'active' : ''}`}>
-        <Image 
-          src={src} 
-          alt="" 
-          fill 
-          className="object-cover" 
-          priority={index === 0}
-          sizes="100vw"
-        />
-      </div>
-    ));
-  }, [data.sliderImages, currentImage]);
-  
   const gridElements = (
       <div className="scrolling-grid-container">
           <div className="scrolling-grid">
@@ -318,31 +292,26 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
           )}
         </motion.h1>
          <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
-            <Button
-                onClick={scrollToNext}
-                variant="outline"
-                size="icon"
-                className="rounded-full w-12 h-12"
-                aria-label="Scroll down"
-            >
-                <div className="w-px h-6">
+             <button onClick={scrollToNext} className="w-12 h-12 rounded-full border border-foreground/30 flex items-center justify-center" aria-label="Scroll down">
+                <div className="w-px h-6 overflow-hidden">
                     <motion.div
-                        animate={{ y: ["0%", "50%", "0%"] }}
+                        animate={{ y: ["-100%", "50%", "100%"] }}
                         transition={{ 
                             duration: 1.5, 
                             ease: "easeInOut",
                             repeat: Infinity,
-                            repeatType: "loop"
+                            repeatType: "loop",
+                            repeatDelay: 0.5
                          }}
                         className="w-full h-full bg-foreground"
                     />
                 </div>
-            </Button>
+            </button>
         </div>
       </div>
 
       <div className="hero-image">
-        {isMobile ? imageElements : gridElements}
+        {gridElements}
       </div>
     </section>
   );
@@ -356,30 +325,29 @@ const IntroSection = memo(function IntroSection({
   data: IntroData | null, 
   backgroundImage?: string 
 }) {
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-  const reducedMotion = useReducedMotion();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
-    target: imageContainerRef,
-    offset: ['start end', 'end start']
+    target: scrollContainerRef,
+    offset: ['start start', 'end end']
   });
 
-  const scale = reducedMotion ? 1 : useTransform(scrollYProgress, [0.3, 1], [1, 1.15]);
-  const textOpacity = reducedMotion ? 1 : useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
-  const y = reducedMotion ? 0 : useTransform(scrollYProgress, [0.3, 1], [0, -50]);
+  const scaleX = useTransform(scrollYProgress, [0.1, 0.7], [1, 2]);
+  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
   
   if (!data) return null;
 
   return (
     <section
-      className="py-28"
+      ref={scrollContainerRef}
+      className="relative h-[250vh]"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center justify-center">
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
@@ -387,32 +355,33 @@ const IntroSection = memo(function IntroSection({
           />
         </ScrollAnimation>
 
-        <div ref={imageContainerRef} className="w-full my-12 flex justify-center">
-          <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%] overflow-hidden rounded-md">
-            <motion.div style={{ y, scale }} className="w-full h-full parallax-element">
-              <Image
-                src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
-                alt="Scenic introduction landscape"
-                fill
-                sizes="(min-width: 768px) 75vw, 90vw"
-                className="object-cover"
-                priority
-              />
-            </motion.div>
-            <div className="absolute inset-0 bg-black/20"></div>
-            <motion.div 
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ opacity: textOpacity }}
-            >
-              <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
-                Welcome to Sri Lanka
-              </h3>
-            </motion.div>
-          </div>
+        <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]">
+          <motion.div 
+            style={{ scaleX }}
+            className="w-full h-full"
+          >
+            <Image
+              src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+              alt="Scenic introduction landscape"
+              fill
+              sizes="(min-width: 768px) 75vw, 90vw"
+              className="object-cover"
+              priority
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-black/20"></div>
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ opacity: textOpacity }}
+          >
+            <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
+              Welcome to Sri Lanka
+            </h3>
+          </motion.div>
         </div>
         
         <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
-          <p className="text-center text-body w-[90%]">{data.paragraph}</p>
+          <p className="text-center text-body w-[90%] mt-12">{data.paragraph}</p>
         </ScrollAnimation>
 
         <ScrollAnimation delay={0.3}>
