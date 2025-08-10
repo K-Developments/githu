@@ -204,11 +204,10 @@ export default function HomePage() {
 
 // Memoized HeroSection
 const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null }) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const controls = useAnimationControls();
   
   useEffect(() => {
-    controls.start("visible");
+     controls.start("visible");
   }, [controls]);
 
   if (!data) return null;
@@ -263,7 +262,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   );
 
   return (
-    <section ref={containerRef} className="hero">
+    <section className="hero">
       <div className="hero-content">
         <motion.h1 
           variants={containerVariants}
@@ -317,14 +316,16 @@ const IntroSection = memo(function IntroSection({
   backgroundImage?: string 
 }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
     offset: ['start start', 'end end']
   });
 
-  const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0%"]);
-  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
+  const borderRadius = useTransform(scrollYProgress, [0, 0.4], ["50%", "0.5rem"]);
+  const desktopWidth = useTransform(scrollYProgress, [0, 0.4], ["60vh", "90vw"]);
+  const textOpacity = useTransform(scrollYProgress, [0.4, 0.6], [0, 1]);
   
   if (!data) return null;
 
@@ -346,10 +347,10 @@ const IntroSection = memo(function IntroSection({
           />
         </ScrollAnimation>
 
-        <div className="relative md:aspect-square aspect-square md:w-1/2 w-[90%] max-w-[80vh] max-h-[80vh]">
+        <div className="relative aspect-square md:w-auto w-[90%] max-w-[80vh] max-h-[80vh]">
           <motion.div 
-            style={{ borderRadius }}
-            className="w-full h-full relative overflow-hidden"
+            style={isMobile ? { borderRadius } : { borderRadius, width: desktopWidth }}
+            className="h-[60vh] md:h-[60vh] relative overflow-hidden aspect-square mx-auto"
           >
             <Image
               src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
