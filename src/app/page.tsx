@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
@@ -95,11 +96,11 @@ const getHomePageData = async () => {
 
     const finalDestinations = featuredDestinations 
         ? allDestinations.filter(d => featuredDestinations.destinationIds.includes(d.id))
-        : allDestinations;
+        : [];
 
     const finalPackages = featuredPackages
         ? allPackages.filter(p => featuredPackages.packageIds.includes(p.id))
-        : allPackages;
+        : [];
 
     const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
     const testimonials = testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
@@ -637,25 +638,30 @@ const PackagesSection = memo(function PackagesSection({
 }) {
   const isMobile = useIsMobile();
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
-  
-  if (packages.length === 0) {
-    return null;
-  }
 
-  const displayCategories = useMemo(() => [
-    { id: 'all', name: 'All' }, 
-    ...categories
-  ], [categories]);
+  const displayCategories = useMemo(() => {
+      const packageCategoryIds = new Set(packages.map(p => p.categoryId));
+      const relevantCategories = categories.filter(c => packageCategoryIds.has(c.id));
+      if (relevantCategories.length > 0) {
+        return [{ id: 'all', name: 'All' }, ...relevantCategories];
+      }
+      return [];
+  }, [packages, categories]);
+
 
   const filteredPackages = useMemo(() => {
     if (activeCategoryId === 'all') return packages;
     return packages.filter(p => p.categoryId === activeCategoryId);
   }, [activeCategoryId, packages]);
-
+  
   const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategoryId(categoryId);
   }, []);
   
+  if (packages.length === 0) {
+    return null;
+  }
+
   return (
     <section 
       className="homepage-packages-section py-28"
@@ -672,20 +678,22 @@ const PackagesSection = memo(function PackagesSection({
           <Separator />
         </ScrollAnimation>
         
-        <ScrollAnimation className="flex justify-center flex-wrap gap-8 md:gap-12 my-8">
-          {displayCategories.map(category => (
-            <button
-              key={category.id}
-              onClick={() => handleCategoryChange(category.id)}
-              className={cn(
-                'package-filter',
-                activeCategoryId === category.id && 'active'
-              )}
-            >
-              {category.name}
-            </button>
-          ))}
-        </ScrollAnimation>
+        {displayCategories.length > 1 && (
+            <ScrollAnimation className="flex justify-center flex-wrap gap-8 md:gap-12 my-8">
+            {displayCategories.map(category => (
+                <button
+                key={category.id}
+                onClick={() => handleCategoryChange(category.id)}
+                className={cn(
+                    'package-filter',
+                    activeCategoryId === category.id && 'active'
+                )}
+                >
+                {category.name}
+                </button>
+            ))}
+            </ScrollAnimation>
+        )}
 
         <motion.div className="packages-grid" layout>
           <AnimatePresence>
@@ -695,7 +703,7 @@ const PackagesSection = memo(function PackagesSection({
           </AnimatePresence>
         </motion.div>
 
-        {filteredPackages.length === 0 && (
+        {filteredPackages.length === 0 && activeCategoryId !== 'all' && (
           <div className="no-packages-message">
             <p>There are currently no packages available for this category.</p>
           </div>
@@ -777,5 +785,3 @@ const TestimonialsSection = memo(function TestimonialsSection({
     </section>
   );
 });
-
-    
