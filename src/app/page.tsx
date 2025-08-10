@@ -97,7 +97,7 @@ const getHomePageData = async () => {
     const finalDestinations = featuredDestinations 
         ? allDestinations.filter(d => featuredDestinations.destinationIds.includes(d.id))
         : [];
-
+    
     const finalPackages = featuredPackages
         ? allPackages.filter(p => featuredPackages.packageIds.includes(p.id))
         : [];
@@ -204,15 +204,13 @@ export default function HomePage() {
 
 // Memoized HeroSection
 const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null }) {
-  const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const controls = useAnimationControls();
   
-  const scrollToNext = useCallback(() => {
-    const nextSection = containerRef.current?.nextElementSibling;
-    nextSection?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
-  
+  useEffect(() => {
+    controls.start("visible");
+  }, [controls]);
+
   if (!data) return null;
 
   const headline = data.headline.replace(/<br\s*\/?>/gi, ' <br> ');
@@ -229,7 +227,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   const childVariants = {
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
         type: "spring",
         damping: 12,
@@ -238,7 +235,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     },
     hidden: {
       opacity: 0,
-      y: 20,
       transition: {
         type: "spring",
         damping: 12,
@@ -246,11 +242,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
       },
     },
   };
-  
-  useEffect(() => {
-    controls.start("visible");
-  }, [controls]);
-  
 
   const gridElements = (
       <div className="scrolling-grid-container">
@@ -270,7 +261,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
           </div>
       </div>
   );
-  
 
   return (
     <section ref={containerRef} className="hero">
@@ -293,7 +283,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
           )}
         </motion.h1>
          <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
-             <button onClick={scrollToNext} className="w-12 h-12 rounded-full border border-foreground/30 flex items-center justify-center" aria-label="Scroll down">
+             <button className="w-12 h-12 rounded-full border border-foreground/30 flex items-center justify-center" aria-label="Scroll down">
                 <div className="w-px h-6 overflow-hidden">
                     <motion.div
                         animate={{ y: ["-100%", "50%", "100%"] }}
@@ -333,7 +323,7 @@ const IntroSection = memo(function IntroSection({
     offset: ['start start', 'end end']
   });
 
-  const clipPath = useTransform(scrollYProgress, [0.1, 0.7], ['circle(0% at 50% 50%)', 'circle(150% at 50% 50%)']);
+  const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0%"]);
   const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
   
   if (!data) return null;
@@ -356,21 +346,21 @@ const IntroSection = memo(function IntroSection({
           />
         </ScrollAnimation>
 
-        <div className="relative md:aspect-[16/9] aspect-[16/12] md:w-3/4 w-[90%]">
+        <div className="relative md:aspect-square aspect-square md:w-1/2 w-[90%] max-w-[80vh] max-h-[80vh]">
           <motion.div 
-            style={{ clipPath }}
-            className="w-full h-full"
+            style={{ borderRadius }}
+            className="w-full h-full relative overflow-hidden"
           >
             <Image
               src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
               alt="Scenic introduction landscape"
               fill
-              sizes="(min-width: 768px) 75vw, 90vw"
+              sizes="(min-width: 768px) 50vw, 90vw"
               className="object-cover"
               priority
             />
+             <div className="absolute inset-0 bg-black/20"></div>
           </motion.div>
-          <div className="absolute inset-0 bg-black/20"></div>
           <motion.div 
             className="absolute inset-0 flex items-center justify-center"
             style={{ opacity: textOpacity }}
