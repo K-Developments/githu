@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
@@ -11,7 +10,7 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Package, Category, Destination, Testimonial, CtaData, SiteSettings } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ArrowRight, ArrowDown, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform, useAnimationControls, useMotionValueEvent } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
@@ -318,18 +317,26 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
           )}
         </motion.h1>
          <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
-            <button
+            <Button
                 onClick={scrollToNext}
-                className="w-px h-20 flex items-end justify-center"
+                variant="outline"
+                size="icon"
+                className="rounded-full w-12 h-12"
                 aria-label="Scroll down"
             >
-                <motion.div
-                    initial={{ height: '0%' }}
-                    animate={{ height: '100%' }}
-                    transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
-                    className="w-full bg-black"
-                />
-            </button>
+                <div className="w-px h-6">
+                    <motion.div
+                        animate={{ y: ["0%", "50%", "0%"] }}
+                        transition={{ 
+                            duration: 1.5, 
+                            ease: "easeInOut",
+                            repeat: Infinity,
+                            repeatType: "loop"
+                         }}
+                        className="w-full h-full bg-foreground"
+                    />
+                </div>
+            </Button>
         </div>
       </div>
 
@@ -631,6 +638,10 @@ const PackagesSection = memo(function PackagesSection({
   const isMobile = useIsMobile();
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
   
+  if (packages.length === 0) {
+    return null;
+  }
+
   const displayCategories = useMemo(() => [
     { id: 'all', name: 'All' }, 
     ...categories
@@ -644,10 +655,6 @@ const PackagesSection = memo(function PackagesSection({
   const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategoryId(categoryId);
   }, []);
-  
-  if (packages.length === 0) {
-     return null;
-  }
   
   return (
     <section 
@@ -683,7 +690,7 @@ const PackagesSection = memo(function PackagesSection({
         <motion.div className="packages-grid" layout>
           <AnimatePresence>
             {filteredPackages.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile} />
+              <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile}/>
             ))}
           </AnimatePresence>
         </motion.div>
@@ -770,3 +777,5 @@ const TestimonialsSection = memo(function TestimonialsSection({
     </section>
   );
 });
+
+    
