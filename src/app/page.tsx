@@ -320,26 +320,34 @@ const IntroSection = memo(function IntroSection({
     offset: ['start start', 'end end']
   });
 
-  const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0.5rem"]);
+  const borderRadius = useTransform(scrollYProgress, [0, 0.7], ["50%", "0.5rem"]);
   const width = useTransform(
     scrollYProgress, 
-    [0.1, 0.7], 
+    [0, 0.7], 
     isMobile ? ["90vw", "90vw"] : ["40vw", "90vw"]
   );
-  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
 
   if (!data) return null;
 
   return (
     <section
       ref={scrollContainerRef}
-      className="relative h-[250vh]"
+      className="relative h-[250vh] py-28"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
+      <div className="text-center w-[90%] md:w-[60%] mx-auto">
+        <ScrollAnimation>
+          <h2
+            className="secondary-heading text-center"
+            dangerouslySetInnerHTML={{ __html: data.headline }}
+          />
+        </ScrollAnimation>
+      </div>
+
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         <motion.div
           style={{
@@ -358,34 +366,16 @@ const IntroSection = memo(function IntroSection({
             className="object-cover"
             priority
           />
-           <div className="absolute inset-0 bg-black/20"></div>
-        </motion.div>
-        
-        <motion.div 
-            className="absolute inset-0 flex items-center justify-center text-center px-4 pointer-events-none"
-            style={{ opacity: textOpacity }}
-        >
-            <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
-                Welcome to Sri Lanka
-            </h3>
         </motion.div>
       </div>
 
-      <div className="relative z-10 -mt-[100vh] flex items-center justify-center flex-col text-center w-full pt-[100vh] pb-20">
-         <div className="w-[90%] md:w-[60%] mx-auto">
-            <ScrollAnimation>
-              <h2
-                className="secondary-heading text-center"
-                dangerouslySetInnerHTML={{ __html: data.headline }}
-              />
-            </ScrollAnimation>
-            <p className="text-center text-body">{data.paragraph}</p>
-            <div className="button-wrapper-for-border mt-8 inline-block">
-              <Button asChild variant="outline" className="text-white border-white hover:bg-white hover:text-black pointer-events-auto">
-                <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-              </Button>
-            </div>
-        </div>
+      <div className="relative z-10 w-[90%] md:w-[60%] mx-auto text-center pt-28">
+         <p className="text-center text-body">{data.paragraph}</p>
+          <div className="button-wrapper-for-border mt-8 inline-block">
+            <Button asChild variant="default">
+              <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+            </Button>
+          </div>
       </div>
     </section>
   );
@@ -752,3 +742,5 @@ const TestimonialsSection = memo(function TestimonialsSection({
     </section>
   );
 });
+
+    
