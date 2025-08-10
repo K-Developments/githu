@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect } from 'react';
@@ -6,13 +7,13 @@ import Lenis from '@studio-freight/lenis';
 export function useLenis() {
   useEffect(() => {
     const lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.5, // Increased duration for a slower, smoother scroll
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         direction: 'vertical',
         gestureDirection: 'vertical',
         smooth: true,
         mouseMultiplier: 1,
-        smoothTouch: true,
+        smoothTouch: true, // Ensure this is true for mobile smoothness
         touchMultiplier: 2,
         infinite: false,
     });
