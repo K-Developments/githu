@@ -98,7 +98,7 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
                 ))}
             </ScrollAnimation>
             
-            <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+            <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-[6rem] md:gap-y-[10rem]">
               <AnimatePresence>
                 {filteredPackages.map((pkg) => (
                   <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile} />

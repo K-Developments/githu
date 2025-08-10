@@ -51,6 +51,8 @@ interface FeaturedDestinationsData {
 export default function AdminHomePage() {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     logoUrl: "",
+    siteTitle: "",
+    siteDescription: "",
     introBackgroundImage: "",
     newsletterBackgroundImage: "",
     quoteBackgroundImage: "",
@@ -119,6 +121,8 @@ export default function AdminHomePage() {
           const settings = (data.siteSettings || {}) as SiteSettings;
           setSiteSettings({
             logoUrl: settings.logoUrl || "",
+            siteTitle: settings.siteTitle || "",
+            siteDescription: settings.siteDescription || "",
             introBackgroundImage: settings.introBackgroundImage || "",
             newsletterBackgroundImage: settings.newsletterBackgroundImage || "",
             quoteBackgroundImage: settings.quoteBackgroundImage || "",
@@ -221,7 +225,7 @@ export default function AdminHomePage() {
     fetchContentData();
   }, [toast]);
 
-  const handleSettingsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSettingsChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setSiteSettings(prevData => ({ ...prevData, [id]: value }));
   };
@@ -375,6 +379,14 @@ export default function AdminHomePage() {
           <div className="space-y-2">
             <Label htmlFor="logoUrl">Logo Image URL</Label>
             <Input id="logoUrl" value={siteSettings.logoUrl} onChange={handleSettingsChange} placeholder="e.g., /logo.png" />
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="siteTitle">Site Title (for SEO)</Label>
+            <Input id="siteTitle" value={siteSettings.siteTitle} onChange={handleSettingsChange} placeholder="e.g., Island Hopes Escapes" />
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="siteDescription">Site Description (for SEO)</Label>
+            <Textarea id="siteDescription" value={siteSettings.siteDescription} onChange={handleSettingsChange} placeholder="e.g., Your premier partner for luxury island travel..." />
           </div>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -664,5 +676,3 @@ https://example.com/image3.png"
     </div>
   );
 }
-
-    

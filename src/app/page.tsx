@@ -315,7 +315,7 @@ const IntroSection = memo(function IntroSection({
         backgroundPosition: 'center',
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
+      <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center justify-center">
         <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
@@ -347,8 +347,8 @@ const IntroSection = memo(function IntroSection({
           </div>
         </div>
         
-        <ScrollAnimation className="max-w-3xl" delay={0.2}>
-          <p className="paragraph-style text-center text-body">{data.paragraph}</p>
+        <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
+          <p className="text-center text-body w-[90%]">{data.paragraph}</p>
         </ScrollAnimation>
 
         <ScrollAnimation delay={0.3}>
@@ -542,8 +542,8 @@ const DestinationsSection = memo(function DestinationsSection({
       </div>
 
       <div className="flex justify-center items-center gap-4 mt-8">
-        <div className="button-wrapper-for-border">
-          <Button variant="outline" size="icon" onClick={handlePrev}>
+        <div className=" rounded-full">
+          <Button variant="outline" size="icon" onClick={handlePrev} className="rounded-full">
             <ChevronLeft className="h-4 w-4" />
           </Button>
         </div>
@@ -552,8 +552,8 @@ const DestinationsSection = memo(function DestinationsSection({
             <Link href={sectionData.buttonUrl || '#'}>View All Destinations</Link>
           </Button>
         </div>
-        <div className="button-wrapper-for-border">
-          <Button variant="outline" size="icon" onClick={handleNext}>
+        <div className="rounded-full">
+          <Button variant="outline" size="icon" onClick={handleNext} className="rounded-full">
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
@@ -700,10 +700,10 @@ const TestimonialsSection = memo(function TestimonialsSection({
       
         {testimonials.length > 1 && (
           <div className="mt-12 flex justify-center gap-3 z-20">
-            <Button variant="outline" size="icon" onClick={handlePrev}>
+            <Button variant="outline" size="icon" onClick={handlePrev} className="rounded-full">
               <ArrowLeft />
             </Button>
-            <Button variant="outline" size="icon" onClick={handleNext}>
+            <Button variant="outline" size="icon" onClick={handleNext} className="rounded-full">
               <ArrowRight />
             </Button>
           </div>

@@ -561,7 +561,7 @@
 	.package-card-location {
 		font-size: 0.9rem;
 		opacity: 0.9;
-		text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+		
 	}
 
 	.packages-header-mobile {
@@ -1206,3 +1206,7 @@
 		}
 	}
 }
+
+
+
+/* Add these rules to your globals.css */

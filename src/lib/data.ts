@@ -3,6 +3,8 @@ import * as z from 'zod';
 
 export type SiteSettings = {
   logoUrl?: string;
+  siteTitle?: string;
+  siteDescription?: string;
   introBackgroundImage?: string;
   newsletterBackgroundImage?: string;
   quoteBackgroundImage?: string;
@@ -155,5 +157,3 @@ export const formSchema = z.object({
 });
 
 export type FormValues = z.infer<typeof formSchema>;
-
-    
