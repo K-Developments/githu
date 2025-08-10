@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
@@ -23,7 +21,6 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { PackageCard } from '@/components/ui/package-card';
 
 const DynamicCtaSection = dynamic(() => import('@/components/ui/cta-section').then(mod => mod.CtaSection));
-const DynamicNewsletterSection = dynamic(() => import('@/components/ui/newsletter-section').then(mod => mod.NewsletterSection));
 
 
 // Define interfaces for the fetched data
@@ -197,17 +194,17 @@ export default function HomePage() {
         backgroundImage={siteSettings?.testimonialsBackgroundImage} 
       />
       {ctaData && <DynamicCtaSection data={ctaData} />}
-      <DynamicNewsletterSection backgroundImage={siteSettings?.newsletterBackgroundImage} />
     </>
   );
 }
 
 // Memoized HeroSection
 const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const controls = useAnimationControls();
   
   useEffect(() => {
-     controls.start("visible");
+    controls.start("visible");
   }, [controls]);
 
   if (!data) return null;
@@ -262,7 +259,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   );
 
   return (
-    <section className="hero">
+    <section ref={containerRef} className="hero">
       <div className="hero-content">
         <motion.h1 
           variants={containerVariants}
@@ -315,24 +312,24 @@ const IntroSection = memo(function IntroSection({
   data: IntroData | null, 
   backgroundImage?: string 
 }) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
     offset: ['start start', 'end end']
   });
 
-  const borderRadius = useTransform(scrollYProgress, [0, 0.4], ["50%", "0.5rem"]);
-  const desktopWidth = useTransform(scrollYProgress, [0, 0.4], ["60vh", "90vw"]);
-  const textOpacity = useTransform(scrollYProgress, [0.4, 0.6], [0, 1]);
+  const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0.5rem"]);
+  const width = useTransform(scrollYProgress, [0.1, 0.7], isMobile ? ["80vw", "90vw"] : ["35vw", "90vw"]);
+  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
   
   if (!data) return null;
 
   return (
     <section
       ref={scrollContainerRef}
-      className="relative h-[250vh]"
+      className="relative h-[250vh] py-[7rem]"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
@@ -340,37 +337,36 @@ const IntroSection = memo(function IntroSection({
       }}
     >
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
-        <ScrollAnimation>
+      <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
             dangerouslySetInnerHTML={{ __html: data.headline }}
           />
         </ScrollAnimation>
 
-        <div className="relative aspect-square md:w-auto w-[90%] max-w-[80vh] max-h-[80vh]">
-          <motion.div 
-            style={isMobile ? { borderRadius } : { borderRadius, width: desktopWidth }}
-            className="h-[60vh] md:h-[60vh] relative overflow-hidden aspect-square mx-auto"
-          >
-            <Image
-              src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
-              alt="Scenic introduction landscape"
-              fill
-              sizes="(min-width: 768px) 50vw, 90vw"
-              className="object-cover"
-              priority
-            />
-             <div className="absolute inset-0 bg-black/20"></div>
-          </motion.div>
-          <motion.div 
+        <motion.div 
+          style={{ width, aspectRatio: '1 / 1', borderRadius }}
+          className="relative max-w-[80vh] max-h-[80vh] overflow-hidden"
+        >
+          <Image
+            src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+            alt="Scenic introduction landscape"
+            fill
+            sizes="(min-width: 768px) 50vw, 90vw"
+            className="object-cover"
+            priority
+          />
+           <div className="absolute inset-0 bg-black/20"></div>
+        </motion.div>
+        
+        <motion.div 
             className="absolute inset-0 flex items-center justify-center"
             style={{ opacity: textOpacity }}
-          >
+        >
             <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
               Welcome to Sri Lanka
             </h3>
-          </motion.div>
-        </div>
+        </motion.div>
         
         <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
           <p className="text-center text-body w-[90%] mt-12">{data.paragraph}</p>

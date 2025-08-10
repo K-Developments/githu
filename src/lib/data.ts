@@ -6,7 +6,6 @@ export type SiteSettings = {
   siteTitle?: string;
   siteDescription?: string;
   introBackgroundImage?: string;
-  newsletterBackgroundImage?: string;
   quoteBackgroundImage?: string;
   destinationsBackgroundImage?: string;
   packagesBackgroundImage?: string;

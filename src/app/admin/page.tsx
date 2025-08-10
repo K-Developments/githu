@@ -54,7 +54,6 @@ export default function AdminHomePage() {
     siteTitle: "",
     siteDescription: "",
     introBackgroundImage: "",
-    newsletterBackgroundImage: "",
     quoteBackgroundImage: "",
     destinationsBackgroundImage: "",
     packagesBackgroundImage: "",
@@ -124,7 +123,6 @@ export default function AdminHomePage() {
             siteTitle: settings.siteTitle || "",
             siteDescription: settings.siteDescription || "",
             introBackgroundImage: settings.introBackgroundImage || "",
-            newsletterBackgroundImage: settings.newsletterBackgroundImage || "",
             quoteBackgroundImage: settings.quoteBackgroundImage || "",
             destinationsBackgroundImage: settings.destinationsBackgroundImage || "",
             packagesBackgroundImage: settings.packagesBackgroundImage || "",
@@ -417,10 +415,6 @@ export default function AdminHomePage() {
            <div className="space-y-2">
             <Label htmlFor="testimonialsBackgroundImage">Testimonials Section Background Image URL</Label>
             <Input id="testimonialsBackgroundImage" value={siteSettings.testimonialsBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/testimonials-bg.jpg"/>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="newsletterBackgroundImage">Newsletter Section Background Image URL</Label>
-            <Input id="newsletterBackgroundImage" value={siteSettings.newsletterBackgroundImage} onChange={handleSettingsChange} placeholder="https://example.com/newsletter-bg.jpg"/>
           </div>
         </CardContent>
       </Card>
