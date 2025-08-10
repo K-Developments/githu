@@ -34,7 +34,7 @@ async function getSiteSettings(): Promise<SiteSettings | null> {
 
 // Dynamic meta tags generator
 function generateMetaTags(siteSettings: SiteSettings | null) {
-  const defaultTitle = "Island Hopes - Bespoke Luxury Travel";
+  const defaultTitle = "Island Hopes Travels";
   const defaultDescription = "Discover the world's most exclusive island destinations with Island Hopes. We craft bespoke, luxury travel experiences and unforgettable journeys tailored to you.";
   
   const title = siteSettings?.siteTitle || defaultTitle;
@@ -73,14 +73,10 @@ function RootLayoutContent({
         <link 
             href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&display=swap" 
             rel="stylesheet"
-            media="print"
-            onLoad={(e) => (e.currentTarget.media = 'all')}
         />
         <link 
             href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" 
             rel="stylesheet"
-            media="print"
-            onLoad={(e) => (e.currentTarget.media = 'all')}
         />
       </head>
       <body className="font-body antialiased">
