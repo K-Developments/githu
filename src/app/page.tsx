@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
@@ -200,11 +201,11 @@ export default function HomePage() {
 
 // Memoized HeroSection
 const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isAnimating, setIsAnimating] = useState(true);
   const controls = useAnimationControls();
-  
+
   useEffect(() => {
-    controls.start("visible");
+    controls.start("visible").then(() => setIsAnimating(false));
   }, [controls]);
 
   if (!data) return null;
@@ -223,6 +224,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   const childVariants = {
     visible: {
       opacity: 1,
+      y: 0,
       transition: {
         type: "spring",
         damping: 12,
@@ -231,6 +233,7 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     },
     hidden: {
       opacity: 0,
+      y: 20,
       transition: {
         type: "spring",
         damping: 12,
@@ -239,27 +242,8 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     },
   };
 
-  const gridElements = (
-      <div className="scrolling-grid-container">
-          <div className="scrolling-grid">
-              {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
-                  <div key={`grid-${index}`} className="image-wrapper">
-                      <Image
-                          src={src}
-                          alt=""
-                          fill
-                          className="object-cover"
-                          priority={index < 6}
-                          sizes="(min-width: 1024px) 25vw, 50vw"
-                      />
-                  </div>
-              ))}
-          </div>
-      </div>
-  );
-
   return (
-    <section ref={containerRef} className="hero">
+    <section className="hero">
       <div className="hero-content">
         <motion.h1 
           variants={containerVariants}
@@ -298,38 +282,62 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
       </div>
 
       <div className="hero-image">
-        {gridElements}
+         <div className="scrolling-grid-container">
+            <div className="scrolling-grid">
+                {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
+                    <div key={`grid-${index}`} className="image-wrapper">
+                        <Image
+                            src={src}
+                            alt=""
+                            fill
+                            className="object-cover"
+                            priority={index < 6}
+                            sizes="(min-width: 1024px) 25vw, 50vw"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
       </div>
     </section>
   );
 });
 
+
 // Memoized IntroSection
-const IntroSection = memo(function IntroSection({ 
-  data, 
-  backgroundImage 
-}: { 
-  data: IntroData | null, 
-  backgroundImage?: string 
+const IntroSection = memo(function IntroSection({
+  data,
+  backgroundImage
+}: {
+  data: IntroData | null,
+  backgroundImage?: string
 }) {
-  const isMobile = useIsMobile();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
     offset: ['start start', 'end end']
   });
 
+  // Animate from circle (50%) to soft rectangle (0.5rem)
   const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0.5rem"]);
-  const width = useTransform(scrollYProgress, [0.1, 0.7], isMobile ? ["80vw", "90vw"] : ["35vw", "90vw"]);
-  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
   
+  // Animate width only on larger screens
+  const width = useTransform(
+    scrollYProgress, 
+    [0.1, 0.7], 
+    isMobile ? ["90vw", "90vw"] : ["40vw", "90vw"]
+  );
+
+  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
+
   if (!data) return null;
 
   return (
     <section
       ref={scrollContainerRef}
-      className="relative h-[250vh] py-[7rem]"
+      className="relative h-[250vh]"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
@@ -337,22 +345,26 @@ const IntroSection = memo(function IntroSection({
       }}
     >
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
-      <ScrollAnimation>
+        <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
             dangerouslySetInnerHTML={{ __html: data.headline }}
           />
         </ScrollAnimation>
 
-        <motion.div 
-          style={{ width, aspectRatio: '1 / 1', borderRadius }}
-          className="relative max-w-[80vh] max-h-[80vh] overflow-hidden"
+        <motion.div
+          style={{
+            borderRadius,
+            width, 
+            height: width, // Keep it square during transition
+          }}
+          className="relative overflow-hidden mx-auto"
         >
           <Image
-            src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+            src={data.landscapeImage || 'https://placehold.co/1200x1200.png'}
             alt="Scenic introduction landscape"
             fill
-            sizes="(min-width: 768px) 50vw, 90vw"
+            sizes="90vw"
             className="object-cover"
             priority
           />
@@ -360,29 +372,32 @@ const IntroSection = memo(function IntroSection({
         </motion.div>
         
         <motion.div 
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 flex items-center justify-center text-center px-4 pointer-events-none"
             style={{ opacity: textOpacity }}
-        >
-            <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
-              Welcome to Sri Lanka
-            </h3>
+          >
+            <div>
+              <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
+                Welcome to Sri Lanka
+              </h3>
+              <ScrollAnimation className="max-w-3xl flex flex-center justify-center mt-8" delay={0.2}>
+                <p className="text-center text-white/80 w-[90%] md:w-[60%] mx-auto text-body">{data.paragraph}</p>
+              </ScrollAnimation>
+              <ScrollAnimation delay={0.3}>
+                <div className="button-wrapper-for-border mt-8 inline-block">
+                  <Button asChild variant="outline" className="text-white border-white hover:bg-white hover:text-black pointer-events-auto">
+                    <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+                  </Button>
+                </div>
+              </ScrollAnimation>
+            </div>
         </motion.div>
-        
-        <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
-          <p className="text-center text-body w-[90%] mt-12">{data.paragraph}</p>
-        </ScrollAnimation>
-
-        <ScrollAnimation delay={0.3}>
-          <div className="button-wrapper-for-border mt-4">
-            <Button asChild variant="outline">
-              <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-            </Button>
-          </div>
-        </ScrollAnimation>
       </div>
     </section>
   );
 });
+
+
+
 
 // Memoized QuoteSection
 const QuoteSection = memo(function QuoteSection({ 
