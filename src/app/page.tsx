@@ -320,10 +320,8 @@ const IntroSection = memo(function IntroSection({
     offset: ['start start', 'end end']
   });
 
-  // Animate from circle (50%) to soft rectangle (0.5rem)
   const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0.5rem"]);
   
-  // Animate width only on larger screens
   const width = useTransform(
     scrollYProgress, 
     [0.1, 0.7], 
@@ -331,6 +329,8 @@ const IntroSection = memo(function IntroSection({
   );
 
   const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
+  const contentOpacity = useTransform(scrollYProgress, [0.9, 1], [0, 1]);
+
 
   if (!data) return null;
 
@@ -345,18 +345,12 @@ const IntroSection = memo(function IntroSection({
       }}
     >
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
-        <ScrollAnimation>
-          <h2
-            className="secondary-heading text-center"
-            dangerouslySetInnerHTML={{ __html: data.headline }}
-          />
-        </ScrollAnimation>
-
+        
         <motion.div
           style={{
             borderRadius,
             width, 
-            height: width, // Keep it square during transition
+            height: width,
           }}
           className="relative overflow-hidden mx-auto"
         >
@@ -369,27 +363,34 @@ const IntroSection = memo(function IntroSection({
             priority
           />
            <div className="absolute inset-0 bg-black/20"></div>
+            <motion.div 
+              className="absolute inset-0 flex items-center justify-center text-center px-4 pointer-events-none"
+              style={{ opacity: textOpacity }}
+            >
+                <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
+                  Welcome to Sri Lanka
+                </h3>
+            </motion.div>
         </motion.div>
         
         <motion.div 
-            className="absolute inset-0 flex items-center justify-center text-center px-4 pointer-events-none"
-            style={{ opacity: textOpacity }}
+            className="absolute bottom-0 w-full text-center pb-8"
+            style={{ opacity: contentOpacity }}
           >
-            <div>
-              <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
-                Welcome to Sri Lanka
-              </h3>
-              <ScrollAnimation className="max-w-3xl flex flex-center justify-center mt-8" delay={0.2}>
-                <p className="text-center text-white/80 w-[90%] md:w-[60%] mx-auto text-body">{data.paragraph}</p>
+             <h2
+                className="secondary-heading text-center"
+                dangerouslySetInnerHTML={{ __html: data.headline }}
+              />
+              <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
+                <p className="text-center w-[90%] md:w-[60%] mx-auto text-body">{data.paragraph}</p>
               </ScrollAnimation>
               <ScrollAnimation delay={0.3}>
                 <div className="button-wrapper-for-border mt-8 inline-block">
-                  <Button asChild variant="outline" className="text-white border-white hover:bg-white hover:text-black pointer-events-auto">
+                  <Button asChild>
                     <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
                   </Button>
                 </div>
               </ScrollAnimation>
-            </div>
         </motion.div>
       </div>
     </section>
