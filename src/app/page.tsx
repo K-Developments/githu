@@ -207,7 +207,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentImage, setCurrentImage] = useState(0);
-  const { scrollY } = useScroll();
   const controls = useAnimationControls();
 
   const scrollToNext = useCallback(() => {
@@ -222,16 +221,15 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({
+    visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.04, delayChildren: i * 0.04 },
-    }),
+      transition: { staggerChildren: 0.04, delayChildren: 0.2 },
+    },
   };
 
   const childVariants = {
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
         type: "spring",
         damping: 12,
@@ -240,7 +238,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     },
     hidden: {
       opacity: 0,
-      y: 20,
       transition: {
         type: "spring",
         damping: 12,
@@ -252,15 +249,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   useEffect(() => {
     controls.start("visible");
   }, [controls]);
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest === 0) {
-      controls.start("visible");
-    } else {
-      controls.start("hidden");
-    }
-  });
-
 
   useEffect(() => {
     if (!isMobile || !data.sliderImages?.length) return;
@@ -635,8 +623,12 @@ const PackagesSection = memo(function PackagesSection({
   packages: Package[], 
   backgroundImage?: string 
 }) {
-  const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
   const isMobile = useIsMobile();
+  const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
+  
+  if (packages.length === 0 || categories.length === 0) {
+     return null;
+  }
   
   const displayCategories = useMemo(() => [
     { id: 'all', name: 'All' }, 
@@ -651,16 +643,6 @@ const PackagesSection = memo(function PackagesSection({
   const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategoryId(categoryId);
   }, []);
-        
-  if (packages.length === 0 || categories.length === 0) {
-    const areHooksCalled = true; 
-    if(!areHooksCalled) {
-      useIsMobile();
-      useMemo(() => {}, []);
-      useCallback(() => {}, []);
-    }
-     return null;
-  }
   
   return (
     <section 
