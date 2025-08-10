@@ -4,13 +4,14 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, collection, getDocs, orderBy, query } from 'firebase/firestore';
 import type { Service } from '@/lib/data';
 import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
-import { ArrowRight } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Plus, Minus } from 'lucide-react';
 
 interface ServicesHeroData {
   headline: string;
@@ -51,6 +52,7 @@ async function getServicesPageData(): Promise<ServicesPageData> {
 export default function ServicesPage() {
   const [pageData, setPageData] = useState<ServicesPageData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
   useEffect(() => {
     getServicesPageData().then(data => {
@@ -113,37 +115,82 @@ export default function ServicesPage() {
       </div>
 
       <section className="py-28 px-4 md:px-12">
-        <div className="max-w-7xl mx-auto space-y-24">
-          {services.map((service, index) => (
-            <ScrollAnimation key={service.id} delay={index * 0.1}>
-              <div className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center ${index % 2 !== 0 ? 'md:grid-flow-col-dense' : ''}`}>
-                <div className={`relative aspect-square ${index % 2 !== 0 ? 'md:col-start-2' : ''}`}>
-                  <Image
-                    src={service.image}
-                    alt={service.title}
-                    fill
-                    className="object-cover rounded-lg shadow-xl"
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                    data-ai-hint="luxury service travel"
-                  />
-                </div>
-                <div className={`max-w-md ${index % 2 !== 0 ? 'md:col-start-1 md:row-start-1' : ''}`}>
-                  <h2 className="text-4xl md:text-5xl font-headline mb-6">{service.title}</h2>
-                  <p className="text-muted-foreground leading-relaxed text-body mb-8">
-                    {service.description}
-                  </p>
-                  <Link href="/contact" className="standard-link">
-                    <span>Inquire Now</span>
-                  </Link>
-                </div>
-              </div>
+        <div className="max-w-5xl mx-auto">
+            <ScrollAnimation className="text-center mb-16">
+                <h2 className="text-4xl md:text-5xl font-headline mb-4">Our Services</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto text-body">
+                    We offer a range of bespoke services designed to make your travel experience seamless and extraordinary. Explore what we can do for you.
+                </p>
             </ScrollAnimation>
-          ))}
-           {services.length === 0 && (
-            <div className="text-center py-16 text-muted-foreground">
-              <p>No services have been added yet.</p>
-            </div>
-          )}
+           {services.length > 0 ? (
+                <Accordion type="single" collapsible className="w-full space-y-6" onValueChange={setOpenAccordion}>
+                    {services.map((service, index) => (
+                        <ScrollAnimation key={service.id} delay={index * 0.1}>
+                            <AccordionItem value={service.id} className="border-b">
+                                <AccordionTrigger
+                                    className="text-left hover:no-underline py-6"
+                                >
+                                    <span className="text-2xl md:text-4xl font-light flex-1 pr-4">{service.title}</span>
+                                     <div className="relative h-8 w-8 flex-shrink-0">
+                                        <AnimatePresence initial={false}>
+                                            {openAccordion !== service.id && (
+                                                <motion.div
+                                                    key="plus"
+                                                    initial={{ rotate: -90, opacity: 0 }}
+                                                    animate={{ rotate: 0, opacity: 1 }}
+                                                    exit={{ rotate: 90, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="absolute inset-0"
+                                                >
+                                                    <Plus className="h-8 w-8 text-muted-foreground" />
+                                                </motion.div>
+                                            )}
+                                            {openAccordion === service.id && (
+                                                 <motion.div
+                                                    key="minus"
+                                                    initial={{ rotate: 90, opacity: 0 }}
+                                                    animate={{ rotate: 0, opacity: 1 }}
+                                                    exit={{ rotate: -90, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="absolute inset-0"
+                                                >
+                                                    <Minus className="h-8 w-8 text-primary" />
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                    <div className="pt-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                                       <div className="relative aspect-square">
+                                            <Image
+                                                src={service.image}
+                                                alt={service.title}
+                                                fill
+                                                className="object-cover rounded-lg"
+                                                sizes="(min-width: 768px) 50vw, 100vw"
+                                                data-ai-hint="luxury service travel"
+                                            />
+                                        </div>
+                                        <div className="max-w-md">
+                                            <p className="text-muted-foreground leading-relaxed text-body mb-8">
+                                            {service.description}
+                                            </p>
+                                            <Link href="/contact" className="standard-link">
+                                            <span>Inquire Now</span>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </ScrollAnimation>
+                    ))}
+                </Accordion>
+            ) : (
+                <div className="text-center py-16 text-muted-foreground">
+                    <p>No services have been added yet.</p>
+                </div>
+            )}
         </div>
       </section>
     </div>
