@@ -317,14 +317,19 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
             )
           )}
         </motion.h1>
-        <div className="flex flex-row-reverse items-center justify-center">
-          <button 
-            onClick={scrollToNext}
-            className="border rounded-full h-14 w-14 flex items-center justify-center hover:bg-white/10 transition-colors text-black"
-            aria-label="Scroll down"
-          >
-            <ArrowDown />
-          </button>
+         <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
+            <button
+                onClick={scrollToNext}
+                className="w-px h-20 flex items-end justify-center"
+                aria-label="Scroll down"
+            >
+                <motion.div
+                    initial={{ height: '0%' }}
+                    animate={{ height: '100%' }}
+                    transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+                    className="w-full bg-black"
+                />
+            </button>
         </div>
       </div>
 
@@ -426,7 +431,7 @@ const QuoteSection = memo(function QuoteSection({
   
   return (
     <section 
-      className="quote-section py-28" 
+      className="quote-section py-28 mt-[7rem] mb-[7rem]" 
       style={{ backgroundImage: `url(${backgroundImage || data.image})` }}
     >
       <div className="overlay"></div>
@@ -626,10 +631,6 @@ const PackagesSection = memo(function PackagesSection({
   const isMobile = useIsMobile();
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
   
-  if (packages.length === 0 || categories.length === 0) {
-     return null;
-  }
-  
   const displayCategories = useMemo(() => [
     { id: 'all', name: 'All' }, 
     ...categories
@@ -643,6 +644,10 @@ const PackagesSection = memo(function PackagesSection({
   const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategoryId(categoryId);
   }, []);
+  
+  if (packages.length === 0) {
+     return null;
+  }
   
   return (
     <section 
