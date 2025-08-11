@@ -1,3 +1,4 @@
+
 import { Suspense } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/firestore';
@@ -6,7 +7,7 @@ import { PackageDetailClient } from './package-detail-client';
 import { notFound } from 'next/navigation';
 
 interface PackagePageProps {
-    params: Promise<{ id: string }>; // Changed: params is now a Promise
+    params: { id: string };
 }
 
 async function getPackagePageData(id: string) {
@@ -40,8 +41,7 @@ async function getPackagePageData(id: string) {
 }
 
 export default async function PackageDetailPage({ params }: PackagePageProps) {
-    // Changed: Await the params Promise
-    const { id } = await params;
+    const { id } = params;
     const pageData = await getPackagePageData(id);
     
     if (!pageData) {
