@@ -187,45 +187,31 @@ export default function AboutPage() {
                 </section>
             )}
             
-            <section className="py-28 overflow-hidden">
+            <section className="py-28">
                 <div className="max-w-7xl mx-auto px-4 md:px-12">
                     <ScrollAnimation>
                         <Separator />
                         <h2 className="text-4xl md:text-5xl font-headline text-center my-8 md:my-12">{journey.title}</h2>
                         <Separator />
                     </ScrollAnimation>
-                    
-                    <div className="mt-16 md:mt-24 grid grid-cols-12 gap-x-8">
-                        <div className="col-span-12 md:col-start-2 md:col-span-8 mb-8 md:mb-0">
-                            <ScrollAnimation>
-                                <div className="relative aspect-[16/11]">
-                                    <Image
-                                        src={journey.image}
-                                        alt="Primary journey image"
-                                        fill
-                                        className="object-cover rounded-md shadow-xl"
-                                        data-ai-hint="mountain landscape"
-                                    />
-                                </div>
-                            </ScrollAnimation>
-                        </div>
-                        <div className="col-span-8 col-start-3 md:col-start-1 md:col-span-3 self-end">
-                            <ScrollAnimation delay={0.2}>
-                                <div className="relative aspect-[3/4] -mt-16 md:mt-0">
-                                     <Image
-                                        src={journey.secondaryImage}
-                                        alt="Secondary journey image"
-                                        fill
-                                        className="object-cover rounded-md shadow-xl"
-                                        data-ai-hint="travel detail person"
-                                    />
-                                </div>
-                            </ScrollAnimation>
-                        </div>
-                    </div>
                 </div>
-                <div className="py-28 -mt-24 md:-mt-32">
-                    <div className="max-w-4xl mx-auto px-4 md:px-12 pt-16 md:pt-24 bg-background">
+                
+                <div className="w-full mt-16 md:mt-24">
+                     <ScrollAnimation>
+                        <div className="relative aspect-video">
+                            <Image
+                                src={journey.image}
+                                alt="Primary journey image"
+                                fill
+                                className="object-cover"
+                                data-ai-hint="mountain landscape"
+                            />
+                        </div>
+                    </ScrollAnimation>
+                </div>
+
+                <div className="py-28">
+                    <div className="max-w-4xl mx-auto px-4 md:px-12 bg-background">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             <ScrollAnimation>
                                 <div>
