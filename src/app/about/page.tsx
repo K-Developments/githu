@@ -5,12 +5,13 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { Separator } from '@/components/ui/separator';
-import type { CoreValue, WorkflowStep, CtaData } from '@/lib/data';
+import type { CoreValue, WorkflowStep, CtaData, Testimonial } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { WorkflowCarousel } from '@/components/ui/workflow-carousel';
 import { CtaSection } from '@/components/ui/cta-section';
+import { TestimonialsSection } from '@/components/ui/testimonials-section';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
@@ -29,7 +30,6 @@ interface AboutPageData {
   journey: {
     title: string;
     image: string;
-    secondaryImage: string;
     missionTitle: string;
     missionText: string;
     visionTitle: string;
@@ -37,6 +37,7 @@ interface AboutPageData {
   };
   coreValues: CoreValue[];
   workflow: WorkflowStep[];
+  testimonials: Testimonial[];
   ctaData: CtaData | null;
 }
 
@@ -47,8 +48,12 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
 
         const homeContentDocRef = doc(db, "content", "home");
         const homeContentDocSnap = await getDoc(homeContentDocRef);
+
+        const testimonialsSnap = await getDocs(collection(db, "testimonials"));
+        const testimonials = testimonialsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
         
         let ctaData: CtaData | null = null;
+        let testimonialsBackgroundImage: string | undefined = undefined;
 
         if (homeContentDocSnap.exists()) {
             const homeData = homeContentDocSnap.data();
@@ -57,6 +62,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 cta.interactiveItems = [];
             }
             ctaData = cta;
+            testimonialsBackgroundImage = homeData.siteSettings?.testimonialsBackgroundImage;
         }
 
         if (contentDocSnap.exists()) {
@@ -76,7 +82,6 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 journey: {
                   title: data.journey?.title || 'Our Journey',
                   image: data.journey?.image || 'https://placehold.co/1200x800.png',
-                  secondaryImage: data.journey?.secondaryImage || 'https://placehold.co/600x800.png',
                   missionTitle: data.journey?.missionTitle || 'Our Mission',
                   missionText: data.journey?.missionText || 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
                   visionTitle: data.journey?.visionTitle || 'Our Vision',
@@ -84,6 +89,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 },
                 coreValues,
                 workflow,
+                testimonials,
                 ctaData
             };
         } else {
@@ -99,7 +105,6 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 journey: {
                     title: 'Our Journey',
                     image: 'https://placehold.co/1200x800.png',
-                    secondaryImage: 'https://placehold.co/600x800.png',
                     missionTitle: 'Our Mission',
                     missionText: 'To craft unparalleled, bespoke travel experiences that transform moments into cherished memories. We are dedicated to unveiling the world\'s most exclusive destinations, ensuring every journey is as unique as the traveler embarking on it.',
                     visionTitle: 'Our Vision',
@@ -107,6 +112,7 @@ async function getAboutPageData(): Promise<AboutPageData | null> {
                 },
                 coreValues: [],
                 workflow: [],
+                testimonials,
                 ctaData,
             };
         }
@@ -127,7 +133,7 @@ export default function AboutPage() {
         return <Preloader />; 
     }
 
-    const { hero, intro, journey, coreValues, workflow, ctaData } = pageData;
+    const { hero, intro, journey, coreValues, workflow, testimonials, ctaData } = pageData;
     
     const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -287,6 +293,11 @@ export default function AboutPage() {
                     </div>
                 </section>
             )}
+
+            {testimonials.length > 0 && (
+                 <TestimonialsSection testimonials={testimonials} />
+            )}
+
             {ctaData && <CtaSection data={ctaData} />}
         </div>
     );
