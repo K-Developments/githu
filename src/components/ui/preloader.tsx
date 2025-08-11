@@ -3,61 +3,25 @@
 
 import { motion } from 'framer-motion';
 
-const containerVariants = {
-  initial: {
+const spinnerVariants = {
+  animate: {
+    rotate: 360,
     transition: {
-      staggerChildren: 0.2,
+      loop: Infinity,
+      ease: "linear",
+      duration: 1,
     },
   },
-  animate: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
 };
-
-const dotVariants = {
-  initial: {
-    y: '0%',
-  },
-  animate: {
-    y: '100%',
-  },
-};
-
-const dotTransition = {
-  duration: 0.5,
-  repeat: Infinity,
-  repeatType: 'reverse' as const,
-  ease: 'easeInOut',
-};
-
 
 export function Preloader() {
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-background pointer-events-none">
        <motion.div
-            className="flex gap-2"
-            variants={containerVariants}
-            initial="initial"
+            className="w-8 h-8 border-4 border-foreground border-t-transparent rounded-full"
+            variants={spinnerVariants}
             animate="animate"
-        >
-            <motion.span
-                className="block w-3 h-3 bg-foreground rounded-full"
-                variants={dotVariants}
-                transition={dotTransition}
-            />
-            <motion.span
-                className="block w-3 h-3 bg-foreground rounded-full"
-                variants={dotVariants}
-                transition={{...dotTransition, delay: 0.2}}
-            />
-            <motion.span
-                className="block w-3 h-3 bg-foreground rounded-full"
-                variants={dotVariants}
-                transition={{...dotTransition, delay: 0.4}}
-            />
-        </motion.div>
+        />
     </div>
   );
 }
