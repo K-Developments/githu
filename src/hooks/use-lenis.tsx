@@ -10,9 +10,9 @@ export function useLenis() {
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         orientation: 'vertical', // Changed from 'direction' to 'orientation'
         gestureOrientation: 'vertical', // Changed from 'gestureDirection' to 'gestureOrientation'
-        smooth: true,
-        mouseMultiplier: 1,
-        smoothTouch: true, // Ensure this is true for mobile smoothness
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        syncTouch: true, // Ensure this is true for mobile smoothness
         touchMultiplier: 2,
         infinite: false,
     });
