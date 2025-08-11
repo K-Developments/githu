@@ -747,5 +747,3 @@ const TestimonialsSection = memo(function TestimonialsSection({
     </section>
   );
 });
-
-    
