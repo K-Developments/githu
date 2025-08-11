@@ -317,64 +317,74 @@ const IntroSection = memo(function IntroSection({
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
-    offset: ['start end', 'end start']
+    offset: ['start start', 'end end']
   });
 
-  const borderRadius = useTransform(scrollYProgress, [0.3, 0.7], ["50%", "0%"]);
-
+  const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0%"]);
+  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
+  
   if (!data) return null;
 
   return (
-    <section className="relative py-28">
-      <div 
-        className="absolute inset-0"
-        style={{
-          backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
-       <div className="relative z-10 max-w-3xl mx-auto text-center">
-         <ScrollAnimation>
+    <section
+      ref={scrollContainerRef}
+      className="relative h-[300vh] py-[7rem]"
+      style={{
+        backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden h-[150vh]">
+      <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
             dangerouslySetInnerHTML={{ __html: data.headline }}
           />
         </ScrollAnimation>
-      </div>
 
-      <div 
-        ref={scrollContainerRef}
-        className="relative md:w-1/2 w-[90%] max-w-[80vh] mx-auto my-12"
-        style={{ aspectRatio: '1/1' }}
-      >
-        <motion.div 
-          style={{ borderRadius }}
-          className="w-full h-full relative overflow-hidden"
-        >
-          <Image
-            src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
-            alt="Scenic introduction landscape"
-            fill
-            sizes="(min-width: 768px) 50vw, 90vw"
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/20"></div>
-        </motion.div>
-      </div>
-      
-      <ScrollAnimation className="max-w-3xl flex flex-col items-center justify-center mx-auto" delay={0.2}>
-        <p className="text-center text-body w-[90%]">{data.paragraph}</p>
-        <div className="button-wrapper-for-border mt-8">
-          <Button asChild variant="default">
-            <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-          </Button>
+        <div className="relative md:aspect-square aspect-square md:w-1/2 w-[90%] max-w-[80vh] max-h-[80vh]">
+          <motion.div 
+            style={{ borderRadius }}
+            className="w-full h-full relative overflow-hidden"
+          >
+            <Image
+              src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+              alt="Scenic introduction landscape"
+              fill
+              sizes="(min-width: 768px) 50vw, 90vw"
+              className="object-cover"
+              priority
+            />
+             <div className="absolute inset-0 bg-black/20"></div>
+          </motion.div>
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ opacity: textOpacity }}
+          >
+            <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
+              Welcome to Sri Lanka
+            </h3>
+          </motion.div>
         </div>
-      </ScrollAnimation>
+        
+        <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
+          <p className="text-center text-body w-[90%] mt-12">{data.paragraph}</p>
+        </ScrollAnimation>
+
+        <ScrollAnimation delay={0.3}>
+          <div className="button-wrapper-for-border mt-4">
+            <Button asChild variant="outline">
+              <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+            </Button>
+          </div>
+        </ScrollAnimation>
+      </div>
     </section>
   );
 });
+
+
 
 
 
