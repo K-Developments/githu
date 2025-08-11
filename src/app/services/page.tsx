@@ -53,7 +53,7 @@ async function getServicesPageData(): Promise<ServicesPageData> {
 export default function ServicesPage() {
   const [pageData, setPageData] = useState<ServicesPageData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const [openAccordion, setOpenAccordion] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     getServicesPageData().then(data => {
@@ -124,7 +124,13 @@ export default function ServicesPage() {
                 </p>
             </ScrollAnimation>
            {services.length > 0 ? (
-                <Accordion type="single" collapsible className="w-full space-y-6" onValueChange={setOpenAccordion}>
+                <Accordion 
+                    type="single" 
+                    collapsible 
+                    className="w-full space-y-6" 
+                    onValueChange={setOpenAccordion}
+                    value={openAccordion}
+                >
                     {services.map((service, index) => (
                         <ScrollAnimation key={service.id} delay={index * 0.1}>
                             <AccordionItem value={service.id} className="border-b">
