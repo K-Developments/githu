@@ -316,33 +316,36 @@ const IntroSection = memo(function IntroSection({
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
-    offset: ['start start', 'end end']
+    offset: ['start end', 'end start']
   });
 
-  const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0%"]);
-  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
-  
+  const borderRadius = useTransform(scrollYProgress, [0.3, 0.7], ["50%", "0%"]);
+
   if (!data) return null;
 
   return (
-    <section
-      ref={scrollContainerRef}
-      className="relative h-[300vh] py-[7rem]"
-      style={{
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden h-[150vh]">
-      <ScrollAnimation>
+    <section className="relative py-28">
+      <div 
+        className="absolute inset-0"
+        style={{
+          backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <div className="relative z-10">
+        <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
             dangerouslySetInnerHTML={{ __html: data.headline }}
           />
         </ScrollAnimation>
 
-        <div className="relative md:aspect-square aspect-square md:w-1/2 w-[90%] max-w-[80vh] max-h-[80vh]">
+        <div 
+          ref={scrollContainerRef}
+          className="relative md:w-1/2 w-[90%] max-w-[80vh] mx-auto my-12"
+          style={{ aspectRatio: '1/1' }}
+        >
           <motion.div 
             style={{ borderRadius }}
             className="w-full h-full relative overflow-hidden"
@@ -355,25 +358,14 @@ const IntroSection = memo(function IntroSection({
               className="object-cover"
               priority
             />
-             <div className="absolute inset-0 bg-black/20"></div>
-          </motion.div>
-          <motion.div 
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ opacity: textOpacity }}
-          >
-            <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
-              Welcome to Sri Lanka
-            </h3>
+            <div className="absolute inset-0 bg-black/20"></div>
           </motion.div>
         </div>
         
-        <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
-          <p className="text-center text-body w-[90%] mt-12">{data.paragraph}</p>
-        </ScrollAnimation>
-
-        <ScrollAnimation delay={0.3}>
-          <div className="button-wrapper-for-border mt-4">
-            <Button asChild variant="outline">
+        <ScrollAnimation className="max-w-3xl flex flex-col items-center justify-center mx-auto" delay={0.2}>
+          <p className="text-center text-body w-[90%]">{data.paragraph}</p>
+          <div className="button-wrapper-for-border mt-8">
+            <Button asChild variant="default">
               <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
             </Button>
           </div>
@@ -433,34 +425,33 @@ const DestinationsCarouselItem = memo(function DestinationsCarouselItem({
 
   return (
     <CarouselItem ref={ref} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
-      <div className="md:h-[75vh] h-[60vh] relative flex items-center justify-center bg-[#f5f5f5]">
-        <div className={cn(
-          "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
-          isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
-        )}>
-          <Link href={dest.linkUrl || `/destinations/${dest.id}`} className="block w-full h-full">
-            <motion.div className="relative w-full h-[130%] parallax-element" style={{ y }}>
-              <Image
-                src={dest.image || "https://placehold.co/600x800.png"}
-                alt={dest.title}
-                fill
-                style={{ objectFit: 'cover' }}
-                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                className="card-image"
-                priority={index <= 2} // Only prioritize first 3 images
-              />
-            </motion.div>
-            <div className={cn(
-              "absolute bottom-0 left-0 p-6 text-left z-10 transition-opacity duration-500",
-              isCenter ? "opacity-100" : "opacity-0"
-            )}>
-              <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
-              <p className="text-white/80">{dest.location}</p>
-            </div>
-           
-          </Link>
+      <Link href={`/destinations?id=${dest.id}`} className="block w-full h-full">
+        <div className="md:h-[75vh] h-[60vh] relative flex items-center justify-center bg-[#f5f5f5]">
+          <div className={cn(
+            "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
+            isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
+          )}>
+              <motion.div className="relative w-full h-[130%] parallax-element" style={{ y }}>
+                <Image
+                  src={dest.image || "https://placehold.co/600x800.png"}
+                  alt={dest.title}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                  className="card-image"
+                  priority={index <= 2} // Only prioritize first 3 images
+                />
+              </motion.div>
+              <div className={cn(
+                "absolute bottom-0 left-0 p-6 text-left z-10 transition-opacity duration-500",
+                isCenter ? "opacity-100" : "opacity-0"
+              )}>
+                <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
+                <p className="text-white/80">{dest.location}</p>
+              </div>
+          </div>
         </div>
-      </div>
+      </Link>
     </CarouselItem>
   );
 });
@@ -656,7 +647,9 @@ const PackagesSection = memo(function PackagesSection({
         <motion.div className="packages-grid" layout>
           <AnimatePresence>
             {filteredPackages.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile}/>
+                <Link key={pkg.id} href={`/packages?id=${pkg.id}`}>
+                    <PackageCard pkg={pkg} isMobile={isMobile}/>
+                </Link>
             ))}
           </AnimatePresence>
         </motion.div>

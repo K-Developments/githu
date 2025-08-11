@@ -2,6 +2,7 @@
 'use client';
 
 import { Suspense, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/firestore';
 import type { Package, Category, PackagesCtaData } from '@/lib/data';
@@ -116,9 +117,12 @@ async function getPackagePageData(id: string): Promise<DetailPageData | null> {
     }
 }
 
-export default function PackagesPage() {
-    const [view, setView] = useState<'list' | 'detail'>('list');
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+function PackagesContent() {
+    const searchParams = useSearchParams();
+    const initialId = searchParams.get('id');
+
+    const [view, setView] = useState<'list' | 'detail'>(initialId ? 'detail' : 'list');
+    const [selectedId, setSelectedId] = useState<string | null>(initialId);
 
     const [listPageData, setListPageData] = useState<ListPageData | null>(null);
     const [detailPageData, setDetailPageData] = useState<DetailPageData | null>(null);
@@ -143,12 +147,33 @@ export default function PackagesPage() {
     const handleSelectPackage = (id: string) => {
         setSelectedId(id);
         setView('detail');
+        const newUrl = `/packages?id=${id}`;
+        window.history.pushState({ ...window.history.state, as: newUrl, url: newUrl }, '', newUrl);
     };
 
     const handleBackToList = () => {
         setView('list');
         setSelectedId(null);
+        const newUrl = `/packages`;
+        window.history.pushState({ ...window.history.state, as: newUrl, url: newUrl }, '', newUrl);
     };
+    
+    useEffect(() => {
+        const handlePopState = () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (id) {
+                setSelectedId(id);
+                setView('detail');
+            } else {
+                setView('list');
+                setSelectedId(null);
+            }
+        };
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
+
 
     if (loading) {
         return <div className="flex items-center justify-center h-screen">Loading...</div>;
@@ -156,29 +181,33 @@ export default function PackagesPage() {
 
     if (view === 'detail' && detailPageData) {
         return (
-            <Suspense fallback={<div>Loading...</div>}>
-                <PackageDetailClient 
-                    pkg={detailPageData.pkg}
-                    otherPackages={detailPageData.otherPackages}
-                    onBack={handleBackToList}
-                />
-            </Suspense>
+            <PackageDetailClient 
+                pkg={detailPageData.pkg}
+                otherPackages={detailPageData.otherPackages}
+                onBack={handleBackToList}
+            />
         );
     }
 
     if (listPageData) {
         return (
-            <Suspense fallback={<div>Loading...</div>}>
-                <PackagesPageClient 
-                    hero={listPageData.hero}
-                    packages={listPageData.packages}
-                    categories={listPageData.categories}
-                    cta={listPageData.cta}
-                    onPackageSelect={handleSelectPackage}
-                />
-            </Suspense>
+            <PackagesPageClient 
+                hero={listPageData.hero}
+                packages={listPageData.packages}
+                categories={listPageData.categories}
+                cta={listPageData.cta}
+                onPackageSelect={handleSelectPackage}
+            />
         );
     }
   
     return <div>Error loading page data.</div>;
+}
+
+export default function PackagesPage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+            <PackagesContent />
+        </Suspense>
+    )
 }
