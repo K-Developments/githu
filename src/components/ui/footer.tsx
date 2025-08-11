@@ -17,7 +17,7 @@ export function Footer({ logoUrl }: { logoUrl?: string }) {
 
   return (
     <footer className="site-footer border-t py-12">
-      <div className="max-w-7xl mx-auto px-4 md:px-12 text-center">
+      <div className="max-w-7xl mx-auto px-4 md:px-12 text-center py-4 bg-[#f5f5f5]">
         
         <h2 className="text-3xl md:text-4xl font-headline tracking-widest uppercase mb-4">
           Island Hopes Travels
