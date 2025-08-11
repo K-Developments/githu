@@ -17,9 +17,10 @@ interface DestinationsClientProps {
     sliderImages?: string[];
   };
   destinations: Destination[];
+  onDestinationSelect: (id: string) => void;
 }
 
-export function DestinationsPageClient({ hero, destinations }: DestinationsClientProps) {
+export function DestinationsPageClient({ hero, destinations, onDestinationSelect }: DestinationsClientProps) {
 
   const handleScrollDown = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -71,7 +72,7 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {destinations.map((dest, i) => (
                 <ScrollAnimation key={dest.id} delay={i * 0.1}>
-                    <Link href={dest.linkUrl || `/destinations/${dest.id}`} className="group block">
+                    <div onClick={() => onDestinationSelect(dest.id)} className="group block cursor-pointer">
                       <div className="destination-card-v2">
                         <div className="destination-card-v2-image">
                           <Image 
@@ -87,7 +88,7 @@ export function DestinationsPageClient({ hero, destinations }: DestinationsClien
                           <p className="text-sm text-muted-foreground">{dest.location}</p>
                         </div>
                       </div>
-                    </Link>
+                    </div>
                 </ScrollAnimation>
                 ))}
             </div>

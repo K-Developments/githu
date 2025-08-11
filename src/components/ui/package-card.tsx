@@ -26,45 +26,47 @@ export function PackageCard({ pkg, isMobile }: { pkg: Package, isMobile: boolean
     if (!pkg) {
         return null;
     }
-
+    
+    // Using a div with an onClick handler instead of Link for the new SPA-like behavior
     return (
-        <Link href={pkg.linkUrl || `/packages/${pkg.id}`} passHref>
-             <motion.div 
-                ref={ref}
-                className={cn(isMobile ? "package-card-v2-style" : "package-card group")}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                layout
-            >
-                <div className={cn(isMobile ? "package-card-v2-image" : "package-card-image-container")}>
-                    <motion.div className="relative w-full h-full" style={{ y }}>
-                        <Image
-                            src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x600.png"}
-                            alt={`Image of ${pkg.title} package in ${pkg.location}`}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            className="object-cover"
-                        />
-                    </motion.div>
+        <motion.div 
+            ref={ref}
+            className={cn(
+                isMobile ? "package-card-v2-style" : "package-card group",
+                "cursor-pointer" // Add cursor-pointer to indicate it's clickable
+            )}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            layout
+        >
+            <div className={cn(isMobile ? "package-card-v2-image" : "package-card-image-container")}>
+                <motion.div className="relative w-full h-full" style={{ y }}>
+                    <Image
+                        src={(pkg.images && pkg.images[0]) || "https://placehold.co/600x600.png"}
+                        alt={`Image of ${pkg.title} package in ${pkg.location}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover"
+                    />
+                </motion.div>
+            </div>
+            {isMobile ? (
+                <div className="package-card-v2-content">
+                    <h3 className="package-card-title">{pkg.title}</h3>
+                    <p className="package-card-location">{pkg.location}</p>
                 </div>
-                 {isMobile ? (
-                    <div className="package-card-v2-content">
+            ) : (
+                <>
+                    <div className="package-card-overlay" />
+                    <div className="package-card-content">
                         <h3 className="package-card-title">{pkg.title}</h3>
                         <p className="package-card-location">{pkg.location}</p>
                     </div>
-                ) : (
-                    <>
-                        <div className="package-card-overlay" />
-                        <div className="package-card-content">
-                            <h3 className="package-card-title">{pkg.title}</h3>
-                            <p className="package-card-location">{pkg.location}</p>
-                        </div>
-                    </>
-                )}
-            </motion.div>
-        </Link>
+                </>
+            )}
+        </motion.div>
     );
 }

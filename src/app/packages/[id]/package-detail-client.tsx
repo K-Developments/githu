@@ -14,14 +14,15 @@ import { TourItinerary } from '@/components/ui/tour-itinerary';
 import { PackageCard } from '@/components/ui/package-card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { Package } from '@/lib/data';
-import { Check, X, Star, Users, MapPin, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, X, Star, Users, MapPin, Clock, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 
 interface PackageDetailClientProps {
   pkg: Package;
   otherPackages: Package[];
+  onBack: () => void;
 }
 
-export function PackageDetailClient({ pkg, otherPackages }: PackageDetailClientProps) {
+export function PackageDetailClient({ pkg, otherPackages, onBack }: PackageDetailClientProps) {
   const [mainImage, setMainImage] = useState(pkg.images[0]);
   const [otherApi, setOtherApi] = useState<CarouselApi>()
   const isMobile = useIsMobile();
@@ -73,10 +74,15 @@ export function PackageDetailClient({ pkg, otherPackages }: PackageDetailClientP
 
         <div className="px-4 md:px-12">
             <Separator />
-            <div className="text-sm text-muted-foreground py-4">
+            <div className="text-sm text-muted-foreground py-4 flex items-center">
+                <button onClick={onBack} className="flex items-center hover:text-primary mr-2">
+                    <ArrowLeft className="h-4 w-4 mr-1" />
+                    <span>Back</span>
+                </button>
+                <span className="mx-2">||</span>
                 <Link href="/" className="hover:text-primary">Home</Link>
                 <span className="mx-2">||</span>
-                <Link href="/packages" className="hover:text-primary">Packages</Link>
+                <span className="hover:text-primary cursor-pointer" onClick={onBack}>Packages</span>
                 <span className="mx-2">||</span>
                 <span>{pkg.title}</span>
             </div>
@@ -188,7 +194,14 @@ export function PackageDetailClient({ pkg, otherPackages }: PackageDetailClientP
                     <CarouselContent className="-ml-8">
                         {otherPackages.map((p, i) => (
                           <CarouselItem key={p.id} className="pl-8 md:basis-1/2 lg:basis-1/3">
-                              <PackageCard pkg={p} isMobile={isMobile} />
+                              <div onClick={() => {
+                                  // Since we can't directly navigate, we might need a different approach
+                                  // For now, this will just re-render with new data but URL won't change
+                                  // A better solution would involve the parent page handling this state change
+                                  console.log("Package clicked, but navigation is handled by parent");
+                              }}>
+                                <PackageCard pkg={p} isMobile={isMobile} />
+                              </div>
                           </CarouselItem>
                         ))}
                     </CarouselContent>

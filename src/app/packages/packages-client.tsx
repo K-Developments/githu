@@ -20,9 +20,10 @@ interface PackagesClientProps {
   packages: Package[];
   categories: Category[];
   cta: PackagesCtaData;
+  onPackageSelect: (id: string) => void;
 }
 
-export function PackagesPageClient({ hero, packages, categories, cta }: PackagesClientProps) {
+export function PackagesPageClient({ hero, packages, categories, cta, onPackageSelect }: PackagesClientProps) {
   const isMobile = useIsMobile();
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
 
@@ -101,7 +102,9 @@ export function PackagesPageClient({ hero, packages, categories, cta }: Packages
             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-[6rem] md:gap-y-[10rem]">
               <AnimatePresence>
                 {filteredPackages.map((pkg) => (
-                  <PackageCard key={pkg.id} pkg={pkg} isMobile={isMobile} />
+                  <div key={pkg.id} onClick={() => onPackageSelect(pkg.id)}>
+                    <PackageCard pkg={pkg} isMobile={isMobile} />
+                  </div>
                 ))}
               </AnimatePresence>
             </motion.div>

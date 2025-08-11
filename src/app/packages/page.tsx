@@ -1,11 +1,14 @@
 
-import { Suspense } from 'react';
+'use client';
+
+import { Suspense, useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/firestore';
 import type { Package, Category, PackagesCtaData } from '@/lib/data';
 import { PackagesPageClient } from './packages-client';
+import { PackageDetailClient } from './[id]/package-detail-client';
 
-interface PackagesPageData {
+interface ListPageData {
   hero: {
     headline: string;
     contentBackgroundImage?: string;
@@ -16,15 +19,20 @@ interface PackagesPageData {
   categories: Category[];
 }
 
-async function getPackagesPageData(): Promise<PackagesPageData | null> {
+interface DetailPageData {
+  pkg: Package;
+  otherPackages: Package[];
+}
+
+async function getPackagesPageData(): Promise<ListPageData | null> {
     try {
         const contentDocRef = doc(db, 'content', 'packages');
         const contentDocSnap = await getDoc(contentDocRef);
         const homeContentDocRef = doc(db, "content", "home");
         const homeContentDocSnap = await getDoc(homeContentDocRef);
 
-        let heroData: PackagesPageData['hero'];
-        let ctaData: PackagesPageData['cta'];
+        let heroData: ListPageData['hero'];
+        let ctaData: ListPageData['cta'];
         let sliderImages: string[] = [];
 
          if (homeContentDocSnap.exists()) {
@@ -78,22 +86,99 @@ async function getPackagesPageData(): Promise<PackagesPageData | null> {
     }
 }
 
+async function getPackagePageData(id: string): Promise<DetailPageData | null> {
+    try {
+        const packageDocRef = doc(db, 'packages', id);
+        const packageDocSnap = await getDoc(packageDocRef);
+        
+        if (!packageDocSnap.exists()) {
+            return null;
+        }
+        
+        const packageData = { id: packageDocSnap.id, ...packageDocSnap.data() } as Package;
+        
+        const otherPackagesQuery = query(
+            collection(db, "packages"), 
+            where('__name__', '!=', id),
+            where('categoryId', '==', packageData.categoryId),
+            limit(3)
+        );
+        const otherPackagesSnap = await getDocs(otherPackagesQuery);
+        const otherPackagesData = otherPackagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Package));
+        
+        return {
+            pkg: packageData,
+            otherPackages: otherPackagesData,
+        };
+    } catch (error) {
+        console.error('Error fetching package page data:', error);
+        return null;
+    }
+}
 
-export default async function PackagesPage() {
-  const pageData = await getPackagesPageData();
+export default function PackagesPage() {
+    const [view, setView] = useState<'list' | 'detail'>('list');
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const [listPageData, setListPageData] = useState<ListPageData | null>(null);
+    const [detailPageData, setDetailPageData] = useState<DetailPageData | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (view === 'list') {
+            setLoading(true);
+            getPackagesPageData().then(data => {
+                setListPageData(data);
+                setLoading(false);
+            });
+        } else if (view === 'detail' && selectedId) {
+            setLoading(true);
+            getPackagePageData(selectedId).then(data => {
+                setDetailPageData(data);
+                setLoading(false);
+            });
+        }
+    }, [view, selectedId]);
+
+    const handleSelectPackage = (id: string) => {
+        setSelectedId(id);
+        setView('detail');
+    };
+
+    const handleBackToList = () => {
+        setView('list');
+        setSelectedId(null);
+    };
+
+    if (loading) {
+        return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    }
+
+    if (view === 'detail' && detailPageData) {
+        return (
+            <Suspense fallback={<div>Loading...</div>}>
+                <PackageDetailClient 
+                    pkg={detailPageData.pkg}
+                    otherPackages={detailPageData.otherPackages}
+                    onBack={handleBackToList}
+                />
+            </Suspense>
+        );
+    }
+
+    if (listPageData) {
+        return (
+            <Suspense fallback={<div>Loading...</div>}>
+                <PackagesPageClient 
+                    hero={listPageData.hero}
+                    packages={listPageData.packages}
+                    categories={listPageData.categories}
+                    cta={listPageData.cta}
+                    onPackageSelect={handleSelectPackage}
+                />
+            </Suspense>
+        );
+    }
   
-  if (!pageData) {
-      return <div>Error loading page data.</div>;
-  }
-
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <PackagesPageClient 
-        hero={pageData.hero}
-        packages={pageData.packages}
-        categories={pageData.categories}
-        cta={pageData.cta}
-      />
-    </Suspense>
-  );
+    return <div>Error loading page data.</div>;
 }

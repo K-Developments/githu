@@ -8,16 +8,17 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import type { Destination } from '@/lib/data';
-import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CheckCircle, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
 interface DestinationDetailClientProps {
   destination: Destination;
   otherDestinations: Destination[];
+  onBack: () => void;
 }
 
-export function DestinationDetailClient({ destination, otherDestinations }: DestinationDetailClientProps) {
+export function DestinationDetailClient({ destination, otherDestinations, onBack }: DestinationDetailClientProps) {
   const [mainApi, setMainApi] = useState<CarouselApi>()
   const [otherApi, setOtherApi] = useState<CarouselApi>()
   
@@ -65,10 +66,15 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
 
         <div className="px-4 md:px-12">
             <Separator />
-            <div className="text-sm text-muted-foreground py-4">
+            <div className="text-sm text-muted-foreground py-4 flex items-center">
+                <button onClick={onBack} className="flex items-center hover:text-primary mr-2">
+                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  <span>Back</span>
+                </button>
+                <span className="mx-2">||</span>
                 <Link href="/" className="hover:text-primary">Home</Link>
                 <span className="mx-2">||</span>
-                <Link href="/destinations" className="hover:text-primary">Destinations</Link>
+                <span className="hover:text-primary cursor-pointer" onClick={onBack}>Destinations</span>
                 <span className="mx-2">||</span>
                 <span>{destination.title}</span>
             </div>
@@ -153,67 +159,6 @@ export function DestinationDetailClient({ destination, otherDestinations }: Dest
            </div>
         </div>
       </section>
-
-      {otherDestinations.length > 0 && (
-          <section className="py-28 px-4 md:px-12 bg-secondary/50">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-12">
-                    <ScrollAnimation>
-                        <h2 className="text-3xl md:text-4xl font-headline">Explore Other Destinations</h2>
-                    </ScrollAnimation>
-                </div>
-                
-                <Carousel 
-                    setApi={setOtherApi}
-                    opts={{
-                        align: "start",
-                        loop: otherDestinations.length > 3,
-                    }}
-                    className="w-full"
-                >
-                    <CarouselContent className="-ml-4">
-                        {otherDestinations.map((dest) => (
-                        <CarouselItem key={dest.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                            <ScrollAnimation>
-                                <Link href={dest.linkUrl || `/destinations/${dest.id}`} passHref>
-                                    <div className="destination-card group">
-                                        <Image 
-                                            src={dest.image || "https://placehold.co/600x800.png"} 
-                                            alt={dest.title} 
-                                            fill 
-                                            style={{ objectFit: 'cover' }} 
-                                            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                                            className="card-image"
-                                        />
-                                        <div className="card-overlay"></div>
-                                        <div className="destination-card-title-box">
-                                            <h3 className="destination-card-title">{dest.title}</h3>
-                                        </div>
-                                        <div className="destination-card-description-box">
-                                            <p className="destination-card-description">{dest.description}</p>
-                                        </div>
-                                    </div>
-                                </Link>
-                            </ScrollAnimation>
-                        </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                </Carousel>
-                <div className="flex justify-center items-center gap-2 mt-8">
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollPrev()}>
-                           <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                    </div>
-                    <div className="button-wrapper-for-border">
-                        <Button variant="outline" size="icon" onClick={() => otherApi?.scrollNext()}>
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
-            </div>
-          </section>
-      )}
     </div>
   );
 }
