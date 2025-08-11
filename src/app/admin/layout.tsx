@@ -1,7 +1,7 @@
 
 'use client';
 
-import "./globals.css";
+import "../globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
