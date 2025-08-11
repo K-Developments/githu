@@ -58,6 +58,9 @@ export default function ServicesPage() {
   useEffect(() => {
     getServicesPageData().then(data => {
       setPageData(data);
+      if (data?.services?.length > 0) {
+        setOpenAccordion(data.services[0].id);
+      }
       setLoading(false);
     });
   }, []);
