@@ -65,7 +65,7 @@ const dotVariants = {
 
 // Optional: Add some floating particles
 const particleVariants = {
-  animate: (i) => ({
+  animate: (i: number) => ({
     y: [-10, -20, -10],
     x: [0, Math.sin(i) * 10, 0],
     opacity: [0.3, 0.7, 0.3],
@@ -77,6 +77,7 @@ const particleVariants = {
     },
   }),
 };
+
 
 export function Preloader() {
   return (
