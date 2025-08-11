@@ -1,10 +1,10 @@
-
 "use client";
 
 import { motion, useScroll, useTransform, MotionValue, EasingFunction } from 'framer-motion';
 import { useRef, useMemo, useCallback } from 'react';
 
-type ScrollOffset = [string, string];
+// Updated type to match Framer Motion's expected offset type
+type ScrollOffset = [string, string] | string[];
 
 interface AnimatedTextProps {
   text: string;
@@ -31,7 +31,7 @@ export function AnimatedText({
 
   const { scrollYProgress } = useScroll({
     target: container,
-    offset: scrollOffset,
+    offset: scrollOffset as any, // Type assertion to resolve the mismatch
   });
 
   const words = useMemo(() => {
