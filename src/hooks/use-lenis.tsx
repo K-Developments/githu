@@ -1,21 +1,27 @@
+
 'use client';
 
 import { useEffect } from 'react';
 import Lenis from '@studio-freight/lenis';
+import { useIsMobile } from './use-mobile';
 
 export function useLenis() {
+  const isMobile = useIsMobile();
+
   useEffect(() => {
-    const lenis = new Lenis({
-        duration: 1.5, // Increased duration for a slower, smoother scroll
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical', // Changed from 'direction' to 'orientation'
-        gestureOrientation: 'vertical', // Changed from 'gestureDirection' to 'gestureOrientation'
+    const lenisOptions = {
+        duration: isMobile ? 2.2 : 1.5,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
         smoothWheel: true,
         wheelMultiplier: 1,
-        syncTouch: true, // Ensure this is true for mobile smoothness
-        touchMultiplier: 2,
+        syncTouch: true,
+        touchMultiplier: isMobile ? 2.5 : 2,
         infinite: false,
-    });
+    };
+
+    const lenis = new Lenis(lenisOptions);
 
     function raf(time: number) {
       lenis.raf(time)
@@ -27,5 +33,5 @@ export function useLenis() {
     return () => {
       lenis.destroy();
     };
-  }, [])
+  }, [isMobile])
 }
