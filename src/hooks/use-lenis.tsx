@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect } from 'react';
@@ -7,13 +6,13 @@ import { useIsMobile } from './use-mobile';
 
 export function useLenis() {
   const isMobile = useIsMobile();
-
+  
   useEffect(() => {
     const lenisOptions = {
         duration: isMobile ? 2.2 : 1.5,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
+        orientation: 'vertical' as const, // Use 'as const' to specify the literal type
+        gestureOrientation: 'vertical' as const, // Use 'as const' to specify the literal type
         smoothWheel: true,
         wheelMultiplier: 1,
         syncTouch: true,
