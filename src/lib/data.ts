@@ -5,6 +5,8 @@ export type SiteSettings = {
   logoUrl?: string;
   siteTitle?: string;
   siteDescription?: string;
+  keywords?: string;
+  ogImage?: string;
   introBackgroundImage?: string;
   quoteBackgroundImage?: string;
   destinationsBackgroundImage?: string;

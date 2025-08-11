@@ -53,6 +53,8 @@ export default function AdminHomePage() {
     logoUrl: "",
     siteTitle: "",
     siteDescription: "",
+    keywords: "",
+    ogImage: "",
     introBackgroundImage: "",
     quoteBackgroundImage: "",
     destinationsBackgroundImage: "",
@@ -120,8 +122,10 @@ export default function AdminHomePage() {
           const settings = (data.siteSettings || {}) as SiteSettings;
           setSiteSettings({
             logoUrl: settings.logoUrl || "",
-            siteTitle: settings.siteTitle || "",
-            siteDescription: settings.siteDescription || "",
+            siteTitle: settings.siteTitle || "Island Hopes Travels",
+            siteDescription: settings.siteDescription || "Bespoke, luxury travel experiences and unforgettable journeys tailored to you.",
+            keywords: settings.keywords || "luxury travel, island destinations, bespoke travel",
+            ogImage: settings.ogImage || "https://your-domain.com/og-image.jpg",
             introBackgroundImage: settings.introBackgroundImage || "",
             quoteBackgroundImage: settings.quoteBackgroundImage || "",
             destinationsBackgroundImage: settings.destinationsBackgroundImage || "",
@@ -371,7 +375,7 @@ export default function AdminHomePage() {
       <Card>
         <CardHeader>
           <CardTitle>Site-wide Settings</CardTitle>
-          <CardDescription>Manage settings that apply across the entire site.</CardDescription>
+          <CardDescription>Manage settings that apply across the entire site, including SEO metadata.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
@@ -385,6 +389,14 @@ export default function AdminHomePage() {
            <div className="space-y-2">
             <Label htmlFor="siteDescription">Site Description (for SEO)</Label>
             <Textarea id="siteDescription" value={siteSettings.siteDescription} onChange={handleSettingsChange} placeholder="e.g., Your premier partner for luxury island travel..." />
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="keywords">Keywords (for SEO, comma-separated)</Label>
+            <Textarea id="keywords" value={siteSettings.keywords} onChange={handleSettingsChange} placeholder="e.g., luxury travel, island hopping, bespoke tours" />
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="ogImage">Open Graph Image URL (for social sharing, 1200x630px)</Label>
+            <Input id="ogImage" value={siteSettings.ogImage} onChange={handleSettingsChange} placeholder="e.g., https://your-domain/og-image.jpg" />
           </div>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
