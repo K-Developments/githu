@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -141,7 +140,9 @@ export default function AdminPackagesPage() {
               if (field === 'activities') {
                 newItinerary[dayIndex] = { ...newItinerary[dayIndex], [field]: Array.isArray(value) ? value : value.split('\n') };
               } else {
-                newItinerary[dayIndex] = { ...newItinerary[dayIndex], [field]: value };
+                // Fixed: Ensure value is always a string for non-array fields
+                const stringValue = Array.isArray(value) ? value.join('\n') : value;
+                newItinerary[dayIndex] = { ...newItinerary[dayIndex], [field]: stringValue };
               }
               return { ...pkg, itinerary: newItinerary };
           }
