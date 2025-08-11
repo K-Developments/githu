@@ -388,6 +388,8 @@ const IntroSection = memo(function IntroSection({
 
 
 
+
+
 // Memoized QuoteSection
 const QuoteSection = memo(function QuoteSection({ 
   data, 
