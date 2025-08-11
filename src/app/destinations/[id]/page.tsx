@@ -9,10 +9,11 @@ async function getDestinationPageData(id: string) {
     try {
         const destinationDocRef = doc(db, 'destinations', id);
         const destinationDocSnap = await getDoc(destinationDocRef);
-
+        
         if (!destinationDocSnap.exists()) {
             return null;
         }
+        
         const destinationData = { id: destinationDocSnap.id, ...destinationDocSnap.data() } as Destination;
         
         const otherDestinationsQuery = query(
@@ -22,12 +23,11 @@ async function getDestinationPageData(id: string) {
         );
         const otherDestinationsSnap = await getDocs(otherDestinationsQuery);
         const otherDestinationsData = otherDestinationsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
-
+        
         return {
             destination: destinationData,
             otherDestinations: otherDestinationsData,
         };
-
     } catch (error) {
         console.error('Error fetching destination page data:', error);
         return null;
@@ -37,14 +37,16 @@ async function getDestinationPageData(id: string) {
 export default async function DestinationDetailPage({
     params
 }: {
-    params: { id: string }
+    params: Promise<{ id: string }>  // Changed: params is now a Promise
 }) {
-    const pageData = await getDestinationPageData(params.id);
+    // Changed: Await the params Promise
+    const { id } = await params;
+    const pageData = await getDestinationPageData(id);
     
     if (!pageData) {
         notFound();
     }
-
+    
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <DestinationDetailClient 
