@@ -202,11 +202,11 @@ export default function HomePage() {
 
 // Memoized HeroSection
 const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null }) {
-  const [isAnimating, setIsAnimating] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
   const controls = useAnimationControls();
-
+  
   useEffect(() => {
-    controls.start("visible").then(() => setIsAnimating(false));
+    controls.start("visible");
   }, [controls]);
 
   if (!data) return null;
@@ -225,7 +225,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
   const childVariants = {
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
         type: "spring",
         damping: 12,
@@ -234,7 +233,6 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     },
     hidden: {
       opacity: 0,
-      y: 20,
       transition: {
         type: "spring",
         damping: 12,
@@ -243,8 +241,27 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
     },
   };
 
+  const gridElements = (
+      <div className="scrolling-grid-container">
+          <div className="scrolling-grid">
+              {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
+                  <div key={`grid-${index}`} className="image-wrapper">
+                      <Image
+                          src={src}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          priority={index < 6}
+                          sizes="(min-width: 1024px) 25vw, 50vw"
+                      />
+                  </div>
+              ))}
+          </div>
+      </div>
+  );
+
   return (
-    <section className="hero">
+    <section ref={containerRef} className="hero">
       <div className="hero-content">
         <motion.h1 
           variants={containerVariants}
@@ -283,26 +300,13 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
       </div>
 
       <div className="hero-image">
-         <div className="scrolling-grid-container">
-            <div className="scrolling-grid">
-                {[...data.sliderImages, ...data.sliderImages].map((src, index) => (
-                    <div key={`grid-${index}`} className="image-wrapper">
-                        <Image
-                            src={src}
-                            alt=""
-                            fill
-                            className="object-cover"
-                            priority={index < 6}
-                            sizes="(min-width: 1024px) 25vw, 50vw"
-                        />
-                    </div>
-                ))}
-            </div>
-        </div>
+        {gridElements}
       </div>
     </section>
   );
 });
+
+
 
 
 // Memoized IntroSection
@@ -335,7 +339,7 @@ const IntroSection = memo(function IntroSection({
         backgroundPosition: 'center',
       }}
     >
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden h-[150vh]">
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden h-[150vh] py-[28rem] md:py-[38rem]">
       <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
@@ -388,6 +392,7 @@ const IntroSection = memo(function IntroSection({
 
 
 
+
 // Memoized QuoteSection
 const QuoteSection = memo(function QuoteSection({ 
   data, 
@@ -411,7 +416,6 @@ const QuoteSection = memo(function QuoteSection({
   );
 });
 
-// Memoized DestinationsCarouselItem
 const DestinationsCarouselItem = memo(function DestinationsCarouselItem({ 
   dest, 
   index, 
@@ -436,33 +440,34 @@ const DestinationsCarouselItem = memo(function DestinationsCarouselItem({
 
   return (
     <CarouselItem ref={ref} className="pl-4 basis-[90%] md:basis-[40%] lg:basis-[30%]">
-      <Link href={`/destinations?id=${dest.id}`} className="block w-full h-full">
-        <div className="md:h-[75vh] h-[60vh] relative flex items-center justify-center bg-[#f5f5f5]">
-          <div className={cn(
-            "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
-            isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
-          )}>
-              <motion.div className="relative w-full h-[130%] parallax-element" style={{ y }}>
-                <Image
-                  src={dest.image || "https://placehold.co/600x800.png"}
-                  alt={dest.title}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                  className="card-image"
-                  priority={index <= 2} // Only prioritize first 3 images
-                />
-              </motion.div>
-              <div className={cn(
-                "absolute bottom-0 left-0 p-6 text-left z-10 transition-opacity duration-500",
-                isCenter ? "opacity-100" : "opacity-0"
-              )}>
-                <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
-                <p className="text-white/80">{dest.location}</p>
-              </div>
-          </div>
+      <div className="md:h-[75vh] h-[60vh] relative flex items-center justify-center bg-[#f5f5f5]">
+        <div className={cn(
+          "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
+          isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
+        )}>
+          <Link href={dest.linkUrl || `/destinations/${dest.id}`} className="block w-full h-full">
+            <motion.div className="relative w-full h-[130%] parallax-element" style={{ y }}>
+              <Image
+                src={dest.image || "https://placehold.co/600x800.png"}
+                alt={dest.title}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                className="card-image"
+                priority={index <= 2} // Only prioritize first 3 images
+              />
+            </motion.div>
+            <div className={cn(
+              "absolute bottom-0 left-0 p-6 text-left z-10 transition-opacity duration-500",
+              isCenter ? "opacity-100" : "opacity-0"
+            )}>
+              <h3 className="text-3xl font-headline text-white">{dest.title}</h3>
+              <p className="text-white/80">{dest.location}</p>
+            </div>
+           
+          </Link>
         </div>
-      </Link>
+      </div>
     </CarouselItem>
   );
 });
