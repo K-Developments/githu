@@ -179,7 +179,11 @@ export default function AboutPage() {
 
             {intro.paragraph && (
                 <section className="py-28 px-4 md:px-12">
-                   <AnimatedText text={intro.paragraph} />
+                   <AnimatedText 
+                        text={intro.paragraph} 
+                        animationType='color'
+                        className="w-[90%] md:max-w-4xl mx-auto text-left text-2xl md:text-4xl leading-tight md:leading-tight font-light flex flex-wrap"
+                    />
                 </section>
             )}
             

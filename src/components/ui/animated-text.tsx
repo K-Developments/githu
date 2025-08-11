@@ -1,16 +1,17 @@
+
 "use client";
 
 import { motion, useScroll, useTransform, MotionValue, EasingFunction } from 'framer-motion';
-import { useRef, useMemo, useCallback } from 'react';
+import { useRef, useMemo, useCallback, ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
-// Updated type to match Framer Motion's expected offset type
 type ScrollOffset = [string, string] | string[];
 
 interface AnimatedTextProps {
   text: string;
   className?: string;
   containerClassName?: string;
-  animationType?: 'opacity' | 'slideUp' | 'scale' | 'blur';
+  animationType?: 'opacity' | 'slideUp' | 'scale' | 'blur' | 'color';
   staggerDelay?: number;
   scrollOffset?: ScrollOffset;
   duration?: number;
@@ -31,27 +32,35 @@ export function AnimatedText({
 
   const { scrollYProgress } = useScroll({
     target: container,
-    offset: scrollOffset as any, // Type assertion to resolve the mismatch
+    offset: scrollOffset as any,
   });
 
   const words = useMemo(() => {
     return text.split(' ').filter(word => word.length > 0);
   }, [text]);
 
+  if (animationType === 'color') {
+    return (
+      <p ref={container} className={className}>
+        {words.map((word, i) => (
+          <WordColor key={`${word}-${i}`} progress={scrollYProgress} words={words} wordIndex={i}>
+            {word}
+          </WordColor>
+        ))}
+      </p>
+    );
+  }
+
   const getAnimationRange = useCallback((index: number, total: number) => {
     const totalDuration = duration + (staggerDelay * total);
     const baseStart = (index * staggerDelay) / totalDuration;
     const baseEnd = Math.min(baseStart + (duration / totalDuration), 1);
     
-    // Make the animation more gradual and smooth
     return [baseStart * 0.7, Math.min(baseEnd * 1.3, 1)] as [number, number];
   }, [staggerDelay, duration]);
 
   return (
-    <p
-      ref={container}
-      className={`${className} ${containerClassName || ''}`}
-    >
+    <p ref={container} className={cn(className, containerClassName)}>
       {words.map((word, i) => {
         const range = getAnimationRange(i, words.length);
         return (
@@ -70,6 +79,30 @@ export function AnimatedText({
   );
 }
 
+// For color animation
+function WordColor({ children, progress, words, wordIndex }: { children: string, progress: MotionValue<number>, words: string[], wordIndex: number }) {
+  const totalChars = words.join(" ").length;
+  const charsBefore = words.slice(0, wordIndex).join(" ").length + wordIndex; // + wordIndex for spaces
+  
+  return (
+    <span className="relative mr-3 mt-3 inline-block">
+      {children.split('').map((char, i) => {
+        const charIndex = charsBefore + i;
+        const start = charIndex / totalChars;
+        const end = (charIndex + 1) / totalChars;
+        const opacity = useTransform(progress, [start, end], [0.2, 1]);
+        return (
+          <motion.span key={i} style={{ opacity }} className="relative inline-block text-foreground">
+            {char}
+          </motion.span>
+        );
+      })}
+    </span>
+  );
+}
+
+
+// For other animations
 interface WordProps {
   children: string;
   progress: MotionValue<number>;
@@ -155,52 +188,5 @@ function Character({ children, progress, range, animationType, easing }: Charact
         {children === ' ' ? '\u00A0' : children}
       </motion.span>
     </span>
-  );
-}
-
-// Utility component for different presets
-export function AnimatedTextPresets() {
-  const sampleText = "This is an example of beautiful animated text that reveals itself as you scroll through the page.";
-  
-  return (
-    <div className="space-y-16 py-16">
-      <div>
-        <h3 className="text-xl font-semibold mb-8 text-center">Opacity Animation</h3>
-        <AnimatedText text={sampleText} animationType="opacity" />
-      </div>
-      
-      <div>
-        <h3 className="text-xl font-semibold mb-8 text-center">Slide Up Animation</h3>
-        <AnimatedText 
-          text={sampleText} 
-          animationType="slideUp" 
-          staggerDelay={0.08}
-          duration={2.5}
-          className="w-[70%] md:max-w-4xl mx-auto text-center text-2xl md:text-3xl leading-relaxed text-blue-600 flex flex-wrap justify-center"
-        />
-      </div>
-      
-      <div>
-        <h3 className="text-xl font-semibold mb-8 text-center">Scale Animation</h3>
-        <AnimatedText 
-          text={sampleText} 
-          animationType="scale"
-          staggerDelay={0.06}
-          duration={3}
-          className="w-[70%] md:max-w-4xl mx-auto text-center text-2xl md:text-3xl leading-relaxed text-green-600 flex flex-wrap justify-center"
-        />
-      </div>
-      
-      <div>
-        <h3 className="text-xl font-semibold mb-8 text-center">Blur Animation</h3>
-        <AnimatedText 
-          text={sampleText} 
-          animationType="blur"
-          staggerDelay={0.04}
-          duration={2.8}
-          className="w-[70%] md:max-w-4xl mx-auto text-center text-2xl md:text-3xl leading-relaxed text-purple-600 flex flex-wrap justify-center"
-        />
-      </div>
-    </div>
   );
 }
