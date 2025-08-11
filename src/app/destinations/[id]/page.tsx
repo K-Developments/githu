@@ -5,8 +5,6 @@ import type { Destination } from '@/lib/data';
 import { DestinationDetailClient } from './destination-detail-client';
 import { notFound } from 'next/navigation';
 
-// Remove the DestinationPageProps interface - not needed in App Router
-
 async function getDestinationPageData(id: string) {
     try {
         const destinationDocRef = doc(db, 'destinations', id);
@@ -37,11 +35,11 @@ async function getDestinationPageData(id: string) {
 }
 
 export default async function DestinationDetailPage({
-    params: { id },
+    params
 }: {
-    params: { id: string };
+    params: { id: string }
 }) {
-    const pageData = await getDestinationPageData(id);
+    const pageData = await getDestinationPageData(params.id);
     
     if (!pageData) {
         notFound();
