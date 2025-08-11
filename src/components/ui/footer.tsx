@@ -38,18 +38,17 @@ export function Footer({ logoUrl }: { logoUrl?: string }) {
 
         <div className="my-12">
           <Separator />
-          <div className="grid grid-flow-col auto-cols-auto justify-center items-center">
-            {navLinks.map((link, index) => (
-              <React.Fragment key={link.href}>
-                <Link href={link.href} className="px-4 md:px-8 py-4 text-lg md:text-xl font-light text-muted-foreground hover:text-primary transition-colors">
+          <nav className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 py-4">
+            {navLinks.map((link) => (
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className="px-2 py-2 text-base md:text-lg font-light text-muted-foreground hover:text-primary hover:underline hover:underline-offset-4 hover:decoration-black transition-colors"
+                >
                   {link.title}
                 </Link>
-                {index < navLinks.length - 1 && (
-                  <Separator orientation="vertical" className="h-6" />
-                )}
-              </React.Fragment>
             ))}
-          </div>
+          </nav>
           <Separator />
         </div>
 
