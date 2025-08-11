@@ -305,82 +305,83 @@ const HeroSection = memo(function HeroSection({ data }: { data: HeroData | null 
 
 
 // Memoized IntroSection
-const IntroSection = memo(function IntroSection({
-  data,
-  backgroundImage
-}: {
-  data: IntroData | null,
-  backgroundImage?: string
+const IntroSection = memo(function IntroSection({ 
+  data, 
+  backgroundImage 
+}: { 
+  data: IntroData | null, 
+  backgroundImage?: string 
 }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
     offset: ['start start', 'end end']
   });
 
-  const borderRadius = useTransform(scrollYProgress, [0, 0.7], ["50%", "0.5rem"]);
-  const width = useTransform(
-    scrollYProgress, 
-    [0, 0.7], 
-    isMobile ? ["90vw", "90vw"] : ["40vw", "90vw"]
-  );
-
+  const borderRadius = useTransform(scrollYProgress, [0.1, 0.7], ["50%", "0%"]);
+  const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
+  
   if (!data) return null;
 
   return (
     <section
       ref={scrollContainerRef}
-      className="relative h-[250vh] py-28"
+      className="relative h-[300vh] py-[7rem]"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <div className="text-center w-[90%] md:w-[60%] mx-auto">
-        <ScrollAnimation>
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden h-[150vh]">
+      <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
             dangerouslySetInnerHTML={{ __html: data.headline }}
           />
         </ScrollAnimation>
-      </div>
 
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-        <motion.div
-          style={{
-            borderRadius,
-            width,
-            height: 'auto',
-            aspectRatio: '1/1',
-          }}
-          className="relative overflow-hidden mx-auto"
-        >
-          <Image
-            src={data.landscapeImage || 'https://placehold.co/1200x1200.png'}
-            alt="Scenic introduction landscape"
-            fill
-            sizes="90vw"
-            className="object-cover"
-            priority
-          />
-        </motion.div>
-      </div>
+        <div className="relative md:aspect-square aspect-square md:w-1/2 w-[90%] max-w-[80vh] max-h-[80vh]">
+          <motion.div 
+            style={{ borderRadius }}
+            className="w-full h-full relative overflow-hidden"
+          >
+            <Image
+              src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+              alt="Scenic introduction landscape"
+              fill
+              sizes="(min-width: 768px) 50vw, 90vw"
+              className="object-cover"
+              priority
+            />
+             <div className="absolute inset-0 bg-black/20"></div>
+          </motion.div>
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ opacity: textOpacity }}
+          >
+            <h3 className="text-white text-3xl md:text-5xl font-headline tracking-wider">
+              Welcome to Sri Lanka
+            </h3>
+          </motion.div>
+        </div>
+        
+        <ScrollAnimation className="max-w-3xl flex flex-center justify-center" delay={0.2}>
+          <p className="text-center text-body w-[90%] mt-12">{data.paragraph}</p>
+        </ScrollAnimation>
 
-      <div className="relative z-10 w-[90%] md:w-[60%] mx-auto text-center pt-28">
-         <p className="text-center text-body">{data.paragraph}</p>
-          <div className="button-wrapper-for-border mt-8 inline-block">
-            <Button asChild variant="default">
+        <ScrollAnimation delay={0.3}>
+          <div className="button-wrapper-for-border mt-4">
+            <Button asChild variant="outline">
               <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
             </Button>
           </div>
+        </ScrollAnimation>
       </div>
     </section>
   );
 });
-
 
 
 

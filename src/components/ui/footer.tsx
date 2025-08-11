@@ -1,67 +1,64 @@
 
-
-import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import React from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
+import { Separator } from '@/components/ui/separator';
 
 export function Footer({ logoUrl }: { logoUrl?: string }) {
   const year = new Date().getFullYear();
 
+  const navLinks = [
+    { title: 'Home', href: '/' },
+    { title: 'Packages', href: '/packages' },
+    { title: 'Destinations', href: '/destinations' },
+    { title: 'Services', href: '/services' },
+    { title: 'Contact', href: '/contact' },
+  ];
+
   return (
-    <footer className="site-footer">
-      <div className="footer-content">
-        <div className="footer-column">
-          <a href="#" className="logo">
-             {logoUrl ? (
-              <div style={{ position: 'relative', width: '150px', height: '40px' }}>
-                <Image src={logoUrl} alt="Island Hopes Logo" fill style={{ objectFit: 'contain', objectPosition: 'left' }} />
-              </div>
-            ) : (
-              <>ISLAND<span>HOPES</span></>
-            )}
-          </a>
-          <p>
-            Crafting unforgettable journeys to the world's most exquisite island destinations.
-          </p>
-          <div className="social-links">
-            <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
-            <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
-            <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
-            <a href="#" aria-label="Youtube"><Youtube size={20} /></a>
+    <footer className="site-footer border-t py-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-12 text-center">
+        
+        <h2 className="text-3xl md:text-4xl font-headline tracking-widest uppercase mb-4">
+          Island Hopes Travels
+        </h2>
+
+        {logoUrl && (
+          <div className="flex justify-center my-8">
+            <Link href="/" className="logo block relative w-[150px] h-[40px]">
+              <Image 
+                src={logoUrl} 
+                alt="Island Hopes Logo" 
+                fill 
+                style={{ objectFit: 'contain' }} 
+              />
+            </Link>
           </div>
+        )}
+
+        <div className="my-12">
+          <Separator />
+          <div className="grid grid-flow-col auto-cols-auto justify-center items-center">
+            {navLinks.map((link, index) => (
+              <React.Fragment key={link.href}>
+                <Link href={link.href} className="px-4 md:px-8 py-4 text-lg md:text-xl font-light text-muted-foreground hover:text-primary transition-colors">
+                  {link.title}
+                </Link>
+                {index < navLinks.length - 1 && (
+                  <Separator orientation="vertical" className="h-6" />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+          <Separator />
         </div>
-        <div className="footer-column">
-          <h4>Company</h4>
-          <ul className="footer-links">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Our Team</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Press</a></li>
-          </ul>
+
+        <div className="text-center text-xs text-muted-foreground space-y-2">
+            <p>&copy; {year} Island Hopes. All rights reserved.</p>
+            <p>Design and Developed by Limidora</p>
         </div>
-        <div className="footer-column">
-          <h4>Explore</h4>
-          <ul className="footer-links">
-            <li><a href="#">Destinations</a></li>
-            <li><a href="#">Packages</a></li>
-            <li><a href="#">Inspiration</a></li>
-            <li><a href="#">Journal</a></li>
-          </ul>
-        </div>
-        <div className="footer-column">
-          <h4>Support</h4>
-          <ul className="footer-links">
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-          </ul>
-        </div>
-      </div>
-      <div className="footer-bottom">
-        <p>&copy; {year} Island Hopes. All rights reserved.</p>
+
       </div>
     </footer>
   );
 }
-
-    
