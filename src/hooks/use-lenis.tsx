@@ -9,15 +9,18 @@ export function useLenis() {
   
   useEffect(() => {
     const lenisOptions = {
-        duration: isMobile ? 2.2 : 1.5,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical' as const, // Use 'as const' to specify the literal type
-        gestureOrientation: 'vertical' as const, // Use 'as const' to specify the literal type
+        duration: isMobile ? 3.5 : 1.5, // Much longer duration for mobile
+        easing: (t: number) => isMobile 
+          ? Math.min(1, 1.001 - Math.pow(2, -6 * t)) // Gentler easing for mobile
+          : Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical' as const,
+        gestureOrientation: 'vertical' as const,
         smoothWheel: true,
-        wheelMultiplier: 1,
+        wheelMultiplier: isMobile ? 0.6 : 1, // Slower wheel scrolling on mobile
         syncTouch: true,
-        touchMultiplier: isMobile ? 2.5 : 2,
+        touchMultiplier: isMobile ? 1.2 : 2, // Much lower touch sensitivity for smoother mobile scroll
         infinite: false,
+        lerp: isMobile ? 0.05 : 0.1, // Much slower lerp for ultra-smooth mobile scrolling
     };
 
     const lenis = new Lenis(lenisOptions);
