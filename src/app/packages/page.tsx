@@ -8,6 +8,7 @@ import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/
 import type { Package, Category, PackagesCtaData } from '@/lib/data';
 import { PackagesPageClient } from './packages-client';
 import { PackageDetailClient } from './[id]/package-detail-client';
+import { Preloader } from '@/components/ui/preloader';
 
 interface ListPageData {
   hero: {
@@ -176,7 +177,7 @@ function PackagesContent() {
 
 
     if (loading) {
-        return <div className="flex items-center justify-center h-screen">Loading...</div>;
+        return <Preloader />;
     }
 
     if (view === 'detail' && detailPageData) {
@@ -206,7 +207,7 @@ function PackagesContent() {
 
 export default function PackagesPage() {
     return (
-        <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+        <Suspense fallback={<Preloader />}>
             <PackagesContent />
         </Suspense>
     )

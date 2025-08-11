@@ -12,6 +12,7 @@ import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Preloader } from '@/components/ui/preloader';
 
 interface GalleryPageData {
   hero: {
@@ -60,7 +61,7 @@ export default function GalleryPage() {
     ) || [];
 
     if (!pageData) {
-        return <div className="flex items-center justify-center h-screen">Loading...</div>; 
+        return <Preloader />; 
     }
 
     const { hero, categories } = pageData;

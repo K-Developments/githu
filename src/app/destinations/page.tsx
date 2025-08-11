@@ -8,6 +8,7 @@ import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/
 import type { Destination, Package } from '@/lib/data';
 import { DestinationsPageClient } from './destinations-client';
 import { DestinationDetailClient } from './[id]/destination-detail-client';
+import { Preloader } from '@/components/ui/preloader';
 
 interface PageData {
   hero: {
@@ -159,7 +160,7 @@ function DestinationsContent() {
 
 
     if (loading) {
-        return <div className="flex items-center justify-center h-screen">Loading...</div>;
+        return <Preloader />;
     }
 
     if (view === 'detail' && detailPageData) {
@@ -187,7 +188,7 @@ function DestinationsContent() {
 
 export default function DestinationsPage() {
     return (
-        <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+        <Suspense fallback={<Preloader />}>
             <DestinationsContent />
         </Suspense>
     );

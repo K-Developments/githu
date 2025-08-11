@@ -12,6 +12,7 @@ import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Plus, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Preloader } from '@/components/ui/preloader';
 
 interface FAQPageData {
   hero: {
@@ -56,7 +57,7 @@ export default function FaqPage() {
     }, []);
 
     if (!pageData) {
-        return <div className="flex items-center justify-center h-screen">Loading...</div>; 
+        return <Preloader />; 
     }
 
     const { hero, faqItems } = pageData;

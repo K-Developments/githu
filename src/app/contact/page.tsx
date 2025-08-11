@@ -19,6 +19,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { Preloader } from '@/components/ui/preloader';
 
 interface ContactHeroData {
   headline: string;
@@ -100,7 +101,7 @@ export default function ContactPage() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    return <Preloader />;
   }
 
   return (

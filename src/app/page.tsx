@@ -20,6 +20,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { PackageCard } from '@/components/ui/package-card';
+import { Preloader } from "@/components/ui/preloader";
 
 const DynamicCtaSection = dynamic(() => import('@/components/ui/cta-section').then(mod => mod.CtaSection));
 
@@ -152,7 +153,7 @@ export default function HomePage() {
   }, []);
 
   if (isLoading) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    return <Preloader />;
   }
 
   if (error || !pageData) {
@@ -333,44 +334,44 @@ const IntroSection = memo(function IntroSection({
           backgroundPosition: 'center',
         }}
       />
-      <div className="relative z-10">
-        <ScrollAnimation>
+       <div className="relative z-10 max-w-3xl mx-auto text-center">
+         <ScrollAnimation>
           <h2
             className="secondary-heading text-center"
             dangerouslySetInnerHTML={{ __html: data.headline }}
           />
         </ScrollAnimation>
-
-        <div 
-          ref={scrollContainerRef}
-          className="relative md:w-1/2 w-[90%] max-w-[80vh] mx-auto my-12"
-          style={{ aspectRatio: '1/1' }}
-        >
-          <motion.div 
-            style={{ borderRadius }}
-            className="w-full h-full relative overflow-hidden"
-          >
-            <Image
-              src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
-              alt="Scenic introduction landscape"
-              fill
-              sizes="(min-width: 768px) 50vw, 90vw"
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-black/20"></div>
-          </motion.div>
-        </div>
-        
-        <ScrollAnimation className="max-w-3xl flex flex-col items-center justify-center mx-auto" delay={0.2}>
-          <p className="text-center text-body w-[90%]">{data.paragraph}</p>
-          <div className="button-wrapper-for-border mt-8">
-            <Button asChild variant="default">
-              <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
-            </Button>
-          </div>
-        </ScrollAnimation>
       </div>
+
+      <div 
+        ref={scrollContainerRef}
+        className="relative md:w-1/2 w-[90%] max-w-[80vh] mx-auto my-12"
+        style={{ aspectRatio: '1/1' }}
+      >
+        <motion.div 
+          style={{ borderRadius }}
+          className="w-full h-full relative overflow-hidden"
+        >
+          <Image
+            src={data.landscapeImage || 'https://placehold.co/1200x675.png'}
+            alt="Scenic introduction landscape"
+            fill
+            sizes="(min-width: 768px) 50vw, 90vw"
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/20"></div>
+        </motion.div>
+      </div>
+      
+      <ScrollAnimation className="max-w-3xl flex flex-col items-center justify-center mx-auto" delay={0.2}>
+        <p className="text-center text-body w-[90%]">{data.paragraph}</p>
+        <div className="button-wrapper-for-border mt-8">
+          <Button asChild variant="default">
+            <Link href={data.linkUrl || '#'}>{data.linkText}</Link>
+          </Button>
+        </div>
+      </ScrollAnimation>
     </section>
   );
 });

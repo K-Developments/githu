@@ -15,6 +15,7 @@ import { ScrollAnimation } from '@/components/ui/scroll-animation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 import { AnimatedText } from '@/components/ui/animated-text';
+import { Preloader } from '@/components/ui/preloader';
 
 interface AboutPageData {
   hero: {
@@ -123,7 +124,7 @@ export default function AboutPage() {
     }, []);
 
     if (!pageData) {
-        return <div className="flex items-center justify-center h-screen">Loading...</div>; 
+        return <Preloader />; 
     }
 
     const { hero, intro, journey, coreValues, workflow, ctaData } = pageData;
