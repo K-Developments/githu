@@ -79,8 +79,10 @@ function RootLayoutContent({
         <meta name="author" content="Island Hopes Travels" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         
-        {/* Favicon */}
-        <link rel="icon" href="/logo.ico" sizes="any" />
+        {/* Favicon - More comprehensive set */}
+        <link rel="icon" href="/logo.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/logo.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="/logo.ico" />
         
         {/* Viewport and Mobile Optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
