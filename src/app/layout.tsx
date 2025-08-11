@@ -37,8 +37,8 @@ function generateMetaTags(siteSettings: SiteSettings | null, pathname: string) {
   const defaultTitle = "Island Hopes Travels";
   const defaultDescription = "Discover the world's most exclusive island destinations with Island Hopes. We craft bespoke, luxury travel experiences and unforgettable journeys tailored to you.";
   const defaultKeywords = "sri lanka, sri lanka travel,  luxury travel, island destinations, bespoke travel, exclusive resorts, tropical getaways, travel planning, vacation packages";
-  const defaultImage = "https://your-production-domain.com/og-image.jpg";
-  const siteUrl = "https://your-production-domain.com"; 
+  const defaultImage = "https://islandhopestravels.com/og-image.jpg";
+  const siteUrl = "https://islandhopestravels.com"; 
   
   const title = siteSettings?.siteTitle || defaultTitle;
   const description = siteSettings?.siteDescription || defaultDescription;
@@ -80,7 +80,7 @@ function RootLayoutContent({
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         
         {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/logo.ico" sizes="any" />
         
         {/* Viewport and Mobile Optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
