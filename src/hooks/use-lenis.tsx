@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect } from 'react';
@@ -9,8 +8,8 @@ export function useLenis() {
     const lenis = new Lenis({
         duration: 1.5, // Increased duration for a slower, smoother scroll
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
+        orientation: 'vertical', // Changed from 'direction' to 'orientation'
+        gestureOrientation: 'vertical', // Changed from 'gestureDirection' to 'gestureOrientation'
         smooth: true,
         mouseMultiplier: 1,
         smoothTouch: true, // Ensure this is true for mobile smoothness
