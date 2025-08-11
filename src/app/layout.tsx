@@ -69,7 +69,7 @@ function RootLayoutContent({
   const meta = generateMetaTags(siteSettings, pathname);
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" >
        <head>
         {/* Basic Meta Tags */}
         <meta charSet="utf-8" />
@@ -138,7 +138,6 @@ function RootLayoutContent({
         <SiteSettingsProvider settings={siteSettings}>
           <PackagesProvider>
             <ScrollRestoration />
-            <div className="noise-overlay"></div>
             {!isAdminPage && <Header logoUrl={siteSettings?.logoUrl} />}
             <main>{children}</main>
             {!isAdminPage && <Footer logoUrl={siteSettings?.logoUrl} />}

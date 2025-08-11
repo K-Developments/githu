@@ -25,7 +25,7 @@ export function Footer({ logoUrl }: { logoUrl?: string }) {
 
         {logoUrl && (
           <div className="flex justify-center my-8">
-            <Link href="/" className="logo block relative w-[150px] h-[40px]">
+            <Link href="/" className="logo block relative w-[5rem] h-[5rem]">
               <Image 
                 src={logoUrl} 
                 alt="Island Hopes Logo" 
