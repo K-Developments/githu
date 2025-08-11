@@ -10,6 +10,7 @@ interface DestinationPageProps {
   params: {
     id: string;
   };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 async function getDestinationPageData(id: string) {
