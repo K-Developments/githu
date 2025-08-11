@@ -1,4 +1,3 @@
-
 import { Suspense } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/firestore';
@@ -6,12 +5,7 @@ import type { Destination } from '@/lib/data';
 import { DestinationDetailClient } from './destination-detail-client';
 import { notFound } from 'next/navigation';
 
-interface DestinationPageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
+// Remove the DestinationPageProps interface - not needed in App Router
 
 async function getDestinationPageData(id: string) {
     try {
@@ -42,20 +36,23 @@ async function getDestinationPageData(id: string) {
     }
 }
 
+export default async function DestinationDetailPage({
+    params: { id },
+}: {
+    params: { id: string };
+}) {
+    const pageData = await getDestinationPageData(id);
+    
+    if (!pageData) {
+        notFound();
+    }
 
-export default async function DestinationDetailPage({ params }: DestinationPageProps) {
-  const pageData = await getDestinationPageData(params.id);
-  
-  if (!pageData) {
-      notFound();
-  }
-
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <DestinationDetailClient 
-        destination={pageData.destination}
-        otherDestinations={pageData.otherDestinations}
-      />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <DestinationDetailClient 
+                destination={pageData.destination}
+                otherDestinations={pageData.otherDestinations}
+            />
+        </Suspense>
+    );
 }
