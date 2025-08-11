@@ -1,11 +1,19 @@
-import { Suspense } from 'react';
+
+'use client';
+
+import { Suspense, useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/firestore';
 import type { Destination } from '@/lib/data';
 import { DestinationDetailClient } from './destination-detail-client';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 
-async function getDestinationPageData(id: string) {
+interface PageData {
+    destination: Destination;
+    otherDestinations: Destination[];
+}
+
+async function getDestinationPageData(id: string): Promise<PageData | null> {
     try {
         const destinationDocRef = doc(db, 'destinations', id);
         const destinationDocSnap = await getDoc(destinationDocRef);
@@ -34,17 +42,32 @@ async function getDestinationPageData(id: string) {
     }
 }
 
-export default async function DestinationDetailPage({
-    params
-}: {
-    params: Promise<{ id: string }>  // Changed: params is now a Promise
-}) {
-    // Changed: Await the params Promise
-    const { id } = await params;
-    const pageData = await getDestinationPageData(id);
+export default function DestinationDetailPage() {
+    const params = useParams();
+    const id = Array.isArray(params.id) ? params.id[0] : params.id;
+    const [pageData, setPageData] = useState<PageData | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (id) {
+            getDestinationPageData(id).then(data => {
+                if (data) {
+                    setPageData(data);
+                } else {
+                    notFound();
+                }
+                setLoading(false);
+            });
+        }
+    }, [id]);
     
+    if (loading) {
+        return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    }
+
     if (!pageData) {
-        notFound();
+        // This will be caught by notFound() in useEffect, but as a fallback
+        return notFound();
     }
     
     return (
