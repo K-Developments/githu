@@ -33,8 +33,11 @@ export function BottomBar() {
 
   const navLinks = [
       { title: "Home", href: "/" },
+      { title: "About", href: "/about" },
+      { title: "Services", href: "/services" },
       { title: "Destinations", href: "/destinations" },
       { title: "Packages", href: "/packages" },
+      { title: "FAQ", href: "/faq" },
       { title: "Contact", href: "/contact" },
   ];
 
