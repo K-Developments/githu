@@ -75,11 +75,6 @@ export function PackageDetailClient({ pkg, otherPackages, onBack }: PackageDetai
         <div className="px-4 md:px-12">
             <Separator />
             <div className="text-xs text-muted-foreground py-4 flex items-center">
-                <button onClick={onBack} className="flex items-center hover:text-primary mr-2">
-                    <ArrowLeft className="h-4 w-4 mr-1" />
-                    <span>Back</span>
-                </button>
-                <span className="mx-2">||</span>
                 <Link href="/" className="hover:text-primary">Home</Link>
                 <span className="mx-2">||</span>
                 <span className="hover:text-primary cursor-pointer" onClick={onBack}>Packages</span>
