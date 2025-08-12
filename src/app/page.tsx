@@ -445,7 +445,7 @@ const DestinationsCarouselItem = memo(function DestinationsCarouselItem({
           "destination-card-parallax w-full h-full transition-all duration-500 ease-in-out",
           isCenter ? "w-full h-full" : "w-[65%] h-[65%]"
         )}>
-          <Link href={dest.linkUrl || `/destinations/${dest.id}`} className="block w-full h-full">
+          <Link href={dest.linkUrl || `/destinations?id=${dest.id}`} className="block w-full h-full">
             <motion.div className="relative w-full h-[130%] parallax-element" style={{ y }}>
               <Image
                 src={dest.image || "https://placehold.co/600x800.png"}
@@ -752,3 +752,5 @@ const TestimonialsSection = memo(function TestimonialsSection({
     </section>
   );
 });
+
+    
