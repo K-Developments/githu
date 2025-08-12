@@ -20,7 +20,6 @@ interface DestinationDetailClientProps {
 
 export function DestinationDetailClient({ destination, otherDestinations, onBack }: DestinationDetailClientProps) {
   const [mainApi, setMainApi] = useState<CarouselApi>()
-  const [otherApi, setOtherApi] = useState<CarouselApi>()
   
   const sliderImages = [destination.image, ...(destination.galleryImages || [])].filter(Boolean);
   
@@ -38,28 +37,23 @@ export function DestinationDetailClient({ destination, otherDestinations, onBack
   return (
     <div>
         <section id="hero-section-destination-detail" className="h-[65vh] flex flex-col">
-            <div className="flex-1 flex items-center justify-center p-4 relative">
-                 <Image
-                    src={sliderImages[0]}
-                    alt={`${destination.title} hero background`}
-                    fill
-                    className="object-cover"
-                    priority
-                />
+            <div 
+              className="flex-1 flex items-center justify-center p-4 relative"
+            >
                 <div className="relative text-center">
                     <ScrollAnimation>
-                        <h1 className="text-5xl md:text-7xl font-bold font-headline text-center uppercase tracking-widest text-foreground z-10 relative">
-                        {destination.title}
+                        <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold font-headline text-center uppercase tracking-widest text-foreground break-words relative" style={{ lineBreak: 'anywhere'}}>
+                          Destinations
                         </h1>
                     </ScrollAnimation>
-                    <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center mt-12" aria-label="Scroll down">
-                      <motion.div
-                          initial={{ height: '0%' }}
-                          animate={{ height: '100%' }}
-                          transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
-                          className="w-full bg-black"
-                      />
-                  </button>
+                    <button onClick={handleScrollDown} className="absolute left-1/2 -translate-x-1/2 bottom-[-8vh] h-20 w-px flex items-end justify-center mt-12 top-[7rem]" aria-label="Scroll down">
+                        <motion.div
+                            initial={{ height: '0%' }}
+                            animate={{ height: '100%' }}
+                            transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+                            className="w-full bg-black"
+                        />
+                    </button>
                 </div>
             </div>
         </section>
@@ -81,8 +75,13 @@ export function DestinationDetailClient({ destination, otherDestinations, onBack
             <Separator />
         </div>
 
-       <section className="py-28 px-4 md:px-12">
+       <section className="pt-16 pb-28 px-4 md:px-12">
         <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+                <ScrollAnimation>
+                    <h2 className="text-lg font-medium tracking-widest uppercase text-muted-foreground">{destination.title}</h2>
+                </ScrollAnimation>
+            </div>
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="relative">
                     <Carousel
