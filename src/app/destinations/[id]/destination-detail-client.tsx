@@ -60,7 +60,7 @@ export function DestinationDetailClient({ destination, otherDestinations, onBack
 
         <div className="px-4 md:px-12">
             <Separator />
-            <div className="text-sm text-muted-foreground py-4 flex items-center">
+            <div className="text-xs text-muted-foreground py-4 flex items-center">
                 <button onClick={onBack} className="flex items-center hover:text-primary mr-2">
                   <ArrowLeft className="h-4 w-4 mr-1" />
                   <span>Back</span>

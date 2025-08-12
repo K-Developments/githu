@@ -71,7 +71,7 @@ export function PackagesPageClient({ hero, packages, categories, cta, onPackageS
       
       <div className="px-4 md:px-12">
           <Separator />
-          <div className="text-sm text-muted-foreground py-4">
+          <div className="text-xs text-muted-foreground py-4">
               <Link href="/" className="hover:text-primary">Home</Link>
               <span className="mx-2">||</span>
               <span>Packages</span>
