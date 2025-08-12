@@ -7,9 +7,11 @@ import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { Facebook, Twitter, Instagram, ArrowUp } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useSiteSettings } from '@/context/site-settings-context';
 
 export function Footer({ logoUrl }: { logoUrl?: string }) {
   const year = new Date().getFullYear();
+  const settings = useSiteSettings();
 
   const navLinks = [
     { title: 'Home', href: '/' },
@@ -22,10 +24,11 @@ export function Footer({ logoUrl }: { logoUrl?: string }) {
   ];
 
   const socialLinks = [
-      { Icon: Facebook, href: '#' },
-      { Icon: Twitter, href: '#' },
-      { Icon: Instagram, href: '#' },
-  ]
+      { Icon: Facebook, href: settings?.facebookUrl, name: "Facebook" },
+      { Icon: Twitter, href: settings?.twitterUrl, name: "Twitter" },
+      { Icon: Instagram, href: settings?.instagramUrl, name: "Instagram" },
+  ].filter(link => link.href);
+
 
   const handleScrollTop = () => {
     window.scrollTo({
@@ -86,20 +89,22 @@ export function Footer({ logoUrl }: { logoUrl?: string }) {
           <Separator />
         </div>
         
-        <div className="flex justify-center items-center gap-6 my-10">
-            {socialLinks.map(({Icon, href}, index) => (
-                 <a 
-                    key={index}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                    aria-label={`Follow us on ${Icon.displayName}`}
-                 >
-                     <Icon size={24} />
-                 </a>
-            ))}
-        </div>
+        {socialLinks.length > 0 && (
+          <div className="flex justify-center items-center gap-6 my-10">
+              {socialLinks.map(({Icon, href, name}, index) => (
+                   <a 
+                      key={index}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                      aria-label={`Follow us on ${name}`}
+                   >
+                       <Icon size={24} />
+                   </a>
+              ))}
+          </div>
+        )}
 
         <div className="text-center text-xs text-muted-foreground space-y-2">
             <p>&copy; {year} Island Hopes. All rights reserved.</p>

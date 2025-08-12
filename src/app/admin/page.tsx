@@ -62,6 +62,9 @@ export default function AdminHomePage() {
     testimonialsBackgroundImage: "",
     phoneNumber: "",
     whatsappNumber: "",
+    facebookUrl: "",
+    instagramUrl: "",
+    twitterUrl: "",
   });
   const [heroData, setHeroData] = useState<HeroData>({
     headline: "",
@@ -133,6 +136,9 @@ export default function AdminHomePage() {
             testimonialsBackgroundImage: settings.testimonialsBackgroundImage || "",
             phoneNumber: settings.phoneNumber || "",
             whatsappNumber: settings.whatsappNumber || "",
+            facebookUrl: settings.facebookUrl || "",
+            instagramUrl: settings.instagramUrl || "",
+            twitterUrl: settings.twitterUrl || "",
           });
 
           const hero = (data.hero || {}) as HeroData;
@@ -406,6 +412,20 @@ export default function AdminHomePage() {
             <div className="space-y-2">
                 <Label htmlFor="whatsappNumber">WhatsApp Number</Label>
                 <Input id="whatsappNumber" value={siteSettings.whatsappNumber} onChange={handleSettingsChange} placeholder="+1 234 567 890" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+                <Label htmlFor="facebookUrl">Facebook URL</Label>
+                <Input id="facebookUrl" value={siteSettings.facebookUrl} onChange={handleSettingsChange} placeholder="https://facebook.com/your-page" />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="instagramUrl">Instagram URL</Label>
+                <Input id="instagramUrl" value={siteSettings.instagramUrl} onChange={handleSettingsChange} placeholder="https://instagram.com/your-profile" />
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="twitterUrl">Twitter URL</Label>
+                <Input id="twitterUrl" value={siteSettings.twitterUrl} onChange={handleSettingsChange} placeholder="https://twitter.com/your-handle" />
             </div>
           </div>
           <div className="space-y-2">

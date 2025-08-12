@@ -14,13 +14,16 @@ export type SiteSettings = {
   testimonialsBackgroundImage?: string;
   phoneNumber?: string;
   whatsappNumber?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
 };
 
 export type Destination = {
   id: string;
   title: string;
   location: string;
-  description: string;
+  description:string;
   longDescription?: string;
   image: string;
   galleryImages?: string[];
